@@ -2,6 +2,12 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+/GenerativeAgentsUnityProject/[Ll]ibrary/
+/GenerativeAgentsUnityProject/[Tt]emp/
+/GenerativeAgentsUnityProject/[Oo]bj/
+/GenerativeAgentsUnityProject/[Bb]uilds/
+/GenerativeAgentsUnityProject/[Uu]ser[Ss]ettings/
+/GenerativeAgentsUnityProject/[Ll]ogs/
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
