@@ -36,6 +36,13 @@ public class FoodGathererAgent : Agent
 
     EnvironmentParameters m_ResetParams;
 
+    //// Health for agent
+    //public int maxHealth = 100;
+    //public int currentHealth;
+
+    //public HealthBar healthbar;
+
+
     public override void Initialize()
     {
         m_AgentRb = GetComponent<Rigidbody>();
@@ -214,6 +221,9 @@ public class FoodGathererAgent : Agent
 
     public override void OnEpisodeBegin()
     {
+        //currentHealth = maxHealth;
+        //healthbar.SetMaxHealth(maxHealth);
+        
         Unfreeze();
         Unpoison();
         Unsatiate();
@@ -271,4 +281,20 @@ public class FoodGathererAgent : Agent
         SetLaserLengths();
         SetAgentScale();
     }
+
+    //void Update()
+    //{
+    //    if(Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        TakeDamage(20);
+    //    }
+    //}
+
+    //void TakeDamage(int damage)
+    //{
+    //    currentHealth -= damage;
+
+    //    healthBar.SetHealth(currentHealth);
+    //}
+
 }
