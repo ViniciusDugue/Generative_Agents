@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class AgentHealth : MonoBehaviour
 {
 
     public int maxHealth = 100;
@@ -17,12 +17,18 @@ public class Player : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnCollisionEnter(Collision collision)
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (collision.gameObject.CompareTag("enemyAgent"))
         {
-            TakeDamage(20);
+            TakeDamage(25);
+            Debug.Log("We hit an enemy. We took damage.");
+            Debug.Log("Current health: " + currentHealth);
+        }
+
+        if (currentHealth <= 0)
+        {
+            Die();
         }
     }
 
@@ -31,5 +37,11 @@ public class Player : MonoBehaviour
         currentHealth -= damage;
 
         healthBar.SetHealth(currentHealth);
+    }
+
+    void Die()
+    {
+        Debug.Log($"{gameObject.name} has died.");
+        gameObject.SetActive(false);
     }
 }

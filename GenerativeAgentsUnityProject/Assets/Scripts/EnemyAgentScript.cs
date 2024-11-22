@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class EnemyAgentScript : MonoBehaviour
 {
-    [Header("Detection Settings")]
-    public float detectionRange = 10f; // Range to detect the agent
-
     [Header("Movement Settings")]
     public float moveSpeed = 2f; // Consistent movement speed for both roaming and chasing
     public float roamRange = 20f; // Range for random roaming around the current position
@@ -14,66 +11,68 @@ public class EnemyAgentScript : MonoBehaviour
     private Transform targetAgent; // Current target agent
     private Vector3 roamTarget; // Target position for roaming
     private bool isChasing = false; // Whether the enemy is currently chasing
-    private Coroutine roamCoroutine; // Reference to the roaming coroutine
+
+    // Reference to the FieldOfView component
+    private FieldOfView fieldOfView;
+
+    // Flags to control enemy behavior
+    private bool isPaused = false; // Indicates if the enemy is currently paused
 
     void Start()
     {
-        roamCoroutine = StartCoroutine(Roam()); // Start roaming behavior
+        // Get the FieldOfView component attached to the same GameObject
+        fieldOfView = GetComponent<FieldOfView>();
+        if (fieldOfView == null)
+        {
+            enabled = false;
+            return;
+        }
+
+        // Start the roaming behavior
+        StartCoroutine(Roam());
     }
 
     void Update()
     {
-        // Find the nearest "agent" in range
-        targetAgent = FindNearestAgent();
+        // If the enemy is paused, do not execute any movement or chasing logic
+        if (isPaused)
+            return;
 
-        if (targetAgent != null)
+        // Use FieldOfView to determine if an agent is visible
+        if (fieldOfView.canSeeAgent)
         {
-            if (!isChasing)
+            // Get the target agent from FieldOfView
+            targetAgent = fieldOfView.agent != null ? fieldOfView.agent.transform : null;
+
+            if (targetAgent != null && targetAgent.CompareTag("agent"))
             {
-                // Stop roaming and start chasing the target agent
-                isChasing = true;
-                if (roamCoroutine != null)
+                if (!isChasing)
                 {
-                    StopCoroutine(roamCoroutine);
-                    roamCoroutine = null;
+                    // Start chasing the target agent
+                    isChasing = true;
+                }
+                // Chase the target agent
+                ChaseAgent();
+            }
+            else
+            {
+                // If the detected object is not tagged as "agent", ignore it
+                targetAgent = null;
+                if (isChasing)
+                {
+                    // Resume roaming if currently chasing
+                    isChasing = false;
                 }
             }
-            // Chase the target agent
-            ChaseAgent();
         }
         else
         {
             if (isChasing)
             {
-                // If no agent is in range, resume roaming
+                // If no agent is in view, resume roaming
                 isChasing = false;
-                if (roamCoroutine == null)
-                {
-                    roamCoroutine = StartCoroutine(Roam());
-                }
             }
         }
-    }
-
-    Transform FindNearestAgent()
-    {
-        Transform nearestAgent = null;
-        float closestDistance = detectionRange;
-
-        // Find all objects tagged as "agent"
-        GameObject[] agents = GameObject.FindGameObjectsWithTag("agent");
-
-        foreach (GameObject agent in agents)
-        {
-            float distance = Vector3.Distance(transform.position, agent.transform.position);
-            if (distance <= closestDistance)
-            {
-                closestDistance = distance;
-                nearestAgent = agent.transform;
-            }
-        }
-
-        return nearestAgent;
     }
 
     void ChaseAgent()
@@ -82,7 +81,6 @@ public class EnemyAgentScript : MonoBehaviour
 
         // Move towards the target agent at constant speed
         Vector3 direction = (targetAgent.position - transform.position).normalized;
-        Vector3 targetPosition = transform.position + direction * moveSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, targetAgent.position, moveSpeed * Time.deltaTime);
 
         // Smoothly rotate towards the target
@@ -97,6 +95,13 @@ public class EnemyAgentScript : MonoBehaviour
     {
         while (true)
         {
+            // If the enemy is paused or chasing, skip roaming
+            if (isPaused || isChasing)
+            {
+                yield return null;
+                continue;
+            }
+
             // Generate a new random roam target relative to the current position
             roamTarget = transform.position + new Vector3(
                 Random.Range(-roamRange, roamRange),
@@ -107,6 +112,12 @@ public class EnemyAgentScript : MonoBehaviour
             // Move towards the roam target at constant speed
             while (Vector3.Distance(transform.position, roamTarget) > 0.5f)
             {
+                // If the enemy is paused or starts chasing, exit the roaming loop
+                if (isPaused || isChasing)
+                {
+                    break;
+                }
+
                 Vector3 direction = (roamTarget - transform.position).normalized;
 
                 // Move towards the roam target smoothly
@@ -125,5 +136,46 @@ public class EnemyAgentScript : MonoBehaviour
             // Wait briefly before choosing a new roam target
             yield return new WaitForSeconds(roamWaitTime);
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Check if the enemy collided with a Food Gatherer Agent
+        if (collision.gameObject.CompareTag("agent"))
+        {
+            if (!isPaused)
+            {
+                StartCoroutine(PauseMovement(5f));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Pauses the enemy's movement and behavior for a specified duration.
+    /// </summary>
+    /// <param name="pauseDuration">Duration in seconds to pause movement.</param>
+    IEnumerator PauseMovement(float pauseDuration)
+    {
+        isPaused = true;
+
+        // Optionally, change color to indicate pause
+        Renderer rend = GetComponent<Renderer>();
+        Color originalColor = Color.white;
+        if (rend != null)
+        {
+            originalColor = rend.material.color;
+            rend.material.color = Color.gray;
+        }
+
+        // Wait for the pause duration
+        yield return new WaitForSeconds(pauseDuration);
+
+        // Revert color back to original
+        if (rend != null)
+        {
+            rend.material.color = originalColor;
+        }
+
+        isPaused = false;
     }
 }
