@@ -22,7 +22,7 @@ public class EnvironmentSettings : MonoBehaviour
     public void EnvironmentReset()
     {
         ClearObjects(GameObject.FindGameObjectsWithTag("food"));
-        ClearObjects(GameObject.FindGameObjectsWithTag("badFood"));
+        // ClearObjects(GameObject.FindGameObjectsWithTag("badFood"));
 
         agents = GameObject.FindGameObjectsWithTag("agent");
         listArea = FindObjectsOfType<FoodSpawner>();
@@ -32,6 +32,7 @@ public class EnvironmentSettings : MonoBehaviour
         }
 
         foodScore = 0;
+        Debug.Log("Environment reset complete.");
     }
 
     void ClearObjects(GameObject[] objects)
@@ -44,7 +45,7 @@ public class EnvironmentSettings : MonoBehaviour
 
     public void Update()
     {
-        foodScoreText.text = $"Food Collected: {foodScore}";
+        // foodScoreText.text = $"Food Collected: {foodScore}";
 
         if ((Time.frameCount % 100) == 0)
         {

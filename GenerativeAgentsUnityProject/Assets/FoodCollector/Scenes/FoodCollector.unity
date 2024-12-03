@@ -208,10 +208,21 @@ PrefabInstance:
       propertyPath: m_DeterministicInference
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114176228333253036, guid: b5339e4b990ade14f992aadf3bf8591b,
+        type: 3}
+      propertyPath: contribute
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114374774605792098, guid: b5339e4b990ade14f992aadf3bf8591b,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: f4b8757bd574543b1aa06d9294a5d707,
+        type: 3}
     - target: {fileID: 114374774605792098, guid: b5339e4b990ade14f992aadf3bf8591b,
         type: 3}
       propertyPath: m_BehaviorType
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114522573150607728, guid: b5339e4b990ade14f992aadf3bf8591b,
         type: 3}

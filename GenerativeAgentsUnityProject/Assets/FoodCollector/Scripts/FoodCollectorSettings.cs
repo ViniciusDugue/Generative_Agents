@@ -31,7 +31,7 @@ public class FoodCollectorSettings : MonoBehaviour
         {
             fa.ResetFoodArea(agents);
         }
-
+        Debug.Log("Environment reset complete.");
         totalScore = 0;
     }
 
