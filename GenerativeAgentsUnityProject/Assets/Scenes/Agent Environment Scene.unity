@@ -7785,8 +7785,14 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 2960078282630464617, guid: e7c36529806c9294890d71a7e5bc62e2,
         type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 10143bfefecc6f941b178f452b5fc684,
+        type: 3}
+    - target: {fileID: 2960078282630464617, guid: e7c36529806c9294890d71a7e5bc62e2,
+        type: 3}
       propertyPath: m_BehaviorType
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3119926355150622599, guid: e7c36529806c9294890d71a7e5bc62e2,
         type: 3}
@@ -7888,7 +7894,8 @@ PrefabInstance:
       propertyPath: 'm_DetectableTags.Array.data[4]'
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3811777220693634315, guid: e7c36529806c9294890d71a7e5bc62e2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

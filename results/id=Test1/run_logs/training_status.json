@@ -2,22 +2,31 @@
     "GridFoodCollector": {
         "checkpoints": [
             {
-                "steps": 0,
-                "file_path": "results\\id=test1\\GridFoodCollector\\GridFoodCollector-0.onnx",
-                "reward": null,
-                "creation_time": 1733249462.1862094,
+                "steps": 499960,
+                "file_path": "results\\id=test1\\GridFoodCollector\\GridFoodCollector-499960.onnx",
+                "reward": 43.285714285714285,
+                "creation_time": 1736850224.83615,
                 "auxillary_file_paths": [
-                    "results\\id=test1\\GridFoodCollector\\GridFoodCollector-0.pt"
+                    "results\\id=test1\\GridFoodCollector\\GridFoodCollector-499960.pt"
+                ]
+            },
+            {
+                "steps": 500064,
+                "file_path": "results\\id=test1\\GridFoodCollector\\GridFoodCollector-500064.onnx",
+                "reward": 43.25,
+                "creation_time": 1736850225.3624625,
+                "auxillary_file_paths": [
+                    "results\\id=test1\\GridFoodCollector\\GridFoodCollector-500064.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 0,
+            "steps": 500064,
             "file_path": "results\\id=test1\\GridFoodCollector.onnx",
-            "reward": null,
-            "creation_time": 1733249462.1862094,
+            "reward": 43.25,
+            "creation_time": 1736850225.3624625,
             "auxillary_file_paths": [
-                "results\\id=test1\\GridFoodCollector\\GridFoodCollector-0.pt"
+                "results\\id=test1\\GridFoodCollector\\GridFoodCollector-500064.pt"
             ]
         }
     },
