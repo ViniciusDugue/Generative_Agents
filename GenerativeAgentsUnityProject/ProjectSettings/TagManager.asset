@@ -30,6 +30,8 @@ TagManager:
   - purpleAgent
   - purpleGoal
   - tile
+  - key
+  - enemyAgent
   layers:
   - Default
   - TransparentFX
@@ -37,8 +39,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Target
+  - Obstruction
   - invisible
   - 
   - 
