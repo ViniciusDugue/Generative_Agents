@@ -6,6 +6,8 @@ using TMPro; // Add this namespace for TextMeshPro
 
 public class EnvironmentSettings : MonoBehaviour
 {
+    public GameObject[] enemyAgents;
+
     public GameObject[] agents;
     public FoodSpawner[] listArea;
     public int foodScore = 0;
@@ -25,10 +27,12 @@ public class EnvironmentSettings : MonoBehaviour
         // ClearObjects(GameObject.FindGameObjectsWithTag("badFood"));
 
         agents = GameObject.FindGameObjectsWithTag("agent");
+        enemyAgents = GameObject.FindGameObjectsWithTag("enemyAgent");
         listArea = FindObjectsOfType<FoodSpawner>();
         foreach (var fa in listArea)
         {
             fa.ResetFoodArea(agents);
+            fa.ResetFoodArea(enemyAgents);
         }
 
         foodScore = 0;

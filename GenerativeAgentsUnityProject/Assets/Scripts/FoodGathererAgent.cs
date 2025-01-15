@@ -213,7 +213,7 @@ public class FoodGathererAgent : Agent
     }
 
     public override void OnEpisodeBegin()
-    {
+    {       
         Unfreeze();
         Unpoison();
         Unsatiate();
@@ -261,6 +261,7 @@ public class FoodGathererAgent : Agent
                 m_EnvironmentSettings.foodScore -= 1;
             }
         }
+
     }
 
     public void SetLaserLengths()
@@ -279,4 +280,5 @@ public class FoodGathererAgent : Agent
         SetLaserLengths();
         SetAgentScale();
     }
+
 }
