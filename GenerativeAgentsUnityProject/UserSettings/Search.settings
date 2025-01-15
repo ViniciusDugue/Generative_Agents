@@ -8,9 +8,11 @@ onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 showStatusBar = false
 scopes = {
-	"last_search.5A656512" = "ref=\"/Environment/Agent (1)/AgentCube_Blue\""
-	"OpenInspectorPreview.5A656512" = "0"
-	"currentGroup.5A656512" = null
+	"picker_window_position_offset.075BCD15" = "186.8572;91.42857;320;550.2858"
+	"picker_visibility_flags.075BCD15" = "264"
+	"picker_item_size.075BCD15" = "96"
+	"picker_inspector.075BCD15" = "0"
+	"picker_current_group.075BCD15" = "all"
 }
 providers = {
 	store = {

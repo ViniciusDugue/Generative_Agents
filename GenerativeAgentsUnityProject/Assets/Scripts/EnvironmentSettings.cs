@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Unity.MLAgents;
+using TMPro; // Add this namespace for TextMeshPro
 
 public class EnvironmentSettings : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class EnvironmentSettings : MonoBehaviour
     public GameObject[] agents;
     public FoodSpawner[] listArea;
     public int foodScore = 0;
-    public Text foodScoreText;
+    public TextMeshProUGUI foodScoreText; // Replace Text with TextMeshProUGUI
 
     StatsRecorder m_Recorder;
 
@@ -21,10 +21,10 @@ public class EnvironmentSettings : MonoBehaviour
         m_Recorder = Academy.Instance.StatsRecorder;
     }
 
-    void EnvironmentReset()
+    public void EnvironmentReset()
     {
         ClearObjects(GameObject.FindGameObjectsWithTag("food"));
-        ClearObjects(GameObject.FindGameObjectsWithTag("badFood"));
+        // ClearObjects(GameObject.FindGameObjectsWithTag("badFood"));
 
         agents = GameObject.FindGameObjectsWithTag("agent");
         enemyAgents = GameObject.FindGameObjectsWithTag("enemyAgent");
@@ -36,6 +36,7 @@ public class EnvironmentSettings : MonoBehaviour
         }
 
         foodScore = 0;
+        Debug.Log("Environment reset complete.");
     }
 
     void ClearObjects(GameObject[] objects)
@@ -48,7 +49,7 @@ public class EnvironmentSettings : MonoBehaviour
 
     public void Update()
     {
-        foodScoreText.text = $"Food Collected: {foodScore}";
+        // foodScoreText.text = $"Food Collected: {foodScore}";
 
         if ((Time.frameCount % 100) == 0)
         {
