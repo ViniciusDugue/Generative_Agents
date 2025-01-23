@@ -43,6 +43,7 @@ public class BlockAgent : Agent
 
         targetBlockCurrentPos = Vector2.zero;
         targetBlockDestinationPos = Vector2.zero;
+        previousPosition = transform.position;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -103,12 +104,6 @@ public class BlockAgent : Agent
         return Mathf.Clamp(alignment, 0f, 1f); 
     }
 
-
-    void Start()
-    {
-        previousPosition = transform.position;
-    }
-
     void Update()
     {
         // lets say the destination is 5 units away from the block
@@ -155,6 +150,12 @@ public class BlockAgent : Agent
         dirToGo += transform.right * right;
         rotateDir = -transform.up * rotate;
 
+        //honestly idk what thius is for?
+        if(IsHoldingBlock)
+        {
+            dirToGo *= 0.5f;
+            m_AgentRb.velocity *= 0.75f;
+        }
         //slow down agent so velocity doesnt increase endlessly
         if (m_AgentRb.velocity.sqrMagnitude > 25f) 
         {
@@ -219,18 +220,22 @@ public class BlockAgent : Agent
         var continuousActionsOut = actionsOut.ContinuousActions;
         if (Input.GetKey(KeyCode.A))
         {
+            Debug.Log("Turn Left");
             continuousActionsOut[2] = 1;
         }
         if (Input.GetKey(KeyCode.W))
         {
+            Debug.Log("Move Forward");
             continuousActionsOut[0] = 1;
         }
         if (Input.GetKey(KeyCode.D))
         {
+            Debug.Log("Turn Right");
             continuousActionsOut[2] = -1;
         }
         if (Input.GetKey(KeyCode.S))
         {
+            Debug.Log("Move Backward");
             continuousActionsOut[0] = -1;
         }
 
