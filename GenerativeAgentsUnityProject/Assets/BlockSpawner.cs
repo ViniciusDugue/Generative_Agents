@@ -10,6 +10,9 @@ public class BlockSpawner : MonoBehaviour
     [SerializeField] public int blockCount;
 
     [SerializeField] public int blocksPerAgent;
+
+    private List<GameObject> spawnedBlocks = new List<GameObject>();
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha6))
@@ -38,17 +41,20 @@ public class BlockSpawner : MonoBehaviour
 
     public void ResetBlockArea(GameObject[] agents)
     {
+        foreach (GameObject block in spawnedBlocks)
+        {
+            Destroy(block);
+        }
+        spawnedBlocks.Clear();
+
         foreach (GameObject agent in agents)
         {
-            if (agent.transform.parent == gameObject.transform)
+            for (int i = 0; i < blocksPerAgent; i++)
             {
-                agent.transform.position = new Vector3(Random.Range(-range, range), 2f,
-                    Random.Range(-range, range))
-                    + transform.position;
-                agent.transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
+                Vector3 randomPosition = new Vector3(Random.Range(-range, range), 0f, Random.Range(-range, range)) + transform.position;
+                GameObject block = Instantiate(blockPrefab, randomPosition, Quaternion.identity);
+                spawnedBlocks.Add(block);
             }
         }
-
-        CreateBlocks(blocksPerAgent, blockPrefab);
     }
 }

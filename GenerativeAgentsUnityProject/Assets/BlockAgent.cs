@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
+using Random = UnityEngine.Random;
 
-public class BlockAgent : MonoBehaviour
+public class BlockAgent : Agent
 {
-    public EnvironmentSettings m_EnvironmentSettings;
+    public BlockEnvironmentSettings m_EnvironmentSettings;
     public GameObject area;
-    FoodSpawner m_MyArea;
-    bool m_Shoot;
+    BlockSpawner m_MyArea;
 
     Rigidbody m_AgentRb;
     float m_LaserLength;
@@ -16,36 +19,30 @@ public class BlockAgent : MonoBehaviour
 
     // Speed of agent movement.
     public float moveSpeed = 2;
-    public Material normalMaterial;
-    public Material badMaterial;
-    public Material goodMaterial;
-    public Material frozenMaterial;
     public GameObject myLaser;
     public bool contribute;
     public bool useVectorObs;
-    [Tooltip("Use only the frozen flag in vector observations. If \"Use Vector Obs\" " +
-             "is checked, this option has no effect. This option is necessary for the " +
-             "VisualFoodCollector scene.")]
     public bool useVectorFrozenFlag;
 
     [SerializeField] public Vector2 currentAgentPos;
     [SerializeField] public Vector2 targetBlockCurrentPos;
     [SerializeField] public Vector2 targetBlockDestinationPos;
     [SerializeField] public GameObject closestBlock;
-    [SerializeField] public bool HoldingBlock;
+    [SerializeField] public bool IsHoldingBlock;
+    [SerializeField] private Vector3 previousPosition;
 
     EnvironmentParameters m_ResetParams;
 
     public override void Initialize()
     {
         m_AgentRb = GetComponent<Rigidbody>();
-        m_MyArea = area.GetComponent<FoodSpawner>();
-        m_EnvironmentSettings = FindObjectOfType<EnvironmentSettings>();
+        m_MyArea = area.GetComponent<BlockSpawner>();
+        m_EnvironmentSettings = FindObjectOfType<BlockEnvironmentSettings>();
         m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
 
-        targetBlockCurrentPos = ;
-        targetBlockDestinationPos = ;
+        targetBlockCurrentPos = Vector2.zero;
+        targetBlockDestinationPos = Vector2.zero;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -55,50 +52,93 @@ public class BlockAgent : MonoBehaviour
             var localVelocity = transform.InverseTransformDirection(m_AgentRb.velocity);
             sensor.AddObservation(localVelocity.x);
             sensor.AddObservation(localVelocity.z);
-            sensor.AddObservation(m_Frozen);
-            sensor.AddObservation(m_Shoot);
 
             //rotation observation
-            sensor.AddObservation(localRotation);
+            sensor.AddObservation(transform.localRotation.x);
+            sensor.AddObservation(transform.localRotation.z);
 
             //block current position
-            sensor.AddObservation(targetBlockCurrentPos);
+            sensor.AddObservation(targetBlockCurrentPos.x);
+            sensor.AddObservation(targetBlockCurrentPos.y);
 
             //block destination
-            sensor.AddObservation(targetBlockDestinationPos);
+            sensor.AddObservation(targetBlockDestinationPos.x);
+            sensor.AddObservation(targetBlockDestinationPos.y);
 
         }
-        else if (useVectorFrozenFlag)
-        {
-            sensor.AddObservation(m_Frozen);
-        }
+    }
+
+    float CalculateProgressTowardsDestination()
+    {
+        if (targetBlockDestinationPos == Vector2.zero || targetBlockCurrentPos == Vector2.zero)
+            return 0f;
+
+        Vector3 currentPosition = transform.position;
+        Vector3 displacement = currentPosition - previousPosition;
+
+        Vector3 toDestination = new Vector3(
+            targetBlockDestinationPos.x - targetBlockCurrentPos.x,
+            0f,
+            targetBlockDestinationPos.y - targetBlockCurrentPos.y
+        ).normalized;
+
+        float progress = Vector3.Dot(displacement, toDestination);
+
+        return progress;
+    }
+
+    float CalculateFacingReward()
+    {
+        if (targetBlockDestinationPos == Vector2.zero)
+            return 0f;
+
+        Vector3 toDestination = new Vector3(
+            targetBlockDestinationPos.x - transform.position.x,
+            0f,
+            targetBlockDestinationPos.y - transform.position.z
+        ).normalized;
+
+        float alignment = Vector3.Dot(transform.forward, toDestination);
+
+        return Mathf.Clamp(alignment, 0f, 1f); 
+    }
+
+
+    void Start()
+    {
+        previousPosition = transform.position;
     }
 
     void Update()
     {
         // lets say the destination is 5 units away from the block
-        if(HoldingBlock && IsProgressMade())
+        float progress = CalculateProgressTowardsDestination();
+
+        if(IsHoldingBlock)
         {
-            AddReward(0.0001f);
+            AddReward(progress * 0.1f);
         }
-        
+
+        //reward for facing in right direction
+        float facingReward = CalculateFacingReward();
+        AddReward(facingReward * 0.1f);
+
+        previousPosition = transform.position;
     }
 
-    bool IsProgressMade()
+    void OnCollisionEnter(Collision collision)
     {
-        Vector3 currentPosition = transform.position;
-        Vector3 toDestination = destination - currentPosition;
-
-        if (toDestination.magnitude > 0.01f)
+        if (collision.gameObject.CompareTag("block"))
         {
-            Vector3 direction = toDestination.normalized;
-            float progress = Vector3.Dot(velocity, direction);
-        }        
+            if (collision.gameObject != closestBlock)
+            {
+                AddReward(-0.01f);
+            }
+        }
     }
 
     public void MoveAgent(ActionBuffers actionBuffers)
     {
-        m_Shoot = false;
 
         var dirToGo = Vector3.zero;
         var rotateDir = Vector3.zero;
@@ -123,7 +163,7 @@ public class BlockAgent : MonoBehaviour
 
     }
 
-    void PickUpBlock()
+    void PickUpBlock(ActionBuffers actionBuffers)
     {
         //find closest block object and call its function;
     
@@ -136,9 +176,12 @@ public class BlockAgent : MonoBehaviour
         }
     }
 
-    void DropBlock()
+    void DropBlock(ActionBuffers actionBuffers)
     {
         //drop the picked up block
+
+        var discreteActions = actionBuffers.DiscreteActions;
+
         if(discreteActions[1] > 0 )
         {
             closestBlock.GetComponent<BlockScript>().DropBlock();
@@ -199,21 +242,19 @@ public class BlockAgent : MonoBehaviour
     }
 
     public override void OnEpisodeBegin()
-    {       
-        Unfreeze();
-        Unpoison();
-        Unsatiate();
-        m_Shoot = false;
+    {
         m_AgentRb.velocity = Vector3.zero;
-        myLaser.transform.localScale = new Vector3(0f, 0f, 0f);
-        transform.position = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range),
-            2f, Random.Range(-m_MyArea.range, m_MyArea.range))
-            + area.transform.position;
-        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
-        SetResetParameters();
-        Debug.Log("Episode complete.");
-        m_EnvironmentSettings.EnvironmentReset();
+        transform.position = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 1f, Random.Range(-m_MyArea.range, m_MyArea.range));
+        transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+
+        Vector3 randomPosition = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 0f, Random.Range(-m_MyArea.range, m_MyArea.range));
+        targetBlockCurrentPos = new Vector2(randomPosition.x, randomPosition.z);
+
+        Vector3 destinationPosition = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 0f, Random.Range(-m_MyArea.range, m_MyArea.range));
+        targetBlockDestinationPos = new Vector2(destinationPosition.x, destinationPosition.z);
+
+        Debug.Log("Episode started. Block positions updated.");
     }
 
     public void SetLaserLengths()
