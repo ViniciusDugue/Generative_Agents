@@ -60,9 +60,9 @@ public class BlockEnvironmentSettings : MonoBehaviour
 
     public void Update()
     {
-        if ((Time.frameCount % 100) == 0)
-        {
-            m_Recorder.Add("Food Score", blockScore);
-        }
+        // if ((Time.frameCount % 100) == 0)
+        // {
+        //     m_Recorder.Add("Food Score", blockScore);
+        // }
     }
 }

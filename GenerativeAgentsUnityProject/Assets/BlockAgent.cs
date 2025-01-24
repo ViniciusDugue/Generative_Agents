@@ -31,6 +31,8 @@ public class BlockAgent : Agent
     [SerializeField] public bool IsHoldingBlock;
     [SerializeField] private Vector3 previousPosition;
 
+    [SerializeField] private float minimumDistance = 5.0f;
+
     EnvironmentParameters m_ResetParams;
 
     public override void Initialize()
@@ -41,6 +43,9 @@ public class BlockAgent : Agent
         m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
 
+        // targetBlockCurrentPos = Vector2.zero;
+        // targetBlockDestinationPos = Vector2.zero;
+        
         targetBlockCurrentPos = Vector2.zero;
         targetBlockDestinationPos = Vector2.zero;
         previousPosition = transform.position;
@@ -62,63 +67,69 @@ public class BlockAgent : Agent
             sensor.AddObservation(targetBlockCurrentPos.x);
             sensor.AddObservation(targetBlockCurrentPos.y);
 
-            //block destination
-            sensor.AddObservation(targetBlockDestinationPos.x);
-            sensor.AddObservation(targetBlockDestinationPos.y);
+            // //block destination
+            // sensor.AddObservation(targetBlockDestinationPos.x);
+            // sensor.AddObservation(targetBlockDestinationPos.y);
 
         }
     }
+    #region Reward Functs
+    // float CalculateProgressTowardsDestination()
+    // {
+    //     if (targetBlockDestinationPos == Vector2.zero || targetBlockCurrentPos == Vector2.zero)
+    //         return 0f;
 
-    float CalculateProgressTowardsDestination()
-    {
-        if (targetBlockDestinationPos == Vector2.zero || targetBlockCurrentPos == Vector2.zero)
-            return 0f;
+    //     Vector3 currentPosition = transform.position;
+    //     Vector3 displacement = currentPosition - previousPosition;
 
-        Vector3 currentPosition = transform.position;
-        Vector3 displacement = currentPosition - previousPosition;
+    //     Vector3 toDestination = new Vector3(
+    //         targetBlockDestinationPos.x - targetBlockCurrentPos.x,
+    //         0f,
+    //         targetBlockDestinationPos.y - targetBlockCurrentPos.y
+    //     ).normalized;
 
-        Vector3 toDestination = new Vector3(
-            targetBlockDestinationPos.x - targetBlockCurrentPos.x,
-            0f,
-            targetBlockDestinationPos.y - targetBlockCurrentPos.y
-        ).normalized;
+    //     float progress = Vector3.Dot(displacement, toDestination);
 
-        float progress = Vector3.Dot(displacement, toDestination);
+    //     return progress;
+    // }
 
-        return progress;
-    }
+    // float CalculateFacingReward()
+    // {
+    //     if (targetBlockDestinationPos == Vector2.zero)
+    //         return 0f;
 
-    float CalculateFacingReward()
-    {
-        if (targetBlockDestinationPos == Vector2.zero)
-            return 0f;
+    //     Vector3 toDestination = new Vector3(
+    //         targetBlockDestinationPos.x - transform.position.x,
+    //         0f,
+    //         targetBlockDestinationPos.y - transform.position.z
+    //     ).normalized;
 
-        Vector3 toDestination = new Vector3(
-            targetBlockDestinationPos.x - transform.position.x,
-            0f,
-            targetBlockDestinationPos.y - transform.position.z
-        ).normalized;
+    //     float alignment = Vector3.Dot(transform.forward, toDestination);
 
-        float alignment = Vector3.Dot(transform.forward, toDestination);
+    //     return Mathf.Clamp(alignment, 0f, 1f); 
+    // }
+    #endregion 
 
-        return Mathf.Clamp(alignment, 0f, 1f); 
-    }
-
+    #region Behaviors
     void Update()
     {
-        // lets say the destination is 5 units away from the block
-        float progress = CalculateProgressTowardsDestination();
+        //float progress = CalculateProgressTowardsDestination();
 
-        if(IsHoldingBlock)
-        {
-            AddReward(progress * 0.1f);
-        }
+        
+        // if(IsHoldingBlock && closestBlock != null)
+        // {
+        //     // add reward for making progress towards destination
+        //     //AddReward(progress * 0.1f);
+
+        //     // keep the block above the agent
+        //     HoldBlockAboveAgent(closestBlock);
+        // }
 
         //reward for facing in right direction
-        float facingReward = CalculateFacingReward();
-        AddReward(facingReward * 0.1f);
+        // float facingReward = CalculateFacingReward();
+        // AddReward(facingReward * 0.1f);
 
-        previousPosition = transform.position;
+        //previousPosition = transform.position;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -130,6 +141,68 @@ public class BlockAgent : Agent
                 AddReward(-0.01f);
             }
         }
+    }
+
+    void PickUpBlock(ActionBuffers actionBuffers)
+    {
+        //find closest block object and pick it up
+    
+        var discreteActions = actionBuffers.DiscreteActions;
+
+        if(discreteActions[1] > 0 )
+        {
+            closestBlock = FindClosestBlock();
+
+            IsHoldingBlock = true;
+            HoldBlockAboveAgent(closestBlock);
+        }
+    }
+
+    void DropBlock(ActionBuffers actionBuffers)
+    {
+        //drop the picked up block
+
+        var discreteActions = actionBuffers.DiscreteActions;
+
+        if(discreteActions[1] > 0 )
+        {
+            IsHoldingBlock = false;
+            closestBlock.transform.position = transform.position + transform.forward + new Vector3(0, 0.5f, 0);
+        }
+    }
+
+    void HoldBlockAboveAgent(GameObject block)
+    {
+        if (block != null)
+        {
+            // Make the agent the parent of the block
+            block.transform.SetParent(transform);
+
+            // Position it above the agent locally
+            block.transform.localPosition = new Vector3(0, 1, 0);
+        }
+    }
+
+    GameObject FindClosestBlock()
+    {
+        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("block");
+
+        GameObject closest = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (GameObject obj in objectsWithTag)
+        {
+            float distance = Vector3.Distance(transform.position, obj.transform.position);
+            
+            // Only consider objects within the minimum distance
+            if (distance < closestDistance && distance <= minimumDistance)
+            {
+                closest = obj;
+                closestDistance = distance;
+            }
+        }
+
+        return closest;
     }
 
     public void MoveAgent(ActionBuffers actionBuffers)
@@ -151,11 +224,11 @@ public class BlockAgent : Agent
         rotateDir = -transform.up * rotate;
 
         //honestly idk what thius is for?
-        if(IsHoldingBlock)
-        {
-            dirToGo *= 0.5f;
-            m_AgentRb.velocity *= 0.75f;
-        }
+        // if(IsHoldingBlock)
+        // {
+        //     dirToGo *= 0.5f;
+        //     m_AgentRb.velocity *= 0.75f;
+        // }
         //slow down agent so velocity doesnt increase endlessly
         if (m_AgentRb.velocity.sqrMagnitude > 25f) 
         {
@@ -164,57 +237,18 @@ public class BlockAgent : Agent
 
     }
 
-    void PickUpBlock(ActionBuffers actionBuffers)
-    {
-        //find closest block object and call its function;
-    
-        var discreteActions = actionBuffers.DiscreteActions;
-
-        if(discreteActions[1] > 0 )
-        {
-            closestBlock = FindClosestBlock();
-            closestBlock.GetComponent<BlockScript>().PickUpBlock();
-        }
-    }
-
-    void DropBlock(ActionBuffers actionBuffers)
-    {
-        //drop the picked up block
-
-        var discreteActions = actionBuffers.DiscreteActions;
-
-        if(discreteActions[1] > 0 )
-        {
-            closestBlock.GetComponent<BlockScript>().DropBlock();
-        }
-    }
-
-    GameObject FindClosestBlock()
-    {
-        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("block");
-
-        GameObject closest = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (GameObject obj in objectsWithTag)
-        {
-            float distance = Vector3.Distance(transform.position, obj.transform.position);
-            if (distance < closestDistance)
-            {
-                closest = obj;
-                closestDistance = distance;
-            }
-        }
-
-        return closest;
-    }
-
     public override void OnActionReceived(ActionBuffers actionBuffers)
 
     {
+        // DropBlock(actionBuffers);
+
+        // PickUpBlock(actionBuffers);
+
         MoveAgent(actionBuffers);
     }
+    #endregion
 
+    #region Heuristics
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
@@ -240,11 +274,11 @@ public class BlockAgent : Agent
         }
 
         var discreteActionsOut = actionsOut.DiscreteActions;
-        discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0;
 
         discreteActionsOut[1] = Input.GetKey(KeyCode.Alpha7) ? 1 : 0; // pick up block
         discreteActionsOut[2] = Input.GetKey(KeyCode.Alpha8) ? 1 : 0; // drop block in front of agent
     }
+    #endregion
 
     public override void OnEpisodeBegin()
     {
@@ -253,11 +287,11 @@ public class BlockAgent : Agent
         transform.position = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 1f, Random.Range(-m_MyArea.range, m_MyArea.range));
         transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
 
-        Vector3 randomPosition = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 0f, Random.Range(-m_MyArea.range, m_MyArea.range));
-        targetBlockCurrentPos = new Vector2(randomPosition.x, randomPosition.z);
+        // Vector3 randomPosition = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 0f, Random.Range(-m_MyArea.range, m_MyArea.range));
+        // targetBlockCurrentPos = new Vector2(randomPosition.x, randomPosition.z);
 
-        Vector3 destinationPosition = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 0f, Random.Range(-m_MyArea.range, m_MyArea.range));
-        targetBlockDestinationPos = new Vector2(destinationPosition.x, destinationPosition.z);
+        // Vector3 destinationPosition = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range), 0f, Random.Range(-m_MyArea.range, m_MyArea.range));
+        // targetBlockDestinationPos = new Vector2(destinationPosition.x, destinationPosition.z);
 
         Debug.Log("Episode started. Block positions updated.");
     }
