@@ -55,5 +55,11 @@ public class EnvironmentSettings : MonoBehaviour
         {
             m_Recorder.Add("Food Score", foodScore);
         }
+
+        if (Input.GetKey(KeyCode.Alpha9))
+        {
+            Debug.Log("manually reset environments");
+            EnvironmentReset();
+        }
     }
 }

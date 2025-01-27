@@ -32,6 +32,7 @@ TagManager:
   - tile
   - key
   - enemyAgent
+  - destination
   layers:
   - Default
   - TransparentFX

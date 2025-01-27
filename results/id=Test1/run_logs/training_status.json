@@ -1,32 +1,23 @@
 {
-    "GridFoodCollector": {
+    "BlockPusher": {
         "checkpoints": [
             {
-                "steps": 499960,
-                "file_path": "results\\id=test1\\GridFoodCollector\\GridFoodCollector-499960.onnx",
-                "reward": 43.285714285714285,
-                "creation_time": 1736850224.83615,
+                "steps": 2600,
+                "file_path": "results\\id=test1\\BlockPusher\\BlockPusher-2600.onnx",
+                "reward": 0.0,
+                "creation_time": 1737936057.1598442,
                 "auxillary_file_paths": [
-                    "results\\id=test1\\GridFoodCollector\\GridFoodCollector-499960.pt"
-                ]
-            },
-            {
-                "steps": 500064,
-                "file_path": "results\\id=test1\\GridFoodCollector\\GridFoodCollector-500064.onnx",
-                "reward": 43.25,
-                "creation_time": 1736850225.3624625,
-                "auxillary_file_paths": [
-                    "results\\id=test1\\GridFoodCollector\\GridFoodCollector-500064.pt"
+                    "results\\id=test1\\BlockPusher\\BlockPusher-2600.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500064,
-            "file_path": "results\\id=test1\\GridFoodCollector.onnx",
-            "reward": 43.25,
-            "creation_time": 1736850225.3624625,
+            "steps": 2600,
+            "file_path": "results\\id=test1\\BlockPusher.onnx",
+            "reward": 0.0,
+            "creation_time": 1737936057.1598442,
             "auxillary_file_paths": [
-                "results\\id=test1\\GridFoodCollector\\GridFoodCollector-500064.pt"
+                "results\\id=test1\\BlockPusher\\BlockPusher-2600.pt"
             ]
         }
     },
