@@ -20,6 +20,7 @@ public class FoodCollectorArea : Area
             f.GetComponent<FoodLogic>().respawn = respawnFood;
             f.GetComponent<FoodLogic>().myArea = this;
         }
+        Debug.Log("Food Created.");
     }
 
     public void ResetFoodArea(GameObject[] agents)

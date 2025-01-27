@@ -17,5 +17,6 @@ public class FoodLogic : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        Debug.Log("Food Respawned.");
     }
 }
