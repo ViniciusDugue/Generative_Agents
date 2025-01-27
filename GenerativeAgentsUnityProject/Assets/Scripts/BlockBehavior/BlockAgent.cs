@@ -34,6 +34,7 @@ public class BlockAgent : Agent
 
     public List<GameObject> spawnedBlocksPerAgent = new List<GameObject>();
     [SerializeField] public GameObject targetBlock;
+    [SerializeField] public GameObject destinationObject;
 
     public bool contribute;
     public bool useVectorObs;

@@ -19,15 +19,15 @@ public class BlockEnvironmentSettings : MonoBehaviour
 
     public void EnvironmentReset()
     {
-        ClearObjects(GameObject.FindGameObjectsWithTag("destination")); //Clear existing destinations
-        ClearObjects(GameObject.FindGameObjectsWithTag("block")); // Clear existing blocks
+        // ClearObjects(GameObject.FindGameObjectsWithTag("destination")); //Clear existing destinations
+        // ClearObjects(GameObject.FindGameObjectsWithTag("block")); // Clear existing blocks
         
         listArea = FindObjectsOfType<BlockSpawner>();
         
         Debug.Log("Environment reset complete.");
         foreach (var spawner in listArea)
         {   
-            spawner.spawnedBlocks.Clear();
+            // spawner.spawnedBlocks.Clear();
             spawner.ResetBlockArea();
             
         }
