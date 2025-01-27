@@ -33,6 +33,7 @@ TagManager:
   - key
   - enemyAgent
   - destination
+  - targetBlock
   layers:
   - Default
   - TransparentFX

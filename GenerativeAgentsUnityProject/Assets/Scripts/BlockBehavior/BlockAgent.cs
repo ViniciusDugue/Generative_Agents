@@ -26,6 +26,9 @@ public class BlockAgent : Agent
     [SerializeField] public Vector2 targetBlockDestinationPos;
     [SerializeField] private float minimumDistance = 5.0f;
     [SerializeField] private float progressRewardWeight = 1f;
+    [SerializeField] private float destinationCollissionReward = 1f;
+    [SerializeField] private float pickedUpTargetBlockReward = 1f;
+
     [SerializeField] private bool isHoldingTargetBlock;
     [SerializeField] private float distanceFromDestination;
     [SerializeField] private float distanceFromTargetBlock;
@@ -256,7 +259,7 @@ public class BlockAgent : Agent
             isHoldingTargetBlock = pickedUpBlock == targetBlock ? true : false;
             if(isHoldingTargetBlock)
             {
-                AddReward(5f);
+                AddReward(pickedUpTargetBlockReward);
             }
         }
     }
@@ -277,28 +280,49 @@ public class BlockAgent : Agent
     #region Reward Functs
     // if is holding target block, give reward/penalty based on positive or negative progress
     void ProgressReward()
-    {   
+    {
         float progress = 0;
-        
-        if(isHoldingTargetBlock)
+
+        // If the agent is NOT holding the target block, reward it for moving closer to the block
+        if (!isHoldingTargetBlock)
         {
+            // 1. Find how the agent moved since last step (in 2D)
+            Vector2 displacement = currentPosition - previousPosition;
+
+            // 2. Direction from the agent to the target block
+            Vector2 toBlock = (targetBlockPos - currentPosition).normalized;
+
+            // 3. Dot product to measure alignment of movement with "toBlock"
+            progress = Vector2.Dot(displacement, toBlock);
+        }
+        // If the agent IS holding the target block, reward it for moving the block to its destination
+        else
+        {
+            // 1. Agent displacement in 3D (though Y is 0, we can still use Vector3)
             Vector3 displacement = currentPosition - previousPosition;
 
+            // 2. Direction from the block to its destination
             Vector3 toDestination = new Vector3(
                 targetBlockDestinationPos.x - targetBlockPos.x,
                 0f,
                 targetBlockDestinationPos.y - targetBlockPos.y
             ).normalized;
 
+            // 3. Dot product for alignment toward destination
             progress = Vector3.Dot(displacement, toDestination);
         }
-        //Debug.Log($"Progress Reward: {progress}");
-        AddReward(progress * progressRewardWeight);
+        if(progress > 0f)
+        {
+            // Apply the progress-based reward
+            AddReward(progress * progressRewardWeight);
 
-        //update variables for next action step
+        }
+        
+        // Update positions for the next step
         previousPosition = currentPosition;
         currentPosition = transform.position;
     }
+
 
     //when agent collides with destination trigger, do drop block reward
     void OnCollisionEnter(Collision collision)
@@ -307,7 +331,7 @@ public class BlockAgent : Agent
         {
             //set block color back to default color
             blockSpawner.SetBlockMaterial(targetBlock, blockSpawner.blockMaterial);
-            AddReward(5f);
+            AddReward(destinationCollissionReward);
         }
     }
     #endregion

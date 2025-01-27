@@ -42,9 +42,6 @@ public class BlockSpawner : MonoBehaviour
         foreach (var agent in agents)
         {
             BlockAgent blockAgent = agent.GetComponent<BlockAgent>();
-
-            //clear this list for this agents environment reset
-            blockAgent.spawnedBlocksPerAgent.Clear();
             
             //spawn in blocks per agent
             for (int i = 0; i < blocksPerAgent; i++)
@@ -75,10 +72,13 @@ public class BlockSpawner : MonoBehaviour
                 //give target block unique color
                 SetBlockMaterial(blockAgent.targetBlock, targetBlockMaterial);
 
+                //change its tag to targetblock
+                blockAgent.targetBlock.tag = "targetBlock";
+
                 // Instantiate destination hitbox and move randomly
                 Vector3 destinationPosition = new Vector3(Random.Range(-range, range), 3f, Random.Range(-range, range)) + transform.position;
                 blockAgent.targetBlockDestinationPos = new Vector2(destinationPosition.x, destinationPosition.z);
-                blockAgent.destinationObject = Instantiate(destinationPrefab, destinationPosition, Quaternion.identity);
+                blockAgent.destinationObject = Instantiate(destinationPrefab, destinationPosition, Quaternion.identity, transform);
             }
             else
             {

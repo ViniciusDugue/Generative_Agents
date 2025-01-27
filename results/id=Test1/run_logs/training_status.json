@@ -2,22 +2,22 @@
     "BlockPusher": {
         "checkpoints": [
             {
-                "steps": 2640,
-                "file_path": "results\\id=test1\\BlockPusher\\BlockPusher-2640.onnx",
-                "reward": 0.0,
-                "creation_time": 1737965177.4778028,
+                "steps": 242401,
+                "file_path": "results\\id=test1\\BlockPusher\\BlockPusher-242401.onnx",
+                "reward": null,
+                "creation_time": 1737969226.4221933,
                 "auxillary_file_paths": [
-                    "results\\id=test1\\BlockPusher\\BlockPusher-2640.pt"
+                    "results\\id=test1\\BlockPusher\\BlockPusher-242401.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 2640,
+            "steps": 242401,
             "file_path": "results\\id=test1\\BlockPusher.onnx",
-            "reward": 0.0,
-            "creation_time": 1737965177.4778028,
+            "reward": null,
+            "creation_time": 1737969226.4221933,
             "auxillary_file_paths": [
-                "results\\id=test1\\BlockPusher\\BlockPusher-2640.pt"
+                "results\\id=test1\\BlockPusher\\BlockPusher-242401.pt"
             ]
         }
     },

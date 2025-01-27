@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1737968584",
+        "python_version": "3.10.0 (tags/v3.10.0:b494f59, Oct  4 2021, 19:00:18) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\ViniciusDugue\\Desktop\\Generative_Agents\\venv\\Scripts\\mlagents-learn --force --run-id=test1 --torch-device cuda:1",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.13.1+cu117",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1737968592"
+    },
+    "total": 7.422084000019822,
+    "count": 1,
+    "self": 0.00568650005152449,
+    "children": {
+        "run_training.setup": {
+            "total": 0.011170299985678867,
+            "count": 1,
+            "self": 0.011170299985678867
+        },
+        "TrainerController.start_learning": {
+            "total": 7.405227199982619,
+            "count": 1,
+            "self": 8.450000314041972e-05,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 7.404942099994514,
+                    "count": 1,
+                    "self": 7.404942099994514
+                },
+                "TrainerController._save_models": {
+                    "total": 0.00020059998496435583,
+                    "count": 1,
+                    "self": 0.00020059998496435583
+                }
+            }
+        }
+    }
+}

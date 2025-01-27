@@ -761,7 +761,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 2
-  m_BehaviorType: 1
+  m_BehaviorType: 0
   m_BehaviorName: BlockPusher
   TeamId: 0
   m_UseChildSensors: 1
@@ -783,7 +783,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
+  MaxStep: 10000
   m_EnvironmentSettings: {fileID: 0}
   area: {fileID: 5009788440251838805}
   blockSpawner: {fileID: 4029907176010456968}
@@ -796,7 +796,9 @@ MonoBehaviour:
   targetBlockPos: {x: 0, y: 0}
   targetBlockDestinationPos: {x: 0, y: 0}
   minimumDistance: 5
-  progressRewardWeight: 1
+  progressRewardWeight: 0.5
+  destinationCollissionReward: 50
+  pickedUpTargetBlockReward: 50
   isHoldingTargetBlock: 0
   distanceFromDestination: 0
   distanceFromTargetBlock: 0
@@ -804,6 +806,7 @@ MonoBehaviour:
   currentPosition: {x: 0, y: 0}
   spawnedBlocksPerAgent: []
   targetBlock: {fileID: 0}
+  destinationObject: {fileID: 0}
   contribute: 1
   useVectorObs: 0
   useVectorFrozenFlag: 0
@@ -841,10 +844,11 @@ MonoBehaviour:
   - wall
   - block
   - destination
+  - targetBlock
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
-  m_RayLength: 35
+  m_RayLength: 65
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967291
@@ -874,10 +878,11 @@ MonoBehaviour:
   - wall
   - block
   - destination
+  - targetBlock
   m_RaysPerDirection: 12
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
-  m_RayLength: 35
+  m_RayLength: 65
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967291
@@ -1492,7 +1497,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 40
-  blockPrefab: {fileID: 0}
+  blockPrefab: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
+    type: 3}
   blockCount: 0
   blocksPerAgent: 5
   destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
@@ -1502,6 +1508,7 @@ MonoBehaviour:
   isTraining: 1
   targetBlockMaterial: {fileID: 2100000, guid: 1fa34bebe866b534ab96a2fb50fa40d8, type: 2}
   blockMaterial: {fileID: 2100000, guid: 20d70394c0585ae419d977c7ec9d5097, type: 2}
+  blocksCreated: 0
 --- !u!1 &5810106184986439444
 GameObject:
   m_ObjectHideFlags: 0

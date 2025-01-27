@@ -10,6 +10,7 @@ public class BlockEnvironmentSettings : MonoBehaviour
     public int blockScore = 0;
 
     StatsRecorder m_Recorder;
+    [SerializeField] public float timeRate;
 
     public void Awake()
     {
@@ -52,6 +53,7 @@ public class BlockEnvironmentSettings : MonoBehaviour
             EnvironmentReset();
         }
         
+        Time.timeScale = timeRate;
         // if ((Time.frameCount % 100) == 0)
         // {
         //     m_Recorder.Add("Food Score", blockScore);
