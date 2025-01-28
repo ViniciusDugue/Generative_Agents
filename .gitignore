@@ -80,3 +80,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 venv/*
 mongodb_agents.py
+GenerativeAgentsUnityProject/UserSettings/Layouts/default-2023.dwlt
+GenerativeAgentsUnityProject/UserSettings/EditorUserSettings.asset
+GenerativeAgentsUnityProject/Assets/Scripts/CameraController.cs.meta
+GenerativeAgentsUnityProject/Assets/Scenes/Agent Environment Scene.unity
