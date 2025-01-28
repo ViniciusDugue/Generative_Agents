@@ -788,7 +788,7 @@ MonoBehaviour:
   area: {fileID: 5009788440251838805}
   blockSpawner: {fileID: 4029907176010456968}
   turnSpeed: 150
-  moveSpeed: 1
+  moveSpeed: 5
   normalMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
   myLaser: {fileID: 6954362038494725039}
   pickedUpBlock: {fileID: 0}

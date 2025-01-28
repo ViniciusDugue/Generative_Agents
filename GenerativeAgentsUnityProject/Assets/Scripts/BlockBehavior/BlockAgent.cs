@@ -188,13 +188,6 @@ public class BlockAgent : Agent
         dirToGo += transform.right * right;
         rotateDir = -transform.up * rotate;
 
-        // var shootCommand = discreteActions[0] > 0;
-        // if (shootCommand)
-        // {
-        //     m_Shoot = true;
-        //     dirToGo *= 0.5f;
-        //     m_AgentRb.velocity *= 0.75f;
-        // }
         m_AgentRb.AddForce(dirToGo * moveSpeed, ForceMode.VelocityChange);
         transform.Rotate(rotateDir, Time.fixedDeltaTime * turnSpeed);
 
@@ -250,12 +243,14 @@ public class BlockAgent : Agent
 
         if(discreteActions[0] > 0 )
         {
-            pickedUpBlock = FindClosestBlock();
+            //make agent only able to pick up target block
+            GameObject closestBlock = FindClosestBlock();
+            if(closestBlock = targetBlock)
+            {
+                pickedUpBlock = closestBlock;
+                isHoldingBlock = true;
+            }
 
-            isHoldingBlock = true;
-
-            //this might be bad incase another agent accidentally picks up another agents target block
-            //should be fine because targetblockposition is updated
             isHoldingTargetBlock = pickedUpBlock == targetBlock ? true : false;
             if(isHoldingTargetBlock)
             {
@@ -311,12 +306,8 @@ public class BlockAgent : Agent
             // 3. Dot product for alignment toward destination
             progress = Vector3.Dot(displacement, toDestination);
         }
-        if(progress > 0f)
-        {
-            // Apply the progress-based reward
-            AddReward(progress * progressRewardWeight);
 
-        }
+        AddReward(progress * progressRewardWeight);
         
         // Update positions for the next step
         previousPosition = currentPosition;
