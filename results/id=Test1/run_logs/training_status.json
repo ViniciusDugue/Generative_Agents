@@ -2,28 +2,28 @@
     "BlockPusher": {
         "checkpoints": [
             {
-                "steps": 242401,
-                "file_path": "results\\id=test1\\BlockPusher\\BlockPusher-242401.onnx",
+                "steps": 0,
+                "file_path": "results\\id=test1\\BlockPusher\\BlockPusher-0.onnx",
                 "reward": null,
-                "creation_time": 1737969226.4221933,
+                "creation_time": 1738046287.4104767,
                 "auxillary_file_paths": [
-                    "results\\id=test1\\BlockPusher\\BlockPusher-242401.pt"
+                    "results\\id=test1\\BlockPusher\\BlockPusher-0.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 242401,
+            "steps": 0,
             "file_path": "results\\id=test1\\BlockPusher.onnx",
             "reward": null,
-            "creation_time": 1737969226.4221933,
+            "creation_time": 1738046287.4104767,
             "auxillary_file_paths": [
-                "results\\id=test1\\BlockPusher\\BlockPusher-242401.pt"
+                "results\\id=test1\\BlockPusher\\BlockPusher-0.pt"
             ]
         }
     },
     "metadata": {
         "stats_format_version": "0.3.0",
         "mlagents_version": "0.30.0",
-        "torch_version": "1.13.1+cu117"
+        "torch_version": "1.13.1+cpu"
     }
 }

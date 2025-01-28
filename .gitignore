@@ -85,3 +85,14 @@ crashlytics-build.properties
 venv/
 
 .env
+results/id=Test1/run_logs/training_status.json
+results/id=Test1/run_logs/timers.json
+results/id=Test1/BlockPusher/events.out.tfevents.1738046287.Nate-PC.14952.0
+results/id=Test1/BlockPusher/events.out.tfevents.1737968667.DESKTOP-KDCIJRP.396.0
+results/id=Test1/BlockPusher/checkpoint.pt
+results/id=Test1/BlockPusher/BlockPusher-0.onnx
+results/id=Test1/BlockPusher/BlockPusher-0.pt
+results/id=Test1/BlockPusher.onnx
+GenerativeAgentsUnityProject/UserSettings/Layouts/default-2023.dwlt
+GenerativeAgentsUnityProject/UserSettings/EditorUserSettings.asset
+mongodb_agents.py
