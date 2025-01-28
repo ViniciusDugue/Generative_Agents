@@ -213,7 +213,7 @@ public class FoodGathererAgent : Agent
     }
 
     public override void OnEpisodeBegin()
-    {
+    {       
         Unfreeze();
         Unpoison();
         Unsatiate();
@@ -226,12 +226,20 @@ public class FoodGathererAgent : Agent
         transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
         SetResetParameters();
+        Debug.Log("Episode complete.");
+        m_EnvironmentSettings.EnvironmentReset();
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("food collision");
         if (collision.gameObject.CompareTag("food"))
         {
+            
+            if (collision.gameObject.GetComponent<FoodScript>() == null)
+            {
+                Debug.LogError("FoodScript is null on collided object!");
+            }
             Satiate();
             collision.gameObject.GetComponent<FoodScript>().OnEaten();
             AddReward(1f);
@@ -253,6 +261,7 @@ public class FoodGathererAgent : Agent
                 m_EnvironmentSettings.foodScore -= 1;
             }
         }
+
     }
 
     public void SetLaserLengths()
@@ -271,4 +280,5 @@ public class FoodGathererAgent : Agent
         SetLaserLengths();
         SetAgentScale();
     }
+
 }

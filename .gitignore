@@ -16,6 +16,8 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+/venv/
+
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
@@ -77,5 +79,9 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-#
-/venv
+### 
+# Environments
+###
+venv/
+
+.env
