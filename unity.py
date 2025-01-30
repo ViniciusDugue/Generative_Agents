@@ -9,12 +9,10 @@ import uvicorn
 load_dotenv()
 
 # Access the environment variables
-base_url = os.getenv("BASE_URL")
 api_key = os.getenv("API_KEY")
 
 # Create OpenAI client
 client = openai.OpenAI(
-    base_url=base_url,
     api_key=api_key,
 )
 
@@ -72,4 +70,4 @@ async def process_input(request: Request):
 
 # Run the FastAPI app
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=12345)
+    uvicorn.run("unity:app", host="localhost", port=12345)

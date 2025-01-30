@@ -38,7 +38,7 @@ public class Client : MonoBehaviour
             using (HttpClient client = new HttpClient())
             {
                 // Prepare the JSON payload
-                var jsonData = new { text = message };
+                var jsonData = new {input_string = message };
                 string jsonString = JsonConvert.SerializeObject(jsonData);
 
                 // Create the HTTP content
