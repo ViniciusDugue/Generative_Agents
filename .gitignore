@@ -79,6 +79,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 venv/*
+.env
 mongodb_agents.py
 GenerativeAgentsUnityProject/UserSettings/Layouts/default-2023.dwlt
 GenerativeAgentsUnityProject/UserSettings/EditorUserSettings.asset
