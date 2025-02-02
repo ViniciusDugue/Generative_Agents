@@ -4,7 +4,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Random = UnityEngine.Random;
 
-public class FoodGathererAgent : Agent
+public class FoodGathererAgent : AgentBehavior
 {
     public EnvironmentSettings m_EnvironmentSettings;
     public GameObject area;
@@ -33,11 +33,13 @@ public class FoodGathererAgent : Agent
              "is checked, this option has no effect. This option is necessary for the " +
              "VisualFoodCollector scene.")]
     public bool useVectorFrozenFlag;
+    
 
     EnvironmentParameters m_ResetParams;
 
     public override void Initialize()
     {
+        // exhaustionRate = 2.0f;
         m_AgentRb = GetComponent<Rigidbody>();
         m_MyArea = area.GetComponent<FoodSpawner>();
         m_EnvironmentSettings = FindObjectOfType<EnvironmentSettings>();
