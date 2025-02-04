@@ -761,7 +761,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: b234194316cd7db4eafea14a1553628c, type: 3}
   m_InferenceDevice: 2
-  m_BehaviorType: 2
+  m_BehaviorType: 0
   m_BehaviorName: BlockPusher
   TeamId: 0
   m_UseChildSensors: 1
