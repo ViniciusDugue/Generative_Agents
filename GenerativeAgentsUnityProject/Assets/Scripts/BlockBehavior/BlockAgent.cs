@@ -20,14 +20,13 @@ public class BlockAgent : Agent
     public Material normalMaterial;
     public GameObject myLaser;
 
-    [SerializeField] public GameObject pickedUpBlock;
-    [SerializeField] public bool isHoldingBlock;
     [SerializeField] public Vector2 targetBlockPos;
     [SerializeField] public Vector2 targetBlockDestinationPos;
-    [SerializeField] private float minimumDistance = 5.0f;
+    [SerializeField] private float minDropDistance = 2f;
+    [SerializeField] private float minPickUpDistance = 5f;
     [SerializeField] private float progressRewardWeight = 1f;
-    [SerializeField] private float destinationCollissionReward = 1f;
-    [SerializeField] private float pickedUpTargetBlockReward = 1f;
+    [SerializeField] private float dropReward = 1f;
+    [SerializeField] private float pickUpReward = 1f;
 
     [SerializeField] private bool isHoldingTargetBlock;
     [SerializeField] private float distanceFromDestination;
@@ -38,6 +37,8 @@ public class BlockAgent : Agent
     public List<GameObject> spawnedBlocksPerAgent = new List<GameObject>();
     [SerializeField] public GameObject targetBlock;
     [SerializeField] public GameObject destinationObject;
+
+    [SerializeField] private float totalReward_Debug;
 
     public bool contribute;
     public bool useVectorObs;
@@ -94,9 +95,6 @@ public class BlockAgent : Agent
             //distance from targetBlock(variable needs to be updated in agent script)
             sensor.AddObservation(distanceFromTargetBlock);
 
-            //whether agent is holding block
-            sensor.AddObservation(isHoldingBlock);
-
             //whether agent is holding target block
             sensor.AddObservation(isHoldingTargetBlock);
             
@@ -148,7 +146,10 @@ public class BlockAgent : Agent
 
         SetResetParameters();
         Debug.Log("Episode complete.");
-        m_EnvironmentSettings.EnvironmentReset();
+
+        blockSpawner.ResetBlockArea();
+        // this is wrong. Should only reset the individual agents environment, not all the environments
+        //m_EnvironmentSettings.EnvironmentReset();
     }
 
     //called at every action step
@@ -167,6 +168,7 @@ public class BlockAgent : Agent
         targetBlockPos = new Vector2(targetBlock.transform.position.x, targetBlock.transform.position.z);
 
         ProgressReward();
+        FacingReward();
     }
 
     #endregion 
@@ -202,7 +204,7 @@ public class BlockAgent : Agent
         }
     }
 
-    // find closest block object in the single environment
+    // find closest block in the single environment
     GameObject FindClosestBlock()
     {
         List<GameObject> blocks = blockSpawner.spawnedBlocks;
@@ -220,7 +222,7 @@ public class BlockAgent : Agent
             float distance = Vector3.Distance(transform.position, block.transform.position);
             
             // Only consider objects within the minimum distance
-            if (distance < closestDistance && distance <= minimumDistance)
+            if (distance < closestDistance)
             {
                 closest = block;
                 closestDistance = distance;
@@ -232,42 +234,41 @@ public class BlockAgent : Agent
     //called in update to keep block object above agent
     void HoldBlockAboveAgent()
     {
-        pickedUpBlock.transform.position = transform.position + new Vector3(0, 2, 0);
+        targetBlock.transform.position = transform.position + new Vector3(0, 2, 0);
     }
 
-    //find closest block object and pick it up
+    //if target block in range, pick it up
     void PickUpBlock(ActionBuffers actionBuffers)
     {
     
         var discreteActions = actionBuffers.DiscreteActions;
 
-        if(discreteActions[0] > 0 )
+        GameObject closestBlock = FindClosestBlock();
+        float pickUpDistance = Vector3.Distance(targetBlock.transform.position, closestBlock.transform.position);
+        if(discreteActions[0] > 0 && closestBlock == targetBlock && distanceFromTargetBlock <= minPickUpDistance)
         {
             //make agent only able to pick up target block
-            GameObject closestBlock = FindClosestBlock();
-            if(closestBlock = targetBlock)
-            {
-                pickedUpBlock = closestBlock;
-                isHoldingBlock = true;
-            }
-
-            isHoldingTargetBlock = pickedUpBlock == targetBlock ? true : false;
-            if(isHoldingTargetBlock)
-            {
-                AddReward(pickedUpTargetBlockReward);
-            }
+            isHoldingTargetBlock = true;
+            AddReward(pickUpReward);
+            totalReward_Debug += pickUpReward;
         }
     }
 
-    //drop the picked up block in front of agent
+    //if in range, drop the targetblock onto the destination 
     void DropBlock(ActionBuffers actionBuffers)
     {
         var discreteActions = actionBuffers.DiscreteActions;
 
-        if(discreteActions[1] > 0 && isHoldingBlock)
+        if(discreteActions[1] > 0 && isHoldingTargetBlock && (distanceFromDestination <= minDropDistance))
         {
-            isHoldingBlock = false;
-            pickedUpBlock.transform.position = transform.position + transform.forward + new Vector3(0, 1.5f, 0);
+            isHoldingTargetBlock = false;
+            targetBlock.transform.position = destinationObject.transform.position + new Vector3(0, 1.5f, 0);
+
+            // need to change this back for inference
+            //blockSpawner.SetBlockMaterial(targetBlock, blockSpawner.blockMaterial);
+            AddReward(dropReward);
+            totalReward_Debug += dropReward;
+            EndEpisode();
         }
     }
     #endregion
@@ -281,56 +282,75 @@ public class BlockAgent : Agent
         // If the agent is NOT holding the target block, reward it for moving closer to the block
         if (!isHoldingTargetBlock)
         {
-            // 1. Find how the agent moved since last step (in 2D)
             Vector2 displacement = currentPosition - previousPosition;
-
-            // 2. Direction from the agent to the target block
             Vector2 toBlock = (targetBlockPos - currentPosition).normalized;
 
-            // 3. Dot product to measure alignment of movement with "toBlock"
+            // Dot product to measure alignment of movement with "toBlock"
             progress = Vector2.Dot(displacement, toBlock);
         }
         // If the agent IS holding the target block, reward it for moving the block to its destination
         else
         {
-            // 1. Agent displacement in 3D (though Y is 0, we can still use Vector3)
             Vector3 displacement = currentPosition - previousPosition;
 
-            // 2. Direction from the block to its destination
+            // Direction from the block to its destination
             Vector3 toDestination = new Vector3(
                 targetBlockDestinationPos.x - targetBlockPos.x,
                 0f,
                 targetBlockDestinationPos.y - targetBlockPos.y
             ).normalized;
 
-            // 3. Dot product for alignment toward destination
+            // Dot product for alignment toward destination
             progress = Vector3.Dot(displacement, toDestination);
         }
 
         AddReward(progress * progressRewardWeight);
+        totalReward_Debug += progress * progressRewardWeight;
         
         // Update positions for the next step
         previousPosition = currentPosition;
         currentPosition = transform.position;
     }
 
-
-    //when agent collides with destination trigger, do drop block reward
-    void OnCollisionEnter(Collision collision)
+    void FacingReward()
     {
-        if (collision.gameObject.CompareTag("destination") && isHoldingTargetBlock)
+        // Only reward if the agent is actually moving
+        if (m_AgentRb.velocity.magnitude < 0.1f) return;
+
+        float facingReward = 0f;
+
+        if (!isHoldingTargetBlock)
         {
-            //set block color back to default color
-            blockSpawner.SetBlockMaterial(targetBlock, blockSpawner.blockMaterial);
-            AddReward(destinationCollissionReward);
+            // Agent should face the target block
+            Vector3 toTarget = (targetBlock.transform.position - transform.position).normalized;
+            float alignment = Vector3.Dot(transform.forward, toTarget); // Dot product for facing direction
+            
+            if (alignment > 0.8f) // Close to facing the target block
+            {
+                facingReward = 0.1f; // Small positive reward
+            }
         }
+        else
+        {
+            // Agent should face the destination
+            Vector3 toDestination = (destinationObject.transform.position - transform.position).normalized;
+            float alignment = Vector3.Dot(transform.forward, toDestination);
+
+            if (alignment > 0.8f) // Close to facing the destination
+            {
+                facingReward = 0.1f; // Small positive reward
+            }
+        }
+
+        AddReward(facingReward);
+        totalReward_Debug += facingReward;
     }
     #endregion
 
     #region Other
     void Update()
     {
-        if(isHoldingBlock)
+        if(isHoldingTargetBlock)
         {
             HoldBlockAboveAgent();
         }
