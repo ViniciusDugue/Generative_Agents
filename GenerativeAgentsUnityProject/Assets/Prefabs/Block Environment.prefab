@@ -795,7 +795,6 @@ MonoBehaviour:
   targetBlockDestinationPos: {x: 0, y: 0}
   minDropDistance: 10
   minPickUpDistance: 10
-  progressRewardWeight: 0.5
   dropReward: 1
   pickUpReward: 1
   isHoldingTargetBlock: 0
