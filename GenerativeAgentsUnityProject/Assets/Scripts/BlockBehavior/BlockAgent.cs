@@ -37,6 +37,7 @@ public class BlockAgent : Agent
     public List<GameObject> spawnedBlocksPerAgent = new List<GameObject>();
     [SerializeField] public GameObject targetBlock;
     [SerializeField] public GameObject destinationObject;
+    [SerializeField] public Vector3 targetDirection;
 
     [SerializeField] private float totalReward_Debug;
 
@@ -70,7 +71,7 @@ public class BlockAgent : Agent
 
         var localVelocity = transform.InverseTransformDirection(m_AgentRb.velocity);
         
-        // Agent movement speed and direction
+        // Agent velocity
         sensor.AddObservation(localVelocity.x);
         sensor.AddObservation(localVelocity.z);
         
@@ -94,6 +95,9 @@ public class BlockAgent : Agent
             sensor.AddObservation(toDestination.z);
         }
 
+        // Target direction for agent to move in to get to block/destination
+        sensor.AddObservation(targetDirection);
+        
         // Whether the agent is holding the block (binary observation)
         sensor.AddObservation(isHoldingTargetBlock ? 1.0f : 0.0f);
     }
@@ -286,7 +290,7 @@ public class BlockAgent : Agent
 
     public float GetFacingReward()
     {
-        Vector3 targetDirection = isHoldingTargetBlock 
+        targetDirection = isHoldingTargetBlock 
             ? (destinationObject.transform.position - transform.position).normalized 
             : (targetBlock.transform.position - transform.position).normalized;
 

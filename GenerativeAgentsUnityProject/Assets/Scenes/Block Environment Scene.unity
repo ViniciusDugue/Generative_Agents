@@ -6858,8 +6858,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1683601347}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.6970653, y: 0.0034826016, z: -0.003285726, w: -0.71699166}
-  m_LocalPosition: {x: 217.94865, y: 411.13098, z: 161.73497}
+  m_LocalRotation: {x: -0.47814855, y: 0.52162236, z: -0.48888442, w: -0.51017267}
+  m_LocalPosition: {x: 5.4049263, y: 105.493774, z: 11.321042}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8923,6 +8923,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Block Environment
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255567512939022234, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255567512939022234, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_BehaviorName
+      value: BlockAgent
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255567512939022234, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
