@@ -938,13 +938,14 @@ GameObject:
   m_Component:
   - component: {fileID: 217292207}
   - component: {fileID: 217292206}
+  - component: {fileID: 217292208}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &217292206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -981,6 +982,23 @@ Transform:
   - {fileID: 405697258}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &217292208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217292205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: defc393aba4c08f488cf851f4dc5ef3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenu: {fileID: 0}
+  settingsMenu: {fileID: 0}
+  aboutUsMenu: {fileID: 0}
+  contactUsMenu: {fileID: 0}
+  environment: {fileID: 0}
 --- !u!1 &218297303
 GameObject:
   m_ObjectHideFlags: 0
@@ -5145,14 +5163,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85716c99ba799ed478d60473ed5d4dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  rotateSpeed: 100
-  zoomSpeed: 50
-  minZoom: 5
-  maxZoom: 50
-  lockOnKey: 32
-  nextAgentKey: 9
-  prevAgentKey: 304
 --- !u!1 &1418304524
 GameObject:
   m_ObjectHideFlags: 0
