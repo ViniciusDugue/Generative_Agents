@@ -7666,11 +7666,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Block Environment (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 5009788440251838805, guid: ae5189902a95a6545b4d99fb215b1330,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8919,25 +8914,15 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1683601348}
+    - target: {fileID: 2851436414597547725, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_RayLength
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5009788440251838805, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
       propertyPath: m_Name
       value: Block Environment
-      objectReference: {fileID: 0}
-    - target: {fileID: 8255567512939022234, guid: ae5189902a95a6545b4d99fb215b1330,
-        type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8255567512939022234, guid: ae5189902a95a6545b4d99fb215b1330,
-        type: 3}
-      propertyPath: m_BehaviorName
-      value: BlockAgent
-      objectReference: {fileID: 0}
-    - target: {fileID: 8255567512939022234, guid: ae5189902a95a6545b4d99fb215b1330,
-        type: 3}
-      propertyPath: m_BehaviorType
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}

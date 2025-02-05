@@ -759,9 +759,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 74758f3da7138384d9ba8ca77333d3e2, type: 3}
   m_InferenceDevice: 2
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: BlockAgent
   TeamId: 0
   m_UseChildSensors: 1
@@ -791,22 +791,28 @@ MonoBehaviour:
   moveSpeed: 2
   normalMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
   myLaser: {fileID: 6954362038494725039}
-  targetBlockPos: {x: 0, y: 0}
-  targetBlockDestinationPos: {x: 0, y: 0}
-  minDropDistance: 10
-  minPickUpDistance: 10
-  dropReward: 1
-  pickUpReward: 1
+  targetBlockPos: {x: 0, y: 0, z: 0}
+  targetBlockDestinationPos: {x: 0, y: 0, z: 0}
+  minDropDistance: 5
+  minPickUpDistance: 5
+  dropReward: 100
+  pickUpReward: 50
   isHoldingTargetBlock: 0
   distanceFromDestination: 0
   distanceFromTargetBlock: 0
-  previousPosition: {x: 0, y: 0}
-  currentPosition: {x: 0, y: 0}
+  previousPosition: {x: 0, y: 0, z: 0}
+  currentPosition: {x: 0, y: 0, z: 0}
   spawnedBlocksPerAgent: []
   targetBlock: {fileID: 0}
   destinationObject: {fileID: 0}
   targetDirection: {x: 0, y: 0, z: 0}
+  progressReward: 0
+  matchSpeedReward: 0
+  progressReward_Debug: 0
+  pickUpReward_Debug: 0
+  dropReward_Debug: 0
   totalReward_Debug: 0
+  alignment: 0
   contribute: 1
   useVectorObs: 0
   useVectorFrozenFlag: 0
@@ -842,13 +848,12 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - block
   - destination
   - targetBlock
   m_RaysPerDirection: 20
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
-  m_RayLength: 65
+  m_RayLength: 100
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 4294967291
@@ -876,7 +881,6 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - block
   - destination
   - targetBlock
   m_RaysPerDirection: 12

@@ -2,31 +2,31 @@
     "BlockAgent": {
         "checkpoints": [
             {
-                "steps": 499984,
-                "file_path": "results\\id=Test1\\BlockAgent\\BlockAgent-499984.onnx",
-                "reward": 2638.0696082375944,
-                "creation_time": 1738715706.847906,
+                "steps": 499975,
+                "file_path": "results\\id=Test1\\BlockAgent\\BlockAgent-499975.onnx",
+                "reward": 202.53271755150385,
+                "creation_time": 1738784166.1115236,
                 "auxillary_file_paths": [
-                    "results\\id=Test1\\BlockAgent\\BlockAgent-499984.pt"
+                    "results\\id=Test1\\BlockAgent\\BlockAgent-499975.pt"
                 ]
             },
             {
-                "steps": 500048,
-                "file_path": "results\\id=Test1\\BlockAgent\\BlockAgent-500048.onnx",
-                "reward": 2638.0696082375944,
-                "creation_time": 1738715706.9102783,
+                "steps": 500103,
+                "file_path": "results\\id=Test1\\BlockAgent\\BlockAgent-500103.onnx",
+                "reward": 202.53271755150385,
+                "creation_time": 1738784166.1850147,
                 "auxillary_file_paths": [
-                    "results\\id=Test1\\BlockAgent\\BlockAgent-500048.pt"
+                    "results\\id=Test1\\BlockAgent\\BlockAgent-500103.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500048,
+            "steps": 500103,
             "file_path": "results\\id=Test1\\BlockAgent.onnx",
-            "reward": 2638.0696082375944,
-            "creation_time": 1738715706.9102783,
+            "reward": 202.53271755150385,
+            "creation_time": 1738784166.1850147,
             "auxillary_file_paths": [
-                "results\\id=Test1\\BlockAgent\\BlockAgent-500048.pt"
+                "results\\id=Test1\\BlockAgent\\BlockAgent-500103.pt"
             ]
         }
     },
