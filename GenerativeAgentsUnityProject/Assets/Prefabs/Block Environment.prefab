@@ -759,10 +759,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: b234194316cd7db4eafea14a1553628c, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 2
   m_BehaviorType: 0
-  m_BehaviorName: BlockPusher
+  m_BehaviorName: BlockAgent
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -805,6 +805,7 @@ MonoBehaviour:
   spawnedBlocksPerAgent: []
   targetBlock: {fileID: 0}
   destinationObject: {fileID: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
   totalReward_Debug: 0
   contribute: 1
   useVectorObs: 0
