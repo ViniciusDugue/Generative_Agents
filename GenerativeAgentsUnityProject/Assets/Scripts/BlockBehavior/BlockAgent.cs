@@ -45,6 +45,7 @@ public class BlockAgent : Agent
     [SerializeField] private float dropReward_Debug;
     [SerializeField] private float totalReward_Debug;
     [SerializeField] private float alignment;
+    [SerializeField] private float alignmentAngleThreshold = 30f;
 
     public bool contribute;
     public bool useVectorObs;
@@ -301,32 +302,46 @@ public class BlockAgent : Agent
     //     return alignment;
     // }
 
-    // logarithmic alignment(penalizes going in circles and also not facing towards target direction even more)
+    //linear alignment with degree cone threshold. If outside the angle threshold from target and is positive, then set it to 0
     public float CalculateFacingReward()
     {
-        targetDirection = isHoldingTargetBlock
-            ? (destinationObject.transform.position - transform.position).normalized
+        targetDirection = isHoldingTargetBlock 
+            ? (destinationObject.transform.position - transform.position).normalized 
             : (targetBlock.transform.position - transform.position).normalized;
 
-        // Calculate alignment (ranges from -1 to 1)
-        float rawAlignment = Vector3.Dot(transform.forward, targetDirection); 
+        float dotProduct = Vector3.Dot(transform.forward, targetDirection);
 
-        // Logarithmic transformation for both reward (positive) and penalty (negative)
-        float logAlignment;
-        if (rawAlignment > 0)
-        {
-            // Logarithmic reward for positive alignment (approaching 1)
-            logAlignment = Mathf.Log10(1 + (rawAlignment * 9)); // Scales 0 to 1 smoothly
-        }
-        else
-        {
-            // Logarithmic penalty for negative alignment (approaching -1)
-            logAlignment = -Mathf.Log10(1 + (-rawAlignment * 9)); // Stronger penalty when facing away
-        }
+        float angle = Mathf.Acos(Mathf.Clamp(dotProduct, -1f, 1f)) * Mathf.Rad2Deg;
 
-        alignment = logAlignment; // Store for observation
-        return logAlignment; // Returns logarithmically scaled alignment
+        alignment = (angle <= alignmentAngleThreshold) ? dotProduct : 0f;
+
+        return alignment;
     }
+
+    // logarithmic alignment(penalizes going in circles and also not facing towards target direction even more)
+    // public float CalculateFacingReward()
+    // {
+    //     targetDirection = isHoldingTargetBlock
+    //         ? (destinationObject.transform.position - transform.position).normalized
+    //         : (targetBlock.transform.position - transform.position).normalized;
+
+    //     // Calculate alignment (ranges from -1 to 1)
+    //     float rawAlignment = Vector3.Dot(transform.forward, targetDirection); 
+
+    //     // Logarithmic transformation for both reward (positive) and penalty (negative)
+    //     float logAlignment;
+    //     if (rawAlignment > 0)
+    //     {
+    //         logAlignment = Mathf.Log10(1 + (rawAlignment * 9));
+    //     }
+    //     else
+    //     {
+    //         logAlignment = -Mathf.Log10(1 + (-rawAlignment * 9));
+    //     }
+
+    //     alignment = logAlignment;
+    //     return logAlignment;
+    // }
 
     //Rewards agent for moving towards target areas and Penalizes moving away
     public void CalculateProgressReward()
@@ -342,6 +357,7 @@ public class BlockAgent : Agent
 
         //totalReward_Debug += progressReward;
     }
+
 
     
 

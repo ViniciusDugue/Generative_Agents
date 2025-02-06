@@ -8919,6 +8919,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Block Environment
       objectReference: {fileID: 0}
+    - target: {fileID: 8255567512939022234, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_BehaviorName
+      value: BlockAgent4
+      objectReference: {fileID: 0}
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -759,10 +759,10 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 6acdbbda53b695b4794122292835f8a7, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 2
   m_BehaviorType: 0
-  m_BehaviorName: BlockAgent3
+  m_BehaviorName: BlockAgent4
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
@@ -812,6 +812,7 @@ MonoBehaviour:
   dropReward_Debug: 0
   totalReward_Debug: 0
   alignment: 0
+  alignmentAngleThreshold: 30
   contribute: 1
   useVectorObs: 0
   useVectorFrozenFlag: 0
