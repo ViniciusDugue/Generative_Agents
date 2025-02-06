@@ -8914,11 +8914,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1683601348}
-    - target: {fileID: 2851436414597547725, guid: ae5189902a95a6545b4d99fb215b1330,
-        type: 3}
-      propertyPath: m_RayLength
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 5009788440251838805, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
       propertyPath: m_Name

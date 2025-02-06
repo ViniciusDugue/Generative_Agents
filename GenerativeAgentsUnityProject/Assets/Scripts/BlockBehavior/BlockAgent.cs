@@ -289,15 +289,43 @@ public class BlockAgent : Agent
 
     #region Reward Functs
     //calculates alignment of agent towards target directions(towards target block and destination)
+    // linear alignment
+    // public float CalculateFacingReward()
+    // {
+    //     targetDirection = isHoldingTargetBlock 
+    //         ? (destinationObject.transform.position - transform.position).normalized 
+    //         : (targetBlock.transform.position - transform.position).normalized;
+
+    //     // normalized to [-1, 1] range
+    //     alignment = Vector3.Dot(transform.forward, targetDirection); 
+    //     return alignment;
+    // }
+
+    // logarithmic alignment(penalizes going in circles and also not facing towards target direction even more)
     public float CalculateFacingReward()
     {
-        targetDirection = isHoldingTargetBlock 
-            ? (destinationObject.transform.position - transform.position).normalized 
+        targetDirection = isHoldingTargetBlock
+            ? (destinationObject.transform.position - transform.position).normalized
             : (targetBlock.transform.position - transform.position).normalized;
 
-        // normalized to [-1, 1] range
-        alignment = Vector3.Dot(transform.forward, targetDirection); 
-        return alignment;
+        // Calculate alignment (ranges from -1 to 1)
+        float rawAlignment = Vector3.Dot(transform.forward, targetDirection); 
+
+        // Logarithmic transformation for both reward (positive) and penalty (negative)
+        float logAlignment;
+        if (rawAlignment > 0)
+        {
+            // Logarithmic reward for positive alignment (approaching 1)
+            logAlignment = Mathf.Log10(1 + (rawAlignment * 9)); // Scales 0 to 1 smoothly
+        }
+        else
+        {
+            // Logarithmic penalty for negative alignment (approaching -1)
+            logAlignment = -Mathf.Log10(1 + (-rawAlignment * 9)); // Stronger penalty when facing away
+        }
+
+        alignment = logAlignment; // Store for observation
+        return logAlignment; // Returns logarithmically scaled alignment
     }
 
     //Rewards agent for moving towards target areas and Penalizes moving away
@@ -310,10 +338,12 @@ public class BlockAgent : Agent
 
         progressReward = (m_AgentRb.velocity.magnitude * progressFactor * alignment) * 0.01f;
         progressReward_Debug += progressReward;
-        AddReward(progressReward);
+        //AddReward(progressReward);
 
-        totalReward_Debug += progressReward;
+        //totalReward_Debug += progressReward;
     }
+
+    
 
     #endregion
 

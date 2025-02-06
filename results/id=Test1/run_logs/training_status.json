@@ -1,32 +1,41 @@
 {
-    "BlockAgent": {
+    "BlockAgent3": {
         "checkpoints": [
             {
-                "steps": 499975,
-                "file_path": "results\\id=Test1\\BlockAgent\\BlockAgent-499975.onnx",
-                "reward": 202.53271755150385,
-                "creation_time": 1738784166.1115236,
+                "steps": 199946,
+                "file_path": "results\\id=Test1\\BlockAgent3\\BlockAgent3-199946.onnx",
+                "reward": 100.0,
+                "creation_time": 1738830388.2084322,
                 "auxillary_file_paths": [
-                    "results\\id=Test1\\BlockAgent\\BlockAgent-499975.pt"
+                    "results\\id=Test1\\BlockAgent3\\BlockAgent3-199946.pt"
                 ]
             },
             {
-                "steps": 500103,
-                "file_path": "results\\id=Test1\\BlockAgent\\BlockAgent-500103.onnx",
-                "reward": 202.53271755150385,
-                "creation_time": 1738784166.1850147,
+                "steps": 399947,
+                "file_path": "results\\id=Test1\\BlockAgent3\\BlockAgent3-399947.onnx",
+                "reward": 122.72727272727273,
+                "creation_time": 1738830691.5464828,
                 "auxillary_file_paths": [
-                    "results\\id=Test1\\BlockAgent\\BlockAgent-500103.pt"
+                    "results\\id=Test1\\BlockAgent3\\BlockAgent3-399947.pt"
+                ]
+            },
+            {
+                "steps": 400011,
+                "file_path": "results\\id=Test1\\BlockAgent3\\BlockAgent3-400011.onnx",
+                "reward": 122.72727272727273,
+                "creation_time": 1738830691.659143,
+                "auxillary_file_paths": [
+                    "results\\id=Test1\\BlockAgent3\\BlockAgent3-400011.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500103,
-            "file_path": "results\\id=Test1\\BlockAgent.onnx",
-            "reward": 202.53271755150385,
-            "creation_time": 1738784166.1850147,
+            "steps": 400011,
+            "file_path": "results\\id=Test1\\BlockAgent3.onnx",
+            "reward": 122.72727272727273,
+            "creation_time": 1738830691.659143,
             "auxillary_file_paths": [
-                "results\\id=Test1\\BlockAgent\\BlockAgent-500103.pt"
+                "results\\id=Test1\\BlockAgent3\\BlockAgent3-400011.pt"
             ]
         }
     },
