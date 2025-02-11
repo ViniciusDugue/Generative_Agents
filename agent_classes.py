@@ -3,7 +3,7 @@ from enum import Enum
 
 # Define the Pydantic Class for JSON outputs
 class Actions(str, Enum):
-    SCAN = "Scan perimiter for threats."
+    SCAN = "Scan perimeter for threats."
     COLLECT_FOOD = "Begin collecting nearby food."
     STORE_FOOD = "Go back to base to store the collected food."
     EVADE_ENEMY = "Take evasive action against detected enemy threats."

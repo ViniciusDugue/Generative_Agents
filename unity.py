@@ -6,12 +6,14 @@ from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
 from agent_classes import AgentResponse
+from agent_classes import Actions
+import json
 import os
 
 
 # Load environment variables from .env file
 load_dotenv()
-api_key = os.getenv("OPEN_API_KEY")
+api_key = os.getenv("OPENAI_API_KEY")
 
 # Create OpenAI client
 client = openai.OpenAI(
@@ -21,62 +23,58 @@ client = openai.OpenAI(
 # Create FastAPI app
 app = FastAPI()
 
+class AgentData(BaseModel):
+    agent_id: int
+    health: int
+    status: str
+    position: dict
+
 # Call the LLM with the JSON schema
-async def NLP(input_string: str):
+async def NLP(agent_data: AgentData):
     context = (
-        "Please answer the following prompt in JSON format with the following fields: "
-        "'Agent_ID', 'Health', and 'Next_Action'. "
-        "The Agent_ID should be a string representing the agent's ID number. "
-        "Health should indicate the current health points of the agent. "
-        "Next_Action should describe what the agent is currently doing."
-        "Prompt: "
+        "Analyze the agent's state and determine the next best action."
+        f" The agent is at position {agent_data.position}, with health {agent_data.health}."
+        " Please return a JSON with the 'next_action' field (e.g., 'explore', 'repair', 'return_to_base')."
     )
 
-    contextualized_input = context + input_string
-
-    chat_completion = client.beta.chat.completions.parse(
+    response = client.beta.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
                 "role": "system",
-                "content": "You are an AI agent in a hostile, survival environment that answers in JSON.",
+                "content": "You are an AI guiding agents in a hostile, survival environment that answers in JSON.",
             },
             {
                 "role": "user",
-                "content": contextualized_input,
+                "content": context,
             },
         ],
         response_format=AgentResponse
     )
 
-    return chat_completion.choices[0].message
+    
+    if response.choices:
+        try:
+            action_data = json.loads(response.choices[0].message.content.strip())  # Parse JSON response
+            next_action = action_data.get("next_action", "idle")
+        except json.JSONDecodeError:
+            next_action = "idle"
+    else:
+        next_action = "idle"
+
+    return {"agent_id": agent_data.agent_id, "next_action": action}
 
 # Define the FastAPI endpoint
-@app.post("/nlp/")
-async def process_input(request: Request):
+@app.post("/nlp")
+async def process_input(agent_data: AgentData):
     try:
-        # Get the raw input data from the client
-        input_data = await request.json()
-        input_string = input_data.get("input_string")
-
-        if not input_string:
-            raise HTTPException(status_code=400, detail="input_string is required")
-
-        # Call the NLP function with the input string
-        message = await NLP(input_string)
-
-        # Return the raw JSON response to the client
-        # json_data = json.loads(response_json)
-        if message.parsed:
-            print(message.parsed.next_action)
-            return (message.parsed)
-        else:
-            return(message.refusal)
-        #return json_data
+        message = await NLP(agent_data)
+        return message
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e
 
+
 # Run the FastAPI app
 if __name__ == "__main__":
-    uvicorn.run("unity:app", host="localhost", port=12345)
+    uvicorn.run(app, host="localhost", port=12345)
