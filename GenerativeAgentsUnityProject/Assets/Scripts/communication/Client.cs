@@ -92,7 +92,8 @@ public class Client : MonoBehaviour
             position = new { x = position.x, y = position.y, z = position.z }
         };
 
-        string jsonString = JsonConvert.SerializeObject(agentData);
+        string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
+        Debug.Log($"🔍 Sending JSON: {jsonString}");
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
         try
