@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MapMarkerManager : MonoBehaviour
 {
@@ -47,9 +48,8 @@ public class MapMarkerManager : MonoBehaviour
             GameObject marker = Instantiate(prefab, mapContainer);
             marker.name = obj.name + "_Marker";
 
-            // Optionally, adjust marker size if needed.
             RectTransform markerRect = marker.GetComponent<RectTransform>();
-            markerRect.sizeDelta = new Vector2(80, 80);  // Change to your desired size.
+            markerRect.sizeDelta = new Vector2(20, 20);  // Change size.
 
             // Store the mapping between the tracked object and its marker.
             markers[obj] = marker;
@@ -65,7 +65,7 @@ public class MapMarkerManager : MonoBehaviour
 
             if (trackedObject == null)
             {
-                Destroy(marker);  // Clean up if the object is destroyed.
+                Destroy(marker);
                 continue;
             }
 
@@ -73,7 +73,7 @@ public class MapMarkerManager : MonoBehaviour
             Vector3 worldPos = trackedObject.transform.position;
             Vector3 viewportPos = mapCamera.WorldToViewportPoint(worldPos);
 
-            // Optional: Hide markers if the object is behind the camera.
+            // Hide the marker if it's behind the camera.
             if (viewportPos.z < 0)
             {
                 marker.SetActive(false);
@@ -85,14 +85,36 @@ public class MapMarkerManager : MonoBehaviour
             }
 
             // Adjust the viewport coordinates for the minimap panel's pivot.
-            // This assumes that your minimap's RectTransform pivot is set to (0.5, 0.5).
+            // Assuming the minimap's RectTransform pivot is (0.5, 0.5).
             Vector2 localPos = new Vector2(
                 (viewportPos.x - 0.5f) * mapContainer.rect.width,
                 (viewportPos.y - 0.5f) * mapContainer.rect.height
             );
-
-            // Update the marker's position on the minimap.
             marker.GetComponent<RectTransform>().anchoredPosition = localPos;
+
+            // Update the coordinate text using TextMeshPro.
+            Transform textTransform = marker.transform.Find("CoordinateText");
+            if (textTransform != null)
+            {
+                TMP_Text tmpText = textTransform.GetComponent<TMP_Text>();
+                if (tmpText != null)
+                {
+                    // Format the world coordinates to two decimal places.
+                    tmpText.text = "(" +
+                        worldPos.x.ToString("F2") + ", " +
+                        worldPos.y.ToString("F2") + ", " +
+                        worldPos.z.ToString("F2") + ")";
+                }
+                else
+                {
+                    Debug.LogWarning("No TMP_Text component found on 'CoordinateText' in " + marker.name);
+                }
+            }
+            else
+            {
+                Debug.LogWarning("'CoordinateText' child not found in " + marker.name);
+            }
         }
     }
+
 }
