@@ -5,12 +5,32 @@ using UnityEngine;
 
 public class BehaviorManager : MonoBehaviour
 {
+    public int agentID = 001;
     public float exhaustion;
     private GameObject agentObject;
     public AgentBehavior defaultBehavior;
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
     private Coroutine exhaustionCoroutine;
+    private bool _updateLLM = false;
+    public delegate void updateLLMBoolChangedHandler(int agentID, bool newValue);
+    public event updateLLMBoolChangedHandler OnUpdateLLM;
+
+    public bool UpdateLLM
+    {
+        get { return _updateLLM; }
+        set
+        {
+            if (_updateLLM != value)
+            {
+                _updateLLM = value;
+                if (_updateLLM) // Only trigger when set to true
+                {
+                    OnUpdateLLM?.Invoke(agentID);
+                }
+            }
+        }
+    }
 
     void Start()
     {
