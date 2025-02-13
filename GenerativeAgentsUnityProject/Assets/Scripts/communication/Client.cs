@@ -1,25 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
+using System.Net.Http;
 using System.Text;
+using Newtonsoft.Json;
+using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
 
 
 public class Client : MonoBehaviour
 {
-    // Server address and port
-    string serverAddress = "127.0.0.1";
-    int serverPort = 12345;
     public TextMeshProUGUI  displayText;
     public TMP_InputField inputField;  // Reference to a TextMeshPro Input Field
 
-    TcpClient tcpClient;
-
     void Start()
     {
-        ConnectToServer();
-
         // Add a listener to the TMP_InputField to send data on value change
         if (inputField != null)
         {
@@ -27,97 +22,48 @@ public class Client : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        string serverData = GetServerData();
-        if (!string.IsNullOrEmpty(serverData))
-        {
-            Debug.Log("Received: " + serverData);
-            displayText.text = serverData;
-        }
-    }
-
-    string GetServerData()
-    {
-        try
-        {
-            if (tcpClient != null && tcpClient.Available > 0)
-            {
-                NetworkStream stream = tcpClient.GetStream();
-                byte[] data = new byte[tcpClient.Available];
-                int bytesRead = stream.Read(data, 0, data.Length);
-                string responseData = Encoding.UTF8.GetString(data, 0, bytesRead);
-                return responseData;
-            }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Exception: " + e.ToString());
-        }
-        return null;
-    }
-
-     // Callback for TMP_InputField value change
+    // Callback for TMP_InputField value change
     void OnInputFieldValueChanged(string newValue)
     {
         Debug.Log("Input field changed");
 
         // Send the new value to the server
-        SendDataToServer(newValue);
+        SendDataToPost(newValue);
     }
 
-    // Moved and renamed the method
-    void SendDataToServer(string message)
+    async void SendDataToPost(string message)
     {
         try
         {
-            if (tcpClient != null && tcpClient.Connected)
+            using (HttpClient client = new HttpClient())
             {
-                NetworkStream stream = tcpClient.GetStream();
-                if (stream.CanWrite)
+                // Prepare the JSON payload
+                var jsonData = new {input_string = message };
+                string jsonString = JsonConvert.SerializeObject(jsonData);
+
+                // Create the HTTP content
+                var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+                // Send the POST request
+                HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    byte[] data = Encoding.UTF8.GetBytes(message + "\n");
-                    stream.Write(data, 0, data.Length);
-                    Debug.Log("Message sent: " + message);
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    Debug.Log("Response from API: " + responseData);
+                    displayText.text = responseData;
                 }
                 else
                 {
-                    Debug.LogError("Can't write to stream");
+                    Debug.LogError("Error: " + response.StatusCode);
                 }
             }
-            else
-            {
-                Debug.LogError("TCP Client not connected");
-            }
-
         }
         catch (System.Exception e)
         {
             Debug.LogError("Exception: " + e.ToString());
         }
     }
+    
 
-    void OnApplicationQuit()
-    {
-        if (tcpClient != null)
-        {
-            tcpClient.Close();
-            Debug.Log("Connection closed");
-        }
-    }
-
-    void ConnectToServer()
-    {
-        try
-        {
-            tcpClient = new TcpClient();
-            tcpClient.Connect(serverAddress, serverPort);
-            Debug.Log("Connected");
-
-        }
-        catch (SocketException e)
-        {
-            Debug.LogError("SocketException: " + e.ToString());
-        }
-    }
 }
