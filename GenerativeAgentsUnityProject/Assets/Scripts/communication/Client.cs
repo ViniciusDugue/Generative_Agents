@@ -49,9 +49,7 @@ public class Client : MonoBehaviour
     }
 
     // Handles when an agent's OnUpdateLLM is set to true
-    private async void HandleOnUpdateLLMChanged(int agentID, bool updateLLM)
-{
-    if (updateLLM) // Only proceed when UpdateLLM is true
+    private async void HandleOnUpdateLLMChanged(int agentID)    
     {
         Debug.Log($"🔄 OnUpdateLLM changed to TRUE for Agent {agentID}, sending data...");
 
@@ -67,8 +65,8 @@ public class Client : MonoBehaviour
                 bm.UpdateLLM = false; // Reset the flag
             }
         }
+    
     }
-}
 
 
     // Callback for TMP_InputField value change
@@ -86,25 +84,26 @@ public class Client : MonoBehaviour
         {
             using (HttpClient client = new HttpClient())
             {
-                // Prepare the JSON payload
-                var jsonData = new {input_string = message };
-                string jsonString = JsonConvert.SerializeObject(jsonData);
+                    // Prepare the JSON payload
+                    var jsonData = new {input_string = message };
+                    string jsonString = JsonConvert.SerializeObject(jsonData);
 
-                // Create the HTTP content
-                var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                    // Create the HTTP content
+                    var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-                // Send the POST request
-                HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
+                    // Send the POST request
+                    HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                string responseData = await response.Content.ReadAsStringAsync();
-                Debug.Log("Response from API: " + responseData);
-                displayText.text = responseData;
-            }
-            else
-            {
-                Debug.LogError("Error: " + response.StatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    Debug.Log("Response from API: " + responseData);
+                    displayText.text = responseData;
+                }
+                else
+                {
+                    Debug.LogError("Error: " + response.StatusCode);
+                }
             }
         }
         catch (System.Exception e)

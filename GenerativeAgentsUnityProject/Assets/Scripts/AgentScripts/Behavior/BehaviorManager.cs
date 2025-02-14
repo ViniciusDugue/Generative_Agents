@@ -13,7 +13,7 @@ public class BehaviorManager : MonoBehaviour
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
     private Coroutine exhaustionCoroutine;
     private bool _updateLLM = false;
-    public delegate void updateLLMBoolChangedHandler(int agentID, bool newValue);
+    public delegate void updateLLMBoolChangedHandler(int agentID);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
 
     public bool UpdateLLM
@@ -74,6 +74,11 @@ public class BehaviorManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) // Example: Switch to second behavior
         {
             SwitchBehavior(GetNextBehaviorName());
+        }
+        if (Input.GetKeyDown(KeyCode.Space)) // Example: Switch to second behavior
+        {
+            _updateLLM = true;
+            Debug.Log("UpdateLLM set to: "+ _updateLLM);
         }
     }
 
