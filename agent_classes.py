@@ -8,13 +8,11 @@ class AgentResponse(BaseModel):
     """
     reasoning: str = Field(
         ...,
-        alias="Reasoning",
         description="Reasoning behind the agent's action selection",
     )
 
-    next_action: Literal["FoodGatherAgent", "RestBehavior"] = Field(
+    next_action: Literal["FoodGathererAgent", "RestBehavior"] = Field(
         ...,
-        alias="Next_Action",
         description="Agent's current activity or objective",
     )
 
