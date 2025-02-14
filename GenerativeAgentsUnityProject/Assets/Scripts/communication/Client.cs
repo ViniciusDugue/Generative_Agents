@@ -47,6 +47,7 @@ public class Client : MonoBehaviour
 
             // Subscribe to the OnUpdateLLM event
             bm.OnUpdateLLM += HandleOnUpdateLLMChanged;
+            Debug.Log($"Subscribed to OnUpdateLLM for Agent {agentID}");
         }
     }
 
@@ -152,8 +153,12 @@ public class Client : MonoBehaviour
                 if (responseJson != null && responseJson.ContainsKey("next_action"))
                 {
                     string nextAction = responseJson["next_action"].ToString();
+                    string reasoning = responseJson["reasoning"].ToString();
                     Debug.Log($"Next action for Agent: {nextAction}");
-                    PerformAction(agent, nextAction); // Perform the received action
+                    Debug.Log($"Agent Reasoning: {reasoning}");
+                    
+                    // Switch Agent Behavior to nextAction
+                    agentDict[agentID].GetComponent<BehaviorManager>().SwitchBehavior(nextAction);
                 }
             }
             else

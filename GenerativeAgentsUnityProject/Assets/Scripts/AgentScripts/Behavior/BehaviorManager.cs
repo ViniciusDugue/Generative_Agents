@@ -26,6 +26,7 @@ public class BehaviorManager : MonoBehaviour
                 _updateLLM = value;
                 if (_updateLLM) // Only trigger when set to true
                 {
+                    // Debug.Log($"Invoking OnUpdateLLM for Agent {agentID}");
                     OnUpdateLLM?.Invoke(agentID);
                 }
             }
@@ -75,9 +76,9 @@ public class BehaviorManager : MonoBehaviour
         {
             SwitchBehavior(GetNextBehaviorName());
         }
-        if (Input.GetKeyDown(KeyCode.Space)) // Example: Switch to second behavior
+        if (Input.GetKeyDown(KeyCode.R)) // Example: Switch to second behavior
         {
-            _updateLLM = true;
+            UpdateLLM = true;
             Debug.Log("UpdateLLM set to: "+ _updateLLM);
         }
     }
