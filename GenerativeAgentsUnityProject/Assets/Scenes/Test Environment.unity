@@ -1516,6 +1516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02c4cddf4e1a5ce4899f142631ad628c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  agentID: 1
   exhaustion: 0
   defaultBehavior: {fileID: 799627051}
   currentAgentBehavior: {fileID: 0}
@@ -1906,6 +1907,11 @@ PrefabInstance:
       propertyPath: agent
       value: 
       objectReference: {fileID: 799627045}
+    - target: {fileID: 9067075277312852853, guid: dc8e446deee4e674f8a648662294a516,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
