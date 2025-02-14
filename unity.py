@@ -5,83 +5,74 @@ import uvicorn
 from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
-from agent_classes import AgentResponse
-from agent_classes import Actions
-import json
+from pydantic_ai import Agent, RunContext
+from pydantic_ai.settings import ModelSettings
+from pydantic_ai.models.openai import OpenAIModel
+from agent_classes import AgentResponse  # Keep AgentResponse for output
 import os
-
+import json
 
 # Load environment variables from .env file
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 
-# Create OpenAI client
-client = openai.OpenAI(api_key=api_key)
+sys_prompt = """
+    You are an AI agent in a survival environment. Your goal is to decide the next action for the agent based on its current state. 
 
+    You actions are defined as:
+    1. FoodGatherAgent
+    2. RestBehavior
+    
+    FoodGatherAgent action begins collecting nearby food. The RestBehavior action makes the agent rest and reduces exhaustion.
+    Gathering food increases the agent's fitness score and should be prioritized if no other critical needs exist. 
+    If exhaustion exceeds 100, the agent will start losing health and may eventually die.
+
+    Expected JSON Input:
+    {
+        agent_id: int
+        current_behavior: Actions
+        exhaustion: int 
+    }
+    
+    Respond with a JSON object in the following format:
+    {
+        "exhaustion": int,
+        "next_action": Actions
+    }
+"""
+
+model = OpenAIModel('gpt-4o-mini', api_key=OPENAI_API_KEY)
+settings = ModelSettings(temperature=0)
+
+survial_agent = Agent(
+    model=model,
+    system_prompt=sys_prompt,
+    result_type=AgentResponse  # Still use AgentResponse for output validation
+)
 
 # Create FastAPI app
 app = FastAPI()
 
-class AgentData(BaseModel):
-    agent_id: int
-    health: int
-    status: str
-    position: dict
-
-# Call the LLM with the JSON schema
-async def NLP(agent_data: AgentData):
-    
-    valid_actions = ["explore", "gather_food", "rest", "return_to_base"]
-    
-    context = (
-        f"Analyze the agent's state and determine the next best action. "
-        f"The agent is at position {agent_data.position}, with health {agent_data.health}. "
-        f"Possible actions: {', '.join(valid_actions)}. "
-        f"ALWAYS return JSON with a 'next_action' field. The action MUST be one of {valid_actions}."
-    )
-
-    try:
-        response = client.chat.completions.create(  # Corrected API call
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are an AI guiding agents in a survival simulation. Always return JSON output."},
-                {"role": "user", "content": context},
-            ],
-            response_format={"type": "json_object"},
-        )
-
-        # Debugging print to check OpenAI response
-        print(f"🔍 OpenAI raw response: {response}")
-
-        # Extract response
-        if response.choices:
-            action_data = json.loads(response.choices[0].message.content.strip())
-            next_action = action_data.get("next_action", "idle")
-            
-            if next_action not in valid_actions:
-                print(f"Invalid action received: {next_action}. Defaulting to 'explore'.")
-                next_action = "explore"
-        else:
-            next_action = "explore"
-
-    except Exception as e:
-        print(f"❌ Error in OpenAI API call: {e}")
-        return {"agent_id": agent_data.agent_id, "next_action": "explore"}
-
-    return {"agent_id": agent_data.agent_id, "next_action": next_action}
-
 # Define the FastAPI endpoint
 @app.post("/nlp")
-async def process_input(agent_data: AgentData):
+async def process_input(request: Request):
     try:
-        message = await NLP(agent_data)
-        return message
+        # Get the raw input data from the client
+        input_data = await request.json()
+
+        if not input_data:
+            raise HTTPException(status_code=400, detail="input_data is required")
+        
+        # Convert input_data to a JSON string
+        input_json_str = json.dumps(input_data)
+        
+        # Pass the JSON string to the agent
+        result = await survial_agent.run(input_json_str)
+        return result.data
 
     except Exception as e:
-        print(f"❌ FastAPI Error: {e}")  # Debugging print
         raise HTTPException(status_code=500, detail=str(e)) from e
-
 
 # Run the FastAPI app
 if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=12345)
+    uvicorn.run("unity:app", host="localhost", port=12345, reload=True)
