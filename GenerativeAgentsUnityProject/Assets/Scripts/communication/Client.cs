@@ -70,7 +70,6 @@ public class Client : MonoBehaviour
     
     }
 
-
     // Callback for TMP_InputField value change
     void OnInputFieldValueChanged(string newValue)
     {
@@ -86,79 +85,26 @@ public class Client : MonoBehaviour
         {
             using (HttpClient client = new HttpClient())
             {
-                    // Prepare the JSON payload
-                    var jsonData = new {input_string = message };
-                    string jsonString = JsonConvert.SerializeObject(jsonData);
+                // Prepare the JSON payload
+                var jsonData = new {input_string = message };
+                string jsonString = JsonConvert.SerializeObject(jsonData);
 
-                    // Create the HTTP content
-                    var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+                // Create the HTTP content
+                var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-                    // Send the POST request
-                    HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
+                // Send the POST request
+                HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
 
-            if (response.IsSuccessStatusCode)
-            {
-                string responseData = await response.Content.ReadAsStringAsync();
-                Debug.Log("Response from API: " + responseData);
-                displayText.text = responseData;
-            }
-            else
-            {
-                Debug.LogError("Error: " + response.StatusCode);
-            }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Exception: " + e.ToString());
-        }
-    }
-
-    async void SendAgentData()
-    {
-        if (agent == null)
-        {
-            Debug.LogError("No agent assigned for communication.");
-            return;
-        }
-
-        // Get agent position
-        Vector3 position = agent.transform.position;
-
-        // Create agent JSON data
-        var agentData = new
-        {
-            agent_id = 1,  // Modify dynamically if needed
-            health = 100,  // Placeholder, replace with actual health
-            status = "active",
-            next_action = "explore",  // Default action
-            position = new { x = position.x, y = position.y, z = position.z }
-        };
-
-        string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
-        Debug.Log($"🔍 Sending JSON: {jsonString}");
-        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
-        try
-        {
-            HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
-
-            if (response.IsSuccessStatusCode)
-            {
-                string responseData = await response.Content.ReadAsStringAsync();
-                Debug.Log("Agent Response: " + responseData);
-
-                // Parse the JSON response and determine the next action
-                var responseJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseData);
-                if (responseJson != null && responseJson.ContainsKey("next_action"))
+                if (response.IsSuccessStatusCode)
                 {
-                    string nextAction = responseJson["next_action"].ToString();
-                    Debug.Log($"Next action for Agent: {nextAction}");
-                    PerformAction(nextAction); // Perform the received action
+                    string responseData = await response.Content.ReadAsStringAsync();
+                    Debug.Log("Response from API: " + responseData);
+                    displayText.text = responseData;
                 }
-            }
-            else
-            {
-                Debug.LogError("Error: " + response.StatusCode);
+                else
+                {
+                    Debug.LogError("Error: " + response.StatusCode);
+                }
             }
         }
         catch (System.Exception e)
@@ -181,10 +127,10 @@ public class Client : MonoBehaviour
         // Create agent JSON data
         var agentData = new
         {
-            agent_id = agent.GetComponent<BehaviorManager>().agentID,  
-            health = 100,  // Placeholder, replace with actual health
-            status = "active",
-            next_action = "explore",  // Default action
+            agentID = agent.GetComponent<BehaviorManager>().agentID,  
+            // health = 100,  // Placeholder, replace with actual health
+            exhaustion = agent.GetComponent<BehaviorManager>().exhaustion,
+            currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
             position = new { x = position.x, y = position.y, z = position.z }
         };
 
