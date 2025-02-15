@@ -32,6 +32,9 @@ TagManager:
   - tile
   - key
   - enemyAgent
+  - foodSpawn
+  - enemySpawn
+  - agentSpawn
   layers:
   - Default
   - TransparentFX
