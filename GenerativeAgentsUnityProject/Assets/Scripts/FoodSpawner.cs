@@ -9,6 +9,7 @@ public class FoodSpawner : MonoBehaviour
     public bool respawnFood;
     public float range;
 
+    //spawns food randomly in area
     void CreateFood(int num, GameObject type)
     {
         for (int i = 0; i < num; i++)
@@ -21,6 +22,7 @@ public class FoodSpawner : MonoBehaviour
         }
     }
 
+    //reset food in area and spawn agent randomly
     public void ResetFoodArea(GameObject[] agents)
     {
         foreach (GameObject agent in agents)

@@ -18,11 +18,10 @@ public class BlockEnvironmentSettings : MonoBehaviour
         m_Recorder = Academy.Instance.StatsRecorder;
     }
 
+
+    //reset environment for block behavior
     public void EnvironmentReset()
     {
-        // ClearObjects(GameObject.FindGameObjectsWithTag("destination")); //Clear existing destinations
-        // ClearObjects(GameObject.FindGameObjectsWithTag("block")); // Clear existing blocks
-        
         listArea = FindObjectsOfType<BlockSpawner>();
         
         Debug.Log("Environment reset complete.");
@@ -37,14 +36,7 @@ public class BlockEnvironmentSettings : MonoBehaviour
         
     }
 
-    void ClearObjects(GameObject[] objects)
-    {
-        foreach (var block in objects)
-        {
-            Destroy(block);
-        }
-    }
-
+    //for testing in environment
     public void Update()
     {
         if (Input.GetKey(KeyCode.Alpha9) && ((Time.frameCount % 60) == 0))

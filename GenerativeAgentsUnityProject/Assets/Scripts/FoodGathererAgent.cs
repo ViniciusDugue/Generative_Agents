@@ -36,6 +36,7 @@ public class FoodGathererAgent : Agent
 
     EnvironmentParameters m_ResetParams;
 
+    //initialize necessary parameters
     public override void Initialize()
     {
         m_AgentRb = GetComponent<Rigidbody>();
@@ -45,6 +46,7 @@ public class FoodGathererAgent : Agent
         SetResetParameters();
     }
 
+    //collect observations from environment to feed as input for agent model
     public override void CollectObservations(VectorSensor sensor)
     {
         if (useVectorObs)
@@ -61,6 +63,7 @@ public class FoodGathererAgent : Agent
         }
     }
 
+    //changes agent color
     public Color32 ToColor(int hexVal)
     {
         var r = (byte)((hexVal >> 16) & 0xFF);
@@ -69,6 +72,7 @@ public class FoodGathererAgent : Agent
         return new Color32(r, g, b, 255);
     }
 
+    //agent model outputs/action buffers are turned into actions onto the environment
     public void MoveAgent(ActionBuffers actionBuffers)
     {
         m_Shoot = false;
@@ -189,6 +193,7 @@ public class FoodGathererAgent : Agent
         MoveAgent(actionBuffers);
     }
 
+    // user controlled actions for agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
@@ -212,6 +217,7 @@ public class FoodGathererAgent : Agent
         discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0;
     }
 
+    //reset agent parameters when new episode begins
     public override void OnEpisodeBegin()
     {       
         Unfreeze();
@@ -230,6 +236,7 @@ public class FoodGathererAgent : Agent
         m_EnvironmentSettings.EnvironmentReset();
     }
 
+    //on collision with food, give reward
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("food collision");
@@ -264,6 +271,7 @@ public class FoodGathererAgent : Agent
 
     }
 
+    //laser for consuming food
     public void SetLaserLengths()
     {
         m_LaserLength = m_ResetParams.GetWithDefault("laser_length", 1.0f);
