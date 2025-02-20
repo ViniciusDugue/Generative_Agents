@@ -19,32 +19,52 @@ OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 sys_prompt = """
     You are an AI agent in a survival environment. Your goal is to decide the next action for the agent based on its current state. 
 
-    You actions are defined as:
-    1. FoodGatherAgent
-    2. RestBehavior
-    
-    FoodGatherAgent action begins collecting nearby food. The RestBehavior action makes the agent rest and reduces exhaustion.
-    Gathering food increases the agent's fitness score and should be prioritized if no other critical needs exist. 
-    If exhaustion exceeds 100, the agent will start losing health and may eventually die.
+    Use the map data to understand the location of:
+    - Agents (friendly)
+    - Enemy Agents (hostile, avoid them)
+    - Food (collect to maintain health)
 
+    You actions are defined as:
+    1. FoodGatherAgent: Collect nearby food
+    2. RestBehavior: Rest to reduce exhaustion
+    3. AvoidEnemy: Move away from the nearest enemy agent
+    4. Explore: Move randomly when no immediate needs exist
+    
+    Decision Rules:
+    - If exhaustion exceeds 100, choose RestBehavior.
+    - If health is below 70 and food is nearby, choose FoodGatherAgent.
+    - If an enemy is too close, choose AvoidEnemy.
+    - Otherwise, choose Explore.
+    
     Expected JSON Input:
     {
-        agent_id: int
-        current_behavior: Actions
-        exhaustion: int 
+        "map": {
+            "width": int,
+            "height": int,
+            "objects": [
+                {"type": "agent" | "enemyAgent" | "food", "id": int, "position": {"x": float, "y": float}}
+            ]
+        },
+        "agent_state": {
+            "agent_id": int,
+            "health": int,
+            "exhaustion": int,
+            "status": str,
+            "position": {"x": float, "y": float}
+        }
     }
     
     Respond with a JSON object in the following format:
     {
         "exhaustion": int,
-        "next_action": Actions
+        "next_action": "FoodGatherAgent" | "RestBehavior" | "AvoidEnemy" | "Explore"
     }
 """
 
 model = OpenAIModel('gpt-4o-mini', api_key=OPENAI_API_KEY)
 settings = ModelSettings(temperature=0)
 
-survial_agent = Agent(
+survival_agent = Agent(
     model=model,
     system_prompt=sys_prompt,
     result_type=AgentResponse  # Still use AgentResponse for output validation

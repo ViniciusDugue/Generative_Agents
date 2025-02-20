@@ -18,16 +18,35 @@ public class MapEncoder : MonoBehaviour
     [Header("Agent Reference")]
     public GameObject agent;
 
+
     private void Start()
     {
         client = new HttpClient();
 
+        // ✅ Get Terrain Dimensions
+        Terrain terrain = Terrain.activeTerrain;
+        if (terrain != null)
+        {
+            mapWidth = terrain.terrainData.size.x;
+            mapHeight = terrain.terrainData.size.z;
+            Debug.Log($"✅ Map Width: {mapWidth}, Map Height: {mapHeight}");
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Terrain not found. Using default map width and height.");
+        }
+
+        // ✅ Assign Agent Reference
         if (agent == null)
         {
             agent = GameObject.FindWithTag("agent");
+            if (agent == null)
+            {
+                Debug.LogError("❌ Agent not found. Ensure the agent has the correct tag.");
+            }
         }
 
-        // Send map data periodically
+        // ✅ Send map data periodically
         InvokeRepeating(nameof(SendMapDataToBackend), 1f, updateInterval);
     }
 
@@ -39,19 +58,21 @@ public class MapEncoder : MonoBehaviour
             return;
         }
 
-        // Collect game objects
+        // ✅ Collect game objects dynamically
         var objects = new List<object>();
         CollectObjects("agent", objects);
         CollectObjects("enemyAgent", objects);
         CollectObjects("food", objects);
 
-        // Get agent state
+        // ✅ Get agent state dynamically from the agent object
         Vector3 agentPosition = agent.transform.position;
-        int agentHealth = 100; // Replace with actual health logic
-        int agentExhaustion = 20; // Replace with actual exhaustion logic
-        string agentStatus = "active"; // Replace with actual status logic
 
-        // Create JSON payload
+        // 🔥 Dynamic health, exhaustion, and status obtained via component access
+        int agentHealth = GetAgentAttribute(agent, "Health");
+        int agentExhaustion = GetAgentAttribute(agent, "Exhaustion");
+        string agentStatus = GetAgentStatus(agent);
+
+        // ✅ Create JSON payload
         var payload = new
         {
             map = new
@@ -76,7 +97,7 @@ public class MapEncoder : MonoBehaviour
         // Debug print JSON
         Debug.Log($"📤 Sending JSON to LLM: {jsonString}");
 
-        // Send to backend
+        // ✅ Send to backend
         try
         {
             HttpResponseMessage response = await client.PostAsync(apiUrl, content);
@@ -110,12 +131,50 @@ public class MapEncoder : MonoBehaviour
         foreach (GameObject obj in objects)
         {
             Vector3 pos = obj.transform.position;
+
+            // ✅ Get dynamic attributes for each agent
+            int health = obj.CompareTag("agent") ? GetAgentAttribute(obj, "Health") : 0;
+            int exhaustion = obj.CompareTag("agent") ? GetAgentAttribute(obj, "Exhaustion") : 0;
+            string status = obj.CompareTag("agent") ? GetAgentStatus(obj) : "N/A";
+
             list.Add(new
             {
                 type = tag,
                 id = obj.GetInstanceID(),
-                position = new { x = pos.x, y = pos.z }
+                position = new { x = pos.x, y = pos.z },
+                health = health,
+                exhaustion = exhaustion,
+                status = status
             });
+        }
+    }
+
+    private int GetAgentAttribute(GameObject obj, string attributeName)
+    {
+        // ✅ Dynamically access the agent's attributes
+        var property = obj.GetType().GetProperty(attributeName);
+        if (property != null)
+        {
+            return (int)property.GetValue(obj);
+        }
+        else
+        {
+            Debug.LogWarning($"⚠️ Attribute '{attributeName}' not found on {obj.name}");
+            return 0;
+        }
+    }
+
+    private string GetAgentStatus(GameObject obj)
+    {
+        var property = obj.GetType().GetProperty("Status");
+        if (property != null)
+        {
+            return property.GetValue(obj)?.ToString() ?? "unknown";
+        }
+        else
+        {
+            Debug.LogWarning($"⚠️ Status property not found on {obj.name}");
+            return "unknown";
         }
     }
 
@@ -129,6 +188,12 @@ public class MapEncoder : MonoBehaviour
                 break;
             case "restbehavior":
                 Debug.Log("💤 Agent is resting.");
+                break;
+            case "avoidenemy":
+                Debug.Log("⚔️ Agent is avoiding enemy.");
+                break;
+            case "explore":
+                Debug.Log("🌍 Agent is exploring.");
                 break;
             default:
                 Debug.Log($"🤔 Unknown action: {action}");
