@@ -15,6 +15,8 @@ public class BehaviorManager : MonoBehaviour
     private bool _updateLLM = false;
     public delegate void updateLLMBoolChangedHandler(int agentID);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
+    private List<string> behaviorKeyList = new List<string>();
+
 
     public bool UpdateLLM
     {
@@ -42,6 +44,7 @@ public class BehaviorManager : MonoBehaviour
         {
             string agentName = agentBehavior.GetType().Name; // Get the script name
             behaviors[agentName] = agentBehavior;
+            behaviorKeyList.Add(agentName);
             Debug.Log($"Registered AgentBehavior: {agentName}");
         }
 
@@ -132,14 +135,15 @@ public class BehaviorManager : MonoBehaviour
 
     private string GetNextBehaviorName()
     {
-        foreach (var key in behaviors.Keys)
-        {
-            if (key != currentAgentBehavior.GetType().Name)
-            {
-                return key;
-            }
-        }
-        return currentAgentBehavior.GetType().Name;
+        
+        // Get the index of the current behavior
+        int currentIndex = behaviorKeyList.IndexOf(currentAgentBehavior.GetType().Name);
+        
+        // Calculate the index of the next behavior
+        int nextIndex = (currentIndex + 1) % behaviorKeyList.Count;
+        
+        // Return the key of the next behavior
+        return behaviorKeyList[nextIndex];
     }
 
     private AgentBehavior GetFirstBehavior()
