@@ -22,6 +22,7 @@ public class FoodGathererAgent : AgentBehavior
 
     // Speed of agent movement.
     public float moveSpeed = 2;
+    public bool agentReset = true;
     public Material normalMaterial;
     public Material badMaterial;
     public Material goodMaterial;
@@ -215,21 +216,26 @@ public class FoodGathererAgent : AgentBehavior
     }
 
     public override void OnEpisodeBegin()
-    {       
-        Unfreeze();
-        Unpoison();
-        Unsatiate();
-        m_Shoot = false;
-        m_AgentRb.velocity = Vector3.zero;
-        myLaser.transform.localScale = new Vector3(0f, 0f, 0f);
-        transform.position = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range),
-            2f, Random.Range(-m_MyArea.range, m_MyArea.range))
-            + area.transform.position;
-        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
+    {   
+        if(agentReset) { 
+            Unfreeze();
+            Unpoison();
+            Unsatiate();
+            m_Shoot = false;
+            m_AgentRb.velocity = Vector3.zero;
+            myLaser.transform.localScale = new Vector3(0f, 0f, 0f);
+            transform.position = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range),
+                2f, Random.Range(-m_MyArea.range, m_MyArea.range))
+                + area.transform.position;
+            transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
-        SetResetParameters();
-        Debug.Log("Episode complete.");
-        m_EnvironmentSettings.EnvironmentReset();
+            SetResetParameters();
+            Debug.Log("Episode complete.");
+
+            // Only reset the environment if Agent is training
+        
+            m_EnvironmentSettings.EnvironmentReset();
+        }
     }
 
     void OnCollisionEnter(Collision collision)
