@@ -1,0 +1,26 @@
+from pydantic import BaseModel, Field, ConfigDict
+from enum import Enum
+from typing import Literal
+
+class AgentResponse(BaseModel):
+    """
+    Represents an agent's action response with JSON-compatible field names.
+    """
+    reasoning: str = Field(
+        ...,
+        description="Reasoning behind the agent's action selection",
+    )
+
+    next_action: Literal["FoodGathererAgent", "RestBehavior"] = Field(
+        ...,
+        description="Agent's current activity or objective",
+    )
+
+    # Optional: Add a Config class to customize JSON schema
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "reasoning": "The agent is hungry and needs to gather food to maintain energy levels.",
+                "next_action": "FoodGatherAgent"
+            }
+        }
