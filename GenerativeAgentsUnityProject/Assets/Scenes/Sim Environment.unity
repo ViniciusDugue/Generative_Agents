@@ -15032,7 +15032,7 @@ MonoBehaviour:
   foodSpawnRadius: 20
   enemySpawnRadius: 30
   agentSpawnRadius: 15
-  dayDuration: 10
+  timeManager: {fileID: 1134269976}
 --- !u!4 &1919913113
 Transform:
   m_ObjectHideFlags: 0

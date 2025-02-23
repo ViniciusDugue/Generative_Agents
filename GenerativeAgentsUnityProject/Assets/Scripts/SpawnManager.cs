@@ -24,29 +24,68 @@ public class SpawnManager : MonoBehaviour
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> spawnedAgents = new List<GameObject>();
 
-    [Header("Day/Night Cycle")]
-    public float dayDuration = 60f;
-    private bool isDaytime = true;
-
     private List<Transform> foodSpawnPoints = new List<Transform>();
     private List<Transform> enemySpawnPoints = new List<Transform>();
     private List<Transform> agentSpawnPoints = new List<Transform>();
 
     private MapMarkerManager markerManager;
 
+    [Header("Time Manager Reference")]
+    // Assign via inspector or let the script find it automatically.
+    public TimeManager timeManager;
+
+    // Keep track of the last known day/night state.
+    private bool lastIsDaytime;
+
     private void Awake()
     {
         markerManager = FindObjectOfType<MapMarkerManager>();
         FindSpawnPoints();
+
+        // Try to locate the TimeManager if it wasn't assigned.
+        if (timeManager == null)
+        {
+            timeManager = FindObjectOfType<TimeManager>();
+        }
+        if (timeManager != null)
+        {
+            lastIsDaytime = timeManager.IsDayTime;
+        }
     }
 
     private void Start()
     {
-        StartCoroutine(DayNightCycle());
-
-        SpawnObjects(foodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
+        // Spawn initial objects. Food is spawned only if it's daytime.
+        if (timeManager != null && timeManager.IsDayTime)
+        {
+            SpawnObjects(foodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
+        }
         SpawnObjects(enemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
         SpawnObjects(agentSpawnPoints, agentPrefab, maxAgents, spawnedAgents, agentSpawnRadius);
+    }
+
+    private void Update()
+    {
+        // Poll the TimeManager's IsDayTime state and compare with our last stored state.
+        if (timeManager != null)
+        {
+            if (timeManager.IsDayTime != lastIsDaytime)
+            {
+                lastIsDaytime = timeManager.IsDayTime;
+                if (lastIsDaytime)
+                {
+                    Debug.Log("Daytime started - Agents can gather food.");
+                    // Respawn food at the start of the day.
+                    SpawnObjects(foodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
+                }
+                else
+                {
+                    Debug.Log("Nighttime started - Agents return to base.");
+                    // Despawn food at night.
+                    DespawnObjects(spawnedFood);
+                }
+            }
+        }
     }
 
     private void FindSpawnPoints()
@@ -84,7 +123,7 @@ public class SpawnManager : MonoBehaviour
                 GameObject newObj = Instantiate(prefab, randomPosition, Quaternion.identity);
                 spawnedList.Add(newObj);
 
-                // Register new object with minimap
+                // Register new object with minimap if available.
                 if (markerManager != null)
                 {
                     markerManager.RegisterMarker(newObj);
@@ -103,28 +142,6 @@ public class SpawnManager : MonoBehaviour
         return new Vector3(center.x + xOffset, center.y + spawnHeightOffset, center.z + zOffset);
     }
 
-    private IEnumerator DayNightCycle()
-    {
-        while (true)
-        {
-            isDaytime = true;
-            Debug.Log("Daytime started - Agents can gather food.");
-
-            // Respawn food at the start of the day
-            SpawnObjects(foodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
-
-            yield return new WaitForSeconds(dayDuration);
-
-            isDaytime = false;
-            Debug.Log("Nighttime started - Agents return to base.");
-
-            // Despawn food at night
-            DespawnObjects(spawnedFood);
-
-            yield return new WaitForSeconds(dayDuration);
-        }
-    }
-
     private void DespawnObjects(List<GameObject> spawnedList)
     {
         foreach (GameObject obj in spawnedList)
@@ -141,8 +158,9 @@ public class SpawnManager : MonoBehaviour
         spawnedList.Clear();
     }
 
+    // Optional helper method.
     public bool IsDaytime()
     {
-        return isDaytime;
+        return timeManager != null ? timeManager.IsDayTime : true;
     }
 }

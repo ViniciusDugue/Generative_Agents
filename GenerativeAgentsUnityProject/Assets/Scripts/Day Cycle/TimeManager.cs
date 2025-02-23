@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -22,26 +20,37 @@ public class TimeManager : MonoBehaviour
     [SerializeField] private Light globalLight;
 
     private int minutes;
-
     public int Minutes
-    { get { return minutes; } set { minutes = value; OnMinutesChange(value); } }
+    {
+        get { return minutes; }
+        set { minutes = value; OnMinutesChange(value); }
+    }
 
     private int hours = 5;
-
     public int Hours
-    { get { return hours; } set { hours = value; OnHoursChange(value); } }
+    {
+        get { return hours; }
+        set { hours = value; OnHoursChange(value); }
+    }
 
     private int days;
-
     public int Days
-    { get { return days; } set { days = value; } }
+    {
+        get { return days; }
+        set { days = value; }
+    }
+
+    // Exposed boolean for day/night state.
+    public bool IsDayTime { get; private set; }
+
+    // To detect changes and avoid spamming logs.
+    private bool lastIsDayTime;
 
     private float tempSecond;
 
-    public void Update()
+    private void Update()
     {
         tempSecond += Time.deltaTime;
-
         if (tempSecond >= 1)
         {
             Minutes += 1;
@@ -51,7 +60,9 @@ public class TimeManager : MonoBehaviour
 
     private void OnMinutesChange(int value)
     {
+        // Rotate the light each minute.
         globalLight.transform.Rotate(Vector3.up, (1f / (1440f / 4f)) * 360f, Space.World);
+
         if (value >= 60)
         {
             Hours++;
@@ -61,11 +72,13 @@ public class TimeManager : MonoBehaviour
         {
             Hours = 0;
             Days++;
+            Debug.Log("New day started. Day count: " + Days);
         }
     }
 
     private void OnHoursChange(int value)
     {
+        // Trigger skybox and light transitions at specific hours.
         if (value == 6)
         {
             StartCoroutine(LerpSkybox(skyboxNight, skyboxSunrise, 10f));
@@ -85,6 +98,22 @@ public class TimeManager : MonoBehaviour
         {
             StartCoroutine(LerpSkybox(skyboxSunset, skyboxNight, 10f));
             StartCoroutine(LerpLight(graddientSunsetToNight, 10f));
+        }
+
+        // Update the day/night status based on current hour.
+        UpdateDayStatus();
+    }
+
+    // Updates the IsDayTime property and logs changes.
+    private void UpdateDayStatus()
+    {
+        // Here, daytime is defined as 8 <= hour < 18 (between 8am and 6pm).
+        bool currentIsDay = (Hours >= 8 && Hours < 18);
+        if (currentIsDay != lastIsDayTime)
+        {
+            lastIsDayTime = currentIsDay;
+            IsDayTime = currentIsDay;
+            Debug.Log("Daytime status changed: " + IsDayTime + ". Current Day: " + Days);
         }
     }
 
