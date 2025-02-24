@@ -34,6 +34,9 @@ TagManager:
   - enemyAgent
   - destination
   - targetBlock
+  - Built_Wall
+  - Built_Small_Wall
+  - ConstructionSite
   layers:
   - Default
   - TransparentFX
