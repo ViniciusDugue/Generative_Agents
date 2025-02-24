@@ -1,9 +1,9 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class BuildWall_Agent : MonoBehaviour
 {
-    // Inspector-assigned variables
     [Header("Required GameObjects")]
     public GameObject[] n_blocks_required;
     public GameObject wallPrefab;
@@ -28,6 +28,8 @@ public class BuildWall_Agent : MonoBehaviour
     public bool startBehavior = false;
     public bool interrupt = false;
 
+    public NavMeshAgent agent;
+
     // Agent States
     private enum AgentState
     {
@@ -44,7 +46,6 @@ public class BuildWall_Agent : MonoBehaviour
     private AgentState currentState = AgentState.Idle;
     private GameObject currentWallInstance;
 
-    private float currentSpeed = 0f;
     private bool waitingAtConstruction = false;
     private bool wasInterruptedDuringDestination = false;
 
@@ -59,6 +60,9 @@ public class BuildWall_Agent : MonoBehaviour
                 smallWall.SetActive(false);
                 wasInterruptedDuringDestination = true;
             }
+            agent.isStopped = true;
+            agent.ResetPath();
+
             currentState = AgentState.Idle;
             return;
         }
@@ -83,10 +87,13 @@ public class BuildWall_Agent : MonoBehaviour
         switch (currentState)
         {
             case AgentState.MoveToConstruction:
-                MoveToTarget(ConstructionSite.transform.position);
-                if (Vector3.Distance(transform.position, ConstructionSite.transform.position) <= rangeThreshold)
+                if (agent.destination != ConstructionSite.transform.position)
                 {
-                    currentSpeed = 0f;
+                    agent.isStopped = false;
+                    agent.SetDestination(ConstructionSite.transform.position);
+                }
+                if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+                {
                     currentState = AgentState.WaitAtConstruction;
                 }
                 break;
@@ -118,10 +125,13 @@ public class BuildWall_Agent : MonoBehaviour
                     {
                         destinationTarget += toAgent.normalized * destinationStopDistance;
                     }
-                    MoveToTarget(destinationTarget);
-                    if (Vector3.Distance(transform.position, destinationTarget) <= rangeThreshold)
+                    if (agent.destination != destinationTarget)
                     {
-                        currentSpeed = 0f;
+                        agent.isStopped = false;
+                        agent.SetDestination(destinationTarget);
+                    }
+                    if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+                    {
                         currentState = AgentState.PlaceWall;
                     }
                 }
@@ -137,30 +147,6 @@ public class BuildWall_Agent : MonoBehaviour
         }
     }
 
-    //movement function for moving to target whether thats the ConstructionSite or Destination
-    private void MoveToTarget(Vector3 targetPos)
-    {
-        Vector3 toTarget = targetPos - transform.position;
-        float distance = toTarget.magnitude;
-        Vector3 direction = toTarget.normalized;
-
-        if (direction != Vector3.zero)
-        {
-            Quaternion targetRot = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
-        }
-
-        if (distance > rangeThreshold)
-        {
-            currentSpeed = Mathf.Min(moveSpeed, currentSpeed + acceleration * Time.deltaTime);
-            transform.position += direction * currentSpeed * Time.deltaTime;
-        }
-        else
-        {
-            transform.position = targetPos;
-            currentSpeed = 0f;
-        }
-    }
     // wait 1 second at construction before creating the wall
     IEnumerator WaitAtConstructionCoroutine()
     {
