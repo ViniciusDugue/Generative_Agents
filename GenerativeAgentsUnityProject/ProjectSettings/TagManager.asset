@@ -32,11 +32,17 @@ TagManager:
   - tile
   - key
   - enemyAgent
+<<<<<<< HEAD
   - destination
   - targetBlock
   - Built_Wall
   - Built_Small_Wall
   - ConstructionSite
+=======
+  - foodSpawn
+  - enemySpawn
+  - agentSpawn
+>>>>>>> origin/sim_env
   layers:
   - Default
   - TransparentFX
@@ -73,4 +79,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: grid
+    uniqueID: 2073667511
     locked: 0
