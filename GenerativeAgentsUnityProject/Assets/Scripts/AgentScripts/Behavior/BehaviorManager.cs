@@ -2,6 +2,7 @@ using Unity.MLAgents;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using Unity.MLAgents.Sensors;
 
 public class BehaviorManager : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class BehaviorManager : MonoBehaviour
     public delegate void updateLLMBoolChangedHandler(int agentID);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
     private List<string> behaviorKeyList = new List<string>();
+    private float raycastInterval = 0.2f; // Time between raycasts
+    private float nextRaycastTime = 0.0f;
 
 
     public bool UpdateLLM
@@ -64,12 +67,20 @@ public class BehaviorManager : MonoBehaviour
 
     void Update()
     {
+        // Ensure current AgentBehavior is not null
         if (currentAgentBehavior == null)
         {
             Debug.LogError("Current Agent AgentBehavior is null");
             return;
         }
 
+        // Check raycasts periodically to increase Performance
+        if (Time.time >= nextRaycastTime)
+        {   
+            checkRayCast();
+            nextRaycastTime = Time.time + raycastInterval;
+        }
+        
         // Switch between behaviors using behavior names
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
@@ -153,5 +164,36 @@ public class BehaviorManager : MonoBehaviour
             return behavior;
         }
         return null;
+    }
+
+    // check raycast hit info
+    private void checkRayCast()
+    {
+        RayPerceptionSensorComponent3D m_rayPerceptionSensorComponent3D = GetComponent<RayPerceptionSensorComponent3D>();
+
+        var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
+        int lengthOfRayOutputs = rayOutputs.Length;
+
+        // Alternating Ray Order: it gives an order of
+        // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
+        // index 0 indicates the center of raycasts
+        for (int i = 0; i < lengthOfRayOutputs; i++)
+        {
+            GameObject goHit = rayOutputs[i].HitGameObject;
+            if (goHit != null && goHit.tag == "foodSpawn")
+            {
+                var rayDirection = rayOutputs[i].EndPositionWorld - rayOutputs[i].StartPositionWorld;
+                var scaledRayLength = rayDirection.magnitude;
+                float rayHitDistance = rayOutputs[i].HitFraction * scaledRayLength;
+
+                // Print info:
+                string dispStr = "";
+                dispStr = dispStr + "__RayPerceptionSensor - HitInfo__:\r\n";
+                dispStr = dispStr + "GameObject name: " + goHit.name + "\r\n";
+                dispStr = dispStr + "Hit distance of Ray: " + rayHitDistance + "\r\n";
+                dispStr = dispStr + "GameObject tag: " + goHit.tag + "\r\n";
+                Debug.Log(dispStr);
+            }
+        }
     }
 }
