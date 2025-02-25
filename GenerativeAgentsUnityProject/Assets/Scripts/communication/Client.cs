@@ -8,6 +8,8 @@ using UnityEngine;
 using TMPro;
 using Unity.MLAgents;
 using UnityEditor.UIElements;
+using System.Net;
+using System;
 
 
 public class Client : MonoBehaviour
@@ -15,6 +17,8 @@ public class Client : MonoBehaviour
     public TextMeshProUGUI  displayText;
     public TMP_InputField inputField;  // Reference to a TextMeshPro Input Field
     private Dictionary<int, GameObject> agentDict = new Dictionary<int, GameObject>();
+    
+
     private HttpClient client;
 
 
@@ -129,15 +133,22 @@ public class Client : MonoBehaviour
         var agentData = new
         {
             agentID = agent.GetComponent<BehaviorManager>().agentID,  
-            // health = 100,  // Placeholder, replace with actual health
+            health = 100,  // Placeholder, replace with actual health
             exhaustion = agent.GetComponent<BehaviorManager>().exhaustion,
             currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
-            position = new { x = position.x, y = position.y, z = position.z }
+            currentPosition = new { x = position.x, y = position.y, z = position.z },
+            foodLocations = GetFoodLocationsAsList(agent.GetComponent<BehaviorManager>().foodLocations),
         };
 
         string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
         Debug.Log($"🔍 Sending JSON: {jsonString}");
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+        var client = new HttpClient(new HttpClientHandler
+        {
+            Proxy = new WebProxy(new Uri("http://127.0.0.1:5559"))
+        });
+ 
 
         try
         {
@@ -170,6 +181,27 @@ public class Client : MonoBehaviour
         {
             Debug.LogError("Exception: " + e.ToString());
         }
+    }
+
+    // Method to convert the HashSet to a List
+    private List<Dictionary<string, float>> GetFoodLocationsAsList(HashSet<Transform> foodLocationsHashSet)
+    {
+        if (foodLocationsHashSet.Count == 0)  return null;
+
+        List<Dictionary<string, float>> positionsList = new List<Dictionary<string, float>>();
+        List<Transform> foodLocationsList = new List<Transform>(foodLocationsHashSet);
+        foreach (Transform foodLocation in foodLocationsList)
+        {
+            Vector3 position = foodLocation.position;
+            Dictionary<string, float> positionDict = new Dictionary<string, float>
+            {
+                { "x", position.x },
+                { "y", position.y },
+                { "z", position.z }
+            };
+            positionsList.Add(positionDict);
+        }
+        return positionsList;
     }
 
     void PerformAction(GameObject agent, string action)

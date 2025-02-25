@@ -19,6 +19,9 @@ public class BehaviorManager : MonoBehaviour
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
     private float nextRaycastTime = 0.0f;
+    
+    [HideInInspector]
+    public HashSet<Transform> foodLocations = new HashSet<Transform>();
 
 
     public bool UpdateLLM
@@ -80,7 +83,7 @@ public class BehaviorManager : MonoBehaviour
             checkRayCast();
             nextRaycastTime = Time.time + raycastInterval;
         }
-        
+
         // Switch between behaviors using behavior names
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
@@ -182,17 +185,10 @@ public class BehaviorManager : MonoBehaviour
             GameObject goHit = rayOutputs[i].HitGameObject;
             if (goHit != null && goHit.tag == "foodSpawn")
             {
-                var rayDirection = rayOutputs[i].EndPositionWorld - rayOutputs[i].StartPositionWorld;
-                var scaledRayLength = rayDirection.magnitude;
-                float rayHitDistance = rayOutputs[i].HitFraction * scaledRayLength;
-
-                // Print info:
-                string dispStr = "";
-                dispStr = dispStr + "__RayPerceptionSensor - HitInfo__:\r\n";
-                dispStr = dispStr + "GameObject name: " + goHit.name + "\r\n";
-                dispStr = dispStr + "Hit distance of Ray: " + rayHitDistance + "\r\n";
-                dispStr = dispStr + "GameObject tag: " + goHit.tag + "\r\n";
-                Debug.Log(dispStr);
+                if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                {
+                    Debug.Log("Food location found!");
+                }
             }
         }
     }
