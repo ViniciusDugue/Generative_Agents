@@ -50,17 +50,30 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
+        // Original time progression (1 game minute per real second):
+        // tempSecond += Time.deltaTime;
+        // if (tempSecond >= 1)
+        // {
+        //     Minutes += 1;
+        //     tempSecond = 0;
+        // }
+
+        // New time progression: full day (1440 game minutes) passes in 4 minutes (240 seconds) of real time.
+        // That means 6 game minutes per real second.
         tempSecond += Time.deltaTime;
-        if (tempSecond >= 1)
+        float secondsPerGameMinute = 1f / 6f; // ~0.1667 seconds per game minute
+        if (tempSecond >= secondsPerGameMinute)
         {
-            Minutes += 1;
-            tempSecond = 0;
+            int minutesToAdd = Mathf.FloorToInt(tempSecond / secondsPerGameMinute);
+            Minutes += minutesToAdd;
+            tempSecond %= secondsPerGameMinute;
         }
     }
 
     private void OnMinutesChange(int value)
     {
         // Rotate the light each minute.
+        // The following rotation calculation remains the same, but you might adjust it if needed.
         globalLight.transform.Rotate(Vector3.up, (1f / (1440f / 4f)) * 360f, Space.World);
 
         if (value >= 60)
