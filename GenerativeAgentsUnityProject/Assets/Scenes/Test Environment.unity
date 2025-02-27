@@ -306,7 +306,17 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 2577723496981894592, guid: e7c36529806c9294890d71a7e5bc62e2,
         type: 3}
+      propertyPath: numFood
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2577723496981894592, guid: e7c36529806c9294890d71a7e5bc62e2,
+        type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2577723496981894592, guid: e7c36529806c9294890d71a7e5bc62e2,
+        type: 3}
+      propertyPath: respawnFood
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2647020216480189933, guid: e7c36529806c9294890d71a7e5bc62e2,
@@ -1751,6 +1761,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpawnManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3013993908227903263, guid: a4621e1a3dd88094889a029918d956a8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
