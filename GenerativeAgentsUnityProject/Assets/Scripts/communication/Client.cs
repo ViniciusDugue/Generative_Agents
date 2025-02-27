@@ -143,13 +143,6 @@ public class Client : MonoBehaviour
         string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
         Debug.Log($"🔍 Sending JSON: {jsonString}");
         var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
-
-        var client = new HttpClient(new HttpClientHandler
-        {
-            Proxy = new WebProxy(new Uri("http://127.0.0.1:5559"))
-        });
- 
-
         try
         {
             HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
@@ -170,6 +163,7 @@ public class Client : MonoBehaviour
                     
                     // Switch Agent Behavior to nextAction
                     agentDict[agentID].GetComponent<BehaviorManager>().SwitchBehavior(nextAction);
+                    agentDict[agentID].GetComponent<BehaviorManager>().SetMoveTarget(responseJson["location"]);
                 }
             }
             else

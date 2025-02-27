@@ -1,6 +1,8 @@
 using Unity.MLAgents;
+using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Reflection;
 using UnityEngine;
 using Unity.MLAgents.Sensors;
 
@@ -121,6 +123,41 @@ public class BehaviorManager : MonoBehaviour
             Debug.LogWarning($"Behavior '{behaviorName}' not found.");
         }
     }
+
+    public void SetMoveTarget(object coords)
+    {
+        // Validate the input to ensure it is not null
+        if (coords == null)
+        {
+            throw new ArgumentNullException(nameof(coords), "Input must not be null.");
+        }
+
+        // Use reflection to get the x, y, and z values
+        PropertyInfo xProperty = coords.GetType().GetProperty("x");
+        PropertyInfo yProperty = coords.GetType().GetProperty("y");
+        PropertyInfo zProperty = coords.GetType().GetProperty("z");
+
+        FieldInfo xField = coords.GetType().GetField("x");
+        FieldInfo yField = coords.GetType().GetField("y");
+        FieldInfo zField = coords.GetType().GetField("z");
+
+        if ((xProperty == null && xField == null) || (yProperty == null && yField == null) || (zProperty == null && zField == null))
+        {
+            throw new ArgumentException("Input object must have 'x', 'y', and 'z' properties or fields.");
+        }
+
+        float x = (xProperty != null) ? (float)xProperty.GetValue(coords) : (float)xField.GetValue(coords);
+        float y = (yProperty != null) ? (float)yProperty.GetValue(coords) : (float)yField.GetValue(coords);
+        float z = (zProperty != null) ? (float)zProperty.GetValue(coords) : (float)zField.GetValue(coords);
+
+        Vector3 targetPosition = new Vector3(x, y, z);
+
+        if (behaviors.ContainsKey("MoveBehavior") && behaviors["MoveBehavior"] is MoveBehavior moveBehavior)
+        {
+            moveBehavior.target.position = targetPosition;
+        }
+    }
+        
 
     private void StartExhaustionCoroutine()
     {

@@ -240,10 +240,9 @@ public class FoodGathererAgent : AgentBehavior
 
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("food collision");
         if (collision.gameObject.CompareTag("food"))
         {
-            
+            Debug.Log("food collision");
             if (collision.gameObject.GetComponent<FoodScript>() == null)
             {
                 Debug.LogError("FoodScript is null on collided object!");
