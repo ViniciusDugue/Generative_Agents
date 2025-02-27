@@ -32,8 +32,9 @@ TagManager:
   - tile
   - key
   - enemyAgent
-  - destination
-  - targetBlock
+  - foodSpawn
+  - enemySpawn
+  - agentSpawn
   layers:
   - Default
   - TransparentFX
@@ -70,4 +71,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: grid
+    uniqueID: 2073667511
     locked: 0
