@@ -26,7 +26,7 @@ public class TimeManager : MonoBehaviour
         set { minutes = value; OnMinutesChange(value); }
     }
 
-    private int hours = 5;
+    private int hours = 8;
     public int Hours
     {
         get { return hours; }
@@ -47,6 +47,18 @@ public class TimeManager : MonoBehaviour
     private bool lastIsDayTime;
 
     private float tempSecond;
+
+        private void Start()
+    {
+        // Always start at 8:00 AM.
+        Hours = 8;
+        Minutes = 0;
+        Days = 1;
+        Debug.Log("Starting time set to 8:00 AM.");
+
+        // Start the time progression (using your accelerated time).
+        // Other initialization code remains the same.
+    }
 
     private void Update()
     {
