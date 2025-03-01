@@ -7,18 +7,34 @@ public class MoveBehavior : AgentBehavior
 {
     public NavMeshAgent agent;
     public Transform target;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
     }
 
+    protected override void OnEnable()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = false;
+        }
+    }
+
+    protected override void OnDisable()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = true;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        // foreach(Transform t in transformList) 
-        // {
-        //     agent.SetDestination(t.position);
-        // }
-        agent.SetDestination(target.position);
+        if (agent != null && target != null)
+        {
+            agent.SetDestination(target.position);
+        }
     }
 }
