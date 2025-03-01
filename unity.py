@@ -9,8 +9,10 @@ from pydantic_ai import Agent, RunContext
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
 from agent_classes import AgentResponse  # Keep AgentResponse for output
+import base64
 import os
 import json
+import logging
 
 # Load environment variables from .env file
 load_dotenv()
@@ -77,22 +79,35 @@ app = FastAPI()
 @app.post("/nlp")
 async def process_input(request: Request):
     try:
-        # Get the raw input data from the client
         input_data = await request.json()
-
         if not input_data:
             raise HTTPException(status_code=400, detail="input_data is required")
-        
-        # Convert input_data to a JSON string
         input_json_str = json.dumps(input_data)
-        
-        # Pass the JSON string to the agent
-        result = await survial_agent.run(input_json_str)
+        logging.debug("Input to survival_agent.run: %s", input_json_str)
+        result = await survival_agent.run(input_json_str)
         return result.data
-
     except Exception as e:
+        logging.error("Error processing /nlp request", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e)) from e
+    
+@app.post("/map")
+async def process_map_with_llm(request: Request):
+    try:
+        input_data = await request.json()
+        print("Received map data:", input_data)
+        
+        if "map_base64" not in input_data or "agent_id" not in input_data:
+            raise HTTPException(status_code=400, detail="Map and agent ID are required")
+        return {"message": "Received map data", "agent_id": input_data["agent_id"]}
+    
+    except Exception as e:
+        print("Error processing /map:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
 
 # Run the FastAPI app
 if __name__ == "__main__":
-    uvicorn.run("unity:app", host="localhost", port=12345, reload=True)
+    uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)

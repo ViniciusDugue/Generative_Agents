@@ -6,6 +6,8 @@ using UnityEngine;
 public class BehaviorManager : MonoBehaviour
 {
     public int agentID = 001;
+    private static int globalAgentID = 1;  // Shared counter for unique IDs
+
     public float exhaustion;
     private GameObject agentObject;
     public AgentBehavior defaultBehavior;
@@ -59,28 +61,31 @@ public class BehaviorManager : MonoBehaviour
         StartExhaustionCoroutine();
     }
 
-    void Update()
+    private void Update()
     {
-        if (currentAgentBehavior == null)
-        {
-            Debug.LogError("Current Agent AgentBehavior is null");
-            return;
-        }
+        Debug.Log("Update is running");  // <- Add this line to check if Update is firing
 
-        // Switch between behaviors using behavior names
-        if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            SwitchBehavior(GetFirstBehavior().GetType().Name);
-        }
-        if (Input.GetKeyDown(KeyCode.E)) // Example: Switch to second behavior
-        {
-            SwitchBehavior(GetNextBehaviorName());
-        }
-        if (Input.GetKeyDown(KeyCode.R)) // Example: Switch to second behavior
-        {
+            Debug.Log("R key pressed");  // <- Check if Unity registers the key press
+
             UpdateLLM = true;
-            Debug.Log("UpdateLLM set to: "+ _updateLLM);
+            MapEncoder mapEncoder = GetComponent<MapEncoder>();
+
+            if (UpdateLLM && mapEncoder != null)
+            {
+                mapEncoder.CaptureAndSendMap(agentID);
+                Debug.Log($"Map captured and sent by Agent {agentID}");
+            }
+
+            Debug.Log($"UpdateLLM set to: {UpdateLLM}");
         }
+    }
+
+    public void InitializeAgent()
+    {
+        agentID = globalAgentID++;
+        Debug.Log($"Agent {agentID} initialized.");
     }
 
     public void SwitchBehavior(string behaviorName)
@@ -121,14 +126,20 @@ public class BehaviorManager : MonoBehaviour
     {
         while (true)
         {
+            if (currentAgentBehavior != null)  // ✅ Added Null Check
+            {
+                exhaustion += 1;  // Example logic
+                Debug.Log($"Agent {agentID} exhaustion: {exhaustion}");
+            }
+            else
+            {
+                Debug.LogWarning($"Agent {agentID} has no current behavior assigned.");
+            }
 
-            yield return new WaitForSeconds(1.0f);
-            if ((exhaustion + currentAgentBehavior.exhaustionRate) > 0)
-                exhaustion += currentAgentBehavior.exhaustionRate; 
-            else // Ensure exhaustion does not go below 0
-               exhaustion = 0; 
+            yield return new WaitForSeconds(5f);
         }
     }
+
 
     private string GetNextBehaviorName()
     {

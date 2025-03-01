@@ -22,53 +22,56 @@ public class Client : MonoBehaviour
     {
         client = new HttpClient();
 
-        // Add a listener to the TMP_InputField to send data on value change
         if (inputField != null)
         {
             inputField.onEndEdit.AddListener(OnInputFieldValueChanged);
         }
+    }
 
-        // Find all active agents in the scene
-        GameObject[]activeAgents = GameObject.FindGameObjectsWithTag("agent");
-        if (activeAgents == null)
+    public void RegisterAgent(GameObject agent)
+    {
+        BehaviorManager bm = agent.GetComponent<BehaviorManager>();
+        if (bm != null)
         {
-            Debug.LogError("No active agents found.");
-        }
-
-        // Assign agent IDs to each agent for the Dictionary
-        foreach(GameObject agent in activeAgents) {
-            BehaviorManager bm = agent.GetComponent<BehaviorManager>();
-            if (bm == null) 
+            int agentID = bm.agentID;
+            if (!agentDict.ContainsKey(agentID))
             {
-                Debug.LogError("No BehaviorManager found on agent.");
+                agentDict.Add(agentID, agent);
+                Debug.Log($"Agent {agentID} registered in Client.");
+                bm.OnUpdateLLM += HandleOnUpdateLLMChanged;
             }
-            int agentID = agent.GetComponent<BehaviorManager>().agentID;
-            agentDict.Add(agentID, agent);
-
-            // Subscribe to the OnUpdateLLM event
-            bm.OnUpdateLLM += HandleOnUpdateLLMChanged;
-            Debug.Log($"Subscribed to OnUpdateLLM for Agent {agentID}");
         }
     }
+
 
     // Handles when an agent's OnUpdateLLM is set to true
     private async void HandleOnUpdateLLMChanged(int agentID)    
     {
         Debug.Log($"🔄 OnUpdateLLM changed to TRUE for Agent {agentID}, sending data...");
 
-        await SendAgentData(agentID); // Wait for data to be sent
-
-        // Reset _updateLLM to false
         if (agentDict.ContainsKey(agentID))
         {
-            BehaviorManager bm = agentDict[agentID].GetComponent<BehaviorManager>();
+            GameObject agent = agentDict[agentID];
+            MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
+
+            if (mapEncoder != null)
+            {
+                mapEncoder.CaptureAndSendMap(agentID);
+                await SendAgentData(agentID); // Wait for data to be sent
+            }
+            else
+            {
+                Debug.LogError($"MapEncoder not found on Agent {agentID}");
+            }
+
+            // Reset _updateLLM to false
+            BehaviorManager bm = agent.GetComponent<BehaviorManager>();
             if (bm != null)
             {
                 Debug.Log($"Resetting UpdateLLM to FALSE for Agent {agentID}");
                 bm.UpdateLLM = false; // Reset the flag
             }
         }
-    
     }
 
     // Callback for TMP_InputField value change
@@ -192,4 +195,5 @@ public class Client : MonoBehaviour
                 break;
         }
     }
+
 }

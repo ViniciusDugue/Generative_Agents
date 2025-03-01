@@ -36,7 +36,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
-        markerManager = FindObjectOfType<MapMarkerManager>();
+        markerManager = FindFirstObjectByType<MapMarkerManager>();
         FindSpawnPoints();
     }
 
@@ -44,9 +44,15 @@ public class SpawnManager : MonoBehaviour
     {
         StartCoroutine(DayNightCycle());
 
+        // Spawn food and enemy objects every cycle
         SpawnObjects(foodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
         SpawnObjects(enemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
-        SpawnObjects(agentSpawnPoints, agentPrefab, maxAgents, spawnedAgents, agentSpawnRadius);
+
+        // IMPORTANT: Spawn agents only once
+        if (spawnedAgents.Count == 0)
+        {
+            SpawnObjects(agentSpawnPoints, agentPrefab, maxAgents, spawnedAgents, agentSpawnRadius);
+        }
     }
 
     private void FindSpawnPoints()
@@ -54,13 +60,16 @@ public class SpawnManager : MonoBehaviour
         foodSpawnPoints.AddRange(FindObjectsWithTag("foodSpawn"));
         enemySpawnPoints.AddRange(FindObjectsWithTag("enemySpawn"));
         agentSpawnPoints.AddRange(FindObjectsWithTag("agentSpawn"));
+
+        if (foodSpawnPoints.Count == 0) Debug.LogError("❌ No food spawn points found!");
+        if (enemySpawnPoints.Count == 0) Debug.LogError("❌ No enemy spawn points found!");
+        if (agentSpawnPoints.Count == 0) Debug.LogError("❌ No agent spawn points found!");
     }
 
     private List<Transform> FindObjectsWithTag(string tag)
     {
         List<Transform> points = new List<Transform>();
         GameObject[] foundObjects = GameObject.FindGameObjectsWithTag(tag);
-
         foreach (GameObject obj in foundObjects)
         {
             points.Add(obj.transform);
@@ -76,19 +85,42 @@ public class SpawnManager : MonoBehaviour
             return;
         }
 
+        Debug.Log($"✅ Spawning {maxCount} {prefab.name}(s)");
+        int totalSpawned = 0;
         foreach (Transform point in spawnPoints)
         {
-            for (int i = 0; i < maxCount; i++)
+            if (totalSpawned >= maxCount)
+                break;
+
+            int countPerPoint = Mathf.Min(maxCount - totalSpawned, 5); // Limit spawns per point
+            for (int i = 0; i < countPerPoint; i++)
             {
                 Vector3 randomPosition = GetRandomPositionAround(point.position, spawnRadius);
                 GameObject newObj = Instantiate(prefab, randomPosition, Quaternion.identity);
                 spawnedList.Add(newObj);
+                totalSpawned++;
 
-                // Register new object with minimap
-                if (markerManager != null)
+                // Only if this is the agent prefab, add the BehaviorManager and register it.
+                if (prefab == agentPrefab)
                 {
-                    markerManager.RegisterMarker(newObj);
+                    BehaviorManager behaviorManager = newObj.GetComponent<BehaviorManager>() ?? newObj.AddComponent<BehaviorManager>();
+                    behaviorManager.InitializeAgent();
+
+                    // Assign MapEncoder (if needed)
+                    MapEncoder mapEncoder = newObj.GetComponent<MapEncoder>() ?? newObj.AddComponent<MapEncoder>();
+                    mapEncoder.mapCamera = GameObject.Find("2DMapCamera").GetComponent<Camera>();
+                    mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
+
+                    // Register markers if applicable
+                    markerManager?.RegisterMarker(newObj);
+
+                    // Notify the Client about the new agent
+                    Client client = FindFirstObjectByType<Client>();
+                    client?.RegisterAgent(newObj);
                 }
+
+                if (totalSpawned >= maxCount)
+                    break;
             }
         }
     }
@@ -99,7 +131,6 @@ public class SpawnManager : MonoBehaviour
         float randomDistance = Random.Range(0f, radius);
         float xOffset = Mathf.Cos(randomAngle) * randomDistance;
         float zOffset = Mathf.Sin(randomAngle) * randomDistance;
-
         return new Vector3(center.x + xOffset, center.y + spawnHeightOffset, center.z + zOffset);
     }
 
@@ -131,10 +162,7 @@ public class SpawnManager : MonoBehaviour
         {
             if (obj != null)
             {
-                if (markerManager != null)
-                {
-                    markerManager.RemoveMarker(obj);
-                }
+                markerManager?.RemoveMarker(obj);
                 Destroy(obj);
             }
         }

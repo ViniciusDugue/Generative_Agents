@@ -1,46 +1,45 @@
 using System;
 using System.Text;
 using UnityEngine;
+using System.Net.Http;
+using System.Collections;
+using System.Threading.Tasks;
 
 public class MapEncoder : MonoBehaviour
 {
-    public Camera mapCamera; // Assign the 2DMapCamera in Inspector
+    public Camera mapCamera;
     public int mapWidth = 50;
     public int mapHeight = 50;
-    public KeyCode captureMapKey = KeyCode.E;
-    public KeyCode captureAgentInfoKey = KeyCode.A;
+    public string serverUrl = "http://127.0.0.1:12345/map";
     private Texture2D capturedTexture;
+    private static readonly HttpClient httpClient = new HttpClient();
 
-    private void Update()
+    [System.Serializable]
+    public class MapPayload
     {
-        if (Input.GetKeyDown(captureMapKey))
-        {
-            string base64Map = CaptureAndEncodeMap();
-            if (!string.IsNullOrEmpty(base64Map))
-            {
-                Debug.Log($"Map Base64: {base64Map.Substring(0, 100)}..."); // Preview first 100 characters
-            }
-        }
+        public int agent_id;
+        public string map_base64;
+    }
 
-        if (Input.GetKeyDown(captureAgentInfoKey))
+
+    public async void CaptureAndSendMap(int agentID)
+    {
+        string base64Map = CaptureAndEncodeMap(); // Capture the map image as Base64
+        if (!string.IsNullOrEmpty(base64Map))
         {
-            CaptureAndSendAgentInfo();
+            await SendMapToServer(agentID, base64Map); // Await async function
         }
     }
 
-    public string CaptureAndEncodeMap()
+    private string CaptureAndEncodeMap()
     {
         if (mapCamera == null)
         {
             Debug.LogError("MapEncoder: No mapCamera assigned.");
             return null;
         }
-
-        // Capture map without changing camera view
+        RenderTexture originalRT = mapCamera.targetTexture;
         RenderTexture tempRT = new RenderTexture(mapWidth, mapHeight, 24);
-        RenderTexture previousRT = mapCamera.targetTexture;
-        RenderTexture currentRT = RenderTexture.active;
-
         mapCamera.targetTexture = tempRT;
         mapCamera.Render();
 
@@ -49,22 +48,37 @@ public class MapEncoder : MonoBehaviour
         capturedTexture.ReadPixels(new Rect(0, 0, mapWidth, mapHeight), 0, 0);
         capturedTexture.Apply();
 
-        RenderTexture.active = currentRT; // Restore original
-        mapCamera.targetTexture = previousRT; // Restore camera target texture
-        tempRT.Release();
+        RenderTexture.active = null;
+        mapCamera.targetTexture = originalRT;
         Destroy(tempRT);
 
         byte[] pngData = capturedTexture.EncodeToPNG();
-        string base64String = Convert.ToBase64String(pngData);
-
-        Debug.Log("Map captured and encoded to Base64.");
-        return base64String;
+        return Convert.ToBase64String(pngData);
     }
 
-    private void CaptureAndSendAgentInfo()
+    private async Task SendMapToServer(int agentID, string base64Map)
     {
-        Debug.Log("Agent information captured and sent.");
-        // Placeholder for capturing and sending agent information.
-        // Replace with actual agent data logic when needed.
+        try
+        {
+            MapPayload payload = new MapPayload { agent_id = agentID, map_base64 = base64Map };
+            string jsonPayload = JsonUtility.ToJson(payload);
+            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await httpClient.PostAsync(serverUrl, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                Debug.Log($"Map sent successfully by Agent {agentID}.");
+            }
+            else
+            {
+                Debug.LogError($"Failed to send map by Agent {agentID}: {response.StatusCode}");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Exception while sending map by Agent {agentID}: {e.Message}");
+        }
     }
+
 }
