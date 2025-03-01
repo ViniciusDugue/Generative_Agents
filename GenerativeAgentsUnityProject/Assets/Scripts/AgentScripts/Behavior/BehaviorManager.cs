@@ -111,7 +111,7 @@ public class BehaviorManager : MonoBehaviour
             // Disable current AgentBehavior
             currentAgentBehavior.enabled = false;
 
-            // Switch and enable new AgentBehavior
+            // Switch and enable new AgentBehavior  
             currentAgentBehavior = newBehavior;
             currentAgentBehavior.enabled = true;
 
@@ -129,33 +129,39 @@ public class BehaviorManager : MonoBehaviour
         // Validate the input to ensure it is not null
         if (coords == null)
         {
-            throw new ArgumentNullException(nameof(coords), "Input must not be null.");
+            return;
         }
 
-        // Use reflection to get the x, y, and z values
-        PropertyInfo xProperty = coords.GetType().GetProperty("x");
-        PropertyInfo yProperty = coords.GetType().GetProperty("y");
-        PropertyInfo zProperty = coords.GetType().GetProperty("z");
-
-        FieldInfo xField = coords.GetType().GetField("x");
-        FieldInfo yField = coords.GetType().GetField("y");
-        FieldInfo zField = coords.GetType().GetField("z");
-
-        if ((xProperty == null && xField == null) || (yProperty == null && yField == null) || (zProperty == null && zField == null))
+        // Ensure the coords object is a JObject (JSON object)
+        if (coords is Newtonsoft.Json.Linq.JObject locationDict)
         {
-            throw new ArgumentException("Input object must have 'x', 'y', and 'z' properties or fields.");
+            try
+            {
+                // Parse location values safely
+                float x = locationDict["x"].ToObject<float>();
+                float y = locationDict["y"].ToObject<float>();
+                float z = locationDict["z"].ToObject<float>();
+
+                // Convert to Vector3
+                Vector3 targetLocation = new Vector3(x, y, z);
+                Debug.Log($"Target Location: {targetLocation}");
+
+                // Assign target position correctly
+                if (behaviors.ContainsKey("MoveBehavior") && behaviors["MoveBehavior"] is MoveBehavior moveBehavior)
+                {
+                    moveBehavior.target.position = targetLocation;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error parsing location: {e.Message}");
+            }
         }
-
-        float x = (xProperty != null) ? (float)xProperty.GetValue(coords) : (float)xField.GetValue(coords);
-        float y = (yProperty != null) ? (float)yProperty.GetValue(coords) : (float)yField.GetValue(coords);
-        float z = (zProperty != null) ? (float)zProperty.GetValue(coords) : (float)zField.GetValue(coords);
-
-        Vector3 targetPosition = new Vector3(x, y, z);
-
-        if (behaviors.ContainsKey("MoveBehavior") && behaviors["MoveBehavior"] is MoveBehavior moveBehavior)
+        else
         {
-            moveBehavior.target.position = targetPosition;
+            Debug.LogError("SetMoveTarget received an invalid location format.");
         }
+
     }
         
 
