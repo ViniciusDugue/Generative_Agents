@@ -37,11 +37,14 @@ You can take one of the following ACTIONS at a time:
     Purpose: Prevents exhaustion from reaching dangerous levels. This action should be taken when exhaustion is high and approaching dangerous thresholds.
 
 * MoveBehaivor
-    Effect: Moves the agent to a specified location.
+    Effect: Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.
     Cost: 1 exhaustion per unit distance between the current and target locations (increases exhaustion).
     Purpose: Allows the agent to relocate to food sources or other points of interest. Movement should be planned efficiently to avoid excessive exhaustion.
 
 Survival Considerations
+    - Food only spawns at specific food locations in the enviornment.
+    - Food locations can be discovered through exploration.
+    - FoodGathererAgent is good for exploration. The MoveBehavior is good for traveling to important locations.
     - If exhaustion exceeds 100, the agent will begin losing health and may eventually die.
     - The agent should prioritize food gathering if it is sustainable but must rest when exhaustion is critically high.
     - Efficient travel planning is essential to avoid unnecessary exhaustion.
@@ -97,6 +100,7 @@ async def process_input(request: Request):
 
         # Pass the JSON string to the agent
         result = await survival_agent.run(input_json_str)
+        print(result.data)
         return result.data
 
     except Exception as e:
