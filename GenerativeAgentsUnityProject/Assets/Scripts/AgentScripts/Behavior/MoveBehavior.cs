@@ -6,15 +6,17 @@ using UnityEngine.AI;
 public class MoveBehavior : AgentBehavior
 {
     public NavMeshAgent agent;
-    public Transform target;
+    public Vector3 target;
 
     void Start()
     {
+        target = this.gameObject.transform.position;
         agent = GetComponent<NavMeshAgent>();
     }
 
     protected override void OnEnable()
     {
+
         if (agent != null)
         {
             agent.isStopped = false;
@@ -34,7 +36,7 @@ public class MoveBehavior : AgentBehavior
     {
         if (agent != null && target != null)
         {
-            agent.SetDestination(target.position);
+            agent.SetDestination(target);
         }
     }
 }
