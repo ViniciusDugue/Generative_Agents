@@ -798,12 +798,12 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 5000
-  exhaustionRate: 0.1
+  exhaustionRate: 0.8
   m_EnvironmentSettings: {fileID: 0}
   area: {fileID: 0}
   turnSpeed: 150
   moveSpeed: 1
-  agentReset: 1
+  agentReset: 0
   normalMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
   badMaterial: {fileID: 2100000, guid: 88b9ae7af2c1748a0a1f63407587a601, type: 2}
   goodMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
@@ -846,9 +846,9 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  exhaustionRate: 0.1
+  exhaustionRate: 0.5
   agent: {fileID: 0}
-  target: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
 --- !u!114 &4155786854146672970
 MonoBehaviour:
   m_ObjectHideFlags: 0

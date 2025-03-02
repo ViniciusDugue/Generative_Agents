@@ -843,7 +843,7 @@ Transform:
   m_GameObject: {fileID: 309435446}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.00155, y: 30.598644, z: -2.5858495}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1870,7 +1870,7 @@ MonoBehaviour:
   MaxStep: 0
   exhaustionRate: 0.5
   agent: {fileID: 799627064}
-  target: {fileID: 1843324203}
+  target: {x: 0, y: 0, z: 0}
 --- !u!1 &808741717 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1781001274680836292, guid: e7c36529806c9294890d71a7e5bc62e2,
@@ -3271,7 +3271,7 @@ PrefabInstance:
     - target: {fileID: 1841426132986401358, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: exhaustionRate
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1841426132986401358, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
@@ -3332,7 +3332,7 @@ PrefabInstance:
         type: 3}
       propertyPath: target
       value: 
-      objectReference: {fileID: 1843324203}
+      objectReference: {fileID: 0}
     - target: {fileID: 4361704349902786676, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: exhaustionRate
