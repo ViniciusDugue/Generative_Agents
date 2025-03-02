@@ -149,7 +149,7 @@ public class BehaviorManager : MonoBehaviour
                 // Assign target position correctly
                 if (behaviors.ContainsKey("MoveBehavior") && behaviors["MoveBehavior"] is MoveBehavior moveBehavior)
                 {
-                    moveBehavior.target.position = targetLocation;
+                    moveBehavior.target = targetLocation;
                 }
             }
             catch (Exception e)
