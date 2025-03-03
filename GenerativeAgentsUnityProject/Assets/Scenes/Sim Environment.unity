@@ -1079,7 +1079,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133223286}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &133223289
 Camera:
   m_ObjectHideFlags: 0
@@ -1328,7 +1328,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2146238846}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: -90}
 --- !u!1 &180078976
 GameObject:
@@ -1517,7 +1517,7 @@ GameObject:
   - component: {fileID: 183420748}
   - component: {fileID: 183420747}
   m_Layer: 5
-  m_Name: Map
+  m_Name: UserMapCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3125,7 +3125,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapCamera: {fileID: 175141912}
-  mapContainer: {fileID: 1241030760}
+  mapContainers:
+  - {fileID: 1841739961}
+  - {fileID: 376374307}
   agentMarkerPrefab: {fileID: 7955253016905973970, guid: 76dfd58fbc427ea46848a9b9ea890aea,
     type: 3}
   enemyMarkerPrefab: {fileID: 1174300385508847463, guid: d3b2c3a7f342c9a40a524fdccc370f2b,
@@ -3144,7 +3146,8 @@ Transform:
   m_LocalPosition: {x: 21.331202, y: 38.108227, z: 22.638372}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2146238846}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &362201285
@@ -9331,7 +9334,7 @@ GameObject:
   - component: {fileID: 1241030762}
   - component: {fileID: 1241030761}
   m_Layer: 5
-  m_Name: Map
+  m_Name: AgentMapCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17455,15 +17458,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146238844}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -21.331202, y: -38.108227, z: -22.638372}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1841739961}
   - {fileID: 376374307}
   - {fileID: 133223287}
-  m_Father: {fileID: 0}
+  - {fileID: 175141913}
+  m_Father: {fileID: 343436095}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
@@ -17475,9 +17479,7 @@ SceneRoots:
   - {fileID: 316168839}
   - {fileID: 1674417349}
   - {fileID: 87198316}
-  - {fileID: 175141913}
   - {fileID: 180078979}
-  - {fileID: 2146238846}
   - {fileID: 2014711432}
   - {fileID: 2073148499}
   - {fileID: 2046212458}
