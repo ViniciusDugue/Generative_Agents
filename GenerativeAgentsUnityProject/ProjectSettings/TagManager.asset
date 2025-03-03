@@ -35,6 +35,7 @@ TagManager:
   - foodSpawn
   - enemySpawn
   - agentSpawn
+  - habitat
   layers:
   - Default
   - TransparentFX
