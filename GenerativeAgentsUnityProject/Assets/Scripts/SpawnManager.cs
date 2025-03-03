@@ -280,23 +280,25 @@ public class SpawnManager : MonoBehaviour
                 spawnedList.Add(newObj);
                 totalSpawned++;
 
-                // Only if this is the agent prefab, add the BehaviorManager and register it.
                 if (prefab == agentPrefab)
                 {
-                    BehaviorManager behaviorManager = newObj.GetComponent<BehaviorManager>() ?? newObj.AddComponent<BehaviorManager>();
+                    BehaviorManager behaviorManager = newObj.GetComponent<BehaviorManager>() 
+                        ?? newObj.AddComponent<BehaviorManager>();
                     behaviorManager.InitializeAgent();
 
-                    // Assign MapEncoder (if needed)
-                    MapEncoder mapEncoder = newObj.GetComponent<MapEncoder>() ?? newObj.AddComponent<MapEncoder>();
-                    mapEncoder.mapCamera = GameObject.Find("2DMapCamera").GetComponent<Camera>();
-                    mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
+                    // Removed MapEncoder logic here.
 
-                    // Register markers if applicable
+                    // Register marker for agent.
                     markerManager?.RegisterMarker(newObj);
 
-                    // Notify the Client about the new agent
+                    // Notify the Client about the new agent.
                     Client client = FindFirstObjectByType<Client>();
                     client?.RegisterAgent(newObj);
+                }
+                else
+                {
+                    // Register marker for enemies and food.
+                    markerManager?.RegisterMarker(newObj);
                 }
 
                 if (totalSpawned >= maxCount)
@@ -304,6 +306,8 @@ public class SpawnManager : MonoBehaviour
             }
         }
     }
+
+
 
     // Spawns agents at the central hub (Habitat).
     private void SpawnAgentsAtHub()
@@ -318,10 +322,33 @@ public class SpawnManager : MonoBehaviour
                 Vector3 spawnPos = hubPos + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
                 GameObject newAgent = Instantiate(agentPrefab, spawnPos, Quaternion.identity);
                 spawnedAgents.Add(newAgent);
-                if (markerManager != null)
+
+                // Ensure the agent has a BehaviorManager component.
+                BehaviorManager behaviorManager = newAgent.GetComponent<BehaviorManager>() 
+                                                ?? newAgent.AddComponent<BehaviorManager>();
+                behaviorManager.InitializeAgent();
+
+                // Ensure the agent has a MapEncoder component.
+                MapEncoder mapEncoder = newAgent.GetComponent<MapEncoder>() 
+                                        ?? newAgent.AddComponent<MapEncoder>();
+                // Locate the 2D map camera and assign it.
+                GameObject mapCameraObj = GameObject.Find("AgentCamera");
+                if(mapCameraObj != null)
                 {
-                    markerManager.RegisterMarker(newAgent);
+                    mapEncoder.mapCamera = mapCameraObj.GetComponent<Camera>();
                 }
+                else
+                {
+                    Debug.LogWarning("2DMapCamera not found!");
+                }
+                mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
+
+                // Register marker for this agent.
+                markerManager?.RegisterMarker(newAgent);
+
+                // Notify the Client about the new agent.
+                Client client = FindFirstObjectByType<Client>();
+                client?.RegisterAgent(newAgent);
             }
         }
         else
