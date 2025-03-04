@@ -12,35 +12,26 @@ public class BlockAgent : MonoBehaviour
         PickUpBlock,
         WaitAfterPickup,
         MoveToDestination,
-        WaitBeforeDrop,
         DropBlock
     }
 
-    [Header("References")]
     public GameObject targetBlock;
     public GameObject destinationObject;
     public NavMeshAgent navAgent;
-
-    [Header("Behavior Settings")]
     public bool startBehavior = false;
     public bool interrupt = false;
     public float pickupRange = 2f;
     public float destinationStopDistance = 1f;
-
     private bool dropAtFront = false;
-
     public AgentState currentState = AgentState.Idle;
-
-    void Start()
-    {
-        if (navAgent == null)
-        {
-            navAgent = GetComponent<NavMeshAgent>();
-        }
-    }
 
     void Update()
     {
+        // holds the block above agent
+        if (targetBlock != null && targetBlock.transform.parent == transform)
+        {
+            targetBlock.transform.position = transform.position + new Vector3(0f, 1.5f, 0f);
+        }
         if (interrupt)
         {
             navAgent.isStopped = true;
@@ -53,9 +44,9 @@ public class BlockAgent : MonoBehaviour
         {
             navAgent.isStopped = false;
         }
-
         switch (currentState)
         {
+            // idle position for start and interrupt
             case AgentState.Idle:
                 if (startBehavior)
                 {
@@ -66,7 +57,7 @@ public class BlockAgent : MonoBehaviour
                     }
                 }
                 break;
-
+            // move towards the block
             case AgentState.MoveToBlock:
                 if (targetBlock != null)
                 {
@@ -79,23 +70,20 @@ public class BlockAgent : MonoBehaviour
                     }
                 }
                 break;
-
             case AgentState.WaitBeforePickup:
                 break;
-
+            // pick up the block
             case AgentState.PickUpBlock:
                 if (targetBlock != null)
                 {
                     targetBlock.transform.SetParent(transform);
-                    targetBlock.transform.localPosition = new Vector3(0f, 1.5f, 0f);
                 }
                 currentState = AgentState.WaitAfterPickup;
                 StartCoroutine(WaitAfterPickupCoroutine());
                 break;
-
+            //wait after pickup
             case AgentState.WaitAfterPickup:
                 break;
-
             case AgentState.MoveToDestination:
                 if (destinationObject != null)
                 {
@@ -103,15 +91,11 @@ public class BlockAgent : MonoBehaviour
                     float distToDestination = Vector3.Distance(transform.position, destinationObject.transform.position);
                     if (distToDestination <= destinationStopDistance && !interrupt)
                     {
-                        currentState = AgentState.WaitBeforeDrop;
-                        StartCoroutine(WaitBeforeDropCoroutine());
+                        currentState = AgentState.DropBlock;
                     }
                 }
                 break;
-
-            case AgentState.WaitBeforeDrop:
-                break;
-
+            // drop block by swetting to position of destination
             case AgentState.DropBlock:
                 if (targetBlock != null)
                 {
@@ -131,11 +115,14 @@ public class BlockAgent : MonoBehaviour
                 break;
         }
     }
+
+    //wait before picking up block
     IEnumerator WaitBeforePickupCoroutine()
     {
         yield return new WaitForSeconds(1f);
         currentState = AgentState.PickUpBlock;
     }
+    // wait coroutine after picking up block
     IEnumerator WaitAfterPickupCoroutine()
     {
         yield return new WaitForSeconds(1f);
@@ -145,10 +132,4 @@ public class BlockAgent : MonoBehaviour
             navAgent.SetDestination(destinationObject.transform.position);
         }
     }
-    IEnumerator WaitBeforeDropCoroutine()
-    {
-        yield return new WaitForSeconds(1f);
-        currentState = AgentState.DropBlock;
-    }
 }
-

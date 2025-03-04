@@ -3183,7 +3183,7 @@ MonoBehaviour:
   startBehavior: 0
   interrupt: 0
   pickupRange: 2
-  destinationStopDistance: 1
+  destinationStopDistance: 2
   currentState: 0
 --- !u!1 &1096839653
 GameObject:
@@ -7027,7 +7027,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Destination
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8808608299389787518, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808608299389787518, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3666645185418166101, guid: 9bcd5cf5acf56994d9e286e0bdaa1857, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -8129,7 +8140,27 @@ PrefabInstance:
       objectReference: {fileID: 1683601348}
     - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
+      propertyPath: m_Speed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
       propertyPath: m_AutoBraking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_Acceleration
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_AngularSpeed
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_StoppingDistance
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4218466781206248958, guid: ae5189902a95a6545b4d99fb215b1330,
