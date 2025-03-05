@@ -52,8 +52,7 @@ public class FoodGathererAgent : AgentBehavior
         if (useVectorObs)
         {
             var localVelocity = transform.InverseTransformDirection(m_AgentRb.velocity);
-            sensor.AddObservation(localVelocity.x);
-            sensor.AddObservation(localVelocity.z);
+            sensor.AddObservation(localVelocity);
             sensor.AddObservation(m_Frozen);
             sensor.AddObservation(m_Shoot);
         }
