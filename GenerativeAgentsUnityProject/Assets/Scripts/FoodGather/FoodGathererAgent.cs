@@ -3,6 +3,7 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class FoodGathererAgent : AgentBehavior
 {
@@ -34,6 +35,9 @@ public class FoodGathererAgent : AgentBehavior
              "VisualFoodCollector scene.")]
     public bool useVectorFrozenFlag;
     
+    public TextMeshProUGUI fitnessScoreText; 
+    public int agentIndex; 
+    private float fitnessScore = 0f;
 
     EnvironmentParameters m_ResetParams;
 
@@ -45,6 +49,7 @@ public class FoodGathererAgent : AgentBehavior
         m_EnvironmentSettings = FindObjectOfType<EnvironmentSettings>();
         m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
+        UpdateFitnessScoreText();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -148,40 +153,40 @@ public class FoodGathererAgent : AgentBehavior
         gameObject.tag = "frozenAgent";
         m_Frozen = true;
         m_FrozenTime = Time.time;
-        gameObject.GetComponentInChildren<Renderer>().material = frozenMaterial;
+        //gameObject.GetComponentInChildren<Renderer>().material = frozenMaterial;
     }
 
     void Unfreeze()
     {
         m_Frozen = false;
         gameObject.tag = "agent";
-        gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
+        //gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
     }
 
     void Poison()
     {
         m_Poisoned = true;
         m_EffectTime = Time.time;
-        gameObject.GetComponentInChildren<Renderer>().material = badMaterial;
+        //gameObject.GetComponentInChildren<Renderer>().material = badMaterial;
     }
 
     void Unpoison()
     {
         m_Poisoned = false;
-        gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
+        //gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
     }
 
     void Satiate()
     {
         m_Satiated = true;
         m_EffectTime = Time.time;
-        gameObject.GetComponentInChildren<Renderer>().material = goodMaterial;
+        //gameObject.GetComponentInChildren<Renderer>().material = goodMaterial;
     }
 
     void Unsatiate()
     {
         m_Satiated = false;
-        gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
+        //gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -231,6 +236,14 @@ public class FoodGathererAgent : AgentBehavior
         m_EnvironmentSettings.EnvironmentReset();
     }
 
+    void UpdateFitnessScoreText()
+    {
+        if (fitnessScoreText != null)
+        {
+            fitnessScoreText.text = "Agent " + agentIndex + " : " + fitnessScore.ToString("0.##");
+        }
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         Debug.Log("food collision");
@@ -244,6 +257,8 @@ public class FoodGathererAgent : AgentBehavior
             Satiate();
             collision.gameObject.GetComponent<FoodScript>().OnEaten();
             AddReward(1f);
+            fitnessScore += 1f;
+            UpdateFitnessScoreText();
             if (contribute)
             {
                 Debug.Log("Contributing to foodScore");
