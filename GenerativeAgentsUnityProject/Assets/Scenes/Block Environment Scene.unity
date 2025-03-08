@@ -2246,6 +2246,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1493371971608653027, guid: da5a6061a37181549a29c19e1a72ac28,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
         type: 3}
       propertyPath: m_Name
@@ -2311,7 +2316,8 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 1fa34bebe866b534ab96a2fb50fa40d8, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3569045005745446048, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3182,8 +3188,8 @@ MonoBehaviour:
   navAgent: {fileID: 1058905145}
   startBehavior: 0
   interrupt: 0
-  pickupRange: 2
-  destinationStopDistance: 2
+  pickupRange: 3
+  destinationStopDistance: 4
   currentState: 0
 --- !u!1 &1096839653
 GameObject:
@@ -6975,12 +6981,12 @@ PrefabInstance:
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -33.48
+      value: -32.729
       objectReference: {fileID: 0}
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
         type: 3}
@@ -8145,6 +8151,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
+      propertyPath: m_Height
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
       propertyPath: m_AutoBraking
       value: 1
       objectReference: {fileID: 0}
@@ -8161,6 +8172,16 @@ PrefabInstance:
     - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
       propertyPath: m_StoppingDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1652136826438875993, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3014757866169428623, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4218466781206248958, guid: ae5189902a95a6545b4d99fb215b1330,
@@ -8174,6 +8195,12 @@ PrefabInstance:
       propertyPath: blockSpawner
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4894017125185603714, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 23800000, guid: ef813b713cdaa1c47b9a8d8fbcc6e79f,
+        type: 2}
     - target: {fileID: 5009788440251838805, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
       propertyPath: m_Name
@@ -8183,6 +8210,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Constraints
       value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657357503455354766, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657357503455354766, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}

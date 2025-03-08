@@ -4,6 +4,7 @@ using System.Collections;
 
 public class BlockAgent : MonoBehaviour
 {
+    // enum table for all block agent behavior states
     public enum AgentState
     {
         Idle,

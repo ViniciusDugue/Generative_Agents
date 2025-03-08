@@ -119,6 +119,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &990482 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
+    type: 3}
+  m_PrefabInstance: {fileID: 1849919592}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &48482771 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+    type: 3}
+  m_PrefabInstance: {fileID: 933024498}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &72536002
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,7 +828,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: ef813b713cdaa1c47b9a8d8fbcc6e79f, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: c9cf8de1bbed0db43999ea59740ede28, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &338096782
 GameObject:
@@ -1968,6 +1980,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 617387997}
   m_CullTransparentMesh: 1
+--- !u!195 &643309899 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+    type: 3}
+  m_PrefabInstance: {fileID: 4421323624968569464}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &646565156
 GameObject:
   m_ObjectHideFlags: 0
@@ -7305,6 +7323,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: targetBlock
       objectReference: {fileID: 0}
+    - target: {fileID: 3569045005745446048, guid: da5a6061a37181549a29c19e1a72ac28,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7409,9 +7432,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f8b74e76b534f44b81678bd01fb53a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listArea: []
-  blockScore: 0
-  timeRate: 1
 --- !u!1 &1867690071
 GameObject:
   m_ObjectHideFlags: 0
@@ -8368,9 +8388,69 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 1683601348}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_Speed
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_Height
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_AutoBraking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_Acceleration
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_AngularSpeed
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 1624682661052511403, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_StoppingDistance
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 1652136826438875993, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3372009179807069335, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4302271488064098689, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: navAgent
+      value: 
+      objectReference: {fileID: 643309899}
+    - target: {fileID: 4302271488064098689, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: pickupRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4302271488064098689, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: targetBlock
+      value: 
+      objectReference: {fileID: 990482}
+    - target: {fileID: 4302271488064098689, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: destinationObject
+      value: 
+      objectReference: {fileID: 48482771}
+    - target: {fileID: 4302271488064098689, guid: ae5189902a95a6545b4d99fb215b1330,
+        type: 3}
+      propertyPath: distanceBeforePickup
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5009788440251838805, guid: ae5189902a95a6545b4d99fb215b1330,
