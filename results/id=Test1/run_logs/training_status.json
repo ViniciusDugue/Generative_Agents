@@ -1,32 +1,32 @@
 {
-    "SingleFoodGatherer": {
+    "MultipleFoodGatherer": {
         "checkpoints": [
             {
-                "steps": 499936,
-                "file_path": "results\\id=test1\\SingleFoodGatherer\\SingleFoodGatherer-499936.onnx",
+                "steps": 499968,
+                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.onnx",
                 "reward": null,
-                "creation_time": 1741199507.0984428,
+                "creation_time": 1741475899.1247644,
                 "auxillary_file_paths": [
-                    "results\\id=test1\\SingleFoodGatherer\\SingleFoodGatherer-499936.pt"
+                    "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.pt"
                 ]
             },
             {
-                "steps": 500448,
-                "file_path": "results\\id=test1\\SingleFoodGatherer\\SingleFoodGatherer-500448.onnx",
+                "steps": 500480,
+                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.onnx",
                 "reward": null,
-                "creation_time": 1741199507.1868773,
+                "creation_time": 1741475899.2446146,
                 "auxillary_file_paths": [
-                    "results\\id=test1\\SingleFoodGatherer\\SingleFoodGatherer-500448.pt"
+                    "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500448,
-            "file_path": "results\\id=test1\\SingleFoodGatherer.onnx",
+            "steps": 500480,
+            "file_path": "results\\id=Test1\\MultipleFoodGatherer.onnx",
             "reward": null,
-            "creation_time": 1741199507.1868773,
+            "creation_time": 1741475899.2446146,
             "auxillary_file_paths": [
-                "results\\id=test1\\SingleFoodGatherer\\SingleFoodGatherer-500448.pt"
+                "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
             ]
         }
     },

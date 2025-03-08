@@ -1,7 +1,7 @@
 default_settings: null
 behaviors:
   MultipleFoodGatherer:
-    trainer_type: poca
+    trainer_type: poca #ppo or poca
     hyperparameters:
       batch_size: 1024
       buffer_size: 10240
@@ -33,6 +33,7 @@ behaviors:
           memory: null
           goal_conditioning_type: hyper
           deterministic: false
+
     init_path: null
     keep_checkpoints: 5
     checkpoint_interval: 500000
@@ -56,13 +57,13 @@ engine_settings:
   width: 84
   height: 84
   quality_level: 5
-  time_scale: 20.0
+  time_scale: 20
   target_frame_rate: -1
   capture_frame_rate: 60
   no_graphics: false
 environment_parameters: null
 checkpoint_settings:
-  run_id: id=Test1
+  run_id: id=test1
   initialize_from: null
   load_model: false
   resume: false
