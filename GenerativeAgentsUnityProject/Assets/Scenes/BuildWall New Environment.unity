@@ -6479,7 +6479,7 @@ PrefabInstance:
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 3.9
       objectReference: {fileID: 0}
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
         type: 3}
@@ -10173,7 +10173,7 @@ MonoBehaviour:
   moveSpeed: 20
   acceleration: 9
   rotationSpeed: 8
-  rangeThreshold: 4
+  rangeThreshold: 2
   pickupRange: 6
   destinationStopDistance: 2
   startBehavior: 0
@@ -10509,7 +10509,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 1
-  m_NavMeshData: {fileID: 23800000, guid: 71ea6b975f7278d42bd9ae64accb83de, type: 2}
+  m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 1
 --- !u!4 &9031917666535609023
 Transform:
