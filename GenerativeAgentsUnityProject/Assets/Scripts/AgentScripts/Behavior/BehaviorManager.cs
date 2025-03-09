@@ -65,6 +65,18 @@ public class BehaviorManager : MonoBehaviour
     {
         Debug.Log("Update is running");  // <- Add this line to check if Update is firing
 
+        // Check if predators are near and switch behavior accordingly:
+        if (ShouldFlee() && currentAgentBehavior.GetType().Name != "FleeBehaviorAgent")
+        {
+            Debug.Log("Predator detected! Switching to FleeBehaviorAgent.");
+            SwitchBehavior("FleeBehaviorAgent");
+        }
+        else if (!ShouldFlee() && currentAgentBehavior.GetType().Name == "FleeBehaviorAgent")
+        {
+            Debug.Log("No predator nearby. Switching back to FoodGathererAgent.");
+            SwitchBehavior("FoodGathererAgent");
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("R key pressed");  // <- Check if Unity registers the key press
@@ -108,6 +120,40 @@ public class BehaviorManager : MonoBehaviour
         {
             Debug.LogWarning($"Behavior '{behaviorName}' not found.");
         }
+    }
+
+    private bool ShouldFlee()
+    {
+        // Define the check radius and enemy tag (ensure these match your project settings)
+        float checkRadius = 10f;
+        string enemyTag = "enemyAgent";
+        
+        // Check for any colliders with the enemy tag within the radius
+        Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, checkRadius);
+        foreach (Collider col in nearbyColliders)
+        {
+            if (col.CompareTag(enemyTag))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool ShouldCancelFlee()
+    {
+        // Check if no predators are within the cancel radius.
+        float cancelRadius = 12f;
+        string enemyTag = "enemyAgent";
+        Collider[] colliders = Physics.OverlapSphere(transform.position, cancelRadius);
+        foreach (Collider col in colliders)
+        {
+            if (col.CompareTag(enemyTag))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void StartExhaustionCoroutine()
