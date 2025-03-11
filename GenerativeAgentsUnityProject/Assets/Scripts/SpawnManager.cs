@@ -286,6 +286,12 @@ public class SpawnManager : MonoBehaviour
                         ?? newObj.AddComponent<BehaviorManager>();
                     behaviorManager.InitializeAgent();
 
+                    // Added AgentController component.
+                    if (newObj.GetComponent<AgentController>() == null)
+                    {
+                        newObj.AddComponent<AgentController>();
+                    }
+
                     // Removed MapEncoder logic here.
 
                     // Register marker for agent.
@@ -307,8 +313,6 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-
-
     // Spawns agents at the central hub (Habitat).
     private void SpawnAgentsAtHub()
     {
@@ -327,6 +331,12 @@ public class SpawnManager : MonoBehaviour
                 BehaviorManager behaviorManager = newAgent.GetComponent<BehaviorManager>() 
                                                 ?? newAgent.AddComponent<BehaviorManager>();
                 behaviorManager.InitializeAgent();
+
+                // Added AgentController component.
+                if (newAgent.GetComponent<AgentController>() == null)
+                {
+                    newAgent.AddComponent<AgentController>();
+                }
 
                 // Ensure the agent has a MapEncoder component.
                 MapEncoder mapEncoder = newAgent.GetComponent<MapEncoder>() 
