@@ -28,7 +28,6 @@ public class BehaviorManager : MonoBehaviour
                 _updateLLM = value;
                 if (_updateLLM) // Only trigger when set to true
                 {
-                    // Debug.Log($"Invoking OnUpdateLLM for Agent {agentID}");
                     OnUpdateLLM?.Invoke(agentID);
                 }
             }
@@ -39,10 +38,10 @@ public class BehaviorManager : MonoBehaviour
     {
         agentObject = this.gameObject;
 
-        // Populate the dictionary with all Agent components, using their script names as keys
+        // Populate the dictionary with all AgentBehavior components on this GameObject
         foreach (AgentBehavior agentBehavior in GetComponents<AgentBehavior>())
         {
-            string agentName = agentBehavior.GetType().Name; // Get the script name
+            string agentName = agentBehavior.GetType().Name;
             behaviors[agentName] = agentBehavior;
             Debug.Log($"Registered AgentBehavior: {agentName}");
         }
@@ -57,39 +56,39 @@ public class BehaviorManager : MonoBehaviour
         currentAgentBehavior = defaultBehavior;
         Debug.Log($"Behavior Manager initialized with {behaviors.Count} behaviors.");
 
-        // Start Exhaustion counter
+        // Start exhaustion counter
         StartExhaustionCoroutine();
     }
 
     private void Update()
     {
-        Debug.Log("Update is running");  // <- Add this line to check if Update is firing
+        Debug.Log("Update is running");
 
-        // Check if predators are near and switch behavior accordingly:
-        if (ShouldFlee() && currentAgentBehavior.GetType().Name != "FleeBehaviorAgent")
+        // Check predator proximity and switch behaviors using hysteresis:
+        // If a predator is within the trigger radius and we're not already fleeing, switch to flee.
+        if (currentAgentBehavior.GetType().Name != "FleeBehaviorAgent" && ShouldFleeTrigger())
         {
-            Debug.Log("Predator detected! Switching to FleeBehaviorAgent.");
+            Debug.Log("Predator detected within trigger radius! Switching to FleeBehaviorAgent.");
             SwitchBehavior("FleeBehaviorAgent");
         }
-        else if (!ShouldFlee() && currentAgentBehavior.GetType().Name == "FleeBehaviorAgent")
+        // If we're in flee mode and no predator is within the cancel radius, switch back.
+        else if (currentAgentBehavior.GetType().Name == "FleeBehaviorAgent" && ShouldCancelFlee())
         {
-            Debug.Log("No predator nearby. Switching back to FoodGathererAgent.");
+            Debug.Log("No predator within cancel radius. Switching back to FoodGathererAgent.");
             SwitchBehavior("FoodGathererAgent");
         }
 
+        // (Optional) Example of triggering an update from input:
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("R key pressed");  // <- Check if Unity registers the key press
-
+            Debug.Log("R key pressed");
             UpdateLLM = true;
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
-
             if (UpdateLLM && mapEncoder != null)
             {
                 mapEncoder.CaptureAndSendMap(agentID);
                 Debug.Log($"Map captured and sent by Agent {agentID}");
             }
-
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
         }
     }
@@ -106,14 +105,12 @@ public class BehaviorManager : MonoBehaviour
         {
             Debug.Log($"Switching AgentBehavior to {behaviorName}");
 
-            // Disable current AgentBehavior
+            // Disable current behavior and enable the new one
             currentAgentBehavior.enabled = false;
-
-            // Switch and enable new AgentBehavior
             currentAgentBehavior = newBehavior;
             currentAgentBehavior.enabled = true;
 
-            // Stop previous exhaustion coroutine and restart with the new exhaustion rate
+            // Restart the exhaustion coroutine
             StartExhaustionCoroutine();
         }
         else
@@ -122,15 +119,13 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
-    private bool ShouldFlee()
+    // Returns true if any predator is within the "trigger" radius (e.g., 7 units)
+    private bool ShouldFleeTrigger()
     {
-        // Define the check radius and enemy tag (ensure these match your project settings)
-        float checkRadius = 10f;
+        float triggerRadius = 7f;
         string enemyTag = "enemyAgent";
-        
-        // Check for any colliders with the enemy tag within the radius
-        Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, checkRadius);
-        foreach (Collider col in nearbyColliders)
+        Collider[] colliders = Physics.OverlapSphere(transform.position, triggerRadius);
+        foreach (Collider col in colliders)
         {
             if (col.CompareTag(enemyTag))
             {
@@ -140,9 +135,9 @@ public class BehaviorManager : MonoBehaviour
         return false;
     }
 
+    // Returns true if no predator is detected within the "cancel" radius (e.g., 12 units)
     private bool ShouldCancelFlee()
     {
-        // Check if no predators are within the cancel radius.
         float cancelRadius = 12f;
         string enemyTag = "enemyAgent";
         Collider[] colliders = Physics.OverlapSphere(transform.position, cancelRadius);
@@ -158,13 +153,10 @@ public class BehaviorManager : MonoBehaviour
 
     private void StartExhaustionCoroutine()
     {
-        // Stop any existing exhaustion coroutine before starting a new one
         if (exhaustionCoroutine != null)
         {
             StopCoroutine(exhaustionCoroutine);
         }
-
-        // Start new coroutine with updated exhaustion rate
         exhaustionCoroutine = StartCoroutine(UpdateExhaustion());
     }
 
@@ -172,20 +164,18 @@ public class BehaviorManager : MonoBehaviour
     {
         while (true)
         {
-            if (currentAgentBehavior != null)  // ✅ Added Null Check
+            if (currentAgentBehavior != null)
             {
-                exhaustion += 1;  // Example logic
+                exhaustion += 1;  // Example logic for increasing exhaustion
                 Debug.Log($"Agent {agentID} exhaustion: {exhaustion}");
             }
             else
             {
                 Debug.LogWarning($"Agent {agentID} has no current behavior assigned.");
             }
-
             yield return new WaitForSeconds(5f);
         }
     }
-
 
     private string GetNextBehaviorName()
     {
