@@ -1,7 +1,10 @@
 using Unity.MLAgents;
+using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Reflection;
 using UnityEngine;
+using Unity.MLAgents.Sensors;
 
 public class BehaviorManager : MonoBehaviour
 {
@@ -17,6 +20,13 @@ public class BehaviorManager : MonoBehaviour
     private bool _updateLLM = false;
     public delegate void updateLLMBoolChangedHandler(int agentID);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
+    private List<string> behaviorKeyList = new List<string>();
+    private float raycastInterval = 0.2f; // Time between raycasts
+    private float nextRaycastTime = 0.0f;
+    
+    [HideInInspector]
+    public HashSet<Transform> foodLocations = new HashSet<Transform>();
+
 
     public bool UpdateLLM
     {
@@ -44,6 +54,7 @@ public class BehaviorManager : MonoBehaviour
         {
             string agentName = agentBehavior.GetType().Name; // Get the script name
             behaviors[agentName] = agentBehavior;
+            behaviorKeyList.Add(agentName);
             Debug.Log($"Registered AgentBehavior: {agentName}");
         }
 
@@ -63,12 +74,31 @@ public class BehaviorManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Update is running");  // <- Add this line to check if Update is firing
-
-        if (Input.GetKeyDown(KeyCode.R))
+        // Ensure current AgentBehavior is not null
+        if (currentAgentBehavior == null)
         {
-            Debug.Log("R key pressed");  // <- Check if Unity registers the key press
+            Debug.LogError("Current Agent AgentBehavior is null");
+            return;
+        }
 
+        // Check raycasts periodically to increase Performance
+        if (Time.time >= nextRaycastTime)
+        {   
+            checkRayCast();
+            nextRaycastTime = Time.time + raycastInterval;
+        }
+
+        // Switch between behaviors using behavior names
+        if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
+        {
+            SwitchBehavior(GetFirstBehavior().GetType().Name);
+        }
+        if (Input.GetKeyDown(KeyCode.E)) // Example: Switch to second behavior
+        {
+            SwitchBehavior(GetNextBehaviorName());
+        }
+        if (Input.GetKeyDown(KeyCode.R)) // Example: Switch to second behavior
+        {
             UpdateLLM = true;
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
 
@@ -97,7 +127,7 @@ public class BehaviorManager : MonoBehaviour
             // Disable current AgentBehavior
             currentAgentBehavior.enabled = false;
 
-            // Switch and enable new AgentBehavior
+            // Switch and enable new AgentBehavior  
             currentAgentBehavior = newBehavior;
             currentAgentBehavior.enabled = true;
 
@@ -109,6 +139,47 @@ public class BehaviorManager : MonoBehaviour
             Debug.LogWarning($"Behavior '{behaviorName}' not found.");
         }
     }
+
+    public void SetMoveTarget(object coords)
+    {
+        // Validate the input to ensure it is not null
+        if (coords == null)
+        {
+            return;
+        }
+
+        // Ensure the coords object is a JObject (JSON object)
+        if (coords is Newtonsoft.Json.Linq.JObject locationDict)
+        {
+            try
+            {
+                // Parse location values safely
+                float x = locationDict["x"].ToObject<float>();
+                float y = locationDict["y"].ToObject<float>();
+                float z = locationDict["z"].ToObject<float>();
+
+                // Convert to Vector3
+                Vector3 targetLocation = new Vector3(x, y, z);
+                Debug.Log($"Target Location: {targetLocation}");
+
+                // Assign target position correctly
+                if (behaviors.ContainsKey("MoveBehavior") && behaviors["MoveBehavior"] is MoveBehavior moveBehavior)
+                {
+                    moveBehavior.target = targetLocation;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error parsing location: {e.Message}");
+            }
+        }
+        else
+        {
+            Debug.LogError("SetMoveTarget received an invalid location format.");
+        }
+
+    }
+        
 
     private void StartExhaustionCoroutine()
     {
@@ -143,14 +214,15 @@ public class BehaviorManager : MonoBehaviour
 
     private string GetNextBehaviorName()
     {
-        foreach (var key in behaviors.Keys)
-        {
-            if (key != currentAgentBehavior.GetType().Name)
-            {
-                return key;
-            }
-        }
-        return currentAgentBehavior.GetType().Name;
+        
+        // Get the index of the current behavior
+        int currentIndex = behaviorKeyList.IndexOf(currentAgentBehavior.GetType().Name);
+        
+        // Calculate the index of the next behavior
+        int nextIndex = (currentIndex + 1) % behaviorKeyList.Count;
+        
+        // Return the key of the next behavior
+        return behaviorKeyList[nextIndex];
     }
 
     private AgentBehavior GetFirstBehavior()
@@ -160,5 +232,29 @@ public class BehaviorManager : MonoBehaviour
             return behavior;
         }
         return null;
+    }
+
+    // check raycast hit info
+    private void checkRayCast()
+    {
+        RayPerceptionSensorComponent3D m_rayPerceptionSensorComponent3D = GetComponent<RayPerceptionSensorComponent3D>();
+
+        var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
+        int lengthOfRayOutputs = rayOutputs.Length;
+
+        // Alternating Ray Order: it gives an order of
+        // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
+        // index 0 indicates the center of raycasts
+        for (int i = 0; i < lengthOfRayOutputs; i++)
+        {
+            GameObject goHit = rayOutputs[i].HitGameObject;
+            if (goHit != null && goHit.tag == "foodSpawn")
+            {
+                if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                {
+                    Debug.Log("Food location found!");
+                }
+            }
+        }
     }
 }

@@ -1,25 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class MapMarkerManager : MonoBehaviour
 {
     public Camera mapCamera;
-    public RectTransform[] mapContainers; // For example, [0] = UserMap, [1] = AgentMap
+    public RectTransform mapContainer;
 
     public GameObject agentMarkerPrefab;
     public GameObject enemyMarkerPrefab;
     public GameObject foodMarkerPrefab;
 
-    // Define marker scales for each map container.
-    // For instance, markerScales[0] applies to mapContainers[0] and so on.
-    public float[] markerScales; 
-    // Define text scales for the CoordinateText inside each marker prefab.
-    public float[] markerTextScales;
+    // Hardcoded map resolution - set to (700,700) or (225,225) as needed
+    public Vector2 mapResolution = new Vector2(700, 700);
 
-    // For multiple maps, we keep a marker for each object per map.
-    private Dictionary<GameObject, List<GameObject>> markers = new Dictionary<GameObject, List<GameObject>>();
+    private Dictionary<GameObject, GameObject> markers = new Dictionary<GameObject, GameObject>();
+
+    // Scan interval to catch any unregistered spawned objects.
+    private float scanInterval = 1f;
+    private float scanTimer = 0f;
 
     void Start()
     {
@@ -29,10 +28,19 @@ public class MapMarkerManager : MonoBehaviour
     void Update()
     {
         UpdateMarkerPositions();
+
+        // Periodically check for new objects that haven't been registered.
+        scanTimer += Time.deltaTime;
+        if (scanTimer >= scanInterval)
+        {
+            scanTimer = 0f;
+            InitializeMarkers();
+        }
     }
 
     private void InitializeMarkers()
     {
+        // This will add markers for any objects with the given tags that don't already have a marker.
         AddMarkers(GameObject.FindGameObjectsWithTag("agent"), agentMarkerPrefab);
         AddMarkers(GameObject.FindGameObjectsWithTag("enemyAgent"), enemyMarkerPrefab);
         AddMarkers(GameObject.FindGameObjectsWithTag("food"), foodMarkerPrefab);
@@ -42,7 +50,7 @@ public class MapMarkerManager : MonoBehaviour
     {
         foreach (GameObject obj in objects)
         {
-            if (!markers.ContainsKey(obj))
+            if (obj != null && !markers.ContainsKey(obj))
             {
                 AddMarker(obj, prefab);
             }
@@ -51,60 +59,32 @@ public class MapMarkerManager : MonoBehaviour
 
     private void AddMarker(GameObject obj, GameObject prefab)
     {
-        // Create one marker per map container.
-        List<GameObject> markerList = new List<GameObject>();
-        for (int i = 0; i < mapContainers.Length; i++)
-        {
-            RectTransform container = mapContainers[i];
-            GameObject marker = Instantiate(prefab, container);
-            marker.name = obj.name + "_Marker_" + container.name;
-
-            // Set marker scale based on markerScales array (if assigned).
-            if (markerScales != null && markerScales.Length > i)
-            {
-                marker.transform.localScale = new Vector3(markerScales[i], markerScales[i], 1f);
-            }
-            else
-            {
-                marker.transform.localScale = Vector3.one;
-            }
-
-            // Also adjust the scale of the TextMeshPro component within the marker.
-            Transform textTransform = marker.transform.Find("CoordinateText");
-            if (textTransform != null)
-            {
-                if (markerTextScales != null && markerTextScales.Length > i)
-                {
-                    // Scale the text object by the given factor.
-                    textTransform.localScale = new Vector3(markerTextScales[i], markerTextScales[i], 1f);
-                }
-                else
-                {
-                    // Default scale for text if not assigned.
-                    textTransform.localScale = Vector3.one;
-                }
-            }
-            markerList.Add(marker);
-        }
-        markers[obj] = markerList;
+        GameObject marker = Instantiate(prefab, mapContainer);
+        marker.name = obj.name + "_Marker";
+        markers[obj] = marker;
     }
 
     public void RegisterMarker(GameObject obj)
     {
         if (obj.CompareTag("agent"))
+        {
             AddMarker(obj, agentMarkerPrefab);
+        }
         else if (obj.CompareTag("enemyAgent"))
+        {
             AddMarker(obj, enemyMarkerPrefab);
+        }
         else if (obj.CompareTag("food"))
+        {
             AddMarker(obj, foodMarkerPrefab);
+        }
     }
 
     public void RemoveMarker(GameObject obj)
     {
         if (markers.ContainsKey(obj))
         {
-            foreach (GameObject marker in markers[obj])
-                Destroy(marker);
+            Destroy(markers[obj]);
             markers.Remove(obj);
         }
     }
@@ -116,50 +96,43 @@ public class MapMarkerManager : MonoBehaviour
         foreach (var pair in markers)
         {
             GameObject trackedObject = pair.Key;
-            List<GameObject> markerList = pair.Value;
+            GameObject marker = pair.Value;
 
+            // If the object has been destroyed, mark it for removal.
             if (trackedObject == null)
             {
                 toRemove.Add(trackedObject);
-                foreach (GameObject marker in markerList)
-                    Destroy(marker);
+                Destroy(marker);
                 continue;
             }
 
             Vector3 worldPos = trackedObject.transform.position;
-            // Get viewport coordinates (0 to 1) using the map camera.
             Vector3 viewportPos = mapCamera.WorldToViewportPoint(worldPos);
-            bool isVisible = viewportPos.z >= 0;
+            marker.SetActive(viewportPos.z >= 0);
 
-            // Update markers for each map container using the same math as before.
-            for (int i = 0; i < mapContainers.Length; i++)
+            // Calculate local position using the hardcoded resolution.
+            Vector2 localPos = new Vector2(
+                (viewportPos.x - 0.5f) * mapResolution.x,
+                (viewportPos.y - 0.5f) * mapResolution.y
+            );
+            marker.GetComponent<RectTransform>().anchoredPosition = localPos;
+
+            // Optionally update coordinate text under the marker.
+            Transform textTransform = marker.transform.Find("CoordinateText");
+            if (textTransform != null)
             {
-                RectTransform container = mapContainers[i];
-                GameObject marker = markerList[i];
-
-                marker.SetActive(isVisible);
-                if (!isVisible)
-                    continue;
-
-                // Use the working math from your single‑map solution.
-                Vector2 localPos = new Vector2(
-                    (viewportPos.x - 0.5f) * container.rect.width,
-                    (viewportPos.y - 0.5f) * container.rect.height
-                );
-                marker.GetComponent<RectTransform>().anchoredPosition = localPos;
-
-                // Optionally update coordinate text if desired.
-                Transform textTransform = marker.transform.Find("CoordinateText");
-                if (textTransform != null)
+                TMP_Text tmpText = textTransform.GetComponent<TMP_Text>();
+                if (tmpText != null)
                 {
-                    TMP_Text tmpText = textTransform.GetComponent<TMP_Text>();
-                    if (tmpText != null)
-                        tmpText.text = $"({worldPos.x:F2}, {worldPos.y:F2}, {worldPos.z:F2})";
+                    tmpText.text = $"({worldPos.x:F2}, {worldPos.y:F2}, {worldPos.z:F2})";
                 }
             }
         }
 
+        // Remove markers for objects that no longer exist.
         foreach (GameObject obj in toRemove)
+        {
             markers.Remove(obj);
+        }
     }
 }

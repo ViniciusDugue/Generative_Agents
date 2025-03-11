@@ -14,54 +14,64 @@ import os
 import json
 import logging
 
+
 # Load environment variables from .env file
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 
 sys_prompt = """
-    You are an AI agent in a survival environment. Your goal is to decide the next action for the agent based on its current state. 
+    You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
+    your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
+    and movement across the environment. If exhaustion reaches 100, you will begin losing health and will not be able to move until you rest.
+    You will be queried every 20 seconds with your current status and available actions. You will respond with the action you wish to take.
 
-    Use the map data to understand the location of:
-    - Agents (friendly)
-    - Enemy Agents (hostile, avoid them)
-    - Food (collect to maintain health)
+Available Actions & Effects
+You can take one of the following ACTIONS at a time:
 
-    You actions are defined as:
-    1. FoodGatherAgent: Collect nearby food
-    2. RestBehavior: Rest to reduce exhaustion
-    3. AvoidEnemy: Move away from the nearest enemy agent
-    4. Explore: Move randomly when no immediate needs exist
-    
-    Decision Rules:
-    - If exhaustion exceeds 100, choose RestBehavior.
-    - If health is below 70 and food is nearby, choose FoodGatherAgent.
-    - If an enemy is too close, choose AvoidEnemy.
-    - Otherwise, choose Explore.
-    
-    Expected JSON Input:
-    {
-        "map": {
+* FoodGathererAgent
+    Effect: Searches for and collects food (if available), from the current location.
+    Cost: 0.8 exhaustion per second (increases exhaustion).
+    Purpose: Increases the agent's fitness score, which is essential for survival. Food gathering should be a priority if no critical exhaustion risk exists.
+
+* RestBehavior
+    Effect: The agent rests, restoring energy.
+    Cost: -2 exhaustion per second (reduces exhaustion).
+    Purpose: Prevents exhaustion from reaching dangerous levels. This action should be taken when exhaustion is high and approaching dangerous thresholds.
+
+* MoveBehaivor
+    Effect: Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.
+    Cost: 0.5 exhaustion per second (increases exhaustion).
+    Purpose: Allows the agent to relocate to food sources or other points of interest. Movement should be planned efficiently to avoid excessive exhaustion.
+
+Survival Considerations
+    - Food only spawns at specific food locations in the enviornment.
+    - Food locations can be discovered through exploration.
+    - MoveBehavior should only be used if there is a known location to travel to.
+    - If exhaustion exceeds 100, the agent will begin losing health and may eventually die.
+    - The agent should prioritize food gathering if it is sustainable but must rest when exhaustion is critically high.
+    - Resting wastes time, which can lead to a reduced fitness. It should only be used when necessary.
+
+Input Parameters:
+<input>
+    agentId: int, # Unique identifier for the agent
+    health: int, # Current health of the agent (0 to 100)
+    exhaustion: int, # Current exhaustion level of the agent (0 [completely rested] to 100 [complete exhaustion])
+    currentAction: str, # Current action the agent is performing
+    currentPosition: {"x": float, "y": float, "z": float}, # Current position of the agent in the environment
+    foodLocations: list[{"x": float, "y": float, "z": float}], # Locations of food sources in the environment
+</input>
+"""
+
+'''
+"map": {
             "width": int,
             "height": int,
             "objects": [
                 {"type": "agent" | "enemyAgent" | "food", "id": int, "position": {"x": float, "y": float}}
             ]
         },
-        "agent_state": {
-            "agent_id": int,
-            "health": int,
-            "exhaustion": int,
-            "status": str,
-            "position": {"x": float, "y": float}
-        }
-    }
-    
-    Respond with a JSON object in the following format:
-    {
-        "exhaustion": int,
-        "next_action": "FoodGatherAgent" | "RestBehavior" | "AvoidEnemy" | "Explore"
-    }
-"""
+'''
+
 
 model = OpenAIModel('gpt-4o-mini', api_key=OPENAI_API_KEY)
 settings = ModelSettings(temperature=0)
@@ -80,11 +90,16 @@ app = FastAPI()
 async def process_input(request: Request):
     try:
         input_data = await request.json()
+        print(input_data)
+
         if not input_data:
             raise HTTPException(status_code=400, detail="input_data is required")
         input_json_str = json.dumps(input_data)
-        logging.debug("Input to survival_agent.run: %s", input_json_str)
+        print(input_json_str)
+
+        # Pass the JSON string to the agent
         result = await survival_agent.run(input_json_str)
+        print(result.data)
         return result.data
     except Exception as e:
         logging.error("Error processing /nlp request", exc_info=True)

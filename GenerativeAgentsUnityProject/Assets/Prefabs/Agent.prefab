@@ -1052,14 +1052,17 @@ GameObject:
   - component: {fileID: 3887981853846396359}
   - component: {fileID: 5279344047456461428}
   - component: {fileID: 3586588434944278327}
+  - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
-  - component: {fileID: 4136731884582524758}
+  - component: {fileID: 3879892247664422788}
   - component: {fileID: 1841426132986401358}
+  - component: {fileID: 8322022180366706281}
+  - component: {fileID: 4361704349902786676}
   - component: {fileID: 4155786854146672970}
   - component: {fileID: 5348884404428321261}
   - component: {fileID: 7887430557503516784}
   - component: {fileID: 7518629946175017511}
-  - component: {fileID: 9162672137737925309}
+  - component: {fileID: 5754602932285685988}
   m_Layer: 0
   m_Name: Agent
   m_TagString: agent
@@ -1084,7 +1087,7 @@ Transform:
   - {fileID: 6244662626960454692}
   - {fileID: 1082443100923470327}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!65 &5279344047456461428
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1133,6 +1136,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!195 &3081395510317380987
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_AgentTypeID: -1372625422
+  m_Radius: 0.5
+  m_Speed: 8
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!114 &148164363397645315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1164,7 +1189,7 @@ MonoBehaviour:
   m_UseChildActuators: 1
   m_DeterministicInference: 0
   m_ObservableAttributeHandling: 0
---- !u!114 &4136731884582524758
+--- !u!114 &3879892247664422788
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1187,7 +1212,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e7ec228d560f48448c66a24b807ae29, type: 3}
   m_Name: 
@@ -1196,11 +1221,12 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 5000
-  exhaustionRate: 0.1
+  exhaustionRate: 0.8
   m_EnvironmentSettings: {fileID: 0}
   area: {fileID: 0}
   turnSpeed: 150
   moveSpeed: 1
+  agentReset: 0
   normalMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
   badMaterial: {fileID: 2100000, guid: 88b9ae7af2c1748a0a1f63407587a601, type: 2}
   goodMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
@@ -1209,6 +1235,43 @@ MonoBehaviour:
   contribute: 1
   useVectorObs: 0
   useVectorFrozenFlag: 0
+--- !u!114 &8322022180366706281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f9ef40be8594fe44a528c4efb6356b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.1
+  rotationSpeed: {x: 0, y: 100, z: 0}
+--- !u!114 &4361704349902786676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8520a0e6090b6c42966fa34e182c016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.5
+  agent: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
 --- !u!114 &4155786854146672970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1299,7 +1362,7 @@ MonoBehaviour:
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
   m_EndVerticalOffset: 2
---- !u!114 &9162672137737925309
+--- !u!114 &5754602932285685988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1308,15 +1371,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93582e99eacaafd4191b50daf06191a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 7042152a288c6e54c9e82fbb531364a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 0
-  healthBar: {fileID: 8190683321543600135}
-  hunger: 100
-  maxHunger: 100
-  fitnessScore: 0
+  mapCamera: {fileID: 0}
+  mapWidth: 200
+  mapHeight: 200
+  serverUrl: http://127.0.0.1:12345/map
 --- !u!1 &8750545991374723211
 GameObject:
   m_ObjectHideFlags: 0
