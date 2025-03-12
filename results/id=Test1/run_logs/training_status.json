@@ -1,7 +1,38 @@
 {
+    "MultipleFoodGatherer": {
+        "checkpoints": [
+            {
+                "steps": 499968,
+                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.onnx",
+                "reward": null,
+                "creation_time": 1741475899.1247644,
+                "auxillary_file_paths": [
+                    "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.pt"
+                ]
+            },
+            {
+                "steps": 500480,
+                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.onnx",
+                "reward": null,
+                "creation_time": 1741475899.2446146,
+                "auxillary_file_paths": [
+                    "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 500480,
+            "file_path": "results\\id=Test1\\MultipleFoodGatherer.onnx",
+            "reward": null,
+            "creation_time": 1741475899.2446146,
+            "auxillary_file_paths": [
+                "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
+            ]
+        }
+    },
     "metadata": {
         "stats_format_version": "0.3.0",
         "mlagents_version": "0.30.0",
-        "torch_version": "2.6.0+cpu"
+        "torch_version": "1.13.1+cu117"
     }
 }
