@@ -13,10 +13,7 @@ import base64
 import os
 import json
 import logging
-<<<<<<< HEAD
-=======
 
->>>>>>> 30783c3d4e12c57da2a4643bfa5dd1cf6099928a
 
 # Load environment variables from .env file
 load_dotenv()
@@ -28,48 +25,6 @@ sys_prompt = """
     and movement across the environment. If exhaustion reaches 100, you will begin losing health and will not be able to move until you rest.
     You will be queried every 20 seconds with your current status and available actions. You will respond with the action you wish to take.
 
-<<<<<<< HEAD
-    Use the map data to understand the location of:
-    - Agents (friendly)
-    - Enemy Agents (hostile, avoid them)
-    - Food (collect to maintain health)
-
-    You actions are defined as:
-    1. FoodGatherAgent: Collect nearby food
-    2. RestBehavior: Rest to reduce exhaustion
-    3. AvoidEnemy: Move away from the nearest enemy agent
-    4. Explore: Move randomly when no immediate needs exist
-    
-    Decision Rules:
-    - If exhaustion exceeds 100, choose RestBehavior.
-    - If health is below 70 and food is nearby, choose FoodGatherAgent.
-    - If an enemy is too close, choose AvoidEnemy.
-    - Otherwise, choose Explore.
-    
-    Expected JSON Input:
-    {
-        "map": {
-            "width": int,
-            "height": int,
-            "objects": [
-                {"type": "agent" | "enemyAgent" | "food", "id": int, "position": {"x": float, "y": float}}
-            ]
-        },
-        "agent_state": {
-            "agent_id": int,
-            "health": int,
-            "exhaustion": int,
-            "status": str,
-            "position": {"x": float, "y": float}
-        }
-    }
-    
-    Respond with a JSON object in the following format:
-    {
-        "exhaustion": int,
-        "next_action": "FoodGatherAgent" | "RestBehavior" | "AvoidEnemy" | "Explore"
-    }
-=======
 Available Actions & Effects
 You can take one of the following ACTIONS at a time:
 
@@ -105,7 +60,6 @@ Input Parameters:
     currentPosition: {"x": float, "y": float, "z": float}, # Current position of the agent in the environment
     foodLocations: list[{"x": float, "y": float, "z": float}], # Locations of food sources in the environment
 </input>
->>>>>>> 30783c3d4e12c57da2a4643bfa5dd1cf6099928a
 """
 
 '''
@@ -136,15 +90,6 @@ app = FastAPI()
 async def process_input(request: Request):
     try:
         input_data = await request.json()
-<<<<<<< HEAD
-        if not input_data:
-            raise HTTPException(status_code=400, detail="input_data is required")
-        input_json_str = json.dumps(input_data)
-        print(input_json_str)
-
-        # Pass the JSON string to the agent
-        result = await survival_agent.run(input_json_str)
-=======
         print(input_data)
 
         if not input_data:
@@ -155,7 +100,6 @@ async def process_input(request: Request):
         # Pass the JSON string to the agent
         result = await survival_agent.run(input_json_str)
         print(result.data)
->>>>>>> 30783c3d4e12c57da2a4643bfa5dd1cf6099928a
         return result.data
     except Exception as e:
         logging.error("Error processing /nlp request", exc_info=True)
