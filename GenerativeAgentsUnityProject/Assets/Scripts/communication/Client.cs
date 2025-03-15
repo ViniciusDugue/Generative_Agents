@@ -10,6 +10,7 @@ using Unity.MLAgents;
 using UnityEditor.UIElements;
 using System.Net;
 using System;
+using NUnit.Framework.Constraints;
 
 
 public class Client : MonoBehaviour
@@ -60,12 +61,8 @@ public class Client : MonoBehaviour
 
             if (mapEncoder != null && mapDataExist)
             {
-                mapEncoder.CaptureAndSendMap(agentID);
-                await SendAgentData(agentID); // Wait for data to be sent
-            }
-            else if (mapEncoder != null) 
-            {
-                await SendAgentData(agentID); // Wait for data to be sent
+                // mapEncoder.CaptureAndSendMap(agentID);
+                await SendAgentData(agent, mapDataExist); // Wait for data to be sent
             }
             else
             {
@@ -125,15 +122,24 @@ public class Client : MonoBehaviour
         }
     }
 
-    async Task SendAgentData(int agentID)
+    async Task SendAgentData(GameObject agent, bool mapDataExist)
     {
+        MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
+        int agentID = agent.GetComponent<BehaviorManager>().agentID;
+        string mapData = null;
+
+        // Check if the agent exists in the dictionary
         if (!agentDict.ContainsKey(agentID))
         {
             Debug.LogError($"Agent ID {agentID} not found in dictionary.");
             return;
         }
 
-        GameObject agent = agentDict[agentID];
+        if (mapDataExist)
+        {
+            mapData = mapEncoder.CaptureAndEncodeMap(); // Capture the map image as Base64
+        }
+
         Vector3 position = agent.transform.position;
 
         // Create agent JSON data
@@ -145,6 +151,7 @@ public class Client : MonoBehaviour
             currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
             currentPosition = new { x = position.x, y = position.y, z = position.z },
             foodLocations = GetFoodLocationsAsList(agent.GetComponent<BehaviorManager>().foodLocations),
+            mapData = mapData,
         };
 
         string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
