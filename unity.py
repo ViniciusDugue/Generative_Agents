@@ -13,6 +13,7 @@ import base64
 import os
 import json
 import logging
+# Dictionary to store map data for each agent
 
 
 # Load environment variables from .env file
@@ -85,6 +86,9 @@ survival_agent = Agent(
 # Create FastAPI app
 app = FastAPI()
 
+# Dictionary to store map data for each agent
+agent_map_data = {}
+
 # Define the FastAPI endpoint
 @app.post("/nlp")
 async def process_input(request: Request):
@@ -113,7 +117,10 @@ async def process_map_with_llm(request: Request):
         
         if "map_base64" not in input_data or "agent_id" not in input_data:
             raise HTTPException(status_code=400, detail="Map and agent ID are required")
-        return {"message": "Received map data", "agent_id": input_data["agent_id"]}
+        
+        # Process the map data and store it in the dictionary for the agent
+        map_b64 = input_data["map_base64"]
+       
     
     except Exception as e:
         print("Error processing /map:", e)

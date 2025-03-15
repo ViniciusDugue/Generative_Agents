@@ -49,7 +49,7 @@ public class Client : MonoBehaviour
 
 
     // Handles when an agent's OnUpdateLLM is set to true
-    private async void HandleOnUpdateLLMChanged(int agentID)    
+    private async void HandleOnUpdateLLMChanged(int agentID, bool mapDataExist)    
     {
         Debug.Log($"🔄 OnUpdateLLM changed to TRUE for Agent {agentID}, sending data...");
 
@@ -58,9 +58,13 @@ public class Client : MonoBehaviour
             GameObject agent = agentDict[agentID];
             MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
 
-            if (mapEncoder != null)
+            if (mapEncoder != null && mapDataExist)
             {
                 mapEncoder.CaptureAndSendMap(agentID);
+                await SendAgentData(agentID); // Wait for data to be sent
+            }
+            else if (mapEncoder != null) 
+            {
                 await SendAgentData(agentID); // Wait for data to be sent
             }
             else

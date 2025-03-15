@@ -17,8 +17,9 @@ public class BehaviorManager : MonoBehaviour
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
     private Coroutine exhaustionCoroutine;
+    private bool mapDataExist = false;
     private bool _updateLLM = false;
-    public delegate void updateLLMBoolChangedHandler(int agentID);
+    public delegate void updateLLMBoolChangedHandler(int agentID, bool mapData);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
@@ -39,7 +40,7 @@ public class BehaviorManager : MonoBehaviour
                 if (_updateLLM) // Only trigger when set to true
                 {
                     // Debug.Log($"Invoking OnUpdateLLM for Agent {agentID}");
-                    OnUpdateLLM?.Invoke(agentID);
+                    OnUpdateLLM?.Invoke(agentID, mapDataExist);
                 }
             }
         }
@@ -99,12 +100,13 @@ public class BehaviorManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R)) // Example: Switch to second behavior
         {
-            UpdateLLM = true;
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
 
-            if (UpdateLLM && mapEncoder != null)
+            if (mapEncoder != null)
             {
-                mapEncoder.CaptureAndSendMap(agentID);
+                // Set Boolean Listeners to True
+                mapDataExist = true;
+                UpdateLLM = true;
                 Debug.Log($"Map captured and sent by Agent {agentID}");
             }
 
@@ -199,15 +201,14 @@ public class BehaviorManager : MonoBehaviour
         {
             if (currentAgentBehavior != null)  // ✅ Added Null Check
             {
-                exhaustion += 1;  // Example logic
-                Debug.Log($"Agent {agentID} exhaustion: {exhaustion}");
+                exhaustion += currentAgentBehavior.exhaustionRate;  // Example logic
             }
             else
             {
                 Debug.LogWarning($"Agent {agentID} has no current behavior assigned.");
             }
 
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(1f);
         }
     }
 
