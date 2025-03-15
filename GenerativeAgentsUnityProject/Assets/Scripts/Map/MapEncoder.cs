@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 public class MapEncoder : MonoBehaviour
 {
     public Camera mapCamera;
-    public int mapWidth = 50;
-    public int mapHeight = 50;
+    public int mapWidth = 200;
+    public int mapHeight = 200;
     public string serverUrl = "http://127.0.0.1:12345/map";
     private Texture2D capturedTexture;
     private static readonly HttpClient httpClient = new HttpClient();

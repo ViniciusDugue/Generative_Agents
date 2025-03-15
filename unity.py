@@ -140,7 +140,9 @@ async def process_input(request: Request):
         if not input_data:
             raise HTTPException(status_code=400, detail="input_data is required")
         input_json_str = json.dumps(input_data)
-        logging.debug("Input to survival_agent.run: %s", input_json_str)
+        print(input_json_str)
+
+        # Pass the JSON string to the agent
         result = await survival_agent.run(input_json_str)
 =======
         print(input_data)

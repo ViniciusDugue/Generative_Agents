@@ -242,14 +242,6 @@ public class FoodGathererAgent : AgentBehavior
         }
     }
 
-    void UpdateFitnessScoreText()
-    {
-        if (fitnessScoreText != null)
-        {
-            fitnessScoreText.text = "Agent " + agentIndex + " : " + fitnessScore.ToString("0.##");
-        }
-    }
-
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("food"))
