@@ -22,11 +22,44 @@ public class BlockAgent : MonoBehaviour
     public bool startBehavior = false;
     public bool interrupt = false;
     public float pickupRange = 2f;
+    public bool isHoldingBlock;
     public float destinationStopDistance = 1f;
     public float distToDestination;
     private bool dropAtFront = false;
+    public GameObject destinationPrefab;
     public AgentState currentState = AgentState.Idle;
 
+    void OnEnable()
+    {
+        startBehavior = true;
+        interrupt = false;
+    }
+
+    void OnDisable()
+    {
+        // not sure if you want an agent to continue its task after being interrupted.
+        currentState = AgentState.Idle;
+        startBehavior = false;
+
+        interrupt = false;
+        navAgent.isStopped = true;
+
+        if (isHoldingBlock)
+        {
+            targetBlock.transform.SetParent(null);
+            targetBlock.transform.position = transform.position + transform.forward;
+            isHoldingBlock = false;
+        }
+    
+        // navAgent.SetDestination(transform.position);
+    }
+
+    void SetBlockAgentData(GameObject targetBlockObject, Vector3 destinationPos)
+    {
+        targetBlock = targetBlockObject;
+        destinationObject = Instantiate(destinationPrefab, destinationPos,Quaternion.identity);
+
+    }
     void Update()
     {
         // holds the block above agent
@@ -80,6 +113,7 @@ public class BlockAgent : MonoBehaviour
                 {
                     targetBlock.transform.SetParent(transform);
                 }
+                isHoldingBlock = true;
                 currentState = AgentState.WaitAfterPickup;
                 StartCoroutine(WaitAfterPickupCoroutine());
                 break;
@@ -104,6 +138,7 @@ public class BlockAgent : MonoBehaviour
                     targetBlock.transform.SetParent(null);
                     if (dropAtFront)
                     {
+                        isHoldingBlock = false;
                         targetBlock.transform.position = transform.position + transform.forward;
                     }
                     else if (destinationObject != null)
