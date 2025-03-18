@@ -23,6 +23,7 @@ public class BlockAgent : MonoBehaviour
     public bool interrupt = false;
     public float pickupRange = 2f;
     public float destinationStopDistance = 1f;
+    public float distToDestination;
     private bool dropAtFront = false;
     public AgentState currentState = AgentState.Idle;
 
@@ -89,7 +90,7 @@ public class BlockAgent : MonoBehaviour
                 if (destinationObject != null)
                 {
                     navAgent.SetDestination(destinationObject.transform.position);
-                    float distToDestination = Vector3.Distance(transform.position, destinationObject.transform.position);
+                    distToDestination = Vector3.Distance(transform.position, destinationObject.transform.position);
                     if (distToDestination <= destinationStopDistance && !interrupt)
                     {
                         currentState = AgentState.DropBlock;
