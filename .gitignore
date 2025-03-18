@@ -101,3 +101,6 @@ GenerativeAgentsUnityProject/UserSettings/EditorUserSettings.asset
 GenerativeAgentsUnityProject/UserSettings/EditorUserSettings.asset
 GenerativeAgentsUnityProject/UserSettings/Layouts/default-2023.dwlt
 GenerativeAgentsUnityProject/UserSettings/Layouts/default-2023.dwlt
+GenerativeAgentsUnityProject/Assets/Scripts/AgentScripts/MultipleFoodGatherer.onnx.meta
+GenerativeAgentsUnityProject/Assets/Scripts/AgentScripts/MultipleFoodGatherer.onnx
+GenerativeAgentsUnityProject/Assets/Scripts/FleeBehaviorAgent.cs.meta
