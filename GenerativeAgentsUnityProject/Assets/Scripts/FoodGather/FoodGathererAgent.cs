@@ -47,7 +47,6 @@ public class FoodGathererAgent : AgentBehavior
         // exhaustionRate = 2.0f;
         m_AgentRb = GetComponent<Rigidbody>();
         m_MyArea = area.GetComponent<FoodSpawner>();
-        m_EnvironmentSettings = FindObjectOfType<EnvironmentSettings>();
         m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
         UpdateFitnessScoreText();
@@ -59,13 +58,13 @@ public class FoodGathererAgent : AgentBehavior
         {
             var localVelocity = transform.InverseTransformDirection(m_AgentRb.velocity);
             sensor.AddObservation(localVelocity);
-            sensor.AddObservation(m_Frozen);
-            sensor.AddObservation(m_Shoot);
+            // sensor.AddObservation(m_Frozen);
+            // sensor.AddObservation(m_Shoot);
         }
-        else if (useVectorFrozenFlag)
-        {
-            sensor.AddObservation(m_Frozen);
-        }
+        // else if (useVectorFrozenFlag)
+        // {
+        //     sensor.AddObservation(m_Frozen);
+        // }
     }
 
     public Color32 ToColor(int hexVal)

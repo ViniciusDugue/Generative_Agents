@@ -4,29 +4,29 @@
             {
                 "steps": 499968,
                 "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.onnx",
-                "reward": null,
-                "creation_time": 1741475899.1247644,
+                "reward": 22.4375,
+                "creation_time": 1742276763.6799119,
                 "auxillary_file_paths": [
                     "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.pt"
                 ]
             },
             {
-                "steps": 500480,
-                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.onnx",
+                "steps": 700288,
+                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-700288.onnx",
                 "reward": null,
-                "creation_time": 1741475899.2446146,
+                "creation_time": 1742277440.685162,
                 "auxillary_file_paths": [
-                    "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
+                    "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-700288.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 500480,
+            "steps": 700288,
             "file_path": "results\\id=Test1\\MultipleFoodGatherer.onnx",
             "reward": null,
-            "creation_time": 1741475899.2446146,
+            "creation_time": 1742277440.685162,
             "auxillary_file_paths": [
-                "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
+                "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-700288.pt"
             ]
         }
     },
