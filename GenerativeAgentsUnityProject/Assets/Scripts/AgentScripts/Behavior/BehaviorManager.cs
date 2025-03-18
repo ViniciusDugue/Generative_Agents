@@ -165,9 +165,10 @@ public class BehaviorManager : MonoBehaviour
                 Debug.Log($"Target Location: {targetLocation}");
 
                 // Assign target position correctly
-                if (behaviors.ContainsKey("MoveBehavior") && behaviors["MoveBehavior"] is MoveBehavior moveBehavior)
+                if (behaviors.ContainsKey("MoveBehavior"))
                 {
-                    moveBehavior.target = targetLocation;
+                    MoveBehavior moveBehavior = (MoveBehavior)behaviors["MoveBehavior"];
+                    moveBehavior.setTarget(targetLocation);
                 }
             }
             catch (Exception e)
@@ -199,16 +200,12 @@ public class BehaviorManager : MonoBehaviour
     {
         while (true)
         {
-            if (currentAgentBehavior != null)  // ✅ Added Null Check
-            {
-                exhaustion += currentAgentBehavior.exhaustionRate;  // Example logic
-            }
-            else
-            {
-                Debug.LogWarning($"Agent {agentID} has no current behavior assigned.");
-            }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1.0f);
+            if ((exhaustion + currentAgentBehavior.exhaustionRate) > 0)
+                exhaustion += currentAgentBehavior.exhaustionRate; 
+            else // Ensure exhaustion does not go below 0
+               exhaustion = 0; 
         }
     }
 
