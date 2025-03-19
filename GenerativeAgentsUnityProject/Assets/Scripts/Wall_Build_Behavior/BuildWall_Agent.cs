@@ -6,10 +6,14 @@ public class BuildWall_Agent : MonoBehaviour
 {
     [Header("Required GameObjects")]
     public GameObject[] n_blocks_required;
-    public GameObject wallPrefab;
+    
     public GameObject smallWall;
     public GameObject ConstructionSite;
     public GameObject Destination;
+
+    public GameObject destinationPrefab;
+    public GameObject wallPrefab;
+    public GameObject constructionSitePrefab;
 
     [Header("Rotation Settings")]
     public float WallRotation;
@@ -29,10 +33,10 @@ public class BuildWall_Agent : MonoBehaviour
     public bool startBehavior = false;
     public bool interrupt = false;
 
-    public NavMeshAgent agent;
+    public NavMeshAgent navAgent;
 
     // Agent States
-    private enum AgentState
+    public enum AgentState
     {
         Idle,
         MoveToConstruction,
@@ -45,7 +49,7 @@ public class BuildWall_Agent : MonoBehaviour
         PlaceWall
     }
 
-    private AgentState currentState = AgentState.Idle;
+    public AgentState currentState = AgentState.Idle;
     private GameObject currentWallInstance;
 
     private bool waitingAtConstruction = false;
@@ -55,8 +59,8 @@ public class BuildWall_Agent : MonoBehaviour
     {
         startBehavior =true; 
         interrupt = false;
-
-
+        // This will be called by llm to set initial values for behavior
+        //SetWallAgentData(Vector3 constructionSitePos, Vector3 destinationPos, List<GameObject> targetBlockList);
     }
 
     void OnDisable()
@@ -67,18 +71,25 @@ public class BuildWall_Agent : MonoBehaviour
 
         if(isHoldingWall)
         {
-            isHoldingWall = false;
-            currentWallInstance = Instantiate(wallPrefab, Destination.transform.position + new Vector3(0, 2f, 0), Quaternion.Euler(0, WallRotation, 0));
-            currentState = AgentState.MoveToWall;
             smallWall.SetActive(false);
+            isHoldingWall = false;
+            //These will be necessary for the llm integration for interrupting behavior
+            // Destroy(Destination);
+            // Destroy(ConstructionSite);
+
+            currentWallInstance = Instantiate(wallPrefab, transform.position + transform.forward * 1.5f, Quaternion.Euler(0, WallRotation, 0));
+            currentState = AgentState.MoveToWall;
+            
+            
         }
 
     }
 
-    void SetWallAgentData(Vector3 constructionSitePos, Vector3 destinationPos)
+    public void SetWallAgentData(Vector3 constructionSitePos, Vector3 destinationPos, List<GameObject> targetBlockList)
     {
         Destination = Instantiate(destinationPrefab,destinationPos, Quaternion.identity);
         ConstructionSite = Instantiate(constructionSitePrefab,constructionSitePos, Quaternion.identity);
+        n_blocks_required = targetBlockList;
     }
 
     void Update()
@@ -92,8 +103,8 @@ public class BuildWall_Agent : MonoBehaviour
                 smallWall.SetActive(false);
                 wasInterruptedDuringDestination = true;
             }
-            agent.isStopped = true;
-            agent.ResetPath();
+            navAgent.isStopped = true;
+            navAgent.ResetPath();
 
             currentState = AgentState.Idle;
             return;
@@ -119,12 +130,12 @@ public class BuildWall_Agent : MonoBehaviour
         switch (currentState)
         {
             case AgentState.MoveToConstruction:
-                if (agent.destination != ConstructionSite.transform.position)
+                if (navAgent.destination != ConstructionSite.transform.position)
                 {
-                    agent.isStopped = false;
-                    agent.SetDestination(ConstructionSite.transform.position);
+                    navAgent.isStopped = false;
+                    navAgent.SetDestination(ConstructionSite.transform.position);
                 }
-                if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+                if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance)
                 {
                     currentState = AgentState.WaitAtConstruction;
                 }
@@ -141,9 +152,30 @@ public class BuildWall_Agent : MonoBehaviour
             case AgentState.CreateWall:
                 CreateWall();
                 break;
-            case AgentState.MoveToWall
-                MoveToWall();
-                break;
+            case AgentState.MoveToWall:
+                {
+                    if (currentWallInstance != null)
+                    {
+                        Vector3 toWall = transform.position - currentWallInstance.transform.position;
+                        Vector3 targetPosition = currentWallInstance.transform.position;
+                        if (toWall != Vector3.zero)
+                        {
+                            targetPosition += toWall.normalized * destinationStopDistance;
+                        }
+                        if (navAgent.destination != targetPosition)
+                        {
+                            navAgent.isStopped = false;
+                            navAgent.SetDestination(targetPosition);
+                        }
+                        if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance)
+                        {
+                            StartCoroutine(WaitAndPickup());
+                            currentState = AgentState.WaitBeforePickup;
+                        }
+                    }
+                    break;
+                }
+                
 
             case AgentState.WaitBeforePickup:
                 break;
@@ -161,12 +193,12 @@ public class BuildWall_Agent : MonoBehaviour
                     {
                         destinationTarget += toAgent.normalized * destinationStopDistance;
                     }
-                    if (agent.destination != destinationTarget)
+                    if (navAgent.destination != destinationTarget)
                     {
-                        agent.isStopped = false;
-                        agent.SetDestination(destinationTarget);
+                        navAgent.isStopped = false;
+                        navAgent.SetDestination(destinationTarget);
                     }
-                    if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+                    if (!navAgent.pathPending && navAgent.remainingDistance <= navAgent.stoppingDistance)
                     {
                         currentState = AgentState.PlaceWall;
                     }
@@ -204,13 +236,6 @@ public class BuildWall_Agent : MonoBehaviour
         currentState = AgentState.MoveToWall;
     }
 
-    private void MoveToWall()
-    {
-
-        StartCoroutine(WaitAndPickup());
-        currentState = AgentState.WaitBeforePickup;
-    }
-
     // wait 1 second before picking up wall
     IEnumerator WaitAndPickup()
     {
@@ -222,6 +247,7 @@ public class BuildWall_Agent : MonoBehaviour
     {
         if (currentWallInstance != null && Vector3.Distance(transform.position, currentWallInstance.transform.position) <= pickupRange)
         {
+            Debug.Log("Ready to Pick up");
             Destroy(currentWallInstance);
             Quaternion desiredWorldRot = Quaternion.Euler(0, WallRotation, 0);
             smallWall.transform.localRotation = Quaternion.Inverse(transform.rotation) * desiredWorldRot;
