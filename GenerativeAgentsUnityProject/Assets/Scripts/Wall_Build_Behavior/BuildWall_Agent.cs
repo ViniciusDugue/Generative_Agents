@@ -20,6 +20,7 @@ public class BuildWall_Agent : MonoBehaviour
     public float rotationSpeed = 5f;
     public float rangeThreshold = 1f;
     public float pickupRange = 2f;
+    public bool isHoldingWall; 
 
     [Header("Destination Settings")]
     public float destinationStopDistance = 1f;
@@ -37,6 +38,7 @@ public class BuildWall_Agent : MonoBehaviour
         MoveToConstruction,
         WaitAtConstruction,
         CreateWall,
+        MoveToWall,
         WaitBeforePickup,
         PickupWall,
         MoveToDestination,
@@ -48,6 +50,36 @@ public class BuildWall_Agent : MonoBehaviour
 
     private bool waitingAtConstruction = false;
     private bool wasInterruptedDuringDestination = false;
+
+    void OnEnable()
+    {
+        startBehavior =true; 
+        interrupt = false;
+
+
+    }
+
+    void OnDisable()
+    {
+        currentState = AgentState.Idle;
+        startBehavior = false;
+        navAgent.isStopped = true;
+
+        if(isHoldingWall)
+        {
+            isHoldingWall = false;
+            currentWallInstance = Instantiate(wallPrefab, Destination.transform.position + new Vector3(0, 2f, 0), Quaternion.Euler(0, WallRotation, 0));
+            currentState = AgentState.MoveToWall;
+            smallWall.SetActive(false);
+        }
+
+    }
+
+    void SetWallAgentData(Vector3 constructionSitePos, Vector3 destinationPos)
+    {
+        Destination = Instantiate(destinationPrefab,destinationPos, Quaternion.identity);
+        ConstructionSite = Instantiate(constructionSitePrefab,constructionSitePos, Quaternion.identity);
+    }
 
     void Update()
     {
@@ -109,12 +141,16 @@ public class BuildWall_Agent : MonoBehaviour
             case AgentState.CreateWall:
                 CreateWall();
                 break;
+            case AgentState.MoveToWall
+                MoveToWall();
+                break;
 
             case AgentState.WaitBeforePickup:
                 break;
 
             case AgentState.PickupWall:
                 PickupWall();
+                isHoldingWall = true;
                 break;
 
             case AgentState.MoveToDestination:
@@ -138,6 +174,7 @@ public class BuildWall_Agent : MonoBehaviour
                 break;
 
             case AgentState.PlaceWall:
+                isHoldingWall = false;
                 PlaceWall();
                 break;
 
@@ -163,6 +200,13 @@ public class BuildWall_Agent : MonoBehaviour
                 Destroy(block);
         }
         currentWallInstance = Instantiate(wallPrefab, ConstructionSite.transform.position, Quaternion.Euler(0, WallRotation, 0));
+        
+        currentState = AgentState.MoveToWall;
+    }
+
+    private void MoveToWall()
+    {
+
         StartCoroutine(WaitAndPickup());
         currentState = AgentState.WaitBeforePickup;
     }
