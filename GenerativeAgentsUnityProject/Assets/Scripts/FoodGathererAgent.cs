@@ -8,7 +8,7 @@ public class FoodGathererAgent : AgentBehavior
 {
     public EnvironmentSettings m_EnvironmentSettings;
     public GameObject area;
-    FoodSpawner m_MyArea;
+    // FoodSpawner m_MyArea;
     bool m_Frozen;
     bool m_Poisoned;
     bool m_Satiated;
@@ -42,7 +42,7 @@ public class FoodGathererAgent : AgentBehavior
     {
         // exhaustionRate = 2.0f;
         m_AgentRb = GetComponent<Rigidbody>();
-        m_MyArea = area.GetComponent<FoodSpawner>();
+        // m_MyArea = area.GetComponent<FoodSpawner>();
         m_EnvironmentSettings = FindObjectOfType<EnvironmentSettings>();
         m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
@@ -224,9 +224,9 @@ public class FoodGathererAgent : AgentBehavior
             m_Shoot = false;
             m_AgentRb.velocity = Vector3.zero;
             myLaser.transform.localScale = new Vector3(0f, 0f, 0f);
-            transform.position = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range),
-                2f, Random.Range(-m_MyArea.range, m_MyArea.range))
-                + area.transform.position;
+            // transform.position = new Vector3(Random.Range(-m_MyArea.range, m_MyArea.range),
+            //     2f, Random.Range(-m_MyArea.range, m_MyArea.range))
+            //     + area.transform.position;
             transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
             SetResetParameters();
