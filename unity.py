@@ -111,10 +111,12 @@ async def process_input(request: Request):
         result = None
             
         for key, value in input_data.items():
-            if key != "mapData":
+            if key != "mapData" and value is not None:
                 print(f"{key}: {value}")
+            else:
+                print(f"{key}: None")
         
-        if "mapData" in input_data:
+        if "mapData" in input_data and input_data["mapData"] is not None:
             map_data = base64.b64decode(input_data.pop("mapData"))
 
         # Pass Map Data if it exists, otherwise run normally
@@ -134,6 +136,7 @@ async def process_input(request: Request):
                 model_settings=settings
             )
         
+        print(result.data)
         return result.data
     except Exception as e:
         logging.error("Error processing /nlp request", exc_info=True)

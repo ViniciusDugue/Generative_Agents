@@ -27,9 +27,13 @@ public class Client : MonoBehaviour
     {
         client = new HttpClient();
 
-        if (inputField != null)
+        GameObject[] agents = GameObject.FindGameObjectsWithTag("agent");
+        foreach (GameObject agent in agents)
         {
-            inputField.onEndEdit.AddListener(OnInputFieldValueChanged);
+            if (agent != null) 
+            {
+                RegisterAgent(agent);
+            }
         }
     }
 
