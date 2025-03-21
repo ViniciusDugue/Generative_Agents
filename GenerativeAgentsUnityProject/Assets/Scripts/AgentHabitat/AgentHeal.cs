@@ -1,109 +1,105 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AgentHeal : MonoBehaviour
 {
     [Header("Health Settings")]
     public int maxHealth = 100;
     public int currentHealth;
-    public HealthBar healthBar;
-    private bool canTakeDamage;
 
-    [Header("Hunger & Fitness Settings")]
-    [Tooltip("Hunger value (100 means fully satiated; 0 means starving).")]
-    public int hunger = 100;
+    [Header("Hunger Settings")]
+    [Tooltip("The maximum hunger value. When hunger is full, healing begins.")]
     public int maxHunger = 100;
-    [Tooltip("Fitness score used to prioritize food dispensing.")]
-    public float fitnessScore = 0f;
+    [Tooltip("Current hunger level. Agents start out hungry.")]
+    public int currentHunger = 0;
+    [Tooltip("Amount of food needed to fill hunger (per portion).")]
+    public int foodPortionValue = 10;
+
+    [Header("Healing Settings")]
+    [Tooltip("Health restored per healing tick once hunger is full.")]
+    public int healingPerTick = 5;
+    [Tooltip("Time (in seconds) between healing ticks.")]
+    public float healingInterval = 1f;
+
+    [Header("UI (Optional)")]
+    public HealthBar healthBar;
+
+    private bool isHealing = false;
 
     void Start()
     {
         currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
-        canTakeDamage = true;
+        // Assume agent starts hungry; you might later implement hunger decay during the day.
+        currentHunger = 0;
+
+        if (healthBar != null)
+        {
+            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetHealth(maxHealth);
+        }
     }
 
-    // Example collision logic for taking damage from enemy agents.
-    void OnCollisionStay(Collision collision)
+    /// <summary>
+    /// Called by the Habitat when the agent enters the habitat at night.
+    /// </summary>
+    public void ReceiveFood(int portion)
     {
-        if (collision.gameObject.CompareTag("enemyAgent") && canTakeDamage)
+        // Increase hunger based on the food portion dispensed.
+        currentHunger += portion;
+        if (currentHunger > maxHunger)
         {
-            TakeDamage(25);
-            Debug.Log("We hit an enemy. We took damage.");
-            Debug.Log("Current health: " + currentHealth);
-            StartCoroutine(HitTimer(1));
+            currentHunger = maxHunger;
         }
+        Debug.Log($"{gameObject.name} received food. Hunger: {currentHunger}/{maxHunger}");
 
+        // Once hunger is full, start the healing process.
+        if (currentHunger >= maxHunger && !isHealing)
+        {
+            StartCoroutine(HealOverTime());
+        }
+    }
+
+    private IEnumerator HealOverTime()
+    {
+        isHealing = true;
+        // Heal continuously every healingInterval until health is full.
+        while (currentHealth < maxHealth && currentHunger >= maxHunger)
+        {
+            currentHealth += healingPerTick;
+            if (currentHealth > maxHealth)
+            {
+                currentHealth = maxHealth;
+            }
+            if (healthBar != null)
+            {
+                healthBar.SetHealth(currentHealth);
+            }
+            Debug.Log($"{gameObject.name} healed to {currentHealth}/{maxHealth}");
+            yield return new WaitForSeconds(healingInterval);
+        }
+        isHealing = false;
+    }
+
+    /// <summary>
+    /// Optional: Called if the agent takes damage (e.g., from enemy collisions).
+    /// </summary>
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        if (healthBar != null)
+        {
+            healthBar.SetHealth(currentHealth);
+        }
         if (currentHealth <= 0)
         {
             Die();
         }
     }
 
-    private IEnumerator HitTimer(float timer)
-    {
-        canTakeDamage = false;
-        yield return new WaitForSeconds(timer);
-        canTakeDamage = true;
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-        healthBar.SetHealth(currentHealth);
-    }
-
-    public void Die()
+    private void Die()
     {
         Debug.Log($"{gameObject.name} has died.");
         gameObject.SetActive(false);
-    }
-
-    // This method is called by the Habitat when food is dispensed.
-    // The agent will heal if injured, or eat if hungry.
-    public void ReceiveFood(int foodValue)
-    {
-        if (currentHealth < maxHealth)
-        {
-            Heal(foodValue);
-        }
-        else if (hunger < maxHunger)
-        {
-            Eat(foodValue);
-        }
-        else
-        {
-            Debug.Log(name + " is fully healthy and satiated.");
-        }
-    }
-
-    // Increase health, update the health bar.
-    public void Heal(int amount)
-    {
-        int oldHealth = currentHealth;
-        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
-        healthBar.SetHealth(currentHealth);
-        Debug.Log(name + " healed from " + oldHealth + " to " + currentHealth);
-    }
-
-    // Increase hunger value.
-    public void Eat(int amount)
-    {
-        int oldHunger = hunger;
-        hunger = Mathf.Min(hunger + amount, maxHunger);
-        Debug.Log(name + " increased hunger from " + oldHunger + " to " + hunger);
-    }
-
-    // Optional: methods to move to or from the habitat.
-    public void GoToHabitat(Habitat habitat)
-    {
-        // Add movement logic here (e.g., using a NavMeshAgent)
-        habitat.RegisterAgent(this);
-    }
-
-    public void LeaveHabitat(Habitat habitat)
-    {
-        habitat.UnregisterAgent(this);
     }
 }

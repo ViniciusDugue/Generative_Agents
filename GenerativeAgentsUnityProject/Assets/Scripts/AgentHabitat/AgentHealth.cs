@@ -1,20 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AgentHealth : MonoBehaviour
 {
-
+    [Header("Health Settings")]
     public int maxHealth = 100;
     public int currentHealth;
-    public HealthBar healthBar;
+
+    [Header("Health Bar UI")]
+    public Slider slider;
+    public Gradient gradient;
+    public Image fill;
+
     private bool canTakeDamage;
 
-    // Initialize Health Values
     void Start()
     {
+        // Initialize health values.
         currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
+        if(slider != null)
+        {
+            slider.maxValue = maxHealth;
+            slider.value = maxHealth;
+            fill.color = gradient.Evaluate(1f);
+        }
         canTakeDamage = true;
     }
 
@@ -34,7 +45,8 @@ public class AgentHealth : MonoBehaviour
         }
     }
 
-    private IEnumerator HitTimer(float timer) {
+    private IEnumerator HitTimer(float timer)
+    {
         canTakeDamage = false; // Disable damage
         yield return new WaitForSeconds(timer); // Wait for the duration
         canTakeDamage = true; // Re-enable damage
@@ -43,10 +55,12 @@ public class AgentHealth : MonoBehaviour
     void TakeDamage(int damage)
     {
         currentHealth -= damage;
-
-        healthBar.SetHealth(currentHealth);
+        if(slider != null)
+        {
+            slider.value = currentHealth;
+            fill.color = gradient.Evaluate(slider.normalizedValue);
+        }
     }
-
 
     void Die()
     {

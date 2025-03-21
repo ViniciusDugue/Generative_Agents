@@ -5675,37 +5675,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 673653341}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &681580575
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 681580576}
-  m_Layer: 0
-  m_Name: DefaultAgentPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &681580576
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681580575}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 103.57, y: 4.96, z: 99.44}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &697519289
 GameObject:
   m_ObjectHideFlags: 0
@@ -9141,7 +9110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   manualHours: 0
   manualMinutes: 0
-  manualTimeControl: 0
+  manualTimeControl: 1
   skyboxNight: {fileID: 2800000, guid: 3cf4d52b14bd4254d9f4fd063f8d9bfd, type: 3}
   skyboxSunrise: {fileID: 2800000, guid: c15e36d3819e8d14ab21ab119e3fd4a7, type: 3}
   skyboxDay: {fileID: 2800000, guid: 90bac99dc822bf641b140cdc291b845e, type: 3}
@@ -11660,6 +11629,51 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1472210492}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1481727350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1481727351}
+  - component: {fileID: 1481727352}
+  m_Layer: 0
+  m_Name: AgentController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1481727351
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481727350}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -20.145638, y: 9.871439, z: 0.90024376}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1919913113}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1481727352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481727350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c8e2b45017065642a3c55ac1effb6d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
 --- !u!1 &1482955956
 GameObject:
   m_ObjectHideFlags: 0
@@ -16141,15 +16155,15 @@ MonoBehaviour:
     type: 3}
   agentPrefab: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
     type: 3}
-  maxFood: 10
-  maxEnemies: 5
-  maxAgents: 2
+  maxFood: 0
+  maxEnemies: 15
+  maxAgents: 1
   spawnHeightOffset: 0
   foodSpawnRadius: 8
   enemySpawnRadius: 8
   agentSpawnRadius: 8
   dailyActiveFoodSpawnCount: 2
-  dailyActiveEnemySpawnCount: 2
+  dailyActiveEnemySpawnCount: 3
   timeManager: {fileID: 1134269976}
 --- !u!4 &1919913113
 Transform:
@@ -16163,7 +16177,8 @@ Transform:
   m_LocalPosition: {x: 23.937805, y: 22.902227, z: 26.493992}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1481727351}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1938690678
@@ -17666,6 +17681,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1357862057355771566, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_Mass
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1357862057355771566, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1865659542353389070, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
       propertyPath: m_IsActive
@@ -18512,7 +18537,7 @@ PrefabInstance:
         type: 3}
       propertyPath: centralHubPoint
       value: 
-      objectReference: {fileID: 681580576}
+      objectReference: {fileID: 1390814036}
     - target: {fileID: 8700605161043674177, guid: 5fd2083b2b3c5cb42883f203b33352c4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -18594,4 +18619,3 @@ SceneRoots:
   - {fileID: 1134269975}
   - {fileID: 259046999}
   - {fileID: 3772322730700701152}
-  - {fileID: 681580576}
