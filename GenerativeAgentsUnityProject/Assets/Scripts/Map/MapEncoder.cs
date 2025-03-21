@@ -31,7 +31,7 @@ public class MapEncoder : MonoBehaviour
         }
     }
 
-    private string CaptureAndEncodeMap()
+    public string CaptureAndEncodeMap()
     {
         if (mapCamera == null)
         {

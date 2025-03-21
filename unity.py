@@ -5,7 +5,8 @@ import uvicorn
 from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
-from pydantic_ai import Agent, RunContext
+from pydantic_ai import Agent, BinaryContent, RunContext
+# from pydantic_ai import Agent, BinaryContent, RunContext
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
 from agent_classes import AgentResponse  # Keep AgentResponse for output
@@ -13,6 +14,8 @@ import base64
 import os
 import json
 import logging
+import base64
+# Dictionary to store map data for each agent
 
 
 # Load environment variables from .env file
@@ -23,7 +26,14 @@ sys_prompt = """
     You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
     your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
     and movement across the environment. If exhaustion reaches 100, you will begin losing health and will not be able to move until you rest.
-    You will be queried every 20 seconds with your current status and available actions. You will respond with the action you wish to take.
+    A map of the environment will be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
+    You will respond with the action you wish to take.
+
+Map Data:
+The map data will be provided as a png image. The Top-Right corner of the map is (0, 0, 0) and the Bottom-Left corner is (120, 0, 120). 
+The map is 120x120 units. A Blue dot represents your current location. Green sqaures represent food locations. White areas are considered
+as obstacles, but can be traversed around.
+
 
 Available Actions & Effects
 You can take one of the following ACTIONS at a time:
@@ -59,6 +69,7 @@ Input Parameters:
     currentAction: str, # Current action the agent is performing
     currentPosition: {"x": float, "y": float, "z": float}, # Current position of the agent in the environment
     foodLocations: list[{"x": float, "y": float, "z": float}], # Locations of food sources in the environment
+    mapData: str, # Base64 encoded image of the map data (optional)
 </input>
 """
 
@@ -85,20 +96,34 @@ survival_agent = Agent(
 # Create FastAPI app
 app = FastAPI()
 
+# Dictionary to store map data for each agent
+agent_map_data = {}
+
 # Define the FastAPI endpoint
 @app.post("/nlp")
 async def process_input(request: Request):
     try:
         input_data = await request.json()
         print(input_data)
-
+        map_data = None
         if not input_data:
             raise HTTPException(status_code=400, detail="input_data is required")
         input_json_str = json.dumps(input_data)
+
+        if "mapData" in input_data:
+            map_data = base64.b64decode(input_data["mapData"])
+            input_data["mapData"] = None #f"data:image/png;base64,{map_data}"
+
         print(input_json_str)
 
-        # Pass the JSON string to the agent
-        result = await survival_agent.run(input_json_str)
+        # # Pass the JSON string to the agent
+        result = await survival_agent.run(
+            [
+                input_json_str,
+                BinaryContent(data=map_data, media_type='image/png'),  
+            ],
+            model_settings=settings
+        )
         print(result.data)
         return result.data
     except Exception as e:
@@ -118,6 +143,8 @@ async def process_map_with_llm(request: Request):
     except Exception as e:
         print("Error processing /map:", e)
         raise HTTPException(status_code=500, detail=str(e))
+
+
 
 
 
