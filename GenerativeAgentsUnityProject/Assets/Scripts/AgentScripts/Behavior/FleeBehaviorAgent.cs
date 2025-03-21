@@ -59,7 +59,7 @@ public class FleeBehaviorAgent : AgentBehavior
                 if (distance > 0)
                 {
                     // Closer predators have more influence.
-                    targetFleeDirection += away.normalized * (fleeRadius - distance);
+                    targetFleeDirection += away.normalized;
                     predatorsFound++;
                 }
             }
