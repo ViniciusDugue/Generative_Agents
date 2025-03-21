@@ -3198,30 +3198,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &343436094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 343436093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e3075bd05af2542ab58646066d3877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapCamera: {fileID: 175141912}
-  mapContainers:
-  - {fileID: 1841739961}
-  - {fileID: 376374307}
-  agentMarkerPrefab: {fileID: 7955253016905973970, guid: 76dfd58fbc427ea46848a9b9ea890aea,
-    type: 3}
-  enemyMarkerPrefab: {fileID: 1174300385508847463, guid: d3b2c3a7f342c9a40a524fdccc370f2b,
-    type: 3}
-  foodMarkerPrefab: {fileID: 2576113170972691007, guid: 6a5722ef3f4e9824a9874fc7599112b9,
-    type: 3}
-  markerScales: []
-  markerTextScales: []
 --- !u!4 &343436095
 Transform:
   m_ObjectHideFlags: 0
@@ -5649,37 +5625,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 673653341}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &681580575
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 681580576}
-  m_Layer: 0
-  m_Name: empty
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &681580576
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 681580575}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -102.26186, y: 2.6318183, z: -54.250538}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &697519289
 GameObject:
   m_ObjectHideFlags: 0
@@ -16063,15 +16008,15 @@ MonoBehaviour:
     type: 3}
   agentPrefab: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
     type: 3}
-  maxFood: 10
-  maxEnemies: 5
+  maxFood: 0
+  maxEnemies: 15
   maxAgents: 1
   spawnHeightOffset: 0
   foodSpawnRadius: 8
   enemySpawnRadius: 8
   agentSpawnRadius: 8
   dailyActiveFoodSpawnCount: 2
-  dailyActiveEnemySpawnCount: 2
+  dailyActiveEnemySpawnCount: 3
   timeManager: {fileID: 1134269976}
 --- !u!4 &1919913113
 Transform:
@@ -17677,6 +17622,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1357862057355771566, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_Mass
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1357862057355771566, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1865659542353389070, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
       propertyPath: m_IsActive
@@ -18598,4 +18553,3 @@ SceneRoots:
   - {fileID: 1134269975}
   - {fileID: 259046999}
   - {fileID: 3772322730700701152}
-  - {fileID: 681580576}

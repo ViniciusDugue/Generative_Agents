@@ -67,6 +67,22 @@ public class SpawnManager : MonoBehaviour
 
     private void Start()
     {
+        // Reposition the habitat only once at simulation start
+        GameObject habitatObj = GameObject.FindWithTag("habitat");
+        if (habitatObj != null)
+        {
+            Habitat habitat = habitatObj.GetComponent<Habitat>();
+            habitat.RepositionHabitat();
+        }
+        else
+        {
+            Debug.LogWarning("No habitat found to reposition.");
+        }
+
+        // Spawn agents at the central hub only once at simulation start.
+        SpawnAgentsAtHub();
+
+        // Continue with food and enemy spawning based on current time.
         if (timeManager != null && timeManager.IsDayTime)
         {
             RandomizeFoodSpawnPoints();
@@ -74,9 +90,6 @@ public class SpawnManager : MonoBehaviour
 
             RandomizeEnemySpawnPoints();
             SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
-
-            // At scene start, spawn agents at the central hub.
-            SpawnAgentsAtHub();
         }
     }
 
@@ -89,35 +102,19 @@ public class SpawnManager : MonoBehaviour
                 lastIsDaytime = timeManager.IsDayTime;
                 if (timeManager.IsDayTime)
                 {
-                    Debug.Log("Daytime started - repositioning habitat and spawning agents at the hub.");
-
-                    // Reposition the habitat to a new agent spawn point.
-                    GameObject habitatObj = GameObject.FindWithTag("habitat");
-                    if (habitatObj != null)
-                    {
-                        Habitat habitat = habitatObj.GetComponent<Habitat>();
-                        habitat.RepositionHabitat();
-                    }
-                    else
-                    {
-                        Debug.LogWarning("No habitat found to reposition.");
-                    }
-
-                    // Existing logic for food and enemy spawning...
+                    Debug.Log("Daytime started - updating food and enemy spawns.");
+                    
+                    // Update food and enemy spawning, but do NOT reposition the habitat or respawn agents.
                     RandomizeFoodSpawnPoints();
                     SpawnFoodAtActivePoints();
 
                     RandomizeEnemySpawnPoints();
                     DespawnObjects(spawnedEnemies);
                     SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
-
-                    // Spawn agents from the new habitat location.
-                    DespawnObjects(spawnedAgents);
-                    SpawnAgentsAtHub();
                 }
                 else
                 {
-                    // Nighttime logic...
+                    // Nighttime logic remains the same except for agent handling.
                     Debug.Log("Nighttime started.");
                     DespawnObjects(spawnedFood);
                     DisableFoodSpawnColliders();
@@ -126,8 +123,7 @@ public class SpawnManager : MonoBehaviour
                     ActivateAllEnemySpawnPoints();
                     SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
 
-                    DespawnObjects(spawnedAgents);
-                    DisableAgentSpawnColliders();
+                    // Agents remain spawned from the initial hub.
                 }
             }
         }
@@ -278,7 +274,6 @@ public class SpawnManager : MonoBehaviour
                 Vector3 randomPosition = GetRandomPositionAround(point.position, spawnRadius);
                 GameObject newObj = Instantiate(prefab, randomPosition, Quaternion.identity);
                 spawnedList.Add(newObj);
-                totalSpawned++;
 
                 if (prefab == agentPrefab)
                 {
@@ -291,8 +286,6 @@ public class SpawnManager : MonoBehaviour
                     {
                         newObj.AddComponent<AgentController>();
                     }
-
-                    // Removed MapEncoder logic here.
 
                     // Register marker for agent.
                     markerManager?.RegisterMarker(newObj);
@@ -307,6 +300,7 @@ public class SpawnManager : MonoBehaviour
                     markerManager?.RegisterMarker(newObj);
                 }
 
+                totalSpawned++;
                 if (totalSpawned >= maxCount)
                     break;
             }
