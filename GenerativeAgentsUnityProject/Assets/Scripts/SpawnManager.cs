@@ -89,7 +89,7 @@ public class SpawnManager : MonoBehaviour
                 lastIsDaytime = timeManager.IsDayTime;
                 if (timeManager.IsDayTime)
                 {
-                    Debug.Log("Daytime started - repositioning habitat and spawning agents at the hub.");
+                    Debug.Log("Daytime started - repositioning habitat and repositioning agents at the hub.");
 
                     // Reposition the habitat to a new agent spawn point.
                     GameObject habitatObj = GameObject.FindWithTag("habitat");
@@ -103,7 +103,7 @@ public class SpawnManager : MonoBehaviour
                         Debug.LogWarning("No habitat found to reposition.");
                     }
 
-                    // Existing logic for food and enemy spawning...
+                    // Existing logic for food and enemy spawning.
                     RandomizeFoodSpawnPoints();
                     SpawnFoodAtActivePoints();
 
@@ -111,13 +111,12 @@ public class SpawnManager : MonoBehaviour
                     DespawnObjects(spawnedEnemies);
                     SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
 
-                    // Spawn agents from the new habitat location.
-                    DespawnObjects(spawnedAgents);
-                    SpawnAgentsAtHub();
+                    // Instead of respawning agents, reposition them.
+                    RepositionAgentsToHub();
                 }
                 else
                 {
-                    // Nighttime logic...
+                    // Nighttime logic.
                     Debug.Log("Nighttime started.");
                     DespawnObjects(spawnedFood);
                     DisableFoodSpawnColliders();
@@ -125,9 +124,6 @@ public class SpawnManager : MonoBehaviour
                     DespawnObjects(spawnedEnemies);
                     ActivateAllEnemySpawnPoints();
                     SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
-
-                    DespawnObjects(spawnedAgents);
-                    DisableAgentSpawnColliders();
                 }
             }
         }
@@ -286,8 +282,6 @@ public class SpawnManager : MonoBehaviour
                         ?? newObj.AddComponent<BehaviorManager>();
                     behaviorManager.InitializeAgent();
 
-                    // Removed MapEncoder logic here.
-
                     // Register marker for agent.
                     markerManager?.RegisterMarker(newObj);
 
@@ -307,9 +301,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-
-
-    // Spawns agents at the central hub (Habitat).
+    // Spawns agents at the central hub (Habitat) on start.
     private void SpawnAgentsAtHub()
     {
         GameObject habitatObj = GameObject.FindWithTag("habitat");
@@ -319,7 +311,7 @@ public class SpawnManager : MonoBehaviour
             Vector3 hubPos = habitat.centralHubPoint.position;
             for (int i = 0; i < maxAgents; i++)
             {
-                Vector3 spawnPos = hubPos + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+                Vector3 spawnPos = hubPos;
                 GameObject newAgent = Instantiate(agentPrefab, spawnPos, Quaternion.identity);
                 spawnedAgents.Add(newAgent);
 
@@ -333,7 +325,7 @@ public class SpawnManager : MonoBehaviour
                                         ?? newAgent.AddComponent<MapEncoder>();
                 // Locate the 2D map camera and assign it.
                 GameObject mapCameraObj = GameObject.Find("AgentCamera");
-                if(mapCameraObj != null)
+                if (mapCameraObj != null)
                 {
                     mapEncoder.mapCamera = mapCameraObj.GetComponent<Camera>();
                 }
@@ -354,6 +346,30 @@ public class SpawnManager : MonoBehaviour
         else
         {
             Debug.LogWarning("No central hub (Habitat) found for spawning agents.");
+        }
+    }
+
+    // New method to reposition existing agents to the current hub.
+    private void RepositionAgentsToHub()
+    {
+        GameObject habitatObj = GameObject.FindWithTag("habitat");
+        if (habitatObj != null)
+        {
+            Habitat habitat = habitatObj.GetComponent<Habitat>();
+            Vector3 hubPos = habitat.centralHubPoint.position;
+            foreach (GameObject agent in spawnedAgents)
+            {
+                if (agent != null)
+                {
+                    Vector3 newPos = hubPos;
+                    agent.transform.position = newPos;
+                }
+            }
+            Debug.Log("Agents repositioned to new habitat hub.");
+        }
+        else
+        {
+            Debug.LogWarning("No central hub (Habitat) found for repositioning agents.");
         }
     }
 
@@ -407,9 +423,4 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    // Optionally disable agent spawn colliders if used.
-    private void DisableAgentSpawnColliders()
-    {
-        // Not needed here since agents are spawned from the central hub.
-    }
 }
