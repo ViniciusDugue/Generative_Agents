@@ -30,8 +30,9 @@ sys_prompt = """
     You will respond with the action you wish to take.
 
 Map Data:
-The map data will be provided as a base64 encoded image. You will be able to see the map data in the prompt.
-A Blue dot represents your current location. Green sqaures represent food sources. White areas are considered as obstacles, but can be traversed.
+The map data will be provided as a png image. The Top-Right corner of the map is (0, 0, 0) and the Bottom-Left corner is (120, 0, 120). 
+The map is 120x120 units. A Blue dot represents your current location. Green sqaures represent food locations. White areas are considered
+as obstacles, but can be traversed around.
 
 
 Available Actions & Effects
@@ -120,7 +121,8 @@ async def process_input(request: Request):
             [
                 input_json_str,
                 BinaryContent(data=map_data, media_type='image/png'),  
-            ]
+            ],
+            model_settings=settings
         )
         print(result.data)
         return result.data
