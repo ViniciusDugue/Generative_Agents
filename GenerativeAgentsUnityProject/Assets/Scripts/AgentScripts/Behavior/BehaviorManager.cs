@@ -157,7 +157,7 @@ public class BehaviorManager : MonoBehaviour
             {
                 // Parse location values safely
                 float x = locationDict["x"].ToObject<float>();
-                float y = locationDict["y"].ToObject<float>();
+                float y = this.transform.position.y; // Use the current y position
                 float z = locationDict["z"].ToObject<float>();
 
                 // Convert to Vector3
