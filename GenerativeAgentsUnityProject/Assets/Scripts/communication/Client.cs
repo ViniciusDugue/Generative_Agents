@@ -149,7 +149,7 @@ public class Client : MonoBehaviour
             health = 100,  // Placeholder, replace with actual health
             exhaustion = agent.GetComponent<BehaviorManager>().exhaustion,
             currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
-            currentPosition = new { x = position.x, y = position.y, z = position.z },
+            currentPosition = new { x = position.x, z = position.z },
             foodLocations = GetFoodLocationsAsList(agent.GetComponent<BehaviorManager>().foodLocations),
             mapData = mapData,
         };
@@ -194,9 +194,10 @@ public class Client : MonoBehaviour
     // Method to convert the HashSet to a List
     private List<Dictionary<string, float>> GetFoodLocationsAsList(HashSet<Transform> foodLocationsHashSet)
     {
-        if (foodLocationsHashSet.Count == 0)  return null;
-
         List<Dictionary<string, float>> positionsList = new List<Dictionary<string, float>>();
+
+        if (foodLocationsHashSet.Count == 0)  return positionsList;
+
         List<Transform> foodLocationsList = new List<Transform>(foodLocationsHashSet);
         foreach (Transform foodLocation in foodLocationsList)
         {
@@ -204,7 +205,6 @@ public class Client : MonoBehaviour
             Dictionary<string, float> positionDict = new Dictionary<string, float>
             {
                 { "x", position.x },
-                { "y", position.y },
                 { "z", position.z }
             };
             positionsList.Add(positionDict);

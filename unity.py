@@ -114,7 +114,7 @@ async def process_input(request: Request):
             map_data = base64.b64decode(input_data["mapData"])
             input_data["mapData"] = None #f"data:image/png;base64,{map_data}"
 
-        print(input_json_str)
+        # print(input_json_str)
 
         # # Pass the JSON string to the agent
         result = await survival_agent.run(
@@ -134,7 +134,9 @@ async def process_input(request: Request):
 async def process_map_with_llm(request: Request):
     try:
         input_data = await request.json()
-        print("Received map data:", input_data)
+        for key, value in input_data.items():
+            if key != "mapData":
+                print(f"{key}: {value}")
         
         if "map_base64" not in input_data or "agent_id" not in input_data:
             raise HTTPException(status_code=400, detail="Map and agent ID are required")

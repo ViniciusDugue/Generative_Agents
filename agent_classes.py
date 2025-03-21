@@ -10,10 +10,6 @@ class Location(BaseModel):
         ...,
         description="The x coordinate of the location"
     )
-    y: float = Field(
-        ...,
-        description="The y coordinate of the location"
-    )
     z: float = Field(
         ...,
         description="The z coordinate of the location"
@@ -43,7 +39,7 @@ class AgentResponse(BaseModel):
         json_schema_extra = {
             "example": {
                 "reasoning": "The agent is hungry, is located on a food tile and needs to gather food to maintain energy levels.",
-                "next_action": "CollectFood",
-                "location": {"x": 1.0, "y": 2.0, "z": 3.0}
+                "next_action": "FoodGathererAgent",
+                "location": {"x": 1.0, "z": 3.0}
             }
         }
