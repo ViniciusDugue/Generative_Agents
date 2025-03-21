@@ -26,11 +26,11 @@ sys_prompt = """
     You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
     your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
     and movement across the environment. If exhaustion reaches 100, you will begin losing health and will not be able to move until you rest.
-    A map of the environment will be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
+    A map of the environment may optionally be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
     You will respond with the action you wish to take.
 
 Map Data:
-The map data will be provided as a png image. The Top-Right corner of the map is (0, 0, 0) and the Bottom-Left corner is (120, 0, 120). 
+The map data will be provided as a png image. The Top-Right corner of the map is (0, 0) and the Bottom-Left corner is (120, 120). 
 The map is 120x120 units. A Blue dot represents your current location. Green sqaures represent food locations. White areas are considered
 as obstacles, but can be traversed around.
 
@@ -104,26 +104,38 @@ agent_map_data = {}
 async def process_input(request: Request):
     try:
         input_data = await request.json()
-        print(input_data)
-        map_data = None
         if not input_data:
             raise HTTPException(status_code=400, detail="input_data is required")
         input_json_str = json.dumps(input_data)
+        map_data = None
+        result = None
+            
+        for key, value in input_data.items():
+            if key != "mapData" and value is not None:
+                print(f"{key}: {value}")
+            else:
+                print(f"{key}: None")
+        
+        if "mapData" in input_data and input_data["mapData"] is not None:
+            map_data = base64.b64decode(input_data.pop("mapData"))
 
-        if "mapData" in input_data:
-            map_data = base64.b64decode(input_data["mapData"])
-            input_data["mapData"] = None #f"data:image/png;base64,{map_data}"
-
-        # print(input_json_str)
-
-        # # Pass the JSON string to the agent
-        result = await survival_agent.run(
-            [
-                input_json_str,
-                BinaryContent(data=map_data, media_type='image/png'),  
-            ],
-            model_settings=settings
-        )
+        # Pass Map Data if it exists, otherwise run normally
+        if map_data:
+            result = await survival_agent.run(
+                [
+                    input_json_str,
+                    BinaryContent(data=map_data, media_type='image/png'),  
+                ],
+                model_settings=settings
+            )
+        elif map_data is None:
+            result = await survival_agent.run(
+                [
+                    input_json_str,
+                ],
+                model_settings=settings
+            )
+        
         print(result.data)
         return result.data
     except Exception as e:

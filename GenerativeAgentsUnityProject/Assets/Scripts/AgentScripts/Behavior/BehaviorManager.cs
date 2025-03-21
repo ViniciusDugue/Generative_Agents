@@ -102,12 +102,18 @@ public class BehaviorManager : MonoBehaviour
         {
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
 
-            if (mapEncoder != null)
+            if (mapEncoder != null && mapEncoder.isActiveAndEnabled)
             {
                 // Set Boolean Listeners to True
                 mapDataExist = true;
                 UpdateLLM = true;
                 Debug.Log($"Map captured and sent by Agent {agentID}");
+            }
+            else
+            {
+                mapDataExist = true;
+                UpdateLLM = true;
+                Debug.Log($"No Map was captured by Agent {agentID}");
             }
 
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
