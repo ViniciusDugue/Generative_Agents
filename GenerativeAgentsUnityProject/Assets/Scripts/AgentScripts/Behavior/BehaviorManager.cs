@@ -17,15 +17,25 @@ public class BehaviorManager : MonoBehaviour
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
     private Coroutine exhaustionCoroutine;
+    private Coroutine enemyBufferCoroutine;
+
     private bool _updateLLM = false;
     public delegate void updateLLMBoolChangedHandler(int agentID);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
     private float nextRaycastTime = 0.0f;
+    private float lastEnemyLogTime = -100f;
+    private float enemyLogInterval = 2f;
     
     [HideInInspector]
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
+    // NEW: Time tracking for enemy detection.
+    private float lastEnemyDetectionTime = -100f;
+    // You can adjust this radius as needed.
+    private float enemyDetectionRadius = 10f;
+    // The buffer time after which we consider that no enemy has been detected.
+    private float enemyDetectionBuffer = 2.5f;
 
 
     public bool UpdateLLM
@@ -88,6 +98,26 @@ public class BehaviorManager : MonoBehaviour
             nextRaycastTime = Time.time + raycastInterval;
         }
 
+        // Update enemy detection.
+        
+        CheckEnemyDetection();
+
+        // Automatic behavior switching using LLM:
+        // If the current behavior is FleeBehaviorAgent and no enemy was detected for the last 2.5 seconds,
+        // then trigger the LLM update.
+        if (currentAgentBehavior.GetType().Name == "FleeBehaviorAgent")
+        {
+            if (!HasDetectedEnemyRecently() && enemyBufferCoroutine == null)
+            {
+                enemyBufferCoroutine = StartCoroutine(EnemyBufferCheck());
+            }
+            else if (HasDetectedEnemyRecently() && enemyBufferCoroutine != null)
+            {
+                StopCoroutine(enemyBufferCoroutine);
+                enemyBufferCoroutine = null;
+            }
+        }
+
         // Switch between behaviors using behavior names
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
@@ -110,6 +140,44 @@ public class BehaviorManager : MonoBehaviour
 
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
         }
+    }
+
+    private IEnumerator EnemyBufferCheck()
+    {
+        // Wait for the enemy detection buffer period.
+        yield return new WaitForSeconds(enemyDetectionBuffer);
+
+        // After waiting, if no enemy was detected in the meantime, trigger the update.
+        if (!HasDetectedEnemyRecently())
+        {
+            Debug.Log("No enemy detected for the buffer period. Triggering LLM update for behavior switch.");
+            UpdateLLM = true;
+        }
+
+        // Reset the coroutine reference.
+        enemyBufferCoroutine = null;
+    }
+
+
+    // Call this function to update the last time an enemy was seen.
+    private void CheckEnemyDetection()
+    {
+        Collider[] enemyColliders = Physics.OverlapSphere(transform.position, enemyDetectionRadius);
+        foreach (Collider col in enemyColliders)
+        {
+            if (col.CompareTag("enemyAgent"))
+            {
+                lastEnemyDetectionTime = Time.time;
+                // You can log for debugging:
+                return; // Exit after the first enemy is found.
+            }
+        }
+    }
+
+    // Returns true if an enemy was detected in the last enemyDetectionBuffer seconds.
+    public bool HasDetectedEnemyRecently()
+    {
+        return (Time.time - lastEnemyDetectionTime) <= enemyDetectionBuffer;
     }
 
     public void InitializeAgent()
