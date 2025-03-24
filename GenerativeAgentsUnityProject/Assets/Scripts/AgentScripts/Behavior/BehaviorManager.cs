@@ -27,6 +27,11 @@ public class BehaviorManager : MonoBehaviour
     private float nextRaycastTime = 0.0f;
     private float lastEnemyLogTime = -100f;
     private float enemyLogInterval = 2f;
+    private bool wasEnemyDetected = false;      // Tracks whether an enemy was detected last frame
+    private float lastLLMPromptTime = 0f;         // Time of the last LLM prompt
+    private float llmPromptInterval = 3f;         // When no enemy, prompt every 3 seconds
+
+    
     
     [HideInInspector]
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
@@ -87,11 +92,11 @@ public class BehaviorManager : MonoBehaviour
         // Ensure current AgentBehavior is not null
         if (currentAgentBehavior == null)
         {
-            Debug.LogError("Current Agent AgentBehavior is null");
+            Debug.LogError("Current AgentBehavior is null");
             return;
         }
 
-        // Check raycasts periodically to increase Performance
+        // Check raycasts periodically to increase performance
         if (Time.time >= nextRaycastTime)
         {   
             checkRayCast();
@@ -99,26 +104,53 @@ public class BehaviorManager : MonoBehaviour
         }
 
         // Update enemy detection.
-        
         CheckEnemyDetection();
 
-        // Automatic behavior switching using LLM:
-        // If the current behavior is FleeBehaviorAgent and no enemy was detected for the last 2.5 seconds,
-        // then trigger the LLM update.
-        if (currentAgentBehavior.GetType().Name == "FleeBehaviorAgent")
+        // Determine whether an enemy is currently detected.
+        bool enemyDetected = HasDetectedEnemyRecently();
+
+        if (enemyDetected)
         {
-            if (!HasDetectedEnemyRecently() && enemyBufferCoroutine == null)
+            // If enemy just entered (i.e. was not detected in the previous frame), prompt instantly.
+            if (!wasEnemyDetected)
             {
-                enemyBufferCoroutine = StartCoroutine(EnemyBufferCheck());
+                Debug.Log("Enemy just entered the radius. Prompting LLM instantly.");
+                UpdateLLM = true;
+                lastLLMPromptTime = Time.time;
             }
-            else if (HasDetectedEnemyRecently() && enemyBufferCoroutine != null)
+            // Mark that an enemy is detected.
+            wasEnemyDetected = true;
+        }
+        else
+        {
+            // If an enemy was detected in the previous frame but now is gone,
+            // wait until the buffer period (2.5 sec) has passed before prompting.
+            if (wasEnemyDetected)
             {
-                StopCoroutine(enemyBufferCoroutine);
-                enemyBufferCoroutine = null;
+                if (Time.time - lastEnemyDetectionTime >= enemyDetectionBuffer)
+                {
+                    if (Time.time - lastLLMPromptTime >= llmPromptInterval)
+                    {
+                        Debug.Log("Enemy recently left (buffer passed). Prompting LLM (every 3 sec).");
+                        UpdateLLM = true;
+                        lastLLMPromptTime = Time.time;
+                    }
+                }
             }
+            else
+            {
+                // When no enemy is detected at all, prompt every 3 seconds.
+                if (Time.time - lastLLMPromptTime >= llmPromptInterval)
+                {
+                    Debug.Log("No enemy present. Prompting LLM every 3 seconds.");
+                    UpdateLLM = true;
+                    lastLLMPromptTime = Time.time;
+                }
+            }
+            wasEnemyDetected = false;
         }
 
-        // Switch between behaviors using behavior names
+        // (The rest of your Update code for manual behavior switching remains unchanged)
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
             SwitchBehavior(GetFirstBehavior().GetType().Name);
@@ -127,7 +159,7 @@ public class BehaviorManager : MonoBehaviour
         {
             SwitchBehavior(GetNextBehaviorName());
         }
-        if (Input.GetKeyDown(KeyCode.R)) // Example: Switch to second behavior
+        if (Input.GetKeyDown(KeyCode.R)) // Example: Manual trigger of LLM update
         {
             UpdateLLM = true;
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
@@ -141,6 +173,7 @@ public class BehaviorManager : MonoBehaviour
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
         }
     }
+
 
     private IEnumerator EnemyBufferCheck()
     {
