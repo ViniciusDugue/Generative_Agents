@@ -23,7 +23,7 @@ public class BehaviorManager : MonoBehaviour
     private int foodCollected = 0;
     [Tooltip("Current amount of food items the agent has collected.")]
     [SerializeField]
-    private int curFood = 0;
+    private int currentFood = 0;
     public AgentBehavior defaultBehavior;
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
@@ -273,14 +273,24 @@ public class BehaviorManager : MonoBehaviour
 
     public void updateFoodCount() {
         foodCollected += 1;
-        curFood += 1;
+        currentFood += 1;
     }
 
     public bool canCarryMoreFood() {
-        if (curFood <= maxFood)
+        if (currentFood <= maxFood)
         {
             return true;
         }
         return false;
     }
+
+    public void dropFood() {
+        currentFood -= 1;
+    }
+
+    public int getFood() {
+        return currentFood;
+    }
+
+    
 }
