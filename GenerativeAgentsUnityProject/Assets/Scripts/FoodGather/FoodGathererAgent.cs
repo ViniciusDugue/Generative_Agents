@@ -239,7 +239,7 @@ public class FoodGathererAgent : AgentBehavior
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("food"))
+        if (collision.gameObject.CompareTag("food") && this.gameObject.GetComponent<BehaviorManager>().canCarryMoreFood())
         {
             Debug.Log("food collision");
             if (collision.gameObject.GetComponent<FoodScript>() == null)
@@ -248,6 +248,7 @@ public class FoodGathererAgent : AgentBehavior
             }
             Satiate();
             collision.gameObject.GetComponent<FoodScript>().OnEaten();
+            this.gameObject.GetComponent<BehaviorManager>().updateFoodCount();
             AddReward(1f);
             if (contribute)
             {

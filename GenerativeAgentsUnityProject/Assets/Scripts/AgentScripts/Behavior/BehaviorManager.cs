@@ -8,11 +8,22 @@ using Unity.MLAgents.Sensors;
 
 public class BehaviorManager : MonoBehaviour
 {
+    [Header("Basic Variables")]
     public int agentID = 001;
     private static int globalAgentID = 1;  // Shared counter for unique IDs
-
+    public float fitnessScore = 0.0f;
     public float exhaustion;
-    private GameObject agentObject;
+
+    [Header("Advanced Variables")]
+    [Tooltip("Maximum amount of food the agent can carry at once.")]
+    [SerializeField]
+    private int maxFood = 3;
+    [Tooltip("Total amount of food the agent has collected Today.")]
+    [SerializeField]
+    private int foodCollected = 0;
+    [Tooltip("Current amount of food items the agent has collected.")]
+    [SerializeField]
+    private int curFood = 0;
     public AgentBehavior defaultBehavior;
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
@@ -48,8 +59,6 @@ public class BehaviorManager : MonoBehaviour
 
     void Start()
     {
-        agentObject = this.gameObject;
-
         // Populate the dictionary with all Agent components, using their script names as keys
         foreach (AgentBehavior agentBehavior in GetComponents<AgentBehavior>())
         {
@@ -260,5 +269,18 @@ public class BehaviorManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void updateFoodCount() {
+        foodCollected += 1;
+        curFood += 1;
+    }
+
+    public bool canCarryMoreFood() {
+        if (maxFood <= curFood)
+        {
+            return true;
+        }
+        return false;
     }
 }
