@@ -104,7 +104,7 @@ public class BehaviorManager : MonoBehaviour
         }
 
         // Update enemy detection.
-        CheckEnemyDetection();
+        // CheckEnemyDetection();
 
         // Determine whether an enemy is currently detected.
         bool enemyDetected = HasDetectedEnemyRecently();
@@ -342,6 +342,7 @@ public class BehaviorManager : MonoBehaviour
 
         var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
         int lengthOfRayOutputs = rayOutputs.Length;
+        float maxDetectionDistance = 20.5f; // Set your max detection distance here
 
         // Alternating Ray Order: it gives an order of
         // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
@@ -356,6 +357,12 @@ public class BehaviorManager : MonoBehaviour
                     Debug.Log("Food location found!");
                 }
             }
+            if (goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
+            {
+                lastEnemyDetectionTime = Time.time;
+                Debug.Log($"Enemies Detected by Agent {agentID}!");
+            }
+
         }
     }
 }
