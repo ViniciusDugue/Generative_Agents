@@ -277,7 +277,7 @@ public class BehaviorManager : MonoBehaviour
     }
 
     public bool canCarryMoreFood() {
-        if (maxFood <= curFood)
+        if (curFood <= maxFood)
         {
             return true;
         }
