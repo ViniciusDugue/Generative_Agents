@@ -3,7 +3,39 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - agent
+  - iWall
+  - wall
+  - pit
+  - frozenAgent
+  - ball
+  - blueGoal
+  - blueAgent
+  - goal
+  - ground
+  - block
+  - switchOff
+  - pyramid
+  - switchOn
+  - stone
+  - target
+  - badFood
+  - food
+  - walkableSurface
+  - symbol_X
+  - symbol_O
+  - symbol_X_Goal
+  - symbol_O_Goal
+  - purpleAgent
+  - purpleGoal
+  - tile
+  - key
+  - enemyAgent
+  - foodSpawn
+  - enemySpawn
+  - agentSpawn
+  - habitat
   layers:
   - Default
   - TransparentFX
@@ -11,9 +43,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Target
+  - Obstruction
+  - invisible
   - 
   - 
   - 
@@ -40,4 +72,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: grid
+    uniqueID: 2073667511
     locked: 0
