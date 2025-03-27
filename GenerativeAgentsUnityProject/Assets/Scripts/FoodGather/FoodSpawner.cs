@@ -4,7 +4,6 @@ using Unity.MLAgentsExamples;
 public class FoodSpawner : MonoBehaviour
 {
     public GameObject food;
-    public GameObject badFood;
     public int numFood;
     public bool respawnFood;
     public float range;
@@ -18,7 +17,9 @@ public class FoodSpawner : MonoBehaviour
                 Quaternion.Euler(new Vector3(0f, Random.Range(0f, 360f), 90f)));
             f.GetComponent<FoodScript>().respawn = respawnFood;
             f.GetComponent<FoodScript>().myArea = this;
+            
         }
+        Debug.Log("Food Created");
     }
 
     public void ResetFoodArea(GameObject[] agents)

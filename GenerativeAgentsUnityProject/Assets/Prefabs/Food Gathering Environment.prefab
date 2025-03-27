@@ -58,7 +58,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 848991063255424910}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -84,8 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   food: {fileID: 2548240240112861867, guid: d4383c6cb518b354e97730aa1b268c44, type: 3}
-  badFood: {fileID: 0}
-  numFood: 50
+  numFood: 20
   respawnFood: 1
   range: 50
 --- !u!1 &1501289074177226439
@@ -564,31 +563,70 @@ PrefabInstance:
       propertyPath: area
       value: 
       objectReference: {fileID: 848991063255424910}
+    - target: {fileID: 710851228539740065, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: useVectorObs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_SensorName
       value: RayPerceptionSensor3
       objectReference: {fileID: 0}
+    - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 2f1fdefcd1e3b174886a6050eb024d98,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6095865175542604692, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724835085130947695, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724835085130947695, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8554419585863795947, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
@@ -598,7 +636,7 @@ PrefabInstance:
     - target: {fileID: 8554419585863795947, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: -0.16
       objectReference: {fileID: 0}
     - target: {fileID: 8554419585863795947, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
@@ -648,6 +686,11 @@ PrefabInstance:
     - target: {fileID: 8789039590297364219, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8875653854559405156, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -674,31 +717,70 @@ PrefabInstance:
       propertyPath: area
       value: 
       objectReference: {fileID: 848991063255424910}
+    - target: {fileID: 710851228539740065, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: useVectorObs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_SensorName
       value: RayPerceptionSensor3
       objectReference: {fileID: 0}
+    - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 2f1fdefcd1e3b174886a6050eb024d98,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6095865175542604692, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724835085130947695, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724835085130947695, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8554419585863795947, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
@@ -758,6 +840,11 @@ PrefabInstance:
     - target: {fileID: 8789039590297364219, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8875653854559405156, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -784,31 +871,70 @@ PrefabInstance:
       propertyPath: area
       value: 
       objectReference: {fileID: 848991063255424910}
+    - target: {fileID: 710851228539740065, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: useVectorObs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_SensorName
       value: RayPerceptionSensor3
       objectReference: {fileID: 0}
+    - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 2f1fdefcd1e3b174886a6050eb024d98,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6095865175542604692, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724835085130947695, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724835085130947695, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8554419585863795947, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
@@ -868,6 +994,11 @@ PrefabInstance:
     - target: {fileID: 8789039590297364219, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8875653854559405156, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -894,20 +1025,35 @@ PrefabInstance:
       propertyPath: area
       value: 
       objectReference: {fileID: 848991063255424910}
+    - target: {fileID: 710851228539740065, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: useVectorObs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_SensorName
       value: RayPerceptionSensor3
       objectReference: {fileID: 0}
+    - target: {fileID: 2933774389197670066, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_BehaviorType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_BrainParameters.VectorActionSpaceType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorObservationSize
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
@@ -922,6 +1068,11 @@ PrefabInstance:
     - target: {fileID: 3263877700965105983, guid: 995c18adc894d8c4a920e902b21d6dac,
         type: 3}
       propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6095865175542604692, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724835085130947695, guid: 995c18adc894d8c4a920e902b21d6dac,
@@ -988,6 +1139,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Agent(FoodGatherer)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8875653854559405156, guid: 995c18adc894d8c4a920e902b21d6dac,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

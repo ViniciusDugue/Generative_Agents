@@ -3037,6 +3037,339 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 662583815}
   m_CullTransparentMesh: 1
+--- !u!1001 &737534994
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586078874395450486, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Name
+      value: Food Gathering Environment (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347449914927322939, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2390824604027193218, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 3006752961040710018, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3054619297045050556, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: numFood
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 133.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4397606419888386251, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695406039603647981, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959639464672531040, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6166589747638525092, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6443532941715012671, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609137753410018976, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6702459159959184036, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098535344276694987, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266249552783017300, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362105846906468688, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627659841615510491, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715605818498587083, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800127713063762772, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2af4045fd7b01ba43a6a02eb1e828a67, type: 3}
 --- !u!1 &738240701
 GameObject:
   m_ObjectHideFlags: 0
@@ -3473,7 +3806,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bba52a4e6a5ac54785f389d53715e5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyAgents: []
   agents:
   - {fileID: 1220673574}
   listArea: []
@@ -3789,6 +4121,339 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1001 &1152856792
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586078874395450486, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Name
+      value: Food Gathering Environment (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347449914927322939, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2390824604027193218, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 3006752961040710018, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3054619297045050556, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: numFood
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 271.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4397606419888386251, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695406039603647981, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959639464672531040, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6166589747638525092, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6443532941715012671, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609137753410018976, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6702459159959184036, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098535344276694987, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266249552783017300, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362105846906468688, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627659841615510491, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715605818498587083, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800127713063762772, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2af4045fd7b01ba43a6a02eb1e828a67, type: 3}
 --- !u!1 &1158710399
 GameObject:
   m_ObjectHideFlags: 0
@@ -4639,6 +5304,339 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1324260943}
   m_CullTransparentMesh: 1
+--- !u!1001 &1343177745
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586078874395450486, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Name
+      value: Food Gathering Environment (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347449914927322939, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2390824604027193218, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 3006752961040710018, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3054619297045050556, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: numFood
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -141.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 138.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4397606419888386251, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695406039603647981, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959639464672531040, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6166589747638525092, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6443532941715012671, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609137753410018976, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6702459159959184036, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098535344276694987, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266249552783017300, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362105846906468688, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627659841615510491, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715605818498587083, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800127713063762772, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2af4045fd7b01ba43a6a02eb1e828a67, type: 3}
 --- !u!1 &1351545424
 GameObject:
   m_ObjectHideFlags: 0
@@ -7372,6 +8370,339 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872638504}
   m_CullTransparentMesh: 1
+--- !u!1001 &1873235972
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586078874395450486, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Name
+      value: Food Gathering Environment (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347449914927322939, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2390824604027193218, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 3006752961040710018, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3054619297045050556, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: numFood
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -142
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 272.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4397606419888386251, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695406039603647981, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959639464672531040, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6166589747638525092, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6443532941715012671, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609137753410018976, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6702459159959184036, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098535344276694987, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266249552783017300, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362105846906468688, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627659841615510491, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715605818498587083, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800127713063762772, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2af4045fd7b01ba43a6a02eb1e828a67, type: 3}
 --- !u!1 &1890413903
 GameObject:
   m_ObjectHideFlags: 0
@@ -8264,6 +9595,339 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2095174069}
   m_CullTransparentMesh: 1
+--- !u!1001 &2114436262
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 19779531842313873, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 192408203143466800, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 586078874395450486, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 635446035437166737, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Name
+      value: Food Gathering Environment (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 848991063255424910, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 999632658263677947, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1347449914927322939, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2390824604027193218, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652806504126742543, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 2975054781870327141, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 3006752961040710018, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3054619297045050556, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: numFood
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSpaceType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: 'm_BrainParameters.VectorActionSize.Array.data[0]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3190627547464564239, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.BranchSizes.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -138.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194050506208895514, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4397606419888386251, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4695406039603647981, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959639464672531040, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6166589747638525092, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6443532941715012671, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6609137753410018976, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6702459159959184036, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: fitnessScoreText
+      value: 
+      objectReference: {fileID: 1827198507}
+    - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 935938115}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8098535344276694987, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266249552783017300, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8362105846906468688, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8627659841615510491, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 8715605818498587083, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8800127713063762772, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_RayLayerMask.m_Bits
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2af4045fd7b01ba43a6a02eb1e828a67, type: 3}
 --- !u!1 &2120875626
 GameObject:
   m_ObjectHideFlags: 0
@@ -8633,6 +10297,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5449592451667052203, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6936319424211864830, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
         type: 3}
       propertyPath: fitnessScoreText
@@ -8643,6 +10317,26 @@ PrefabInstance:
       propertyPath: m_EnvironmentSettings
       value: 
       objectReference: {fileID: 935938115}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7110927182116838751, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654110784688956255, guid: 2af4045fd7b01ba43a6a02eb1e828a67,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8658,4 +10352,9 @@ SceneRoots:
   - {fileID: 935938114}
   - {fileID: 2068005736}
   - {fileID: 3288817141557948675}
+  - {fileID: 737534994}
+  - {fileID: 2114436262}
+  - {fileID: 1343177745}
+  - {fileID: 1152856792}
+  - {fileID: 1873235972}
   - {fileID: 217292207}

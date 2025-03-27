@@ -38,6 +38,10 @@ public class FoodGathererAgent : AgentBehavior
         if (useVectorObs)
         {
             var localVelocity = transform.InverseTransformDirection(m_AgentRb.velocity);
+            if( sensor == null)
+            {
+                Debug.Log("Shits null");
+            }
             sensor.AddObservation(localVelocity);
         }
     }
@@ -147,7 +151,14 @@ public class FoodGathererAgent : AgentBehavior
         }
     }
 
+    public void SetAgentScale()
+    {
+        float agentScale = m_ResetParams.GetWithDefault("agent_scale", 1.0f);
+        gameObject.transform.localScale = new Vector3(agentScale, agentScale, agentScale);
+    }
+
     public void SetResetParameters()
     {
+        SetAgentScale();
     }
 }
