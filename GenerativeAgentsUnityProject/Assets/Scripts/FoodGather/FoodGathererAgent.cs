@@ -42,10 +42,6 @@ public class FoodGathererAgent : AgentBehavior
     {
         // exhaustionRate = 2.0f;
         m_AgentRb = GetComponent<Rigidbody>();
-<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scripts/FoodGathererAgent.cs
-        // m_MyArea = area.GetComponent<FoodSpawner>();
-=======
->>>>>>> main:GenerativeAgentsUnityProject/Assets/Scripts/FoodGather/FoodGathererAgent.cs
         m_EnvironmentSettings = FindObjectOfType<EnvironmentSettings>();
         m_ResetParams = Academy.Instance.EnvironmentParameters;
         SetResetParameters();
