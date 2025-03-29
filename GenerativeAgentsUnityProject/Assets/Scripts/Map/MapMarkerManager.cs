@@ -4,12 +4,27 @@ using TMPro;
 
 public class MapMarkerManager : MonoBehaviour
 {
+    // // Nested class to store marker pairs for two different maps.
+    // public class MarkerPair
+    // {
+    //     public GameObject agentMarker;
+    //     public GameObject userMarker;
+
+    //     public MarkerPair(GameObject agentMarker, GameObject userMarker)
+    //     {
+    //         this.agentMarker = agentMarker;
+    //         this.userMarker = userMarker;
+    //     }
+    // }
+
     public Camera mapCamera;
     public RectTransform mapContainer;
 
     public GameObject agentMarkerPrefab;
     public GameObject enemyMarkerPrefab;
     public GameObject foodMarkerPrefab;
+
+    public GameObject foodSpawnPointMarkerPrefab;
 
     // Hardcoded map resolution - set to (700,700) or (225,225) as needed
     public Vector2 mapResolution = new Vector2(700, 700);
@@ -43,7 +58,6 @@ public class MapMarkerManager : MonoBehaviour
         // This will add markers for any objects with the given tags that don't already have a marker.
         AddMarkers(GameObject.FindGameObjectsWithTag("agent"), agentMarkerPrefab);
         AddMarkers(GameObject.FindGameObjectsWithTag("enemyAgent"), enemyMarkerPrefab);
-        AddMarkers(GameObject.FindGameObjectsWithTag("food"), foodMarkerPrefab);
     }
 
     private void AddMarkers(GameObject[] objects, GameObject prefab)
@@ -86,6 +100,60 @@ public class MapMarkerManager : MonoBehaviour
         {
             Destroy(markers[obj]);
             markers.Remove(obj);
+        }
+    }
+
+    // NEW: Method to register a discovered spawn point.
+    public void RegisterDiscoveredSpawnPoint(GameObject spawnPoint, string spawnType)
+    {
+        // Only register if a marker for this spawn point doesn't already exist.
+        if (!markers.ContainsKey(spawnPoint))
+        {
+            GameObject marker = null;
+            if (spawnType == "foodSpawn")
+            {
+                // Instantiate without specifying a parent, then set the parent explicitly.
+                marker = Instantiate(foodSpawnPointMarkerPrefab);
+                if (mapContainer != null)
+                {
+                    marker.transform.SetParent(mapContainer, false);
+                }
+                else
+                {
+                    Debug.LogError("mapContainer is not assigned in MapMarkerManager!");
+                }
+            }
+            
+            if (marker != null)
+            {
+                marker.name = spawnPoint.name + "_SpawnMarker";
+                markers[spawnPoint] = marker;
+                Debug.Log($"Registered discovered spawn point marker for '{spawnPoint.name}' with gametag '{spawnType}'. Parent: {marker.transform.parent.name}");
+            }
+            else
+            {
+                Debug.LogWarning("No marker prefab found for spawn type: " + spawnType);
+            }
+        }
+        else
+        {
+            Debug.Log($"Spawn point '{spawnPoint.name}' is already registered.");
+        }
+    }
+
+    public void RegisterDiscoveredFood(GameObject foodObject)
+    {
+        // Only register if a marker for this food isn't already present.
+        if (!markers.ContainsKey(foodObject))
+        {
+            GameObject marker = Instantiate(foodMarkerPrefab, mapContainer);
+            marker.name = foodObject.name + "_FoodMarker";
+            markers[foodObject] = marker;
+            Debug.Log($"Registered discovered food marker for '{foodObject.name}'.");
+        }
+        else
+        {
+            Debug.Log($"Food '{foodObject.name}' is already registered.");
         }
     }
 

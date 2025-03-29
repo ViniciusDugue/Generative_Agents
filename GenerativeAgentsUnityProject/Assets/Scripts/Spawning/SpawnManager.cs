@@ -44,6 +44,10 @@ public class SpawnManager : MonoBehaviour
 
     private MapMarkerManager markerManager;
 
+    public List<Transform> ActiveFoodSpawnPoints { get { return activeFoodSpawnPoints; } }
+    private Dictionary<Transform, List<GameObject>> foodSpawnMapping = new Dictionary<Transform, List<GameObject>>();
+
+
     [Header("Time Manager Reference")]
     public TimeManager timeManager;
 
@@ -158,12 +162,14 @@ public class SpawnManager : MonoBehaviour
         activeFoodSpawnPoints.Clear();
         int countToSelect = Mathf.Min(dailyActiveFoodSpawnCount, foodSpawnPoints.Count);
         List<Transform> tempList = new List<Transform>(foodSpawnPoints);
+
         for (int i = 0; i < countToSelect; i++)
         {
             int index = Random.Range(0, tempList.Count);
             activeFoodSpawnPoints.Add(tempList[index]);
             tempList.RemoveAt(index);
         }
+
         foreach (Transform spawnPoint in foodSpawnPoints)
         {
             SphereCollider sc = spawnPoint.GetComponent<SphereCollider>();
@@ -180,12 +186,6 @@ public class SpawnManager : MonoBehaviour
                 }
             }
         }
-        string log = "Day " + timeManager.Days + " - Active Food Spawn Points: ";
-        foreach (Transform activePoint in activeFoodSpawnPoints)
-        {
-            log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
-        }
-        Debug.Log(log);
     }
 
     // Randomizes active enemy spawn points (daytime only).
@@ -275,6 +275,16 @@ public class SpawnManager : MonoBehaviour
                 GameObject newObj = Instantiate(prefab, randomPosition, Quaternion.identity);
                 spawnedList.Add(newObj);
 
+                // If it's food, store it in the mapping.
+                if (prefab == foodPrefab)
+                {
+                    if (!foodSpawnMapping.ContainsKey(point))
+                    {
+                        foodSpawnMapping[point] = new List<GameObject>();
+                    }
+                    foodSpawnMapping[point].Add(newObj);
+                }
+
                 if (prefab == agentPrefab)
                 {
                     BehaviorManager behaviorManager = newObj.GetComponent<BehaviorManager>() 
@@ -296,8 +306,11 @@ public class SpawnManager : MonoBehaviour
                 }
                 else
                 {
-                    // Register marker for enemies and food.
-                    markerManager?.RegisterMarker(newObj);
+                    // Register marker for enemies only; skip food to wait for discovery.
+                    if (prefab != foodPrefab)
+                    {
+                        markerManager?.RegisterMarker(newObj);
+                    }
                 }
 
                 totalSpawned++;
@@ -305,6 +318,11 @@ public class SpawnManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public Dictionary<Transform, List<GameObject>> FoodSpawnMapping
+    {
+        get { return foodSpawnMapping; }
     }
 
     // Spawns agents at the central hub (Habitat).

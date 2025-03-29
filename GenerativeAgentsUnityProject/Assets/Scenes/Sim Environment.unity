@@ -3431,6 +3431,8 @@ MonoBehaviour:
     type: 3}
   foodMarkerPrefab: {fileID: 2576113170972691007, guid: 6a5722ef3f4e9824a9874fc7599112b9,
     type: 3}
+  foodSpawnPointMarkerPrefab: {fileID: 7726337879876815179, guid: 7fb84dab4bdb4e14597f10fe38092e05,
+    type: 3}
   mapResolution: {x: 225, y: 225}
 --- !u!1 &396934360
 GameObject:
@@ -15475,7 +15477,9 @@ MonoBehaviour:
     type: 3}
   enemyMarkerPrefab: {fileID: 1174300385508847463, guid: d3b2c3a7f342c9a40a524fdccc370f2b,
     type: 3}
-  foodMarkerPrefab: {fileID: 2576113170972691007, guid: 6a5722ef3f4e9824a9874fc7599112b9,
+  foodMarkerPrefab: {fileID: 5119823827849170261, guid: 5987350577ba2244892486ebafcfcec7,
+    type: 3}
+  foodSpawnPointMarkerPrefab: {fileID: 2399544487940202852, guid: d8c9fa9951302d64db2b95b24aac52bb,
     type: 3}
   mapResolution: {x: 700, y: 700}
 --- !u!1 &1843151015
@@ -16155,8 +16159,8 @@ MonoBehaviour:
     type: 3}
   agentPrefab: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
     type: 3}
-  maxFood: 0
-  maxEnemies: 15
+  maxFood: 10
+  maxEnemies: 5
   maxAgents: 1
   spawnHeightOffset: 0
   foodSpawnRadius: 8
@@ -16727,6 +16731,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -2325263815777301736, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666538100298051283, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 1841426132986401358, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_EnvironmentSettings
@@ -16785,11 +16799,21 @@ PrefabInstance:
     - target: {fileID: 6918375715167313049, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6918375715167313049, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7518629946175017511, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887430557503516784, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
@@ -16800,7 +16824,7 @@ PrefabInstance:
     - target: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
