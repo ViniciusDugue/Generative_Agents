@@ -101,13 +101,45 @@ public class Habitat : MonoBehaviour
     //     }
     // }
 
-    // Draw a visual representation of the central hub.
-    private void OnDrawGizmos()
+    // Draw a visual representation of the central hub and spawn points.
+private void OnDrawGizmos()
+{
+    // Draw the central hub (cyan).
+    if (centralHubPoint != null)
     {
-        if (centralHubPoint != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawSphere(centralHubPoint.position, 1f);
-        }
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(centralHubPoint.position, 1f);
     }
+    
+    // Draw agent spawn points in blue.
+    GameObject[] agentSpawns = GameObject.FindGameObjectsWithTag("agentSpawn");
+    foreach (GameObject spawn in agentSpawns)
+    {
+        SphereCollider sc = spawn.GetComponent<SphereCollider>();
+        float radius = (sc != null) ? sc.radius : 1f;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(spawn.transform.position, radius);
+    }
+
+    // Draw enemy spawn points in red.
+    GameObject[] enemySpawns = GameObject.FindGameObjectsWithTag("enemySpawn");
+    foreach (GameObject spawn in enemySpawns)
+    {
+        SphereCollider sc = spawn.GetComponent<SphereCollider>();
+        float radius = (sc != null) ? sc.radius : 1f;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(spawn.transform.position, radius);
+    }
+
+    // Draw food spawn points in green.
+    GameObject[] foodSpawns = GameObject.FindGameObjectsWithTag("foodSpawn");
+    foreach (GameObject spawn in foodSpawns)
+    {
+        SphereCollider sc = spawn.GetComponent<SphereCollider>();
+        float radius = (sc != null) ? sc.radius : 1f;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(spawn.transform.position, radius);
+    }
+}
+
 }

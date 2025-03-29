@@ -17,10 +17,9 @@ public class BehaviorManager : MonoBehaviour
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
     private Coroutine exhaustionCoroutine;
-    private Coroutine enemyBufferCoroutine;
-
+    private bool mapDataExist = false;
     private bool _updateLLM = false;
-    public delegate void updateLLMBoolChangedHandler(int agentID);
+    public delegate void updateLLMBoolChangedHandler(int agentID, bool mapData);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
@@ -55,7 +54,7 @@ public class BehaviorManager : MonoBehaviour
                 if (_updateLLM) // Only trigger when set to true
                 {
                     // Debug.Log($"Invoking OnUpdateLLM for Agent {agentID}");
-                    OnUpdateLLM?.Invoke(agentID);
+                    OnUpdateLLM?.Invoke(agentID, mapDataExist);
                 }
             }
         }
@@ -124,13 +123,20 @@ public class BehaviorManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.R)) // Example: Manual trigger of LLM update
         {
-            UpdateLLM = true;
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
 
-            if (UpdateLLM && mapEncoder != null)
+            if (mapEncoder != null && mapEncoder.isActiveAndEnabled)
             {
-                mapEncoder.CaptureAndSendMap(agentID);
+                // Set Boolean Listeners to True
+                mapDataExist = true;
+                UpdateLLM = true;
                 Debug.Log($"Map captured and sent by Agent {agentID}");
+            }
+            else
+            {
+                mapDataExist = true;
+                UpdateLLM = true;
+                Debug.Log($"No Map was captured by Agent {agentID}");
             }
 
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
@@ -212,7 +218,7 @@ public class BehaviorManager : MonoBehaviour
             {
                 // Parse location values safely
                 float x = locationDict["x"].ToObject<float>();
-                float y = locationDict["y"].ToObject<float>();
+                float y = this.transform.position.y; // Use the current y position
                 float z = locationDict["z"].ToObject<float>();
 
                 // Convert to Vector3
@@ -220,9 +226,10 @@ public class BehaviorManager : MonoBehaviour
                 Debug.Log($"Target Location: {targetLocation}");
 
                 // Assign target position correctly
-                if (behaviors.ContainsKey("MoveBehavior") && behaviors["MoveBehavior"] is MoveBehavior moveBehavior)
+                if (behaviors.ContainsKey("MoveBehavior"))
                 {
-                    moveBehavior.target = targetLocation;
+                    MoveBehavior moveBehavior = (MoveBehavior)behaviors["MoveBehavior"];
+                    moveBehavior.setTarget(targetLocation);
                 }
             }
             catch (Exception e)
@@ -254,17 +261,12 @@ public class BehaviorManager : MonoBehaviour
     {
         while (true)
         {
-            if (currentAgentBehavior != null)  // ✅ Added Null Check
-            {
-                exhaustion += 1;  // Example logic
-                // Debug.Log($"Agent {agentID} exhaustion: {exhaustion}");
-            }
-            else
-            {
-                Debug.LogWarning($"Agent {agentID} has no current behavior assigned.");
-            }
 
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(1.0f);
+            if ((exhaustion + currentAgentBehavior.exhaustionRate) > 0)
+                exhaustion += currentAgentBehavior.exhaustionRate; 
+            else // Ensure exhaustion does not go below 0
+               exhaustion = 0; 
         }
     }
 
