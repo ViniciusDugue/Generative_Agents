@@ -1055,10 +1055,11 @@ GameObject:
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
   - component: {fileID: 3879892247664422788}
+  - component: {fileID: 7039869131580968681}
   - component: {fileID: 1841426132986401358}
-  - component: {fileID: 2387474044386642822}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
+  - component: {fileID: 4101373293661529012}
   - component: {fileID: 4155786854146672970}
   - component: {fileID: 5348884404428321261}
   - component: {fileID: 7887430557503516784}
@@ -1206,6 +1207,22 @@ MonoBehaviour:
   exhaustion: 0
   defaultBehavior: {fileID: 1841426132986401358}
   currentAgentBehavior: {fileID: 0}
+--- !u!114 &7039869131580968681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c4cddf4e1a5ce4899f142631ad628c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentID: 1
+  exhaustion: 0
+  defaultBehavior: {fileID: 1841426132986401358}
+  currentAgentBehavior: {fileID: 0}
 --- !u!114 &1841426132986401358
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1236,27 +1253,6 @@ MonoBehaviour:
   contribute: 1
   useVectorObs: 0
   useVectorFrozenFlag: 0
---- !u!114 &2387474044386642822
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 401760740b8eb644b9d1b1120528ec23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  exhaustionRate: 0.1
-  fleeRadius: 10
-  fleeSpeed: 5
-  predatorTag: enemyAgent
-  smoothFactor: 0.1
 --- !u!114 &8322022180366706281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1292,8 +1288,30 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   exhaustionRate: 0.5
-  agent: {fileID: 0}
+  agent: {fileID: 3081395510317380987}
   target: {x: 0, y: 0, z: 0}
+--- !u!114 &4101373293661529012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3064805454212f24080ae7feea1c9ada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.1
+  fleeRadius: 10
+  fleeSpeed: 5
+  predatorTag: enemyAgent
+  smoothFactor: 0.1
+  rotationSpeed: 5
 --- !u!114 &4155786854146672970
 MonoBehaviour:
   m_ObjectHideFlags: 0

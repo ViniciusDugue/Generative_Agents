@@ -27,7 +27,8 @@ public class BehaviorManager : MonoBehaviour
     private float nextRaycastTime = 0.0f;
     private float lastEnemyLogTime = -100f;
     private float enemyLogInterval = 2f;
-    private bool wasEnemyDetected = false;      // Tracks whether an enemy was detected last frame
+    private bool enemyDetected = false;     // Tracks whether an enemy is detected this frame
+    private bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
     private float lastLLMPromptTime = 0f;         // Time of the last LLM prompt
     private float llmPromptInterval = 3f;         // When no enemy, prompt every 3 seconds
 
@@ -36,7 +37,7 @@ public class BehaviorManager : MonoBehaviour
     [HideInInspector]
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
     // NEW: Time tracking for enemy detection.
-    private float lastEnemyDetectionTime = -100f;
+    private float lastEnemyDetectionTime;
     // You can adjust this radius as needed.
     private float enemyDetectionRadius = 10f;
     // The buffer time after which we consider that no enemy has been detected.
@@ -107,48 +108,9 @@ public class BehaviorManager : MonoBehaviour
         // CheckEnemyDetection();
 
         // Determine whether an enemy is currently detected.
-        bool enemyDetected = HasDetectedEnemyRecently();
-
-        if (enemyDetected)
-        {
-            // If enemy just entered (i.e. was not detected in the previous frame), prompt instantly.
-            if (!wasEnemyDetected)
-            {
-                Debug.Log("Enemy just entered the radius. Prompting LLM instantly.");
-                UpdateLLM = true;
-                lastLLMPromptTime = Time.time;
-            }
-            // Mark that an enemy is detected.
-            wasEnemyDetected = true;
-        }
-        else
-        {
-            // If an enemy was detected in the previous frame but now is gone,
-            // wait until the buffer period (2.5 sec) has passed before prompting.
-            if (wasEnemyDetected)
-            {
-                if (Time.time - lastEnemyDetectionTime >= enemyDetectionBuffer)
-                {
-                    if (Time.time - lastLLMPromptTime >= llmPromptInterval)
-                    {
-                        Debug.Log("Enemy recently left (buffer passed). Prompting LLM (every 3 sec).");
-                        UpdateLLM = true;
-                        lastLLMPromptTime = Time.time;
-                    }
-                }
-            }
-            else
-            {
-                // When no enemy is detected at all, prompt every 3 seconds.
-                if (Time.time - lastLLMPromptTime >= llmPromptInterval)
-                {
-                    Debug.Log("No enemy present. Prompting LLM every 3 seconds.");
-                    UpdateLLM = true;
-                    lastLLMPromptTime = Time.time;
-                }
-            }
-            wasEnemyDetected = false;
-        }
+        enemyPreviousDetected = HasDetectedEnemyRecently();
+        esclatedDetectedEnemyToLLM(enemyPreviousDetected);
+        
 
         // (The rest of your Update code for manual behavior switching remains unchanged)
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
@@ -175,42 +137,35 @@ public class BehaviorManager : MonoBehaviour
     }
 
 
-    private IEnumerator EnemyBufferCheck()
-    {
-        // Wait for the enemy detection buffer period.
-        yield return new WaitForSeconds(enemyDetectionBuffer);
-
-        // After waiting, if no enemy was detected in the meantime, trigger the update.
-        if (!HasDetectedEnemyRecently())
-        {
-            Debug.Log("No enemy detected for the buffer period. Triggering LLM update for behavior switch.");
-            UpdateLLM = true;
-        }
-
-        // Reset the coroutine reference.
-        enemyBufferCoroutine = null;
-    }
-
-
-    // Call this function to update the last time an enemy was seen.
-    private void CheckEnemyDetection()
-    {
-        Collider[] enemyColliders = Physics.OverlapSphere(transform.position, enemyDetectionRadius);
-        foreach (Collider col in enemyColliders)
-        {
-            if (col.CompareTag("enemyAgent"))
-            {
-                lastEnemyDetectionTime = Time.time;
-                // You can log for debugging:
-                return; // Exit after the first enemy is found.
-            }
-        }
-    }
-
     // Returns true if an enemy was detected in the last enemyDetectionBuffer seconds.
     public bool HasDetectedEnemyRecently()
     {
         return (Time.time - lastEnemyDetectionTime) <= enemyDetectionBuffer;
+    }
+    
+    private void esclatedDetectedEnemyToLLM(bool enemyPreviousDetected) {
+        if (enemyDetected && !enemyPreviousDetected)
+        {
+            Debug.Log("Enemy just entered the radius. Prompting LLM instantly.");
+            UpdateLLM = true;
+            // Mark that an enemy is detected.
+            enemyPreviousDetected = true;
+        }
+        // If an enemy was detected in the previous frame but now is gone,
+        // wait until the buffer period (2.5 sec) has passed before prompting. 
+        else if (!enemyDetected && enemyPreviousDetected) 
+        {
+            if (Time.time - lastEnemyDetectionTime >= enemyDetectionBuffer)
+            {
+                
+                Debug.Log("Enemy recently left (buffer passed). Prompting LLM.");
+                UpdateLLM = true;
+                enemyPreviousDetected = false;
+                // lastLLMPromptTime = Time.time;
+                
+            }
+            
+        }
     }
 
     public void InitializeAgent()
@@ -343,6 +298,7 @@ public class BehaviorManager : MonoBehaviour
         var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
         int lengthOfRayOutputs = rayOutputs.Length;
         float maxDetectionDistance = 20.5f; // Set your max detection distance here
+        enemyDetected = false;
 
         // Alternating Ray Order: it gives an order of
         // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
@@ -357,8 +313,9 @@ public class BehaviorManager : MonoBehaviour
                     Debug.Log("Food location found!");
                 }
             }
-            if (goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
+            if (goHit != null && goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
             {
+                enemyDetected = true;
                 lastEnemyDetectionTime = Time.time;
                 Debug.Log($"Enemies Detected by Agent {agentID}!");
             }

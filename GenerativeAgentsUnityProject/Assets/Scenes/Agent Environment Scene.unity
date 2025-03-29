@@ -670,6 +670,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyAgent
       objectReference: {fileID: 0}
+    - target: {fileID: 659702081715010919, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9222359993837190118, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -683,7 +688,7 @@ PrefabInstance:
     - target: {fileID: 9222359993837190118, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -41.9
       objectReference: {fileID: 0}
     - target: {fileID: 9222359993837190118, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
@@ -1885,6 +1890,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnemyAgent (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 659702081715010919, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9222359993837190118, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
@@ -3614,6 +3624,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyAgent (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 659702081715010919, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9222359993837190118, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4049,10 +4064,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4101373293661529012, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4361704349902786676, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6918375715167313049, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
@@ -4072,7 +4092,7 @@ PrefabInstance:
     - target: {fileID: 8322022180366706281, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4099,6 +4119,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnemyAgent (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 659702081715010919, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9222359993837190118, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
@@ -5195,6 +5220,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EnemyAgent (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 659702081715010919, guid: f07e5f9a90e6c094c809fe384b89b525,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9222359993837190118, guid: f07e5f9a90e6c094c809fe384b89b525,
         type: 3}
