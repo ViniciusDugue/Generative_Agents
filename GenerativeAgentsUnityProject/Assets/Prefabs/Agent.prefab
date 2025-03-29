@@ -1054,12 +1054,11 @@ GameObject:
   - component: {fileID: 3586588434944278327}
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
-  - component: {fileID: 3879892247664422788}
   - component: {fileID: 7039869131580968681}
   - component: {fileID: 1841426132986401358}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
-  - component: {fileID: 4101373293661529012}
+  - component: {fileID: 8813810141994640850}
   - component: {fileID: 4155786854146672970}
   - component: {fileID: 5348884404428321261}
   - component: {fileID: 7887430557503516784}
@@ -1194,22 +1193,6 @@ MonoBehaviour:
   m_UseChildActuators: 1
   m_DeterministicInference: 0
   m_ObservableAttributeHandling: 0
---- !u!114 &3879892247664422788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c4cddf4e1a5ce4899f142631ad628c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentID: 1
-  exhaustion: 0
-  defaultBehavior: {fileID: 1841426132986401358}
-  currentAgentBehavior: {fileID: 0}
 --- !u!114 &7039869131580968681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1291,8 +1274,30 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   exhaustionRate: 0.5
-  agent: {fileID: 0}
+  agent: {fileID: 3081395510317380987}
   target: {x: 105.93, y: 7.1, z: 107.9}
+--- !u!114 &8813810141994640850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1fb8dbb65075143a96fb5724755016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.1
+  fleeRadius: 10
+  fleeSpeed: 5
+  predatorTag: enemyAgent
+  smoothFactor: 0.1
+  rotationSpeed: 5
 --- !u!114 &4155786854146672970
 MonoBehaviour:
   m_ObjectHideFlags: 0
