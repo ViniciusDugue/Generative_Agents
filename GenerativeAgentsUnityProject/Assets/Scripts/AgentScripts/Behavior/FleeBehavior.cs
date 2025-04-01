@@ -9,7 +9,7 @@ using Unity.MLAgents.Sensors;
 /// the agent faces away from the predator while fleeing, and once no predator is detected, the agent
 /// rotates to look back at the last predator.
 /// </summary>
-public class FleeBehaviorAgent : AgentBehavior
+public class FleeBehavior : AgentBehavior
 {
     [Header("Flee Settings")]
     [Tooltip("The radius within which hostile NPCs will trigger the flee behavior.")]
