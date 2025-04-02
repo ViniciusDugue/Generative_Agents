@@ -61,7 +61,7 @@ public class Client : MonoBehaviour
             GameObject agent = agentDict[agentID];
             MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
 
-            if (mapEncoder != null && mapDataExist)
+            if (mapEncoder != null)
             {
                 // mapEncoder.CaptureAndSendMap(agentID);
                 await SendAgentData(agent, mapDataExist); // Wait for data to be sent

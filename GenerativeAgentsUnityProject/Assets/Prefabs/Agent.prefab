@@ -1344,7 +1344,6 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - Default
   m_RaysPerDirection: 0
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
@@ -1376,7 +1375,6 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - Default
   m_RaysPerDirection: 0
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
@@ -1389,7 +1387,7 @@ MonoBehaviour:
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 1
+  m_StartVerticalOffset: 2
   m_EndVerticalOffset: 6
 --- !u!114 &-2325263815777301736
 MonoBehaviour:
@@ -1408,7 +1406,6 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - Default
   m_RaysPerDirection: 30
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5

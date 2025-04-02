@@ -25,7 +25,8 @@ public class BehaviorManager : MonoBehaviour
     private float raycastInterval = 0.2f; // Time between raycasts
     private float nextRaycastTime = 0.0f;
     public bool enemyCurrentlyDetected = false;     // Tracks whether an enemy is detected this frame
-    private bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
+    public bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
+    public Transform enemyTransform;
     private float enemyOutOfRangeStartTime = -1f;
     
 
@@ -292,33 +293,37 @@ public class BehaviorManager : MonoBehaviour
     // check raycast hit info
     private void checkRayCast()
     {
-        RayPerceptionSensorComponent3D m_rayPerceptionSensorComponent3D = GetComponent<RayPerceptionSensorComponent3D>();
+        RayPerceptionSensorComponent3D[] rayPerceptionSensorComponents = GetComponents<RayPerceptionSensorComponent3D>();
 
-        var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
-        int lengthOfRayOutputs = rayOutputs.Length;
         float maxDetectionDistance = 20.5f; // Set your max detection distance here
         enemyCurrentlyDetected = false;
 
-        // Alternating Ray Order: it gives an order of
-        // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
-        // index 0 indicates the center of raycasts
-        for (int i = 0; i < lengthOfRayOutputs; i++)
+        foreach (var m_rayPerceptionSensorComponent3D in rayPerceptionSensorComponents)
         {
-            GameObject goHit = rayOutputs[i].HitGameObject;
-            if (goHit != null && goHit.tag == "foodSpawn")
+            var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
+            int lengthOfRayOutputs = rayOutputs.Length;
+
+            // Alternating Ray Order: it gives an order of
+            // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
+            // index 0 indicates the center of raycasts
+            for (int i = 0; i < lengthOfRayOutputs; i++)
             {
-                if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                GameObject goHit = rayOutputs[i].HitGameObject;
+                if (goHit != null && goHit.tag == "foodSpawn")
                 {
-                    Debug.Log("Food location found!");
+                    if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                    {
+                        Debug.Log("Food location found!");
+                    }
+                }
+                if (goHit != null && goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
+                {
+                    enemyTransform = goHit.transform;
+                    enemyCurrentlyDetected = true;
+                    // lastEnemyDetectionTime = Time.time;
+                    Debug.Log($"Enemies Detected by Agent {agentID}!");
                 }
             }
-            if (goHit != null && goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
-            {
-                enemyCurrentlyDetected = true;
-                // lastEnemyDetectionTime = Time.time;
-                Debug.Log($"Enemies Detected by Agent {agentID}!");
-            }
-
         }
     }
 }

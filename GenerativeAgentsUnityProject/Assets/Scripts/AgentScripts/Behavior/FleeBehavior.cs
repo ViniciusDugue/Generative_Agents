@@ -1,125 +1,86 @@
 using UnityEngine;
-using Unity.MLAgents;
-using Unity.MLAgents.Actuators;
-using Unity.MLAgents.Sensors;
+using UnityEngine.AI;
 
 /// <summary>
-/// This behavior makes the agent flee from any hostile NPCs (predators) within a specified radius.
-/// It uses smoothing to prevent abrupt changes in direction and updates the agent's rotation so that
-/// the agent faces away from the predator while fleeing, and once no predator is detected, the agent
-/// rotates to look back at the last predator.
+/// This behavior makes the agent flee from enemies detected by the BehaviorManager,
+/// ensuring that the destination remains within the valid NavMesh (i.e., within the arena).
+/// When an enemy is in view, the agent calculates a flee destination directly opposite the enemy,
+/// samples the NavMesh to get a valid position, and sets that as its destination.
+/// If the enemy is no longer in view but was seen recently, the agent rotates to face the enemy’s last known location.
+/// A gizmo is drawn in the Scene view to show the computed flee destination.
 /// </summary>
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(BehaviorManager))]
 public class FleeBehavior : AgentBehavior
 {
     [Header("Flee Settings")]
-    [Tooltip("The radius within which hostile NPCs will trigger the flee behavior.")]
-    public float fleeRadius = 10f;
-    [Tooltip("The speed at which the agent flees.")]
-    public float fleeSpeed = 5f;
-    [Tooltip("The tag used to identify hostile NPCs.")]
-    public string predatorTag = "enemyAgent";
-    
-    [Tooltip("Smoothing factor for flee direction adjustments (0 = no change, 1 = instant change).")]
-    [Range(0f, 1f)]
-    public float smoothFactor = 0.1f;
+    [Tooltip("How far to flee from the enemy.")]
+    public float fleeDistance = 10f;
 
-    [Tooltip("Speed at which the agent rotates toward its target direction.")]
+    [Tooltip("Rotation speed to look at the last known enemy location.")]
     public float rotationSpeed = 5f;
 
-    private Rigidbody rb;
-    // Store the current flee direction for smoothing
-    private Vector3 currentFleeDirection = Vector3.zero;
-    // Store the closest predator (or the last one seen)
-    private Transform lastPredator;
+    // Maximum distance to sample for a valid NavMesh position
+    public float sampleDistance = 2f;
 
-    public override void Initialize()
+    private NavMeshAgent navMeshAgent;
+    private BehaviorManager behaviorManager;
+    private Transform lastEnemy;
+    private Vector3 fleeDestination;
+
+    private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            Debug.LogError("FleeBehaviorAgent requires a Rigidbody on the same GameObject.");
-        }
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        behaviorManager = GetComponent<BehaviorManager>();
+
+        if (navMeshAgent == null)
+            Debug.LogError("FleeBehavior requires a NavMeshAgent component.");
+        if (behaviorManager == null)
+            Debug.LogError("FleeBehavior requires a BehaviorManager component.");
     }
 
-    // Instead of using OnActionReceived, we use Update to continuously check for predators.
     private void Update()
     {
-        FleeFromPredators();
-    }
-
-    private void FleeFromPredators()
-    {
-        if (rb == null) return;
-
-        // Look for predators within the fleeRadius.
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, fleeRadius);
-        Vector3 targetFleeDirection = Vector3.zero;
-        int predatorsFound = 0;
-        Transform closestPredator = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (Collider col in hitColliders)
+        // Check the detection status from BehaviorManager.
+        if (behaviorManager.enemyCurrentlyDetected && behaviorManager.enemyTransform != null)
         {
-            if (col.CompareTag(predatorTag))
+            // Update the last known enemy.
+            lastEnemy = behaviorManager.enemyTransform;
+            // Calculate the flee direction (directly away from the enemy).
+            Vector3 fleeDirection = (transform.position - lastEnemy.position).normalized;
+            Vector3 potentialDestination = transform.position + fleeDirection * fleeDistance;
+
+            // Ensure the flee destination is within the nav mesh area.
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(potentialDestination, out hit, sampleDistance, NavMesh.AllAreas))
             {
-                float distance = Vector3.Distance(transform.position, col.transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestPredator = col.transform;
-                }
-
-                Vector3 away = transform.position - col.transform.position;
-                if (away.magnitude > 0)
-                {
-                    targetFleeDirection += away.normalized;
-                    predatorsFound++;
-                }
+                fleeDestination = hit.position;
             }
-        }
-
-        if (predatorsFound > 0)
-        {
-            // Calculate the average flee direction.
-            targetFleeDirection /= predatorsFound;
-            targetFleeDirection.Normalize();
-
-            // Smoothly interpolate current flee direction toward the target direction.
-            currentFleeDirection = Vector3.Lerp(currentFleeDirection, targetFleeDirection, smoothFactor);
-
-            // Set the velocity based on the flee direction.
-            rb.velocity = currentFleeDirection * fleeSpeed;
-
-            // Rotate to face the flee direction.
-            Quaternion targetRotation = Quaternion.LookRotation(currentFleeDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-
-            // Update the last predator reference.
-            lastPredator = closestPredator;
-        }
-        else
-        {
-            // No predators detected: smoothly decelerate.
-            rb.velocity = Vector3.Lerp(rb.velocity, Vector3.zero, smoothFactor);
-            currentFleeDirection = Vector3.zero;
-
-            // If we have a last predator reference, rotate to face it.
-            if (lastPredator != null)
+            else
             {
-                Vector3 directionToEnemy = lastPredator.position - transform.position;
-                if (directionToEnemy != Vector3.zero)
-                {
-                    Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-                }
+                // If no valid position is found nearby, fall back to the potential destination.
+                fleeDestination = potentialDestination;
             }
+            navMeshAgent.SetDestination(fleeDestination);
+        }
+        else if (behaviorManager.enemyPreviousDetected && lastEnemy != null)
+        {
+            // Enemy is not in view now, but was seen recently.
+            // Rotate the agent to face the last known enemy location.
+            Vector3 directionToEnemy = (lastEnemy.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
         }
     }
 
-    // Optional: visualize the flee radius in the Scene view.
-    private void OnDrawGizmosSelected()
+    // Visualize the flee destination in the Scene view.
+    private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, fleeRadius);
+        if (navMeshAgent != null && navMeshAgent.hasPath)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(transform.position, fleeDestination);
+            Gizmos.DrawSphere(fleeDestination, 0.5f);
+        }
     }
 }
