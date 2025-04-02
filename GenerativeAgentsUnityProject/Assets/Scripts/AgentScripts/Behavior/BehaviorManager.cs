@@ -24,8 +24,11 @@ public class BehaviorManager : MonoBehaviour
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
     private float nextRaycastTime = 0.0f;
+    [HideInInspector]
     public bool enemyCurrentlyDetected = false;     // Tracks whether an enemy is detected this frame
+     [HideInInspector]
     public bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
+     [HideInInspector]
     public Transform enemyTransform;
     private float enemyOutOfRangeStartTime = -1f;
     
