@@ -24,9 +24,17 @@ public class BehaviorManager : MonoBehaviour
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
     private float nextRaycastTime = 0.0f;
+    public bool enemyCurrentlyDetected = false;     // Tracks whether an enemy is detected this frame
+    private bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
+    private float enemyOutOfRangeStartTime = -1f;
+    
+
+    
     
     [HideInInspector]
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
+    // NEW: Time tracking for enemy detection.
+    private float enemyDetectionBuffer = 5f;
 
 
     public bool UpdateLLM
@@ -78,18 +86,27 @@ public class BehaviorManager : MonoBehaviour
         // Ensure current AgentBehavior is not null
         if (currentAgentBehavior == null)
         {
-            Debug.LogError("Current Agent AgentBehavior is null");
+            Debug.LogError("Current AgentBehavior is null");
             return;
         }
 
-        // Check raycasts periodically to increase Performance
+        // Check raycasts periodically to increase performance
         if (Time.time >= nextRaycastTime)
         {   
             checkRayCast();
             nextRaycastTime = Time.time + raycastInterval;
+            esclatedDetectedEnemyToLLM();
+            // enemyPreviousDetected = enemyCurrentlyDetected; 
         }
 
-        // Switch between behaviors using behavior names
+        // Update enemy detection.
+        // CheckEnemyDetection();
+
+        // Determine whether an enemy is currently detected.
+        
+        
+
+        // (The rest of your Update code for manual behavior switching remains unchanged)
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
             SwitchBehavior(GetFirstBehavior().GetType().Name);
@@ -98,7 +115,7 @@ public class BehaviorManager : MonoBehaviour
         {
             SwitchBehavior(GetNextBehaviorName());
         }
-        if (Input.GetKeyDown(KeyCode.R)) // Example: Switch to second behavior
+        if (Input.GetKeyDown(KeyCode.R)) // Example: Manual trigger of LLM update
         {
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
 
@@ -117,6 +134,40 @@ public class BehaviorManager : MonoBehaviour
             }
 
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
+        }
+    }
+
+    
+    private void esclatedDetectedEnemyToLLM() {
+        if (enemyCurrentlyDetected && !enemyPreviousDetected)
+        {
+            Debug.Log("Enemy just entered the radius. Prompting LLM instantly.");
+            // Mark that an enemy is detected.
+            enemyPreviousDetected = true;
+            UpdateLLM = true;
+            mapDataExist = true;
+        }
+        else if (enemyCurrentlyDetected && enemyPreviousDetected) 
+        {
+            enemyOutOfRangeStartTime = -1f;
+        }
+        // Enemy has just left detection
+        else if (!enemyCurrentlyDetected && enemyPreviousDetected && enemyOutOfRangeStartTime == -1f)
+        {
+            Debug.Log("Enemy no longer visible. Starting buffer timer.");
+            enemyOutOfRangeStartTime = Time.time;
+        }
+        // If an enemy was detected in the previous frame but now is gone,
+        // wait until the buffer period (2.5 sec) has passed before prompting. 
+        if (!enemyCurrentlyDetected && enemyPreviousDetected && (Time.time - enemyOutOfRangeStartTime) >= enemyDetectionBuffer) 
+        {       
+            Debug.Log("Enemy recently left (buffer passed). Prompting LLM.");
+            enemyPreviousDetected = false;
+            enemyOutOfRangeStartTime = -1f;
+            UpdateLLM = true;
+            mapDataExist = true;
+            // lastLLMPromptTime = Time.time;
+            
         }
     }
 
@@ -245,6 +296,8 @@ public class BehaviorManager : MonoBehaviour
 
         var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
         int lengthOfRayOutputs = rayOutputs.Length;
+        float maxDetectionDistance = 20.5f; // Set your max detection distance here
+        enemyCurrentlyDetected = false;
 
         // Alternating Ray Order: it gives an order of
         // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
@@ -259,6 +312,13 @@ public class BehaviorManager : MonoBehaviour
                     Debug.Log("Food location found!");
                 }
             }
+            if (goHit != null && goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
+            {
+                enemyCurrentlyDetected = true;
+                // lastEnemyDetectionTime = Time.time;
+                Debug.Log($"Enemies Detected by Agent {agentID}!");
+            }
+
         }
     }
 }
