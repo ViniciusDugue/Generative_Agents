@@ -149,6 +149,7 @@ public class Client : MonoBehaviour
         {
             agentID = agent.GetComponent<BehaviorManager>().agentID,
             health = 100,  // Placeholder, replace with actual health
+            enemyCurrentlyDetected = agent.GetComponent<BehaviorManager>().enemyCurrentlyDetected,
             exhaustion = agent.GetComponent<BehaviorManager>().exhaustion,
             currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
             currentPosition = new { x = position.x, z = position.z },

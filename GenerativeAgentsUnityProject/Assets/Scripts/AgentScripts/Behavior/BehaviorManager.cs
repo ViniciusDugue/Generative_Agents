@@ -24,9 +24,7 @@ public class BehaviorManager : MonoBehaviour
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
     private float nextRaycastTime = 0.0f;
-    private float lastEnemyLogTime = -100f;
-    private float enemyLogInterval = 2f;
-    private bool enemyCurrentlyDetected = false;     // Tracks whether an enemy is detected this frame
+    public bool enemyCurrentlyDetected = false;     // Tracks whether an enemy is detected this frame
     private bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
     private float enemyOutOfRangeStartTime = -1f;
     
@@ -36,10 +34,6 @@ public class BehaviorManager : MonoBehaviour
     [HideInInspector]
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
     // NEW: Time tracking for enemy detection.
-    private float lastEnemyDetectionTime;
-    // You can adjust this radius as needed.
-    private float enemyDetectionRadius = 10f;
-    // The buffer time after which we consider that no enemy has been detected.
     private float enemyDetectionBuffer = 5f;
 
 
@@ -148,9 +142,10 @@ public class BehaviorManager : MonoBehaviour
         if (enemyCurrentlyDetected && !enemyPreviousDetected)
         {
             Debug.Log("Enemy just entered the radius. Prompting LLM instantly.");
-            UpdateLLM = true;
             // Mark that an enemy is detected.
             enemyPreviousDetected = true;
+            UpdateLLM = true;
+            mapDataExist = true;
         }
         else if (enemyCurrentlyDetected && enemyPreviousDetected) 
         {
@@ -167,9 +162,10 @@ public class BehaviorManager : MonoBehaviour
         if (!enemyCurrentlyDetected && enemyPreviousDetected && (Time.time - enemyOutOfRangeStartTime) >= enemyDetectionBuffer) 
         {       
             Debug.Log("Enemy recently left (buffer passed). Prompting LLM.");
-            UpdateLLM = true;
             enemyPreviousDetected = false;
             enemyOutOfRangeStartTime = -1f;
+            UpdateLLM = true;
+            mapDataExist = true;
             // lastLLMPromptTime = Time.time;
             
         }
