@@ -1064,7 +1064,6 @@ GameObject:
   - component: {fileID: 7887430557503516784}
   - component: {fileID: 7518629946175017511}
   - component: {fileID: -2325263815777301736}
-  - component: {fileID: 5754602932285685988}
   - component: {fileID: 6572964766931281634}
   - component: {fileID: 2381536804232584231}
   - component: {fileID: 3734130453397303237}
@@ -1346,7 +1345,7 @@ MonoBehaviour:
   - agent
   - wall
   - Default
-  m_RaysPerDirection: 40
+  m_RaysPerDirection: 0
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
   m_RayLength: 70
@@ -1358,7 +1357,7 @@ MonoBehaviour:
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0
+  m_StartVerticalOffset: 1
   m_EndVerticalOffset: 0
 --- !u!114 &7518629946175017511
 MonoBehaviour:
@@ -1378,7 +1377,7 @@ MonoBehaviour:
   - agent
   - wall
   - Default
-  m_RaysPerDirection: 30
+  m_RaysPerDirection: 0
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
   m_RayLength: 70
@@ -1390,8 +1389,8 @@ MonoBehaviour:
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0
-  m_EndVerticalOffset: 5
+  m_StartVerticalOffset: 1
+  m_EndVerticalOffset: 6
 --- !u!114 &-2325263815777301736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1423,23 +1422,7 @@ MonoBehaviour:
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
-  m_EndVerticalOffset: -1.5
---- !u!114 &5754602932285685988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7042152a288c6e54c9e82fbb531364a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapCamera: {fileID: 0}
-  mapWidth: 200
-  mapHeight: 200
-  serverUrl: http://127.0.0.1:12345/map
+  m_EndVerticalOffset: -3
 --- !u!114 &6572964766931281634
 MonoBehaviour:
   m_ObjectHideFlags: 0
