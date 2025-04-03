@@ -97,6 +97,7 @@ public class BehaviorManager : MonoBehaviour
 
         // Start Exhaustion counter
         StartExhaustionCoroutine();
+        StartCoroutine(pollLLM());
 
         // Get References
         agentHealth = GetComponent<AgentHealth>();
@@ -288,6 +289,35 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
+    private IEnumerator pollLLM()
+{
+    float interval = 10f;
+    float timer = interval;
+    bool lastUpdateLLM = UpdateLLM; // track the initial value
+
+    while (true)
+    {
+        // Check if the flag has changed since the last frame
+        if (lastUpdateLLM != UpdateLLM)
+        {
+            timer = interval;  // reset the timer on any change
+            lastUpdateLLM = UpdateLLM;
+        }
+        
+        // Countdown the timer
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
+        {
+            // If timer expires without interruption, set the flag to true.
+            UpdateLLM = true;
+            timer = interval;  // reset the timer after triggering
+            lastUpdateLLM = UpdateLLM; // update the last known value
+        }
+        
+        yield return null;
+    }
+}
+
 
     private string GetNextBehaviorName()
     {
@@ -357,6 +387,7 @@ public class BehaviorManager : MonoBehaviour
         - 10 * (agentHealth.maxHealth -agentHealth.currentHealth);
         return FitnessScore;
     }
+
 
     public void updateFoodCount() {
         foodCollected += 1;
