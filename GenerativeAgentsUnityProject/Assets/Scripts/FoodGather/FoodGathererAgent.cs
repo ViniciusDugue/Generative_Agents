@@ -38,6 +38,7 @@ public class FoodGathererAgent : AgentBehavior
 
     EnvironmentParameters m_ResetParams;
 
+    //initialize necessary parameters
     public override void Initialize()
     {
         // exhaustionRate = 2.0f;
@@ -47,6 +48,7 @@ public class FoodGathererAgent : AgentBehavior
         SetResetParameters();
     }
 
+    //collect observations from environment to feed as input for agent model
     public override void CollectObservations(VectorSensor sensor)
     {
         if (useVectorObs)
@@ -63,6 +65,7 @@ public class FoodGathererAgent : AgentBehavior
         }
     }
 
+    //changes agent color
     public Color32 ToColor(int hexVal)
     {
         var r = (byte)((hexVal >> 16) & 0xFF);
@@ -71,6 +74,7 @@ public class FoodGathererAgent : AgentBehavior
         return new Color32(r, g, b, 255);
     }
 
+    //agent model outputs/action buffers are turned into actions onto the environment
     public void MoveAgent(ActionBuffers actionBuffers)
     {
         m_Shoot = false;
@@ -191,6 +195,7 @@ public class FoodGathererAgent : AgentBehavior
         MoveAgent(actionBuffers);
     }
 
+    // user controlled actions for agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
@@ -214,6 +219,7 @@ public class FoodGathererAgent : AgentBehavior
         discreteActionsOut[0] = Input.GetKey(KeyCode.Space) ? 1 : 0;
     }
 
+    //reset agent parameters when new episode begins
     public override void OnEpisodeBegin()
     {   
         if(agentReset) { 
@@ -237,6 +243,7 @@ public class FoodGathererAgent : AgentBehavior
         }
     }
 
+    //on collision with food, give reward
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("food"))
@@ -270,6 +277,7 @@ public class FoodGathererAgent : AgentBehavior
 
     }
 
+    //laser for consuming food
     public void SetLaserLengths()
     {
         m_LaserLength = m_ResetParams.GetWithDefault("laser_length", 1.0f);

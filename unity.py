@@ -2,6 +2,11 @@ from dotenv import load_dotenv
 import openai
 from fastapi import FastAPI, HTTPException, Request
 import uvicorn
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
 from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
@@ -17,11 +22,16 @@ import logging
 import base64
 # Dictionary to store map data for each agent
 
+<<<<<<< HEAD
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
 
 # Load environment variables from .env file
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 
+<<<<<<< HEAD
 sys_prompt = """
     You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
     your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
@@ -29,6 +39,23 @@ sys_prompt = """
     A map of the environment may optionally be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
     You will respond with the action you wish to take.
 
+=======
+<<<<<<< HEAD
+# Access the environment variables
+api_key = os.getenv("API_KEY")
+
+# Create OpenAI client
+client = openai.OpenAI(
+    api_key=api_key,
+=======
+sys_prompt = """
+    You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
+    your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
+    and movement across the environment. If exhaustion reaches 100, you will begin losing health and will not be able to move until you rest.
+    A map of the environment may optionally be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
+    You will respond with the action you wish to take.
+
+>>>>>>> Block_Agent_Behavior
 Map Data:
 The map data will be provided as a png image. The Top-Right corner of the map is (0, 0) and the Bottom-Left corner is (120, 120). 
 The map is 120x120 units. A Blue dot represents your current location. Green sqaures represent food locations. White areas are considered
@@ -91,14 +118,36 @@ survival_agent = Agent(
     model=model,
     system_prompt=sys_prompt,
     result_type=AgentResponse  # Still use AgentResponse for output validation
+<<<<<<< HEAD
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
 )
 
 # Create FastAPI app
 app = FastAPI()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+# Call the LLM with the JSON schema
+async def NLP(input_string: str):
+    context = (
+        "Please answer the following prompt in JSON format with the following fields: "
+        "'Agent_ID', 'Health', and 'Next_Action'. "
+        "The Agent_ID should be a string representing the agent's ID number. "
+        "Health should indicate the current health points of the agent. "
+        "Next_Action should describe what the agent is currently doing."
+        "Prompt: "
+    )
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
 
 # Dictionary to store map data for each agent
 agent_map_data = {}
 
+<<<<<<< HEAD
 # Define the FastAPI endpoint
 @app.post("/nlp")
 async def process_input(request: Request):
@@ -167,3 +216,115 @@ async def process_map_with_llm(request: Request):
 # Run the FastAPI app
 if __name__ == "__main__":
     uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
+=======
+<<<<<<< HEAD
+    chat_completion = client.chat.completions.create(
+        model="mistralai/Mistral-7B-Instruct-v0.1",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an AI agent in a hostile, survival environment that answers in JSON.",
+            },
+            {
+                "role": "user",
+                "content": contextualized_input,
+            },
+        ],
+    )
+
+    return chat_completion.choices[0].message.content
+
+# Define the FastAPI endpoint
+@app.post("/nlp/")
+async def process_input(request: Request):
+    try:
+        # Get the raw input data from the client
+        input_data = await request.json()
+        input_string = input_data.get("input_string")
+
+        if not input_string:
+            raise HTTPException(status_code=400, detail="input_string is required")
+
+        # Call the NLP function with the input string
+        response_json = await NLP(input_string)
+
+        # Return the raw JSON response to the client
+        return json.loads(response_json)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Run the FastAPI app
+if __name__ == "__main__":
+    uvicorn.run("unity:app", host="localhost", port=12345)
+=======
+# Define the FastAPI endpoint
+@app.post("/nlp")
+async def process_input(request: Request):
+    try:
+        input_data = await request.json()
+        if not input_data:
+            raise HTTPException(status_code=400, detail="input_data is required")
+        input_json_str = json.dumps(input_data)
+        map_data = None
+        result = None
+            
+        for key, value in input_data.items():
+            if key != "mapData" and value is not None:
+                print(f"{key}: {value}")
+            else:
+                print(f"{key}: None")
+        
+        if "mapData" in input_data and input_data["mapData"] is not None:
+            map_data = base64.b64decode(input_data.pop("mapData"))
+
+        # Pass Map Data if it exists, otherwise run normally
+        if map_data:
+            result = await survival_agent.run(
+                [
+                    input_json_str,
+                    BinaryContent(data=map_data, media_type='image/png'),  
+                ],
+                model_settings=settings
+            )
+        elif map_data is None:
+            result = await survival_agent.run(
+                [
+                    input_json_str,
+                ],
+                model_settings=settings
+            )
+        
+        print(result.data)
+        return result.data
+    except Exception as e:
+        logging.error("Error processing /nlp request", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e)) from e
+    
+@app.post("/map")
+async def process_map_with_llm(request: Request):
+    try:
+        input_data = await request.json()
+        for key, value in input_data.items():
+            if key != "mapData":
+                print(f"{key}: {value}")
+        
+        if "map_base64" not in input_data or "agent_id" not in input_data:
+            raise HTTPException(status_code=400, detail="Map and agent ID are required")
+        return {"message": "Received map data", "agent_id": input_data["agent_id"]}
+    
+    except Exception as e:
+        print("Error processing /map:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+
+
+
+# Run the FastAPI app
+if __name__ == "__main__":
+    uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior

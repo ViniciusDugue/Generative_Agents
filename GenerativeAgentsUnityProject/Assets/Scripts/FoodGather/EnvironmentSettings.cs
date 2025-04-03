@@ -21,6 +21,7 @@ public class EnvironmentSettings : MonoBehaviour
         m_Recorder = Academy.Instance.StatsRecorder;
     }
 
+    //Resets environment for new episode
     public void EnvironmentReset()
     {
         ClearObjects(GameObject.FindGameObjectsWithTag("food"));
@@ -39,6 +40,7 @@ public class EnvironmentSettings : MonoBehaviour
         Debug.Log("Environment reset complete.");
     }
 
+    //clears food to prepare for spawning new food
     void ClearObjects(GameObject[] objects)
     {
         foreach (var food in objects)
@@ -47,6 +49,7 @@ public class EnvironmentSettings : MonoBehaviour
         }
     }
 
+    //updates food score to keep track of agent performance
     public void Update()
     {
         // foodScoreText.text = $"Food Collected: {foodScore}";
@@ -54,6 +57,12 @@ public class EnvironmentSettings : MonoBehaviour
         if ((Time.frameCount % 100) == 0)
         {
             m_Recorder.Add("Food Score", foodScore);
+        }
+
+        if (Input.GetKey(KeyCode.Alpha9))
+        {
+            Debug.Log("manually reset environments");
+            EnvironmentReset();
         }
     }
 }
