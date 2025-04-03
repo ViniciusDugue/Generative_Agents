@@ -164,20 +164,28 @@ public class SpawnManager : MonoBehaviour
             activeFoodSpawnPoints.Add(tempList[index]);
             tempList.RemoveAt(index);
         }
+
         foreach (Transform spawnPoint in foodSpawnPoints)
         {
             SphereCollider sc = spawnPoint.GetComponent<SphereCollider>();
-            if (sc != null)
+            FoodSpawnPointStatus status = spawnPoint.GetComponent<FoodSpawnPointStatus>();
+
+            if (status == null)
             {
-                if (activeFoodSpawnPoints.Contains(spawnPoint))
-                {
-                    sc.radius = foodSpawnRadius;
-                    sc.enabled = true;
-                }
-                else
-                {
-                    sc.enabled = false;
-                }
+                // If the component doesn't exist, add it.
+                status = spawnPoint.gameObject.AddComponent<FoodSpawnPointStatus>();
+            }
+        
+            if (activeFoodSpawnPoints.Contains(spawnPoint))
+            {
+                sc.radius = foodSpawnRadius;
+                sc.enabled = true;
+                status.HasFood = true;  // This spawn point is active and has food.
+            }
+            else
+            {
+                sc.enabled = false;
+                status.HasFood = false; // This spawn point is inactive and has no food.
             }
         }
         string log = "Day " + timeManager.Days + " - Active Food Spawn Points: ";
