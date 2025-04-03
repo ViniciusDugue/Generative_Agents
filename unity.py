@@ -5,6 +5,9 @@ import uvicorn
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
 =======
 >>>>>>> Block_Agent_Behavior
 from enum import Enum
@@ -23,6 +26,10 @@ import base64
 # Dictionary to store map data for each agent
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
@@ -31,6 +38,7 @@ import base64
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 sys_prompt = """
     You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
@@ -41,6 +49,8 @@ sys_prompt = """
 
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
 # Access the environment variables
 api_key = os.getenv("API_KEY")
 
@@ -55,6 +65,9 @@ sys_prompt = """
     A map of the environment may optionally be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
     You will respond with the action you wish to take.
 
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
 >>>>>>> Block_Agent_Behavior
 Map Data:
 The map data will be provided as a png image. The Top-Right corner of the map is (0, 0) and the Bottom-Left corner is (120, 120). 
@@ -119,6 +132,10 @@ survival_agent = Agent(
     system_prompt=sys_prompt,
     result_type=AgentResponse  # Still use AgentResponse for output validation
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
@@ -127,8 +144,11 @@ survival_agent = Agent(
 # Create FastAPI app
 app = FastAPI()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
 
 # Call the LLM with the JSON schema
 async def NLP(input_string: str):
@@ -142,11 +162,15 @@ async def NLP(input_string: str):
     )
 =======
 >>>>>>> main
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
 >>>>>>> Block_Agent_Behavior
 
 # Dictionary to store map data for each agent
 agent_map_data = {}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Define the FastAPI endpoint
 @app.post("/nlp")
@@ -218,6 +242,8 @@ if __name__ == "__main__":
     uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
     chat_completion = client.chat.completions.create(
         model="mistralai/Mistral-7B-Instruct-v0.1",
         messages=[
@@ -327,4 +353,7 @@ async def process_map_with_llm(request: Request):
 if __name__ == "__main__":
     uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
 >>>>>>> main
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
 >>>>>>> Block_Agent_Behavior

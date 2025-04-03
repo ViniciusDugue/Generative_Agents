@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class BlockAgent : MonoBehaviour
+public class BlockAgent : AgentBehavior
 {
     // enum table for all block agent behavior states
     public enum AgentState
@@ -31,25 +31,32 @@ public class BlockAgent : MonoBehaviour
 
     public static BlockAgent Instance;
 
-    void Awake()
+    protected override void Awake()
     {
         Instance = this;
     }
 
-    void OnEnable()
+    protected override void OnEnable()
     {
         startBehavior = true;
         interrupt = false;
     }
 
-    void OnDisable()
+    protected override void OnDisable()
     {
         // not sure if you want an agent to continue its task after being interrupted.
         currentState = AgentState.Idle;
         startBehavior = false;
 
         interrupt = false;
-        navAgent.isStopped = true;
+        if (navAgent.isOnNavMesh)
+        {
+            navAgent.isStopped = true;
+        }
+        else
+        {
+            Debug.LogWarning("OnDisable: NavMeshAgent is not on a NavMesh.");
+        }
 
         if (isHoldingBlock)
         {
