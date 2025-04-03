@@ -85,7 +85,7 @@ public class BuildWall_Agent : MonoBehaviour
 
     }
 
-    public void SetWallAgentData(Vector3 constructionSitePos, Vector3 destinationPos, List<GameObject> targetBlockList)
+    public void SetWallAgentData(Vector3 constructionSitePos, Vector3 destinationPos, GameObject[] targetBlockList)
     {
         Destination = Instantiate(destinationPrefab,destinationPos, Quaternion.identity);
         ConstructionSite = Instantiate(constructionSitePrefab,constructionSitePos, Quaternion.identity);
