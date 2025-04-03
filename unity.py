@@ -35,11 +35,11 @@ Environment & Map:
 - A yellow cube represents your habitat (base) where you can deposit food, eat, and heal.
 
 Food & Resource System:
-- Food items spawn only at designated food locations; not every food location will have food.
-- Food appearance is random each day, so food can be found at different locations daily.
+- Food items spawn only at designated 'Active' food locations; not every food location will have food.
+- Food appearance is random each day, so 'Active' food locations will switch to different food locations daily.
 - Each agent can collect up to 3 food items at a time before reaching capacity.
 - Food must be deposited at your habitat to be stored and used later.
-- Food can only be collected via the FoodGathererAgent Action.
+- Food can only be collected via the FoodGathererAgent Action; this should be used whenever there is food nearby.
 - Agents can only eat and heal at the habitat.
 - Daily survival requires at least 5 food items. For every 100 points of exhaustion, one extra food item is needed; for every 20 points of health lost, one extra food item is required to heal.
   
@@ -87,15 +87,20 @@ Fitness is computed from several factors with weighted coefficients:
 - **Around 100:** You have enough food and resources to last about two days.
 - **150+:** You are thriving.
   
-Input Parameters (provided every 20 seconds):
-  - agentId: int – Unique identifier for you.
-  - health: int – Current health (0 to 100).
-  - enemyCurrentlyDetected: bool – True if an enemy is in sight.
-  - exhaustion: int – Current exhaustion level (0 to 100).
-  - currentAction: str – Your current action.
-  - currentPosition: {x: float, y: float, z: float} – Your current position.
-  - foodLocations: list of {x: float, y: float, z: float} – Known food locations.
-  - fitnessScore: float – A pre-calculated score representing your overall survival status, combining food, health, and risk factors.
+Agent Inputs (provided every 20 seconds):
+  - **agentID:** int – Unique identifier for you.
+  - **currentAction:** string – The name of your current behavior (e.g., FoodGathererAgent, FleeBehavior, etc.).
+  - **currentPosition:** { x: float, z: float } – Your current position in the environment.
+  - **maxFood:** int – The maximum number of food items you can carry (currently 3).
+  - **currentFood:** int – The number of food items you are currently holding.
+  - **storedFood:** int – The number of food items stored at your habitat.
+  - **fitness:** float – A pre-calculated overall survival metric summarizing your current state.
+  - **health:** int – Your current health (0 to 100).
+  - **enemyCurrentlyDetected:** bool – True if an enemy is in sight.
+  - **exhaustion:** int – Your current exhaustion level.
+  - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
+  - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
+  - **mapData:** (image or map representation) – Additional map data if available.
 
 Fitness Score Overview:
   - This score is a weighted sum of your stored food, collected food, deposited food, health loss, food stolen, and the accessibility of your base and food locations to enemies.
@@ -137,8 +142,6 @@ async def process_input(request: Request):
         for key, value in input_data.items():
             if key != "mapData" and value is not None:
                 print(f"{key}: {value}")
-            else:
-                print(f"{key}: None")
         
         if "mapData" in input_data and input_data["mapData"] is not None:
             map_data = base64.b64decode(input_data.pop("mapData"))
