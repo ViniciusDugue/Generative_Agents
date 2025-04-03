@@ -29,6 +29,13 @@ public class BlockAgent : MonoBehaviour
     public GameObject destinationPrefab;
     public AgentState currentState = AgentState.Idle;
 
+    public static BlockAgent Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void OnEnable()
     {
         startBehavior = true;
@@ -54,7 +61,7 @@ public class BlockAgent : MonoBehaviour
         // navAgent.SetDestination(transform.position);
     }
 
-    void SetBlockAgentData(GameObject targetBlockObject, Vector3 destinationPos)
+    public void SetBlockAgentData(GameObject targetBlockObject, Vector3 destinationPos)
     {
         targetBlock = targetBlockObject;
         destinationObject = Instantiate(destinationPrefab, destinationPos,Quaternion.identity);
