@@ -43,15 +43,19 @@ public class BehaviorManager : MonoBehaviour
     public bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
      [HideInInspector]
     public Transform enemyTransform;
+    [HideInInspector]
+    public HashSet<Transform> activeFoodLocations = new HashSet<Transform>();
+        [HideInInspector]
+    public HashSet<Transform> foodLocations = new HashSet<Transform>();
     private float enemyOutOfRangeStartTime = -1f;
     private AgentHealth agentHealth;
     private Habitat agentHabitat; 
     private float depositedFood = 0;
+    
 
     
     
-    [HideInInspector]
-    public HashSet<Transform> foodLocations = new HashSet<Transform>();
+
     // NEW: Time tracking for enemy detection.
     private float enemyDetectionBuffer = 5f;
 
@@ -349,6 +353,7 @@ public class BehaviorManager : MonoBehaviour
         float maxDetectionDistance = 20.5f; // Set your max detection distance here
         enemyCurrentlyDetected = false;
 
+
         foreach (var m_rayPerceptionSensorComponent3D in rayPerceptionSensorComponents)
         {
             var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
@@ -364,7 +369,15 @@ public class BehaviorManager : MonoBehaviour
                 {
                     if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
                     {
-                        Debug.Log("Food location found!");
+                        FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
+                        if (status != null && status.HasFood) {
+                            activeFoodLocations.Add(goHit.transform);
+                            Debug.Log("Active Food location found!");
+                        }
+                        else{
+                            Debug.Log("Food location found!");
+                        }
+                        
                     }
                 }
                 if (goHit != null && goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)

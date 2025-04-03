@@ -16,7 +16,7 @@ using NUnit.Framework.Constraints;
 public class Client : MonoBehaviour
 {
     public TextMeshProUGUI displayText;
-    public TMP_InputField inputField;  // Reference to a TextMeshPro Input Field
+    private Habitat agentHabitat;
     private Dictionary<int, GameObject> agentDict = new Dictionary<int, GameObject>();
 
     private HttpClient client;
@@ -34,6 +34,9 @@ public class Client : MonoBehaviour
                 RegisterAgent(agent);
             }
         }
+
+        // Assign Reference
+        agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
     }
 
     public void RegisterAgent(GameObject agent)
@@ -119,6 +122,7 @@ public class Client : MonoBehaviour
     async Task SendAgentData(GameObject agent, bool mapDataExist)
     {
         MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
+        BehaviorManager bm = agent.GetComponent<BehaviorManager>();
         int agentID = agent.GetComponent<BehaviorManager>().agentID;
         string mapData = null;
 
@@ -139,14 +143,18 @@ public class Client : MonoBehaviour
         // Create agent JSON data
         var agentData = new
         {
-            agentID = agent.GetComponent<BehaviorManager>().agentID,
-            health = 100,  // Placeholder, replace with actual health
-            enemyCurrentlyDetected = agent.GetComponent<BehaviorManager>().enemyCurrentlyDetected,
-            exhaustion = agent.GetComponent<BehaviorManager>().exhaustion,
-            fitness = agent.GetComponent<BehaviorManager>().fitnessScore,
-            currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
+            agentID = bm.agentID,
+            currentAction = bm.currentAgentBehavior.GetType().Name,  // Default action
             currentPosition = new { x = position.x, z = position.z },
-            foodLocations = GetFoodLocationsAsList(agent.GetComponent<BehaviorManager>().foodLocations),
+            maxFood = 3, // Placeholder, replace with actual maxFood
+            currentFood = bm.getFood(),
+            storedFood = agentHabitat.storedFood,
+            fitness = bm.fitnessScore,
+            health = 100,  // Placeholder, replace with actual health
+            enemyCurrentlyDetected = bm.enemyCurrentlyDetected,
+            exhaustion = bm.exhaustion,
+            activeFoodLocations = GetFoodLocationsAsList(bm.activeFoodLocations),
+            foodLocations = GetFoodLocationsAsList(bm.foodLocations),
             mapData = mapData,
         };
 
