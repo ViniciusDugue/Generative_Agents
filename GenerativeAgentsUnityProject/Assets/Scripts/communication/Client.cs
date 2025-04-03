@@ -81,14 +81,6 @@ public class Client : MonoBehaviour
         }
     }
 
-    // Callback for TMP_InputField value change
-    void OnInputFieldValueChanged(string newValue)
-    {
-        Debug.Log("[Client] Input field changed");
-        // Send the new value to the server
-        SendDataToPost(newValue);
-    }
-
     async void SendDataToPost(string message)
     {
         try
@@ -235,24 +227,4 @@ public class Client : MonoBehaviour
         return positionsList;
     }
 
-    void PerformAction(GameObject agent, string action)
-    {
-        action = action.Trim();
-
-        switch (action)
-        {
-            case "explore":
-                agent.transform.position += new Vector3(1, 0, 0); // Move right
-                break;
-            case "repair":
-                Debug.Log("Agent is repairing.");
-                break;
-            case "return_to_base":
-                agent.transform.position = Vector3.zero; // Reset position
-                break;
-            default:
-                Debug.Log($"[Client] Unknown action: {action}");
-                break;
-        }
-    }
 }
