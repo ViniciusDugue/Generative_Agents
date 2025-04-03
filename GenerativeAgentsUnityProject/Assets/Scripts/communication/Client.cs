@@ -143,6 +143,7 @@ public class Client : MonoBehaviour
             health = 100,  // Placeholder, replace with actual health
             enemyCurrentlyDetected = agent.GetComponent<BehaviorManager>().enemyCurrentlyDetected,
             exhaustion = agent.GetComponent<BehaviorManager>().exhaustion,
+            fitness = agent.GetComponent<BehaviorManager>().fitnessScore,
             currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
             currentPosition = new { x = position.x, z = position.z },
             foodLocations = GetFoodLocationsAsList(agent.GetComponent<BehaviorManager>().foodLocations),

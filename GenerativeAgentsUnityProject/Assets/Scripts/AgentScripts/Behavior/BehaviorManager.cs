@@ -24,6 +24,8 @@ public class BehaviorManager : MonoBehaviour
     [Tooltip("Current amount of food items the agent has collected.")]
     [SerializeField]
     private int currentFood = 0;
+    [SerializeField]
+    public float FitnessScore;
     public AgentBehavior defaultBehavior;
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
@@ -42,7 +44,9 @@ public class BehaviorManager : MonoBehaviour
      [HideInInspector]
     public Transform enemyTransform;
     private float enemyOutOfRangeStartTime = -1f;
-    
+    private AgentHealth agentHealth;
+    private Habitat agentHabitat; 
+    private float depositedFood = 0;
 
     
     
@@ -64,6 +68,7 @@ public class BehaviorManager : MonoBehaviour
                 {
                     // Debug.Log($"Invoking OnUpdateLLM for Agent {agentID}");
                     OnUpdateLLM?.Invoke(agentID, mapDataExist);
+                    _updateLLM = false;
                 }
             }
         }
@@ -92,6 +97,10 @@ public class BehaviorManager : MonoBehaviour
 
         // Start Exhaustion counter
         StartExhaustionCoroutine();
+
+        // Get References
+        agentHealth = GetComponent<AgentHealth>();
+        agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
     }
 
     private void Update()
@@ -339,6 +348,16 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
+    public float calculateFitnessScore() {
+        float maxHealth = agentHealth.maxHealth;
+        float curHealth = agentHealth.currentHealth;
+        float habitatFood = agentHabitat.storedFood; 
+
+        FitnessScore += 10 * habitatFood + 5 * currentFood + 7*(depositedFood)
+        - 10 * (agentHealth.maxHealth -agentHealth.currentHealth);
+        return FitnessScore;
+    }
+
     public void updateFoodCount() {
         foodCollected += 1;
         currentFood += 1;
@@ -353,6 +372,7 @@ public class BehaviorManager : MonoBehaviour
     }
 
     public void dropFood() {
+        depositedFood += 1;
         currentFood -= 1;
     }
 

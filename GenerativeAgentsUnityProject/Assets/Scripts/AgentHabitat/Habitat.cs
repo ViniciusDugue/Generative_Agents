@@ -17,7 +17,7 @@ public class Habitat : MonoBehaviour
 
     [Header("In-Sim Variables")]
     [SerializeField]
-    int storedFood = 0;
+    public int storedFood = 0;
 
 
     // List of agents waiting for food at the habitat.
