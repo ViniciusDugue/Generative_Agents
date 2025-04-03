@@ -55,6 +55,12 @@ public class BuildWall_Agent : MonoBehaviour
     private bool waitingAtConstruction = false;
     private bool wasInterruptedDuringDestination = false;
 
+    public static BuildWall_Agent Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
     void OnEnable()
     {
         startBehavior =true; 
