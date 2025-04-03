@@ -1055,6 +1055,7 @@ GameObject:
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
   - component: {fileID: 3879892247664422788}
+  - component: {fileID: 8390504711016312230}
   - component: {fileID: 1841426132986401358}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
@@ -1208,6 +1209,35 @@ MonoBehaviour:
   exhaustion: 0
   defaultBehavior: {fileID: 1841426132986401358}
   currentAgentBehavior: {fileID: 0}
+--- !u!114 &8390504711016312230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1990cbd563521048adad39a290c4f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.1
+  targetBlock: {fileID: 0}
+  destinationObject: {fileID: 0}
+  navAgent: {fileID: 3081395510317380987}
+  startBehavior: 0
+  interrupt: 0
+  pickupRange: 2
+  isHoldingBlock: 0
+  destinationStopDistance: 1
+  distToDestination: 0
+  destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+    type: 3}
+  currentState: 0
 --- !u!114 &1841426132986401358
 MonoBehaviour:
   m_ObjectHideFlags: 0
