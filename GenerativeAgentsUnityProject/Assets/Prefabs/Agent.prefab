@@ -1056,6 +1056,7 @@ GameObject:
   - component: {fileID: 148164363397645315}
   - component: {fileID: 3879892247664422788}
   - component: {fileID: 1841426132986401358}
+  - component: {fileID: 3383206477321224366}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
   - component: {fileID: 4155786854146672970}
@@ -1238,6 +1239,29 @@ MonoBehaviour:
   contribute: 1
   useVectorObs: 0
   useVectorFrozenFlag: 0
+--- !u!114 &3383206477321224366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1990cbd563521048adad39a290c4f9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetBlock: {fileID: 0}
+  destinationObject: {fileID: 0}
+  navAgent: {fileID: 0}
+  startBehavior: 0
+  interrupt: 0
+  pickupRange: 2
+  isHoldingBlock: 0
+  destinationStopDistance: 1
+  distToDestination: 0
+  destinationPrefab: {fileID: 0}
+  currentState: 0
 --- !u!114 &8322022180366706281
 MonoBehaviour:
   m_ObjectHideFlags: 0
