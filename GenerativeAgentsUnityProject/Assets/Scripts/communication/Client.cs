@@ -6,19 +6,80 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
+using Unity.MLAgents;
+using UnityEditor.UIElements;
+using System.Net;
+using System;
+using NUnit.Framework.Constraints;
 
 
 public class Client : MonoBehaviour
 {
     public TextMeshProUGUI  displayText;
     public TMP_InputField inputField;  // Reference to a TextMeshPro Input Field
+    private Dictionary<int, GameObject> agentDict = new Dictionary<int, GameObject>();
+    
+
+    private HttpClient client;
+
 
     void Start()
     {
-        // Add a listener to the TMP_InputField to send data on value change
-        if (inputField != null)
+        client = new HttpClient();
+
+        GameObject[] agents = GameObject.FindGameObjectsWithTag("agent");
+        foreach (GameObject agent in agents)
         {
-            inputField.onEndEdit.AddListener(OnInputFieldValueChanged);
+            if (agent != null) 
+            {
+                RegisterAgent(agent);
+            }
+        }
+    }
+
+    public void RegisterAgent(GameObject agent)
+    {
+        BehaviorManager bm = agent.GetComponent<BehaviorManager>();
+        if (bm != null)
+        {
+            int agentID = bm.agentID;
+            if (!agentDict.ContainsKey(agentID))
+            {
+                agentDict.Add(agentID, agent);
+                Debug.Log($"Agent {agentID} registered in Client.");
+                bm.OnUpdateLLM += HandleOnUpdateLLMChanged;
+            }
+        }
+    }
+
+
+    // Handles when an agent's OnUpdateLLM is set to true
+    private async void HandleOnUpdateLLMChanged(int agentID, bool mapDataExist)    
+    {
+        Debug.Log($"🔄 OnUpdateLLM changed to TRUE for Agent {agentID}, sending data...");
+
+        if (agentDict.ContainsKey(agentID))
+        {
+            GameObject agent = agentDict[agentID];
+            MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
+
+            if (mapEncoder != null && mapDataExist)
+            {
+                // mapEncoder.CaptureAndSendMap(agentID);
+                await SendAgentData(agent, mapDataExist); // Wait for data to be sent
+            }
+            else
+            {
+                Debug.LogError($"MapEncoder not found on Agent {agentID}");
+            }
+
+            // Reset _updateLLM to false
+            BehaviorManager bm = agent.GetComponent<BehaviorManager>();
+            if (bm != null)
+            {
+                Debug.Log($"Resetting UpdateLLM to FALSE for Agent {agentID}");
+                bm.UpdateLLM = false; // Reset the flag
+            }
         }
     }
 
@@ -64,6 +125,116 @@ public class Client : MonoBehaviour
             Debug.LogError("Exception: " + e.ToString());
         }
     }
-    
+
+    async Task SendAgentData(GameObject agent, bool mapDataExist)
+    {
+        MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
+        int agentID = agent.GetComponent<BehaviorManager>().agentID;
+        string mapData = null;
+
+        // Check if the agent exists in the dictionary
+        if (!agentDict.ContainsKey(agentID))
+        {
+            Debug.LogError($"Agent ID {agentID} not found in dictionary.");
+            return;
+        }
+
+        if (mapDataExist)
+        {
+            mapData = mapEncoder.CaptureAndEncodeMap(); // Capture the map image as Base64
+        }
+
+        Vector3 position = agent.transform.position;
+
+        // Create agent JSON data
+        var agentData = new
+        {
+            agentID = agent.GetComponent<BehaviorManager>().agentID,  
+            health = 100,  // Placeholder, replace with actual health
+            exhaustion = agent.GetComponent<BehaviorManager>().exhaustion,
+            currentAction = agent.GetComponent<BehaviorManager>().currentAgentBehavior.GetType().Name,  // Default action
+            currentPosition = new { x = position.x, z = position.z },
+            foodLocations = GetFoodLocationsAsList(agent.GetComponent<BehaviorManager>().foodLocations),
+            mapData = mapData,
+        };
+
+        string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
+        Debug.Log($"🔍 Sending JSON: {jsonString}");
+        var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+        try
+        {
+            HttpResponseMessage response = await client.PostAsync("http://127.0.0.1:12345/nlp", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string responseData = await response.Content.ReadAsStringAsync();
+                Debug.Log("Agent Response: " + responseData);
+
+                // Parse the JSON response and determine the next action
+                var responseJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseData);
+                if (responseJson != null && responseJson.ContainsKey("next_action"))
+                {
+                    string nextAction = responseJson["next_action"].ToString();
+                    string reasoning = responseJson["reasoning"].ToString();
+                    Debug.Log($"Next action for Agent: {nextAction}");
+                    Debug.Log($"Agent Reasoning: {reasoning}");
+                    
+                    // Switch Agent Behavior to nextAction
+                    agentDict[agentID].GetComponent<BehaviorManager>().SwitchBehavior(nextAction);
+                    agentDict[agentID].GetComponent<BehaviorManager>().SetMoveTarget(responseJson["location"]);
+                }
+            }
+            else
+            {
+                Debug.LogError("Error: " + response.StatusCode);
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("Exception: " + e.ToString());
+        }
+    }
+
+    // Method to convert the HashSet to a List
+    private List<Dictionary<string, float>> GetFoodLocationsAsList(HashSet<Transform> foodLocationsHashSet)
+    {
+        List<Dictionary<string, float>> positionsList = new List<Dictionary<string, float>>();
+
+        if (foodLocationsHashSet.Count == 0)  return positionsList;
+
+        List<Transform> foodLocationsList = new List<Transform>(foodLocationsHashSet);
+        foreach (Transform foodLocation in foodLocationsList)
+        {
+            Vector3 position = foodLocation.position;
+            Dictionary<string, float> positionDict = new Dictionary<string, float>
+            {
+                { "x", position.x },
+                { "z", position.z }
+            };
+            positionsList.Add(positionDict);
+        }
+        return positionsList;
+    }
+
+    void PerformAction(GameObject agent, string action)
+    {
+        action = action.Trim();
+
+        switch (action)
+        {
+            case "explore":
+                agent.transform.position += new Vector3(1, 0, 0); // Move right
+                break;
+            case "repair":
+                Debug.Log("Agent is repairing.");
+                break;
+            case "return_to_base":
+                agent.transform.position = Vector3.zero; // Reset position
+                break;
+            default:
+                Debug.Log($"Unknown action: {action}");
+                break;
+        }
+    }
 
 }
