@@ -92,25 +92,39 @@ public class MapMarkerManager : MonoBehaviour
             }
         }
 
-        // For the agent map, add the marker only if the agent has discovered it.
-        if (agentMapContainer != null && PersonalMap.allPersonalMaps.Count > 0 && trackedObject != null && !agentMarkers.ContainsKey(trackedObject))
+        // For the agent map, we differentiate based on marker type.
+        if (agentMapContainer != null && trackedObject != null && !agentMarkers.ContainsKey(trackedObject))
         {
-            bool discovered = false;
-            // Loop through every agent's personal map.
-            foreach (PersonalMap pm in PersonalMap.allPersonalMaps)
+            // For food and food spawn markers, check the agent's personal memory.
+            if (markerType == MarkerEventManager.MarkerType.Food || markerType == MarkerEventManager.MarkerType.FoodSpawn)
             {
-                foreach (PersonalMap.MarkerData data in pm.knownMarkers)
+                bool discovered = false;
+                foreach (PersonalMap pm in PersonalMap.allPersonalMaps)
                 {
-                    // Compare the object reference.
-                    if (data.markerType == markerType && data.discoveredObject == trackedObject)
+                    foreach (PersonalMap.MarkerData data in pm.knownMarkers)
                     {
-                        discovered = true;
-                        break;
+                        // Only register if at least one agent has discovered this object.
+                        if (data.markerType == markerType && data.discoveredObject == trackedObject)
+                        {
+                            discovered = true;
+                            break;
+                        }
+                    }
+                    if (discovered) break;
+                }
+                if (discovered)
+                {
+                    GameObject prefab = GetPrefabForMarker(markerType);
+                    if (prefab != null)
+                    {
+                        GameObject marker = Instantiate(prefab, agentMapContainer);
+                        marker.name = trackedObject.name + "_AgentMarker";
+                        agentMarkers[trackedObject] = marker;
                     }
                 }
-                if (discovered) break;
             }
-            if (discovered)
+            // For enemy and agent markers, instantiate immediately.
+            else
             {
                 GameObject prefab = GetPrefabForMarker(markerType);
                 if (prefab != null)
@@ -277,7 +291,13 @@ public class MapMarkerManager : MonoBehaviour
     // Updates marker positions based on tracked object's world position.
     private void UpdateMarkerPositions(Dictionary<GameObject, GameObject> markerDict, RectTransform container)
     {
-        if (container == null) return;
+        // Choose resolution based on which map is being updated.
+        Vector2 resolution = mapResolution; // Default for user map.
+        if (container == agentMapContainer)
+        {
+            resolution = new Vector2(225, 225); // Agent map resolution.
+        }
+
         List<GameObject> toRemove = new List<GameObject>();
 
         foreach (var kvp in markerDict)
@@ -297,14 +317,18 @@ public class MapMarkerManager : MonoBehaviour
             marker.SetActive(viewportPos.z >= 0);
 
             Vector2 localPos = new Vector2(
-                (viewportPos.x - 0.5f) * mapResolution.x,
-                (viewportPos.y - 0.5f) * mapResolution.y
+                (viewportPos.x - 0.5f) * resolution.x,
+                (viewportPos.y - 0.5f) * resolution.y
             );
 
             RectTransform markerRect = marker.GetComponent<RectTransform>();
             if (markerRect != null)
             {
                 markerRect.anchoredPosition = localPos;
+            }
+            else
+            {
+                Debug.LogWarning($"Marker '{marker.name}' is missing a RectTransform.");
             }
 
             // Optionally update coordinate text.
