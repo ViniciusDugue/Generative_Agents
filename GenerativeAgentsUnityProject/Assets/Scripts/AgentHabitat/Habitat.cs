@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.ComponentModel;
 
 public class Habitat : MonoBehaviour
 {
@@ -18,8 +19,10 @@ public class Habitat : MonoBehaviour
     // List of agents waiting for food at the habitat.
     private List<AgentHeal> waitingAgents = new List<AgentHeal>();
 
+    public static Habitat Instance;
     private void Awake()
     {
+        Instance = this;
         // If no central hub is assigned, reposition the habitat.
         if (centralHubPoint == null)
         {
@@ -72,6 +75,14 @@ public class Habitat : MonoBehaviour
         }
     }
 
+    public void RemoveFood(int foodRemoved)
+    {   
+        if(foodPortionsAvailable - foodRemoved>0)
+        {
+            foodPortionsAvailable -=foodRemoved;
+        }
+        
+    }
     // // Periodically dispenses food.
     // private IEnumerator DispenseFoodRoutine()
     // {
