@@ -4,169 +4,287 @@ using TMPro;
 
 public class MapMarkerManager : MonoBehaviour
 {
-    // // Nested class to store marker pairs for two different maps.
-    // public class MarkerPair
-    // {
-    //     public GameObject agentMarker;
-    //     public GameObject userMarker;
-
-    //     public MarkerPair(GameObject agentMarker, GameObject userMarker)
-    //     {
-    //         this.agentMarker = agentMarker;
-    //         this.userMarker = userMarker;
-    //     }
-    // }
-
     public Camera mapCamera;
-    public RectTransform mapContainer;
+    // public RectTransform mapContainer;
 
+    [Header("Marker Prefabs")]
     public GameObject agentMarkerPrefab;
     public GameObject enemyMarkerPrefab;
     public GameObject foodMarkerPrefab;
 
     public GameObject foodSpawnPointMarkerPrefab;
 
+    // [Header("Agent Map Settings")]
+    // [Tooltip("Reference to the PersonalMap component used for agent discovery (used for the agent map).")]
+    // public PersonalMap agentPersonalMap; // Assign via Inspector if the agent map should filter markers
+
+    // These will hold our map containers
+    private RectTransform userMapContainer;
+    private RectTransform agentMapContainer;
+
+    // Dictionaries to track markers for each map type.
+    private Dictionary<GameObject, GameObject> userMarkers = new Dictionary<GameObject, GameObject>();
+    private Dictionary<GameObject, GameObject> agentMarkers = new Dictionary<GameObject, GameObject>();
+
     // Hardcoded map resolution - set to (700,700) or (225,225) as needed
     public Vector2 mapResolution = new Vector2(700, 700);
 
-    private Dictionary<GameObject, GameObject> markers = new Dictionary<GameObject, GameObject>();
+    // Dictionary to keep track of markers by their associated tracked objects.
+    // private Dictionary<GameObject, GameObject> markers = new Dictionary<GameObject, GameObject>();
 
-    // Scan interval to catch any unregistered spawned objects.
-    private float scanInterval = 1f;
-    private float scanTimer = 0f;
+    // // Scan interval to catch any unregistered spawned objects.
+    // private float scanInterval = 1f;
+    // private float scanTimer = 0f;
 
-    void Start()
+    private void Awake()
     {
-        InitializeMarkers();
+        // Get all RectTransform components in this object's hierarchy, including nested ones
+        RectTransform[] allMaps = GetComponentsInChildren<RectTransform>(true);
+
+        foreach (RectTransform rt in allMaps)
+        {
+            // Skip the parent (MapController) itself
+
+            if (rt.gameObject == gameObject) continue;
+            if (rt.CompareTag("usermap"))
+            {
+                userMapContainer = rt;
+                Debug.Log("User map container found: " + rt.name);
+            }
+            else if (rt.CompareTag("agentmap"))
+            {
+                agentMapContainer = rt;
+                Debug.Log("Agent map container found: " + rt.name);
+            }
+        }
+        if (userMapContainer == null)
+            Debug.LogWarning("No child with tag 'usermap' found in MapController.");
+        if (agentMapContainer == null)
+            Debug.LogWarning("No child with tag 'agentmap' found in MapController.");
     }
+
+    // Subscribe to marker events.
+    private void OnEnable()
+    {
+        MarkerEventManager.OnMarkerSpawned += OnMarkerSpawnedHandler;
+        MarkerEventManager.OnMarkerRemoved += OnMarkerRemovedHandler;
+    }
+
+    // Unsubscribe from marker events.
+    private void OnDisable()
+    {
+        MarkerEventManager.OnMarkerSpawned -= OnMarkerSpawnedHandler;
+        MarkerEventManager.OnMarkerRemoved -= OnMarkerRemovedHandler;
+    }
+
+    // Called when a marker spawn event is raised.
+    private void OnMarkerSpawnedHandler(GameObject trackedObject, MarkerEventManager.MarkerType markerType)
+    {
+        // For the user map, always add the marker.
+        if (userMapContainer != null && trackedObject != null && !userMarkers.ContainsKey(trackedObject))
+        {
+            GameObject prefab = GetPrefabForMarker(markerType);
+            if (prefab != null)
+            {
+                GameObject marker = Instantiate(prefab, userMapContainer);
+                marker.name = trackedObject.name + "_UserMarker";
+                userMarkers[trackedObject] = marker;
+            }
+        }
+
+        // For the agent map, add the marker only if the agent has discovered it.
+        if (agentMapContainer != null && PersonalMap.allPersonalMaps.Count > 0 && trackedObject != null && !agentMarkers.ContainsKey(trackedObject))
+        {
+            bool discovered = false;
+            // Loop through every agent's personal map.
+            foreach (PersonalMap pm in PersonalMap.allPersonalMaps)
+            {
+                foreach (PersonalMap.MarkerData data in pm.knownMarkers)
+                {
+                    // Compare the object reference.
+                    if (data.markerType == markerType && data.discoveredObject == trackedObject)
+                    {
+                        discovered = true;
+                        break;
+                    }
+                }
+                if (discovered) break;
+            }
+            if (discovered)
+            {
+                GameObject prefab = GetPrefabForMarker(markerType);
+                if (prefab != null)
+                {
+                    GameObject marker = Instantiate(prefab, agentMapContainer);
+                    marker.name = trackedObject.name + "_AgentMarker";
+                    agentMarkers[trackedObject] = marker;
+                }
+            }
+        }
+    }
+
+    // Helper method to select the correct prefab based on marker type.
+    private GameObject GetPrefabForMarker(MarkerEventManager.MarkerType markerType)
+    {
+        switch (markerType)
+        {
+            case MarkerEventManager.MarkerType.Agent:
+                return agentMarkerPrefab;
+            case MarkerEventManager.MarkerType.Enemy:
+                return enemyMarkerPrefab;
+            case MarkerEventManager.MarkerType.Food:
+                return foodMarkerPrefab;
+            case MarkerEventManager.MarkerType.FoodSpawn:
+                return foodSpawnPointMarkerPrefab;
+            default:
+                return null;
+        }
+    }
+
+    // Called when a marker removal event is raised.
+    private void OnMarkerRemovedHandler(GameObject trackedObject)
+    {
+        if (trackedObject == null) return;
+        if (userMarkers.ContainsKey(trackedObject))
+        {
+            Destroy(userMarkers[trackedObject]);
+            userMarkers.Remove(trackedObject);
+        }
+        if (agentMarkers.ContainsKey(trackedObject))
+        {
+            Destroy(agentMarkers[trackedObject]);
+            agentMarkers.Remove(trackedObject);
+        }
+    }
+
+
+    // void Start()
+    // {
+    //     InitializeMarkers();
+    // }
 
     void Update()
     {
-        UpdateMarkerPositions();
-
-        // Periodically check for new objects that haven't been registered.
-        scanTimer += Time.deltaTime;
-        if (scanTimer >= scanInterval)
-        {
-            scanTimer = 0f;
-            InitializeMarkers();
-        }
+        // Update positions of markers for both maps.
+        UpdateMarkerPositions(userMarkers, userMapContainer);
+        UpdateMarkerPositions(agentMarkers, agentMapContainer);
     }
 
-    private void InitializeMarkers()
-    {
-        // This will add markers for any objects with the given tags that don't already have a marker.
-        AddMarkers(GameObject.FindGameObjectsWithTag("agent"), agentMarkerPrefab);
-        AddMarkers(GameObject.FindGameObjectsWithTag("enemyAgent"), enemyMarkerPrefab);
-    }
+    // private void InitializeMarkers()
+    // {
+    //     // This will add markers for any objects with the given tags that don't already have a marker.
+    //     AddMarkers(GameObject.FindGameObjectsWithTag("agent"), agentMarkerPrefab);
+    //     AddMarkers(GameObject.FindGameObjectsWithTag("enemyAgent"), enemyMarkerPrefab);
+    // }
 
-    private void AddMarkers(GameObject[] objects, GameObject prefab)
-    {
-        foreach (GameObject obj in objects)
-        {
-            if (obj != null && !markers.ContainsKey(obj))
-            {
-                AddMarker(obj, prefab);
-            }
-        }
-    }
+    // private void AddMarkers(GameObject[] objects, GameObject prefab)
+    // {
+    //     foreach (GameObject obj in objects)
+    //     {
+    //         if (obj != null && !markers.ContainsKey(obj))
+    //         {
+    //             AddMarker(obj, prefab);
+    //         }
+    //     }
+    // }
 
-    private void AddMarker(GameObject obj, GameObject prefab)
-    {
-        GameObject marker = Instantiate(prefab, mapContainer);
-        marker.name = obj.name + "_Marker";
-        markers[obj] = marker;
-    }
+    // private void AddMarker(GameObject obj, GameObject prefab)
+    // {
+    //     GameObject marker = Instantiate(prefab, mapContainer);
+    //     marker.name = obj.name + "_Marker";
+    //     markers[obj] = marker;
+    // }
 
-    public void RegisterMarker(GameObject obj)
-    {
-        if (obj.CompareTag("agent"))
-        {
-            AddMarker(obj, agentMarkerPrefab);
-        }
-        else if (obj.CompareTag("enemyAgent"))
-        {
-            AddMarker(obj, enemyMarkerPrefab);
-        }
-        else if (obj.CompareTag("food"))
-        {
-            AddMarker(obj, foodMarkerPrefab);
-        }
-    }
+    // public void RegisterMarker(GameObject obj)
+    // {
+    //     if (obj.CompareTag("agent"))
+    //     {
+    //         AddMarker(obj, agentMarkerPrefab);
+    //     }
+    //     else if (obj.CompareTag("enemyAgent"))
+    //     {
+    //         AddMarker(obj, enemyMarkerPrefab);
+    //     }
+    //     else if (obj.CompareTag("food"))
+    //     {
+    //         AddMarker(obj, foodMarkerPrefab);
+    //     }
+    // }
 
-    public void RemoveMarker(GameObject obj)
-    {
-        if (markers.ContainsKey(obj))
-        {
-            Destroy(markers[obj]);
-            markers.Remove(obj);
-        }
-    }
+    // public void RemoveMarker(GameObject obj)
+    // {
+    //     if (markers.ContainsKey(obj))
+    //     {
+    //         Destroy(markers[obj]);
+    //         markers.Remove(obj);
+    //     }
+    // }
 
     // NEW: Method to register a discovered spawn point.
-    public void RegisterDiscoveredSpawnPoint(GameObject spawnPoint, string spawnType)
-    {
-        // Only register if a marker for this spawn point doesn't already exist.
-        if (!markers.ContainsKey(spawnPoint))
-        {
-            GameObject marker = null;
-            if (spawnType == "foodSpawn")
-            {
-                // Instantiate without specifying a parent, then set the parent explicitly.
-                marker = Instantiate(foodSpawnPointMarkerPrefab);
-                if (mapContainer != null)
-                {
-                    marker.transform.SetParent(mapContainer, false);
-                }
-                else
-                {
-                    Debug.LogError("mapContainer is not assigned in MapMarkerManager!");
-                }
-            }
+    // public void RegisterDiscoveredSpawnPoint(GameObject spawnPoint, string spawnType)
+    // {
+    //     // Only register if a marker for this spawn point doesn't already exist.
+    //     if (!markers.ContainsKey(spawnPoint))
+    //     {
+    //         GameObject marker = null;
+    //         if (spawnType == "foodSpawn")
+    //         {
+    //             // Instantiate without specifying a parent, then set the parent explicitly.
+    //             marker = Instantiate(foodSpawnPointMarkerPrefab);
+    //             if (mapContainer != null)
+    //             {
+    //                 marker.transform.SetParent(mapContainer, false);
+    //             }
+    //             else
+    //             {
+    //                 Debug.LogError("mapContainer is not assigned in MapMarkerManager!");
+    //             }
+    //         }
             
-            if (marker != null)
-            {
-                marker.name = spawnPoint.name + "_SpawnMarker";
-                markers[spawnPoint] = marker;
-                Debug.Log($"Registered discovered spawn point marker for '{spawnPoint.name}' with gametag '{spawnType}'. Parent: {marker.transform.parent.name}");
-            }
-            else
-            {
-                Debug.LogWarning("No marker prefab found for spawn type: " + spawnType);
-            }
-        }
-        else
-        {
-            Debug.Log($"Spawn point '{spawnPoint.name}' is already registered.");
-        }
-    }
+    //         if (marker != null)
+    //         {
+    //             marker.name = spawnPoint.name + "_SpawnMarker";
+    //             markers[spawnPoint] = marker;
+    //             Debug.Log($"Registered discovered spawn point marker for '{spawnPoint.name}' with gametag '{spawnType}'. Parent: {marker.transform.parent.name}");
+    //         }
+    //         else
+    //         {
+    //             Debug.LogWarning("No marker prefab found for spawn type: " + spawnType);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         Debug.Log($"Spawn point '{spawnPoint.name}' is already registered.");
+    //     }
+    // }
 
-    public void RegisterDiscoveredFood(GameObject foodObject)
-    {
-        // Only register if a marker for this food isn't already present.
-        if (!markers.ContainsKey(foodObject))
-        {
-            GameObject marker = Instantiate(foodMarkerPrefab, mapContainer);
-            marker.name = foodObject.name + "_FoodMarker";
-            markers[foodObject] = marker;
-            Debug.Log($"Registered discovered food marker for '{foodObject.name}'.");
-        }
-        else
-        {
-            Debug.Log($"Food '{foodObject.name}' is already registered.");
-        }
-    }
+    // public void RegisterDiscoveredFood(GameObject foodObject)
+    // {
+    //     // Only register if a marker for this food isn't already present.
+    //     if (!markers.ContainsKey(foodObject))
+    //     {
+    //         GameObject marker = Instantiate(foodMarkerPrefab, mapContainer);
+    //         marker.name = foodObject.name + "_FoodMarker";
+    //         markers[foodObject] = marker;
+    //         Debug.Log($"Registered discovered food marker for '{foodObject.name}'.");
+    //     }
+    //     else
+    //     {
+    //         Debug.Log($"Food '{foodObject.name}' is already registered.");
+    //     }
+    // }
 
-    private void UpdateMarkerPositions()
+    // Updates marker positions based on tracked object's world position.
+    private void UpdateMarkerPositions(Dictionary<GameObject, GameObject> markerDict, RectTransform container)
     {
+        if (container == null) return;
         List<GameObject> toRemove = new List<GameObject>();
 
-        foreach (var pair in markers)
+        foreach (var kvp in markerDict)
         {
-            GameObject trackedObject = pair.Key;
-            GameObject marker = pair.Value;
+            GameObject trackedObject = kvp.Key;
+            GameObject marker = kvp.Value;
 
-            // If the object has been destroyed, mark it for removal.
             if (trackedObject == null)
             {
                 toRemove.Add(trackedObject);
@@ -178,14 +296,18 @@ public class MapMarkerManager : MonoBehaviour
             Vector3 viewportPos = mapCamera.WorldToViewportPoint(worldPos);
             marker.SetActive(viewportPos.z >= 0);
 
-            // Calculate local position using the hardcoded resolution.
             Vector2 localPos = new Vector2(
                 (viewportPos.x - 0.5f) * mapResolution.x,
                 (viewportPos.y - 0.5f) * mapResolution.y
             );
-            marker.GetComponent<RectTransform>().anchoredPosition = localPos;
 
-            // Optionally update coordinate text under the marker.
+            RectTransform markerRect = marker.GetComponent<RectTransform>();
+            if (markerRect != null)
+            {
+                markerRect.anchoredPosition = localPos;
+            }
+
+            // Optionally update coordinate text.
             Transform textTransform = marker.transform.Find("CoordinateText");
             if (textTransform != null)
             {
@@ -197,10 +319,9 @@ public class MapMarkerManager : MonoBehaviour
             }
         }
 
-        // Remove markers for objects that no longer exist.
         foreach (GameObject obj in toRemove)
         {
-            markers.Remove(obj);
+            markerDict.Remove(obj);
         }
     }
 }

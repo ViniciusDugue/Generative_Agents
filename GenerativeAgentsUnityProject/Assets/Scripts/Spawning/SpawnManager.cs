@@ -297,21 +297,26 @@ public class SpawnManager : MonoBehaviour
                         newObj.AddComponent<AgentController>();
                     }
 
-                    // Register marker for agent.
-                    markerManager?.RegisterMarker(newObj);
+                    // Raise a marker event using MarkerEventManager.
+                    Debug.Log("Firing MarkerSpawned for " + newObj.name);
+                    MarkerEventManager.MarkerSpawned(newObj, MarkerEventManager.MarkerType.Agent);
 
                     // Notify the Client about the new agent.
                     Client client = FindFirstObjectByType<Client>();
                     client?.RegisterAgent(newObj);
                 }
-                else
+                else if (prefab == enemyPrefab)
                 {
-                    // Register marker for enemies only; skip food to wait for discovery.
-                    if (prefab != foodPrefab)
-                    {
-                        markerManager?.RegisterMarker(newObj);
-                    }
+                    MarkerEventManager.MarkerSpawned(newObj, MarkerEventManager.MarkerType.Enemy);
                 }
+                // else if (prefab == foodPrefab)
+                // {
+                //     // Register marker for enemies only; skip food to wait for discovery.
+                //     if (prefab != foodPrefab)
+                //     {
+                //         markerManager?.RegisterMarker(newObj);
+                //     }
+                // }
 
                 totalSpawned++;
                 if (totalSpawned >= maxCount)
@@ -325,7 +330,7 @@ public class SpawnManager : MonoBehaviour
         get { return foodSpawnMapping; }
     }
 
-    // Spawns agents at the central hub (Habitat).
+        // Spawns agents at the central hub (Habitat).
     private void SpawnAgentsAtHub()
     {
         GameObject habitatObj = GameObject.FindWithTag("habitat");
@@ -365,8 +370,8 @@ public class SpawnManager : MonoBehaviour
                 }
                 mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
 
-                // Register marker for this agent.
-                markerManager?.RegisterMarker(newAgent);
+                // Register the agent marker via the event system.
+                MarkerEventManager.MarkerSpawned(newAgent, MarkerEventManager.MarkerType.Agent);
 
                 // Notify the Client about the new agent.
                 Client client = FindFirstObjectByType<Client>();
@@ -396,7 +401,8 @@ public class SpawnManager : MonoBehaviour
         {
             if (obj != null)
             {
-                markerManager?.RemoveMarker(obj);
+                // markerManager?.RemoveMarker(obj);
+                MarkerEventManager.MarkerRemoved(obj);
                 Destroy(obj);
             }
         }

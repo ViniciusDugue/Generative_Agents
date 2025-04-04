@@ -70,7 +70,7 @@ public class AgentHealth : MonoBehaviour
         MapMarkerManager[] markerManagers = FindObjectsOfType<MapMarkerManager>();
         foreach (MapMarkerManager manager in markerManagers)
         {
-            manager.RemoveMarker(gameObject);
+            MarkerEventManager.MarkerRemoved(gameObject);
         }
 
         // Deactivate the agent.
