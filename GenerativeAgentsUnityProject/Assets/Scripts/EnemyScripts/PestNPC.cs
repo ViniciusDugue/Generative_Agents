@@ -47,7 +47,7 @@ public class PestNPC : MonoBehaviour
     private bool runawayDestinationSet = false;
 
     public float health = 100f;
-    public float collisionDamage = 20f;
+    public float collisionDamage = 40f;
 
     void Start()
     {
@@ -93,7 +93,6 @@ public class PestNPC : MonoBehaviour
             threat = null;
         }
 
-        // State machine
         switch (currentState)
         {
             // npc wanders around and actively checks if habitat in range
@@ -233,30 +232,57 @@ public class PestNPC : MonoBehaviour
         }
     }
 
-    // calculate runaway destination
+    //calculatese runaway destination
     void SetRunAwayDestination()
     {
-        if (threat == null) return;
-        Vector3 directionAway = (transform.position - threat.position).normalized;
+        if (threat == null || currentHabitat == null)
+            return;
 
-        Vector3 perpendicular = Vector3.Cross(directionAway, Vector3.up).normalized;
-        Vector3 target = transform.position + perpendicular * runAwayDistance;
+        // calculate middle vector inbetween habitat to pest and pest to agent
+        Vector3 habitatToPest = (transform.position - currentHabitat.position).normalized;
+        Vector3 pesttoAgent = (threat.position - transform.position).normalized;
 
-        // checks a perpendicular direction and if not valid, goes the opposite direction
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(target, out hit, runAwayDistance, NavMesh.AllAreas))
+        habitatToPest.y = 0;
+        pesttoAgent.y = 0;
+        Vector3 middleDirection = (habitatToPest + pesttoAgent).normalized;
+
+        //fallback to running away from habitat
+        if(middleDirection == Vector3.zero)
         {
-            runawayDestination = hit.position;
-            navAgent.SetDestination(runawayDestination);
+            middleDirection = habitatToPest;
         }
-        else
+        NavMeshHit hit;
+        float angleIncrement = 5f;
+        int maxAttempts = Mathf.CeilToInt(360f / angleIncrement);
+        int attempts = 0;
+        bool found = false;
+        Vector3 rotatedDirection;
+        Vector3 candidate = transform.position;
+
+        // try potential runnaway directions/locations
+        while (attempts < maxAttempts && !found)
         {
-            Vector3 fallbackTarget = transform.position + directionAway * runAwayDistance;
-            if (NavMesh.SamplePosition(fallbackTarget, out hit, runAwayDistance, NavMesh.AllAreas))
+            rotatedDirection = Quaternion.Euler(0, angleIncrement * attempts, 0) * middleDirection;
+            candidate = transform.position + rotatedDirection * runAwayDistance;
+            
+            if (NavMesh.SamplePosition(candidate, out hit, 1.0f, NavMesh.AllAreas))
             {
-                runawayDestination = hit.position;
-                navAgent.SetDestination(runawayDestination);
+                if (Vector3.Distance(transform.position, hit.position) >= runAwayDistance)
+                {
+                    found = true;
+                    runawayDestination = hit.position;
+                    navAgent.SetDestination(runawayDestination);
+                    break;
+                }
             }
+            attempts++;
+        }
+
+        //if no direction found, fall back to last candidate direction/location
+        if (!found)
+        {
+            runawayDestination = candidate;
+            navAgent.SetDestination(runawayDestination);
         }
     }
 
@@ -277,6 +303,7 @@ public class PestNPC : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("agent"))
         {
+            Debug.Log("Collision Detected with an Agent");
             health -= collisionDamage;
             if (health <= 0)
             {

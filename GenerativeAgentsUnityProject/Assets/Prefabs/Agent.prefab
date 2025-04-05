@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6469390480390452264}
   - component: {fileID: 4479097550134142220}
   - component: {fileID: 8111720288139862673}
+  - component: {fileID: 6125903389608372974}
   m_Layer: 6
   m_Name: AgentCube_Blue
   m_TagString: Untagged
@@ -90,6 +91,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6125903389608372974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41902001815330996}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &845323699607671451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,6 +1077,7 @@ GameObject:
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
   - component: {fileID: 3879892247664422788}
+  - component: {fileID: 3951101079465718669}
   - component: {fileID: 8390504711016312230}
   - component: {fileID: 1841426132986401358}
   - component: {fileID: 8322022180366706281}
@@ -1186,7 +1209,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 2f1fdefcd1e3b174886a6050eb024d98, type: 3}
   m_InferenceDevice: 2
-  m_BehaviorType: 2
+  m_BehaviorType: 1
   m_BehaviorName: GridFoodCollector
   TeamId: 0
   m_UseChildSensors: 1
@@ -1209,7 +1232,7 @@ MonoBehaviour:
   exhaustion: 0
   defaultBehavior: {fileID: 1841426132986401358}
   currentAgentBehavior: {fileID: 0}
---- !u!114 &8390504711016312230
+--- !u!114 &3951101079465718669
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1217,6 +1240,28 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11632dc52db4b64dbfdedfe77ec3de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  navAgent: {fileID: 3081395510317380987}
+  habitat: {fileID: 0}
+  goTowardsStoppingDistance: 3
+  patrolRadius: 20
+  patrolInterval: 3
+  detectionRadius: 20
+  chaseDuration: 3
+  maxChaseDistance: 20
+  collisionDamage: 20
+--- !u!114 &8390504711016312230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1990cbd563521048adad39a290c4f9a, type: 3}
   m_Name: 
@@ -1231,7 +1276,7 @@ MonoBehaviour:
   navAgent: {fileID: 3081395510317380987}
   startBehavior: 0
   interrupt: 0
-  pickupRange: 2
+  pickupRange: 3
   isHoldingBlock: 0
   destinationStopDistance: 1
   distToDestination: 0
@@ -1245,7 +1290,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e7ec228d560f48448c66a24b807ae29, type: 3}
   m_Name: 
