@@ -50,6 +50,7 @@ public class BehaviorManager : MonoBehaviour
     private float enemyOutOfRangeStartTime = -1f;
     private AgentHealth agentHealth;
     private Habitat agentHabitat; 
+    private GatherBehavior gatherBehavior; 
     private float depositedFood = 0;
     
 
@@ -105,6 +106,7 @@ public class BehaviorManager : MonoBehaviour
 
         // Get References
         agentHealth = GetComponent<AgentHealth>();
+        gatherBehavior = GetComponent<GatherBehavior>();
         agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
     }
 
@@ -365,27 +367,41 @@ public class BehaviorManager : MonoBehaviour
             for (int i = 0; i < lengthOfRayOutputs; i++)
             {
                 GameObject goHit = rayOutputs[i].HitGameObject;
-                if (goHit != null && goHit.tag == "foodSpawn")
-                {
-                    if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+
+                if (goHit != null) {
+
+                    // Check if the hit object is a food spawn point
+                    if (goHit.tag == "foodSpawn")
                     {
-                        FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
-                        if (status != null && status.HasFood) {
-                            activeFoodLocations.Add(goHit.transform);
-                            Debug.Log("Active Food location found!");
+                        if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                        {
+                            FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
+                            if (status != null && status.HasFood) {
+                                activeFoodLocations.Add(goHit.transform);
+                                Debug.Log("Active Food location found!");
+                            }
+                            else{
+                                Debug.Log("Food location found!");
+                            }
+                            
                         }
-                        else{
-                            Debug.Log("Food location found!");
-                        }
-                        
                     }
-                }
-                if (goHit != null && goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
-                {
-                    enemyTransform = goHit.transform;
-                    enemyCurrentlyDetected = true;
-                    // lastEnemyDetectionTime = Time.time;
-                    Debug.Log($"Enemies Detected by Agent {agentID}!");
+
+                    if(goHit.tag == "food")
+                    {
+                        if(gatherBehavior != null) {
+                            gatherBehavior.SetFoodTarget(goHit.transform.position);
+                        }
+                    }
+
+                    // Check if the hit object is an enemy agent
+                    if (goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
+                    {
+                        enemyTransform = goHit.transform;
+                        enemyCurrentlyDetected = true;
+                        // lastEnemyDetectionTime = Time.time;
+                        Debug.Log($"Enemies Detected by Agent {agentID}!");
+                    }
                 }
             }
         }
