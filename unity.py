@@ -2,14 +2,6 @@ from dotenv import load_dotenv
 import openai
 from fastapi import FastAPI, HTTPException, Request
 import uvicorn
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
 from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
@@ -17,6 +9,7 @@ from pydantic_ai import Agent, BinaryContent, RunContext
 # from pydantic_ai import Agent, BinaryContent, RunContext
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.providers.openai import OpenAIProvider
 from agent_classes import AgentResponse  # Keep AgentResponse for output
 import base64
 import os
@@ -25,153 +18,122 @@ import logging
 import base64
 # Dictionary to store map data for each agent
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> main
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> main
->>>>>>> Block_Agent_Behavior
 
 # Load environment variables from .env file
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 sys_prompt = """
-    You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
-    your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
-    and movement across the environment. If exhaustion reaches 100, you will begin losing health and will not be able to move until you rest.
-    A map of the environment may optionally be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
-    You will respond with the action you wish to take.
+    You are an intelligent survival agent in a hostile environment. Your primary goal is to make strategic decisions that maximize your long-term survival and fitness. Your choices must balance resource acquisition, energy management, safety, and movement. Hostile predators roam the area, and fleeing them is always a top priority to maintain your health.
 
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
-# Access the environment variables
-api_key = os.getenv("API_KEY")
+Environment & Map:
+- The arena is a 120x120 unit area.  
+- Map coordinates: Top-Right is (0, 0) and Bottom-Left is (120, 120).  
+- A blue dot marks your current location.
+- Green squares indicate potential food locations.  
+- Purple squares indicate hostile predators.  
+- White areas are obstacles but can be navigated around.
+- A yellow cube represents your habitat (base) where you can deposit food, eat, and heal.
 
-# Create OpenAI client
-client = openai.OpenAI(
-    api_key=api_key,
-=======
-sys_prompt = """
-    You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
-    your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
-    and movement across the environment. If exhaustion reaches 100, you will begin losing health and will not be able to move until you rest.
-    A map of the environment may optionally be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
-    You will respond with the action you wish to take.
+Food & Resource System:
+- Food items spawn only at designated 'Active' food locations; not every food location will have food.
+- Food appearance is random each day, so 'Active' food locations will switch to different food locations daily.
+- Each agent can collect up to 3 food items at a time before reaching capacity.
+- Food must be deposited at your habitat to be stored and used later.
+- Food can only be collected via the FoodGathererAgent Action; this should be used whenever there is food nearby.
+- Agents can only eat and heal at the habitat.
+- Daily survival requires at least 5 food items. For every 100 points of exhaustion, one extra food item is needed; for every 20 points of health lost, one extra food item is required to heal.
+  
+Available Actions & Effects:
+- **FoodGathererAgent:**  
+  *Effect:* Searches for and collects food items at the current location.  
+  *Cost:* +0.8 exhaustion per second.  
+  *Purpose:* Boosts fitness by increasing food collected.
 
-<<<<<<< HEAD
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
-Map Data:
-The map data will be provided as a png image. The Top-Right corner of the map is (0, 0) and the Bottom-Left corner is (120, 120). 
-The map is 120x120 units. A Blue dot represents your current location. Green sqaures represent food locations. White areas are considered
-as obstacles, but can be traversed around.
+- **RestBehavior:**  
+  *Effect:* Rests to restore energy.  
+  *Cost:* -2 exhaustion per second.  
+  *Purpose:* Prevents exhaustion from reaching dangerous levels.
+
+- **FleeBehavior:**  
+  *Effect:* Flees from detected enemies by moving away.  
+  *Cost:* +2 exhaustion per second.  
+  *Purpose:* Ensures survival by avoiding hostile predators.
+
+- **MoveBehavior:**  
+  *Effect:* Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.  
+  *Cost:* +0.5 exhaustion per second.  
+  *Purpose:* Allows relocation to food sources or strategic positions.
+
+Survival Considerations:
+- Fleeing is used only when an enemy is detected.
+- Food only exists at known food locations; gathering food requires exploration.
+- MoveBehavior should be used only if there is a known target location.
+- If exhaustion reaches 100, you will begin losing health and cannot move until you rest.
+- The agent’s actions should always aim to maximize long-term survival while increasing a calculated fitness score.
+
+Fitness Score Calculation:
+Fitness is computed from several factors with weighted coefficients:
+  - **Current_Food:** Number of food items stored at your habitat.
+  - **Food_Collected:** Total food collected by you.
+  - **Food_Deposited:** Food deposited at the habitat.
+  - **Health Loss:** (Max_Health - Current_Health); higher loss reduces fitness.
+  - **Food_Lost:** Food stolen from the habitat that day.
+
+ Fitness Score Evaluation:
+ The Fitness score is a weighted sum reflecting your items above. The weights are designed so that:
+
+- **Below 0:** You are in critical condition and likely to perish soon.
+- **Around 50:** You should be able to survive the day.
+- **Around 100:** You have enough food and resources to last about two days.
+- **150+:** You are thriving.
+  
+Agent Inputs (provided every 20 seconds):
+  - **agentID:** int – Unique identifier for you.
+  - **currentAction:** string – The name of your current behavior (e.g., FoodGathererAgent, FleeBehavior, etc.).
+  - **currentPosition:** { x: float, z: float } – Your current position in the environment.
+  - **maxFood:** int – The maximum number of food items you can carry (currently 3).
+  - **currentFood:** int – The number of food items you are currently holding.
+  - **storedFood:** int – The number of food items stored at your habitat.
+  - **fitness:** float – A pre-calculated overall survival metric summarizing your current state.
+  - **health:** int – Your current health (0 to 100).
+  - **enemyCurrentlyDetected:** bool – True if an enemy is in sight.
+  - **exhaustion:** int – Your current exhaustion level.
+  - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
+  - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
+  - **mapData:** (image or map representation) – Additional map data if available.
+
+Fitness Score Overview:
+  - This score is a weighted sum of your stored food, collected food, deposited food, health loss, food stolen, and the accessibility of your base and food locations to enemies.
+  - A higher fitness score indicates better overall survival prospects.
+  - Use this score to help determine whether you should prioritize gathering food, resting, fleeing, or moving to a new location.
 
 
-Available Actions & Effects
-You can take one of the following ACTIONS at a time:
+"If your fitness score is low, prioritize actions that boost your survival (e.g., FoodGathererAgent or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
+Respond with the chosen ACTION (and location if using MoveBehavior) along with any necessary brief rationale.
 
-* FoodGathererAgent
-    Effect: Searches for and collects food (if available), from the current location.
-    Cost: 0.8 exhaustion per second (increases exhaustion).
-    Purpose: Increases the agent's fitness score, which is essential for survival. Food gathering should be a priority if no critical exhaustion risk exists.
-
-* RestBehavior
-    Effect: The agent rests, restoring energy.
-    Cost: -2 exhaustion per second (reduces exhaustion).
-    Purpose: Prevents exhaustion from reaching dangerous levels. This action should be taken when exhaustion is high and approaching dangerous thresholds.
-
-* MoveBehaivor
-    Effect: Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.
-    Cost: 0.5 exhaustion per second (increases exhaustion).
-    Purpose: Allows the agent to relocate to food sources or other points of interest. Movement should be planned efficiently to avoid excessive exhaustion.
-
-Survival Considerations
-    - Food only spawns at specific food locations in the enviornment.
-    - Food locations can be discovered through exploration.
-    - MoveBehavior should only be used if there is a known location to travel to.
-    - If exhaustion exceeds 100, the agent will begin losing health and may eventually die.
-    - The agent should prioritize food gathering if it is sustainable but must rest when exhaustion is critically high.
-    - Resting wastes time, which can lead to a reduced fitness. It should only be used when necessary.
-
-Input Parameters:
-<input>
-    agentId: int, # Unique identifier for the agent
-    health: int, # Current health of the agent (0 to 100)
-    exhaustion: int, # Current exhaustion level of the agent (0 [completely rested] to 100 [complete exhaustion])
-    currentAction: str, # Current action the agent is performing
-    currentPosition: {"x": float, "y": float, "z": float}, # Current position of the agent in the environment
-    foodLocations: list[{"x": float, "y": float, "z": float}], # Locations of food sources in the environment
-    mapData: str, # Base64 encoded image of the map data (optional)
-</input>
 """
 
-'''
-"map": {
-            "width": int,
-            "height": int,
-            "objects": [
-                {"type": "agent" | "enemyAgent" | "food", "id": int, "position": {"x": float, "y": float}}
-            ]
-        },
-'''
-
-
-model = OpenAIModel('gpt-4o-mini', api_key=OPENAI_API_KEY)
+model = OpenAIModel('meta-llama/llama-4-maverick',
+    provider=OpenAIProvider(
+        base_url='https://openrouter.ai/api/v1',
+        api_key='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',
+    ),
+)
 settings = ModelSettings(temperature=0)
 
 survival_agent = Agent(
     model=model,
     system_prompt=sys_prompt,
     result_type=AgentResponse  # Still use AgentResponse for output validation
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> main
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> main
->>>>>>> Block_Agent_Behavior
 )
 
 # Create FastAPI app
 app = FastAPI()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
-
-# Call the LLM with the JSON schema
-async def NLP(input_string: str):
-    context = (
-        "Please answer the following prompt in JSON format with the following fields: "
-        "'Agent_ID', 'Health', and 'Next_Action'. "
-        "The Agent_ID should be a string representing the agent's ID number. "
-        "Health should indicate the current health points of the agent. "
-        "Next_Action should describe what the agent is currently doing."
-        "Prompt: "
-    )
-=======
->>>>>>> main
-<<<<<<< HEAD
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
 
 # Dictionary to store map data for each agent
 agent_map_data = {}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 # Define the FastAPI endpoint
 @app.post("/nlp")
 async def process_input(request: Request):
@@ -186,8 +148,6 @@ async def process_input(request: Request):
         for key, value in input_data.items():
             if key != "mapData" and value is not None:
                 print(f"{key}: {value}")
-            else:
-                print(f"{key}: None")
         
         if "mapData" in input_data and input_data["mapData"] is not None:
             map_data = base64.b64decode(input_data.pop("mapData"))
@@ -240,120 +200,3 @@ async def process_map_with_llm(request: Request):
 # Run the FastAPI app
 if __name__ == "__main__":
     uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
-=======
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
-    chat_completion = client.chat.completions.create(
-        model="mistralai/Mistral-7B-Instruct-v0.1",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are an AI agent in a hostile, survival environment that answers in JSON.",
-            },
-            {
-                "role": "user",
-                "content": contextualized_input,
-            },
-        ],
-    )
-
-    return chat_completion.choices[0].message.content
-
-# Define the FastAPI endpoint
-@app.post("/nlp/")
-async def process_input(request: Request):
-    try:
-        # Get the raw input data from the client
-        input_data = await request.json()
-        input_string = input_data.get("input_string")
-
-        if not input_string:
-            raise HTTPException(status_code=400, detail="input_string is required")
-
-        # Call the NLP function with the input string
-        response_json = await NLP(input_string)
-
-        # Return the raw JSON response to the client
-        return json.loads(response_json)
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-# Run the FastAPI app
-if __name__ == "__main__":
-    uvicorn.run("unity:app", host="localhost", port=12345)
-=======
-# Define the FastAPI endpoint
-@app.post("/nlp")
-async def process_input(request: Request):
-    try:
-        input_data = await request.json()
-        if not input_data:
-            raise HTTPException(status_code=400, detail="input_data is required")
-        input_json_str = json.dumps(input_data)
-        map_data = None
-        result = None
-            
-        for key, value in input_data.items():
-            if key != "mapData" and value is not None:
-                print(f"{key}: {value}")
-            else:
-                print(f"{key}: None")
-        
-        if "mapData" in input_data and input_data["mapData"] is not None:
-            map_data = base64.b64decode(input_data.pop("mapData"))
-
-        # Pass Map Data if it exists, otherwise run normally
-        if map_data:
-            result = await survival_agent.run(
-                [
-                    input_json_str,
-                    BinaryContent(data=map_data, media_type='image/png'),  
-                ],
-                model_settings=settings
-            )
-        elif map_data is None:
-            result = await survival_agent.run(
-                [
-                    input_json_str,
-                ],
-                model_settings=settings
-            )
-        
-        print(result.data)
-        return result.data
-    except Exception as e:
-        logging.error("Error processing /nlp request", exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e)) from e
-    
-@app.post("/map")
-async def process_map_with_llm(request: Request):
-    try:
-        input_data = await request.json()
-        for key, value in input_data.items():
-            if key != "mapData":
-                print(f"{key}: {value}")
-        
-        if "map_base64" not in input_data or "agent_id" not in input_data:
-            raise HTTPException(status_code=400, detail="Map and agent ID are required")
-        return {"message": "Received map data", "agent_id": input_data["agent_id"]}
-    
-    except Exception as e:
-        print("Error processing /map:", e)
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-
-
-
-
-
-# Run the FastAPI app
-if __name__ == "__main__":
-    uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
->>>>>>> main
-<<<<<<< HEAD
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
