@@ -8,11 +8,24 @@ using Unity.MLAgents.Sensors;
 
 public class BehaviorManager : MonoBehaviour
 {
+    [Header("Basic Variables")]
     public int agentID = 001;
     private static int globalAgentID = 1;  // Shared counter for unique IDs
-
+    public float fitnessScore = 0.0f;
     public float exhaustion;
-    private GameObject agentObject;
+
+    [Header("Advanced Variables")]
+    [Tooltip("Maximum amount of food the agent can carry at once.")]
+    [SerializeField]
+    private int maxFood = 3;
+    [Tooltip("Total amount of food the agent has collected Today.")]
+    [SerializeField]
+    private int foodCollected = 0;
+    [Tooltip("Current amount of food items the agent has collected.")]
+    [SerializeField]
+    private int currentFood = 0;
+    [SerializeField]
+    public float FitnessScore;
     public AgentBehavior defaultBehavior;
     public AgentBehavior currentAgentBehavior;
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
@@ -24,9 +37,27 @@ public class BehaviorManager : MonoBehaviour
     private List<string> behaviorKeyList = new List<string>();
     private float raycastInterval = 0.2f; // Time between raycasts
     private float nextRaycastTime = 0.0f;
-    
     [HideInInspector]
+    public bool enemyCurrentlyDetected = false;     // Tracks whether an enemy is detected this frame
+     [HideInInspector]
+    public bool enemyPreviousDetected = false;      // Tracks whether an enemy was detected within a buffer time frame
+     [HideInInspector]
+    public Transform enemyTransform;
+    [HideInInspector]
+    public HashSet<Transform> activeFoodLocations = new HashSet<Transform>();
+        [HideInInspector]
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
+    private float enemyOutOfRangeStartTime = -1f;
+    private AgentHealth agentHealth;
+    private Habitat agentHabitat; 
+    private float depositedFood = 0;
+    
+
+    
+    
+
+    // NEW: Time tracking for enemy detection.
+    private float enemyDetectionBuffer = 5f;
 
 
     public bool UpdateLLM
@@ -41,6 +72,7 @@ public class BehaviorManager : MonoBehaviour
                 {
                     // Debug.Log($"Invoking OnUpdateLLM for Agent {agentID}");
                     OnUpdateLLM?.Invoke(agentID, mapDataExist);
+                    _updateLLM = false;
                 }
             }
         }
@@ -48,8 +80,6 @@ public class BehaviorManager : MonoBehaviour
 
     void Start()
     {
-        agentObject = this.gameObject;
-
         // Populate the dictionary with all Agent components, using their script names as keys
         foreach (AgentBehavior agentBehavior in GetComponents<AgentBehavior>())
         {
@@ -71,6 +101,11 @@ public class BehaviorManager : MonoBehaviour
 
         // Start Exhaustion counter
         StartExhaustionCoroutine();
+        StartCoroutine(pollLLM());
+
+        // Get References
+        agentHealth = GetComponent<AgentHealth>();
+        agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
     }
 
     private void Update()
@@ -78,18 +113,27 @@ public class BehaviorManager : MonoBehaviour
         // Ensure current AgentBehavior is not null
         if (currentAgentBehavior == null)
         {
-            Debug.LogError("Current Agent AgentBehavior is null");
+            Debug.LogError("Current AgentBehavior is null");
             return;
         }
 
-        // Check raycasts periodically to increase Performance
+        // Check raycasts periodically to increase performance
         if (Time.time >= nextRaycastTime)
         {   
             checkRayCast();
             nextRaycastTime = Time.time + raycastInterval;
+            esclatedDetectedEnemyToLLM();
+            // enemyPreviousDetected = enemyCurrentlyDetected; 
         }
 
-        // Switch between behaviors using behavior names
+        // Update enemy detection.
+        // CheckEnemyDetection();
+
+        // Determine whether an enemy is currently detected.
+        
+        
+
+        // (The rest of your Update code for manual behavior switching remains unchanged)
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
             SwitchBehavior(GetFirstBehavior().GetType().Name);
@@ -98,7 +142,7 @@ public class BehaviorManager : MonoBehaviour
         {
             SwitchBehavior(GetNextBehaviorName());
         }
-        if (Input.GetKeyDown(KeyCode.R)) // Example: Switch to second behavior
+        if (Input.GetKeyDown(KeyCode.R)) // Example: Manual trigger of LLM update
         {
             MapEncoder mapEncoder = GetComponent<MapEncoder>();
 
@@ -117,6 +161,40 @@ public class BehaviorManager : MonoBehaviour
             }
 
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
+        }
+    }
+
+    
+    private void esclatedDetectedEnemyToLLM() {
+        if (enemyCurrentlyDetected && !enemyPreviousDetected)
+        {
+            Debug.Log("Enemy just entered the radius. Prompting LLM instantly.");
+            // Mark that an enemy is detected.
+            enemyPreviousDetected = true;
+            UpdateLLM = true;
+            mapDataExist = true;
+        }
+        else if (enemyCurrentlyDetected && enemyPreviousDetected) 
+        {
+            enemyOutOfRangeStartTime = -1f;
+        }
+        // Enemy has just left detection
+        else if (!enemyCurrentlyDetected && enemyPreviousDetected && enemyOutOfRangeStartTime == -1f)
+        {
+            Debug.Log("Enemy no longer visible. Starting buffer timer.");
+            enemyOutOfRangeStartTime = Time.time;
+        }
+        // If an enemy was detected in the previous frame but now is gone,
+        // wait until the buffer period (2.5 sec) has passed before prompting. 
+        if (!enemyCurrentlyDetected && enemyPreviousDetected && (Time.time - enemyOutOfRangeStartTime) >= enemyDetectionBuffer) 
+        {       
+            Debug.Log("Enemy recently left (buffer passed). Prompting LLM.");
+            enemyPreviousDetected = false;
+            enemyOutOfRangeStartTime = -1f;
+            UpdateLLM = true;
+            mapDataExist = true;
+            // lastLLMPromptTime = Time.time;
+            
         }
     }
 
@@ -215,6 +293,35 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
+    private IEnumerator pollLLM()
+{
+    float interval = 10f;
+    float timer = interval;
+    bool lastUpdateLLM = UpdateLLM; // track the initial value
+
+    while (true)
+    {
+        // Check if the flag has changed since the last frame
+        if (lastUpdateLLM != UpdateLLM)
+        {
+            timer = interval;  // reset the timer on any change
+            lastUpdateLLM = UpdateLLM;
+        }
+        
+        // Countdown the timer
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
+        {
+            // If timer expires without interruption, set the flag to true.
+            UpdateLLM = true;
+            timer = interval;  // reset the timer after triggering
+            lastUpdateLLM = UpdateLLM; // update the last known value
+        }
+        
+        yield return null;
+    }
+}
+
 
     private string GetNextBehaviorName()
     {
@@ -241,24 +348,81 @@ public class BehaviorManager : MonoBehaviour
     // check raycast hit info
     private void checkRayCast()
     {
-        RayPerceptionSensorComponent3D m_rayPerceptionSensorComponent3D = GetComponent<RayPerceptionSensorComponent3D>();
+        RayPerceptionSensorComponent3D[] rayPerceptionSensorComponents = GetComponents<RayPerceptionSensorComponent3D>();
 
-        var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
-        int lengthOfRayOutputs = rayOutputs.Length;
+        float maxDetectionDistance = 20.5f; // Set your max detection distance here
+        enemyCurrentlyDetected = false;
 
-        // Alternating Ray Order: it gives an order of
-        // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
-        // index 0 indicates the center of raycasts
-        for (int i = 0; i < lengthOfRayOutputs; i++)
+
+        foreach (var m_rayPerceptionSensorComponent3D in rayPerceptionSensorComponents)
         {
-            GameObject goHit = rayOutputs[i].HitGameObject;
-            if (goHit != null && goHit.tag == "foodSpawn")
+            var rayOutputs = RayPerceptionSensor.Perceive(m_rayPerceptionSensorComponent3D.GetRayPerceptionInput(), true).RayOutputs;
+            int lengthOfRayOutputs = rayOutputs.Length;
+
+            // Alternating Ray Order: it gives an order of
+            // (0, -delta, delta, -2delta, 2delta, ..., -ndelta, ndelta)
+            // index 0 indicates the center of raycasts
+            for (int i = 0; i < lengthOfRayOutputs; i++)
             {
-                if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                GameObject goHit = rayOutputs[i].HitGameObject;
+                if (goHit != null && goHit.tag == "foodSpawn")
                 {
-                    Debug.Log("Food location found!");
+                    if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                    {
+                        FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
+                        if (status != null && status.HasFood) {
+                            activeFoodLocations.Add(goHit.transform);
+                            Debug.Log("Active Food location found!");
+                        }
+                        else{
+                            Debug.Log("Food location found!");
+                        }
+                        
+                    }
+                }
+                if (goHit != null && goHit.tag == "enemyAgent" && rayOutputs[i].HitFraction <= maxDetectionDistance)
+                {
+                    enemyTransform = goHit.transform;
+                    enemyCurrentlyDetected = true;
+                    // lastEnemyDetectionTime = Time.time;
+                    Debug.Log($"Enemies Detected by Agent {agentID}!");
                 }
             }
         }
     }
+
+    public float calculateFitnessScore() {
+        float maxHealth = agentHealth.maxHealth;
+        float curHealth = agentHealth.currentHealth;
+        float habitatFood = agentHabitat.storedFood; 
+
+        FitnessScore += 10 * habitatFood + 5 * currentFood + 7*(depositedFood)
+        - 10 * (agentHealth.maxHealth -agentHealth.currentHealth);
+        return FitnessScore;
+    }
+
+
+    public void updateFoodCount() {
+        foodCollected += 1;
+        currentFood += 1;
+    }
+
+    public bool canCarryMoreFood() {
+        if (currentFood <= maxFood)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void dropFood() {
+        depositedFood += 1;
+        currentFood -= 1;
+    }
+
+    public int getFood() {
+        return currentFood;
+    }
+
+    
 }

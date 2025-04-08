@@ -15,6 +15,11 @@ public class Habitat : MonoBehaviour
     [Tooltip("The food portion value dispensed to each agent.")]
     public int foodPortionValue = 10;
 
+    [Header("In-Sim Variables")]
+    [SerializeField]
+    public int storedFood = 0;
+
+
     // List of agents waiting for food at the habitat.
     private List<AgentHeal> waitingAgents = new List<AgentHeal>();
 
@@ -72,6 +77,17 @@ public class Habitat : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("agent")) {
+            Debug.Log("Entered Habitat Collider");
+            BehaviorManager bm = collider.GetComponent<BehaviorManager>();
+            StartCoroutine(dropFood(collider, bm));
+        }
+
+
+    }
+
     // // Periodically dispenses food.
     // private IEnumerator DispenseFoodRoutine()
     // {
@@ -102,44 +118,56 @@ public class Habitat : MonoBehaviour
     // }
 
     // Draw a visual representation of the central hub and spawn points.
-private void OnDrawGizmos()
-{
-    // Draw the central hub (cyan).
-    if (centralHubPoint != null)
+    private void OnDrawGizmos()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawSphere(centralHubPoint.position, 1f);
-    }
-    
-    // Draw agent spawn points in blue.
-    GameObject[] agentSpawns = GameObject.FindGameObjectsWithTag("agentSpawn");
-    foreach (GameObject spawn in agentSpawns)
-    {
-        SphereCollider sc = spawn.GetComponent<SphereCollider>();
-        float radius = (sc != null) ? sc.radius : 1f;
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(spawn.transform.position, radius);
+        // Draw the central hub (cyan).
+        if (centralHubPoint != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(centralHubPoint.position, 1f);
+        }
+        
+        // Draw agent spawn points in blue.
+        GameObject[] agentSpawns = GameObject.FindGameObjectsWithTag("agentSpawn");
+        foreach (GameObject spawn in agentSpawns)
+        {
+            SphereCollider sc = spawn.GetComponent<SphereCollider>();
+            float radius = (sc != null) ? sc.radius : 1f;
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(spawn.transform.position, radius);
+        }
+
+        // Draw enemy spawn points in red.
+        GameObject[] enemySpawns = GameObject.FindGameObjectsWithTag("enemySpawn");
+        foreach (GameObject spawn in enemySpawns)
+        {
+            SphereCollider sc = spawn.GetComponent<SphereCollider>();
+            float radius = (sc != null) ? sc.radius : 1f;
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(spawn.transform.position, radius);
+        }
+
+        // Draw food spawn points in green.
+        GameObject[] foodSpawns = GameObject.FindGameObjectsWithTag("foodSpawn");
+        foreach (GameObject spawn in foodSpawns)
+        {
+            SphereCollider sc = spawn.GetComponent<SphereCollider>();
+            float radius = (sc != null) ? sc.radius : 1f;
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(spawn.transform.position, radius);
+        }
     }
 
-    // Draw enemy spawn points in red.
-    GameObject[] enemySpawns = GameObject.FindGameObjectsWithTag("enemySpawn");
-    foreach (GameObject spawn in enemySpawns)
-    {
-        SphereCollider sc = spawn.GetComponent<SphereCollider>();
-        float radius = (sc != null) ? sc.radius : 1f;
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(spawn.transform.position, radius);
-    }
+    IEnumerator dropFood(Collider collider, BehaviorManager bm) {
+        yield return new WaitForSeconds(1f);
+        if (collider.CompareTag("agent") && bm.getFood() > 0) {
+            bm.dropFood();
+            storedFood += 1;
+            if (bm.getFood() <= 0) {
+                Debug.Log("Agent has deposisted all food");
+            }
+        }
 
-    // Draw food spawn points in green.
-    GameObject[] foodSpawns = GameObject.FindGameObjectsWithTag("foodSpawn");
-    foreach (GameObject spawn in foodSpawns)
-    {
-        SphereCollider sc = spawn.GetComponent<SphereCollider>();
-        float radius = (sc != null) ? sc.radius : 1f;
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(spawn.transform.position, radius);
     }
-}
 
 }
