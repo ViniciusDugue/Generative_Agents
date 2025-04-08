@@ -9,6 +9,7 @@ from pydantic_ai import Agent, BinaryContent, RunContext
 # from pydantic_ai import Agent, BinaryContent, RunContext
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.providers.openai import OpenAIProvider
 from agent_classes import AgentResponse  # Keep AgentResponse for output
 import base64
 import os
@@ -113,7 +114,12 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 """
 
-model = OpenAIModel('gpt-4o-mini', api_key=OPENAI_API_KEY)
+model = OpenAIModel('meta-llama/llama-4-maverick',
+    provider=OpenAIProvider(
+        base_url='https://openrouter.ai/api/v1',
+        api_key='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',
+    ),
+)
 settings = ModelSettings(temperature=0)
 
 survival_agent = Agent(
