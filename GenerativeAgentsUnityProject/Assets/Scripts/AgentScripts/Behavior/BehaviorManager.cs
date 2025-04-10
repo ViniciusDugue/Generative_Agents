@@ -389,6 +389,7 @@ public class BehaviorManager : MonoBehaviour
 
                     if(goHit.tag == "food")
                     {
+                        Debug.Log("Food is Found");
                         if(gatherBehavior != null) {
                             gatherBehavior.SetFoodTarget(goHit.transform.position);
                         }
@@ -424,7 +425,7 @@ public class BehaviorManager : MonoBehaviour
     }
 
     public bool canCarryMoreFood() {
-        if (currentFood <= maxFood)
+        if (currentFood < maxFood)
         {
             return true;
         }
