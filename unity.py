@@ -21,7 +21,7 @@ import base64
 
 # Load environment variables from .env file
 load_dotenv()
-OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
+API_KEY = os.getenv("OPEN_API_KEY")
 
 sys_prompt = """
     You are an intelligent survival agent in a hostile environment. Your primary goal is to make strategic decisions that maximize your long-term survival and fitness. Your choices must balance resource acquisition, energy management, safety, and movement. Hostile predators roam the area, and fleeing them is always a top priority to maintain your health.
@@ -117,7 +117,7 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 model = OpenAIModel('meta-llama/llama-4-maverick',
     provider=OpenAIProvider(
         base_url='https://openrouter.ai/api/v1',
-        api_key='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',
+        api_key=API_KEY,
     ),
 )
 settings = ModelSettings(temperature=0)
