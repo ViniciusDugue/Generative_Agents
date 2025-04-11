@@ -6,29 +6,42 @@ public class GatherBehavior : AgentBehavior
     bool m_Satiated;
     public NavMeshAgent agent;
     public Vector3 target;
-    public float wanderRadius = 10f;  // Radius for random wandering
+    public float wanderRadius = 15f;  // Radius for random wandering
 
     // These variables are assumed to be defined or set in the editor.
     private float m_EffectTime;
     public Material goodMaterial;
     public bool contribute = true;
     public EnvironmentSettings m_EnvironmentSettings; // Custom class holding environmental variables, e.g., foodScore
+    public float rotationSpeed = 45f; // degrees per second
 
     /// <summary>
     /// Called when the script instance is loaded.
     /// </summary>
-    protected void Awake()
+    protected override void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         target = transform.position;
     }
     
     // Start is called before the first frame update.
-    void Start()
+    protected override void  OnEnable()
     {
+        if (agent != null)
+        {
+            agent.isStopped = false;
+        }
         // Choose an initial random destination.
         target = GetRandomDestination();
         agent.SetDestination(target);
+    }
+
+    protected override void  OnDisable()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = true;
+        }
     }
 
     // Update is called once per frame.
@@ -69,9 +82,16 @@ public class GatherBehavior : AgentBehavior
     public void SetFoodTarget(Vector3 foodLocation)
     {
         // Overrides any current destination with the food target.
-        target = foodLocation;
-        agent.SetDestination(target);
-        Debug.Log("New food target set at: " + target);
+        if (this.gameObject.GetComponent<BehaviorManager>().canCarryMoreFood())
+        {
+            target = foodLocation;
+            agent.SetDestination(target);
+            Debug.Log("New food target set at: " + target);
+        }
+        else {
+            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        }
+            
     }
 
     /// <summary>
@@ -106,12 +126,4 @@ public class GatherBehavior : AgentBehavior
         GetComponentInChildren<Renderer>().material = goodMaterial;
     }
 
-    /// <summary>
-    /// Placeholder method to add reward. Replace with your actual reward logic.
-    /// </summary>
-    /// <param name="reward">Reward amount</param>
-    void AddReward(float reward)
-    {
-        Debug.Log("Added reward: " + reward);
-    }
 }
