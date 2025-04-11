@@ -13,6 +13,8 @@ public class BehaviorManager : MonoBehaviour
     private static int globalAgentID = 1;  // Shared counter for unique IDs
     public float fitnessScore = 0.0f;
     public float exhaustion;
+    [SerializeField]
+    public bool refreshLLM = false;
 
     [Header("Advanced Variables")]
     [Tooltip("Maximum amount of food the agent can carry at once.")]
@@ -301,7 +303,7 @@ public class BehaviorManager : MonoBehaviour
     float timer = interval;
     bool lastUpdateLLM = UpdateLLM; // track the initial value
 
-    while (true)
+    while (refreshLLM)
     {
         // Check if the flag has changed since the last frame
         if (lastUpdateLLM != UpdateLLM)
