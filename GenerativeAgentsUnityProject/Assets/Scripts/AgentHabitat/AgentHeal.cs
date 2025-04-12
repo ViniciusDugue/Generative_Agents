@@ -22,6 +22,16 @@ public class AgentHeal : MonoBehaviour
     [Tooltip("Time (in seconds) between healing ticks.")]
     public float healingInterval = 1f;
 
+    [Header("Hunger Damage Settings")]
+    [Tooltip("Damage taken when hunger is at or below the threshold each decay tick.")]
+    public int hungerDamage = 5;
+    [Tooltip("When hunger is at or below this value, the agent takes damage.")]
+    public int hungerDamageThreshold = 30;
+    [Tooltip("Hunger points decreased per decay tick.")]
+    public int hungerDecay = 10;
+    [Tooltip("Time in seconds between hunger decay ticks.")]
+    public float hungerDecayInterval = 10f;
+
     [Header("UI (Optional)")]
     public HealthBar healthBar;
 
@@ -30,14 +40,16 @@ public class AgentHeal : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        // Assume agent starts hungry; you might later implement hunger decay during the day.
-        currentHunger = 0;
+        currentHunger = maxHunger;
 
         if (healthBar != null)
         {
             healthBar.SetMaxHealth(maxHealth);
             healthBar.SetHealth(maxHealth);
         }
+
+        // Start the hunger decay routine.
+        StartCoroutine(HungerDecayRoutine());
     }
 
     /// <summary>
@@ -51,7 +63,7 @@ public class AgentHeal : MonoBehaviour
         {
             currentHunger = maxHunger;
         }
-        Debug.Log($"{gameObject.name} received food. Hunger: {currentHunger}/{maxHunger}");
+        // Debug.Log($"{gameObject.name} received food. Hunger: {currentHunger}/{maxHunger}");
 
         // Once hunger is full, start the healing process.
         if (currentHunger >= maxHunger && !isHealing)
@@ -60,6 +72,9 @@ public class AgentHeal : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gradually heals the agent as long as hunger is full.
+    /// </summary>
     private IEnumerator HealOverTime()
     {
         isHealing = true;
@@ -75,10 +90,35 @@ public class AgentHeal : MonoBehaviour
             {
                 healthBar.SetHealth(currentHealth);
             }
-            Debug.Log($"{gameObject.name} healed to {currentHealth}/{maxHealth}");
+            // Debug.Log($"{gameObject.name} healed to {currentHealth}/{maxHealth}");
             yield return new WaitForSeconds(healingInterval);
         }
         isHealing = false;
+    }
+
+    /// <summary>
+    /// Every hungerDecayInterval seconds, reduce hunger by hungerDecay.
+    /// If hunger falls at or below hungerDamageThreshold, apply starvation damage.
+    /// </summary>
+    private IEnumerator HungerDecayRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(hungerDecayInterval);
+            currentHunger -= hungerDecay;
+            if (currentHunger < 0)
+                currentHunger = 0;
+            // Debug.Log($"{gameObject.name} hunger decayed: {currentHunger}/{maxHunger}");
+            if (currentHunger <= hungerDamageThreshold)
+            {
+                AgentHealth agentHealth = GetComponent<AgentHealth>();
+                if (agentHealth != null)
+                {
+                    agentHealth.TakeDamage(hungerDamage);
+                    // Debug.Log($"{gameObject.name} takes {hungerDamage} damage due to starvation.");
+                }
+            }
+        }
     }
 
     /// <summary>
