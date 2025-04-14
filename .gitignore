@@ -111,3 +111,9 @@ GenerativeAgentsUnityProject/Assets/Scripts/AgentScripts/Behavior/FleeBehaviorAg
 GenerativeAgentsUnityProject/Assets/Prefabs/Agent.prefab
 GenerativeAgentsUnityProject/Assets/Scripts/Day Cycle/Skybox.mat
 GenerativeAgentsUnityProject/UserSettings/Layouts/default-2023.dwlt
+GenerativeAgentsUnityProject/Assets/Prefabs/Agent.prefab
+GenerativeAgentsUnityProject/Assets/Prefabs/EnemyAgent.prefab
+GenerativeAgentsUnityProject/Assets/Scenes/Sim Environment.unity
+GenerativeAgentsUnityProject/Assets/Scripts/Day Cycle/Skybox.mat
+GenerativeAgentsUnityProject/UserSettings/EditorUserSettings.asset
+GenerativeAgentsUnityProject/UserSettings/Layouts/default-2023.dwlt
