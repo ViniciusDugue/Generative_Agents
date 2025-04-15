@@ -60,7 +60,7 @@ public class EnemyAgentScript : MonoBehaviour
             if (targetAgent != null && targetAgent.CompareTag("agent"))
             {
                 float distFromSpawn = Vector3.Distance(targetAgent.position, spawnPosition);
-                Debug.Log("Distance from target to spawn: " + distFromSpawn + " (patrolRadius: " + patrolRadius + ")");
+                // Debug.Log("Distance from target to spawn: " + distFromSpawn + " (patrolRadius: " + patrolRadius + ")");
 
                 // Chase only if within the allowed patrol area.
                 if (distFromSpawn <= patrolRadius)
@@ -130,7 +130,7 @@ public class EnemyAgentScript : MonoBehaviour
             }
 
             navAgent.SetDestination(roamTarget);
-            Debug.Log("Roaming to: " + roamTarget);
+            // Debug.Log("Roaming to: " + roamTarget);
 
             // Wait until close to the roam target or until roamWaitTime expires.
             float elapsedTime = 0f;
