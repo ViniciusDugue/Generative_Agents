@@ -54,10 +54,7 @@ public class BehaviorManager : MonoBehaviour
     private Habitat agentHabitat; 
     private GatherBehavior gatherBehavior; 
     private float depositedFood = 0;
-    
-
-    
-    
+    private bool hasDepositedFood = false;
 
     // NEW: Time tracking for enemy detection.
     private float enemyDetectionBuffer = 5f;
@@ -443,5 +440,61 @@ public class BehaviorManager : MonoBehaviour
         return currentFood;
     }
 
-    
+    public int DepositAllFood()
+    {
+        if (!hasDepositedFood)
+        {
+            int deposited = currentFood;
+            depositedFood += currentFood;
+            currentFood = 0;
+            hasDepositedFood = true;
+            return deposited;
+        }
+        else
+        {
+            // Already deposited, return 0 so it doesn't add more.
+            return 0;
+        }
+    }
+
+    // Optionally, add a method to reset this flag for the next cycle/day.
+    public void ResetFoodDepositFlag()
+    {
+        hasDepositedFood = false;
+    } 
+
+    public void ApplyDailyHungerPenalty()
+    {
+        // Required food portions per day.
+        int requiredFood = 5;
+        // Using depositedFood as the count of food this agent deposited today.
+        int deposited = Mathf.RoundToInt(depositedFood);
+
+        if (deposited < requiredFood)
+        {
+            int missingFood = requiredFood - deposited;
+            // Parameter: Percentage of max health damage per missing food portion.
+            float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
+            AgentHealth agentHealth = GetComponent<AgentHealth>();
+            if (agentHealth != null)
+            {
+                // Calculate total damage.
+                int damage = Mathf.RoundToInt(missingFood * damagePercentagePerPortion * agentHealth.maxHealth);
+                Debug.Log($"Agent {agentID} did not consume enough food. Missing {missingFood} portions. Applying {damage} damage.");
+                agentHealth.TakeDamage(damage);
+            }
+            else
+            {
+                Debug.LogWarning("AgentHealth component missing on " + gameObject.name);
+            }
+        }
+        else
+        {
+            Debug.Log($"Agent {agentID} met the food requirement with {deposited} portions.");
+        }
+
+        // Reset the daily food tally for the next day.
+        depositedFood = 0;
+    }
+
 }
