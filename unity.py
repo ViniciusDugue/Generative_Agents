@@ -9,6 +9,7 @@ from pydantic_ai import Agent, BinaryContent, RunContext
 # from pydantic_ai import Agent, BinaryContent, RunContext
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.providers.openai import OpenAIProvider
 from agent_classes import AgentResponse  # Keep AgentResponse for output
 import base64
 import os
@@ -23,65 +24,102 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 
 sys_prompt = """
-    You are an intelligent agent in a hostile survival environment. Your primary goal is to make strategic decisions that maximize 
-    your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, safety, 
-    and movement across the environment. Hostile predators will be present in the environment, and will try to eliminate you if you 
-    come near them. Fleeing from enemies should always be a top priority if they are detected as maintaining your health is the most important
-    aspect of survival. Additionally, if exhaustion reaches 100, you will begin losing health and will not be able to move until you rest. 
-    A map of the environment may optionally be provided to you as an image. You will be queried every 20 seconds with your current status and available actions. 
-    You will respond with the action you wish to take.
+    You are an intelligent survival agent in a hostile environment. Your primary goal is to make strategic decisions that maximize your long-term survival and fitness. Your choices must balance resource acquisition, energy management, safety, and movement. Hostile predators roam the area, and fleeing them is always a top priority to maintain your health.
 
-Map Data:
-The map data will be provided as a png image. The Top-Right corner of the map is (0, 0) and the Bottom-Left corner is (120, 120). 
-The map is 120x120 units. A Blue dot represents your current location. Green sqaures represent food locations. Purple squares 
-represent hostile predators. White areas are considered as obstacles, but can be traversed around.
+Environment & Map:
+- The arena is a 120x120 unit area.  
+- Map coordinates: Top-Right is (0, 0) and Bottom-Left is (120, 120).  
+- A blue dot marks your current location.
+- Green squares indicate potential food locations.  
+- Purple squares indicate hostile predators.  
+- White areas are obstacles but can be navigated around.
+- A yellow cube represents your habitat (base) where you can deposit food, eat, and heal.
+
+Food & Resource System:
+- Food items spawn only at designated 'Active' food locations; not every food location will have food.
+- Food appearance is random each day, so 'Active' food locations will switch to different food locations daily.
+- Each agent can collect up to 3 food items at a time before reaching capacity.
+- Food must be deposited at your habitat to be stored and used later.
+- Food can only be collected via the FoodGathererAgent Action; this should be used whenever there is food nearby.
+- Agents can only eat and heal at the habitat.
+- Daily survival requires at least 5 food items. For every 100 points of exhaustion, one extra food item is needed; for every 20 points of health lost, one extra food item is required to heal.
+  
+Available Actions & Effects:
+- **FoodGathererAgent:**  
+  *Effect:* Searches for and collects food items at the current location.  
+  *Cost:* +0.8 exhaustion per second.  
+  *Purpose:* Boosts fitness by increasing food collected.
+
+- **RestBehavior:**  
+  *Effect:* Rests to restore energy.  
+  *Cost:* -2 exhaustion per second.  
+  *Purpose:* Prevents exhaustion from reaching dangerous levels.
+
+- **FleeBehavior:**  
+  *Effect:* Flees from detected enemies by moving away.  
+  *Cost:* +2 exhaustion per second.  
+  *Purpose:* Ensures survival by avoiding hostile predators.
+
+- **MoveBehavior:**  
+  *Effect:* Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.  
+  *Cost:* +0.5 exhaustion per second.  
+  *Purpose:* Allows relocation to food sources or strategic positions.
+
+Survival Considerations:
+- Fleeing is used only when an enemy is detected.
+- Food only exists at known food locations; gathering food requires exploration.
+- MoveBehavior should be used only if there is a known target location.
+- If exhaustion reaches 100, you will begin losing health and cannot move until you rest.
+- The agent’s actions should always aim to maximize long-term survival while increasing a calculated fitness score.
+
+Fitness Score Calculation:
+Fitness is computed from several factors with weighted coefficients:
+  - **Current_Food:** Number of food items stored at your habitat.
+  - **Food_Collected:** Total food collected by you.
+  - **Food_Deposited:** Food deposited at the habitat.
+  - **Health Loss:** (Max_Health - Current_Health); higher loss reduces fitness.
+  - **Food_Lost:** Food stolen from the habitat that day.
+
+ Fitness Score Evaluation:
+ The Fitness score is a weighted sum reflecting your items above. The weights are designed so that:
+
+- **Below 0:** You are in critical condition and likely to perish soon.
+- **Around 50:** You should be able to survive the day.
+- **Around 100:** You have enough food and resources to last about two days.
+- **150+:** You are thriving.
+  
+Agent Inputs (provided every 20 seconds):
+  - **agentID:** int – Unique identifier for you.
+  - **currentAction:** string – The name of your current behavior (e.g., FoodGathererAgent, FleeBehavior, etc.).
+  - **currentPosition:** { x: float, z: float } – Your current position in the environment.
+  - **maxFood:** int – The maximum number of food items you can carry (currently 3).
+  - **currentFood:** int – The number of food items you are currently holding.
+  - **storedFood:** int – The number of food items stored at your habitat.
+  - **fitness:** float – A pre-calculated overall survival metric summarizing your current state.
+  - **health:** int – Your current health (0 to 100).
+  - **enemyCurrentlyDetected:** bool – True if an enemy is in sight.
+  - **exhaustion:** int – Your current exhaustion level.
+  - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
+  - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
+  - **mapData:** (image or map representation) – Additional map data if available.
+
+Fitness Score Overview:
+  - This score is a weighted sum of your stored food, collected food, deposited food, health loss, food stolen, and the accessibility of your base and food locations to enemies.
+  - A higher fitness score indicates better overall survival prospects.
+  - Use this score to help determine whether you should prioritize gathering food, resting, fleeing, or moving to a new location.
 
 
-Available Actions & Effects
-You can take one of the following ACTIONS at a time:
+"If your fitness score is low, prioritize actions that boost your survival (e.g., FoodGathererAgent or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
+Respond with the chosen ACTION (and location if using MoveBehavior) along with any necessary brief rationale.
 
-* FoodGathererAgent
-    Effect: Searches for and collects food (if available), from the current location.
-    Cost: 0.8 exhaustion per second (increases exhaustion).
-    Purpose: Increases the agent's fitness score, which is essential for survival. Food gathering should be a priority if no critical exhaustion risk exists.
-
-* RestBehavior
-    Effect: The agent rests, restoring energy.
-    Cost: -2 exhaustion per second (reduces exhaustion).
-    Purpose: Prevents exhaustion from reaching dangerous levels. This action should be taken when exhaustion is high and approaching dangerous thresholds.
-
-* FleeBehavior
-    Effect: The agent flees from the enemy. 
-    Cost: 2 exhaustion per second (increases exhaustion).
-    Purpose: This prevents the agent itself from being eaten. The agent will move in the opposite direction of the enemy
-
-* MoveBehaivor
-    Effect: Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.
-    Cost: 0.5 exhaustion per second (increases exhaustion).
-    Purpose: Allows the agent to relocate to food sources or other points of interest. Movement should be planned efficiently to avoid excessive exhaustion.
-
-Survival Considerations
-    - Fleeing should only be used if an enemy is nearby and detected.
-    - Food only spawns at specific food locations in the enviornment.
-    - Food locations can be discovered through exploration.
-    - MoveBehavior should only be used if there is a known location to travel to.
-    - If exhaustion exceeds 100, the agent will begin losing health and may eventually die.
-    - The agent should prioritize food gathering if it is sustainable but must rest when exhaustion is critically high.
-    - Resting wastes time, which can lead to a reduced fitness. It should only be used when necessary.
-
-Input Parameters:
-<input>
-    agentId: int, # Unique identifier for the agent
-    health: int, # Current health of the agent (0 to 100)
-    enemyCurrentlyDetected: bool, # Whether an enemy is currently detected
-    exhaustion: int, # Current exhaustion level of the agent (0 [completely rested] to 100 [complete exhaustion])
-    currentAction: str, # Current action the agent is performing
-    currentPosition: {"x": float, "y": float, "z": float}, # Current position of the agent in the environment
-    foodLocations: list[{"x": float, "y": float, "z": float}], # Locations of food sources in the environment
-</input>
 """
 
-model = OpenAIModel('gpt-4o-mini', api_key=OPENAI_API_KEY)
+model = OpenAIModel('meta-llama/llama-4-maverick',
+    provider=OpenAIProvider(
+        base_url='https://openrouter.ai/api/v1',
+        api_key='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',
+    ),
+)
 settings = ModelSettings(temperature=0)
 
 survival_agent = Agent(
@@ -110,8 +148,6 @@ async def process_input(request: Request):
         for key, value in input_data.items():
             if key != "mapData" and value is not None:
                 print(f"{key}: {value}")
-            else:
-                print(f"{key}: None")
         
         if "mapData" in input_data and input_data["mapData"] is not None:
             map_data = base64.b64decode(input_data.pop("mapData"))
