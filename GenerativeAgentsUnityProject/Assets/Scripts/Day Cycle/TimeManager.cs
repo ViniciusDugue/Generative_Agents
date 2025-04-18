@@ -51,10 +51,10 @@ public class TimeManager : MonoBehaviour
         private void Start()
     {
         // Always start at 8:00 AM.
-        Hours = 20;
+        Hours = 8;
         Minutes = 0;
         Days = 1;
-        Debug.Log("Starting time set to 8:00 PM.");
+        Debug.Log("Starting time set to 8:00 AM.");
     }
 
     private void Update()

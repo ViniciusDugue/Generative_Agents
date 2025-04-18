@@ -1,48 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
+[RequireComponent(typeof(SphereCollider))]
 public class Habitat : MonoBehaviour
 {
+    [Header("Trigger Settings")]
+    [Tooltip("Radius around the habitat to detect agents for food drop.")]
+    public float triggerRadius = 5f;
+
     [Header("Habitat Settings")]
     [Tooltip("The central hub point for agents to gather. If left unassigned, the habitat will reposition itself at a random agent spawn point.")]
     public Transform centralHubPoint;
-    // [Tooltip("Total food stock available at the habitat.")]
-    // public int foodPortionsAvailable = 100;
     [Tooltip("Time interval (in seconds) at which food is dispensed.")]
     public float dispenseInterval = 5f;
     [Tooltip("The food portion value dispensed to each agent.")]
     public int foodPortionValue = 10;
+    [Tooltip("Expected number of agents (or threshold of agents) that should be registered before dispensing.")]
+    public int expectedAgentCount = 2;
 
-    [Header("In-Sim Variables")]
+    [Header("In‑Sim Variables")]
     [SerializeField]
     public int storedFood = 0;
 
-    [Header("Dispensation Settings")]
-    [Tooltip("Expected number of agents (or threshold of agents) that should be registered.")]
-    public int expectedAgentCount = 2;
-
-
-    // List of agents waiting for food at the habitat.
     private List<AgentHeal> waitingAgents = new List<AgentHeal>();
+    private SphereCollider triggerCollider;
 
-    private void Awake()
+    void Awake()
     {
-        // If no central hub is assigned, reposition the habitat.
+        // Ensure we have a trigger collider at the right radius
+        triggerCollider = GetComponent<SphereCollider>();
+        triggerCollider.isTrigger = true;
+        triggerCollider.radius = triggerRadius;
+
+        // If no hub assigned, reposition as before
         if (centralHubPoint == null)
-        {
             RepositionHabitat();
-        }
     }
 
-    private void Start()
+    void Start()
     {
-        // Start dispensing food periodically.
+        // Begin the periodic dispense check
         StartCoroutine(CheckForDispenseCondition());
     }
 
-    // Call this method to reposition the habitat to a random agent spawn point.
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("agent"))
+        {
+            var agentHeal = other.GetComponent<AgentHeal>();
+            if (agentHeal != null)
+            {
+                RegisterAgent(agentHeal);
+                var bm = other.GetComponent<BehaviorManager>();
+                if (bm != null)
+                    StartCoroutine(DropFoodAfterDelay(other, bm));
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("agent"))
+        {
+            var agentHeal = other.GetComponent<AgentHeal>();
+            if (agentHeal != null)
+                UnregisterAgent(agentHeal);
+        }
+    }
+
+    /// <summary>
+    /// If no central hub is assigned, reposition the habitat to a random agent spawn point.
+    /// </summary>
     public void RepositionHabitat()
     {
         GameObject[] agentSpawnPoints = GameObject.FindGameObjectsWithTag("agentSpawn");
@@ -50,7 +80,7 @@ public class Habitat : MonoBehaviour
         {
             int index = Random.Range(0, agentSpawnPoints.Length);
             Transform chosenSpawn = agentSpawnPoints[index].transform;
-            centralHubPoint = chosenSpawn;  // Optionally update the central hub reference.
+            centralHubPoint = chosenSpawn;
             transform.position = chosenSpawn.position;
             transform.rotation = chosenSpawn.rotation;
             Debug.Log("Habitat repositioned to agent spawn point: " + chosenSpawn.position);
@@ -61,7 +91,9 @@ public class Habitat : MonoBehaviour
         }
     }
 
-    // Called when an agent arrives at the habitat.
+    /// <summary>
+    /// Called when an agent enters the radius.
+    /// </summary>
     public void RegisterAgent(AgentHeal agent)
     {
         if (!waitingAgents.Contains(agent))
@@ -69,13 +101,11 @@ public class Habitat : MonoBehaviour
             waitingAgents.Add(agent);
             Debug.Log("Agent registered at habitat: " + agent.name);
         }
-        else 
-        {
-            Debug.LogWarning("AgentHeal component missing" + GetComponent<Collider>());
-        }
     }
 
-    // Called when an agent leaves the habitat.
+    /// <summary>
+    /// Called when an agent leaves the radius.
+    /// </summary>
     public void UnregisterAgent(AgentHeal agent)
     {
         if (waitingAgents.Contains(agent))
@@ -85,74 +115,47 @@ public class Habitat : MonoBehaviour
         }
     }
 
-    public void HandleAgentEntry(Collider collider)
-    {
-        Debug.Log("Agent entered Habitat door trigger: " + collider.name);
-        
-        // Register the agent using its AgentHeal component.
-        AgentHeal agentHeal = collider.GetComponent<AgentHeal>();
-        if (agentHeal != null)
-        {
-            RegisterAgent(agentHeal);
-        }
-        else
-        {
-            Debug.LogWarning("AgentHeal component missing on " + collider.name);
-        }
-        
-        // Trigger food drop after a delay.
-        BehaviorManager bm = collider.GetComponent<BehaviorManager>();
-        if (bm != null)
-        {
-            StartCoroutine(DropFoodAfterDelay(collider, bm));
-        }
-        else
-        {
-            Debug.LogWarning("No BehaviorManager found on " + collider.name);
-        }
-    }
-
-
+    /// <summary>
+    /// After a short delay, deposit all the agent’s food and add it to storedFood.
+    /// </summary>
     IEnumerator DropFoodAfterDelay(Collider collider, BehaviorManager bm)
     {
         yield return new WaitForSeconds(1f);
         if (collider.CompareTag("agent") && bm.getFood() > 0)
         {
-            // Instead of dropping food one unit at a time,
-            // deposit all food the agent is carrying.
             int deposited = bm.DepositAllFood();
             storedFood += deposited;
             Debug.Log($"Agent {collider.name} deposited {deposited} food. Habitat stored food now = {storedFood}");
         }
     }
 
-    // Coroutine that checks if the expected number of agents are registered and if they have dropped food.
+    /// <summary>
+    /// Every second, once enough agents are in range and have dropped their food,
+    /// dispense based on fitness and clear the waiting list.
+    /// </summary>
     private IEnumerator CheckForDispenseCondition()
     {
         while (true)
         {
-            // Check every 1 second.
             yield return new WaitForSeconds(1f);
 
-            // If the number of registered agents is at least the expected count…
             if (waitingAgents.Count >= expectedAgentCount)
             {
                 bool allDropped = true;
-                // Check if every registered agent has dropped its food.
                 foreach (var agent in waitingAgents)
                 {
-                    BehaviorManager bm = agent.GetComponent<BehaviorManager>();
+                    var bm = agent.GetComponent<BehaviorManager>();
                     if (bm != null && bm.getFood() > 0)
                     {
                         allDropped = false;
                         break;
                     }
                 }
+
                 if (allDropped)
                 {
                     Debug.Log("All registered agents have dropped their food. Dispensing food based on fitness.");
                     DispenseFood();
-                    // Optionally clear the list or wait for a new registration cycle.
                     waitingAgents.Clear();
                     break;
                 }
@@ -168,11 +171,11 @@ public class Habitat : MonoBehaviour
         }
     }
 
-    // Dispenses food in order of fitness (highest first).
+    /// <summary>
+    /// Dispense food in order of fitness (highest first), decrementing storedFood.
+    /// </summary>
     public void DispenseFood()
     {
-        // Sort waiting agents by descending fitness score,
-        // and if the scores are equal, by ascending agentID.
         var sortedAgents = waitingAgents
             .OrderByDescending(a => a.GetComponent<BehaviorManager>().calculateFitnessScore())
             .ThenBy(a => a.GetComponent<BehaviorManager>().agentID)
@@ -185,14 +188,8 @@ public class Habitat : MonoBehaviour
             float fitness = bm.calculateFitnessScore();
             Debug.Log($"{agent.name}: Fitness = {fitness}, AgentID = {bm.agentID}");
 
-            // Dispense food portion to the agent.
             agent.ReceiveFood(foodPortionValue);
-
-            // Decrement storedFood by the portion that was dispensed.
-            storedFood -= foodPortionValue;
-            if (storedFood < 0)
-                storedFood = 0;
-
+            storedFood = Mathf.Max(0, storedFood - foodPortionValue);
             Debug.Log($"Stored food remaining: {storedFood}");
         }
     }
@@ -237,17 +234,4 @@ public class Habitat : MonoBehaviour
             Gizmos.DrawWireSphere(spawn.transform.position, radius);
         }
     }
-
-    IEnumerator dropFood(Collider collider, BehaviorManager bm) {
-        yield return new WaitForSeconds(1f);
-        if (collider.CompareTag("agent") && bm.getFood() > 0) {
-            bm.dropFood();
-            storedFood += 1;
-            if (bm.getFood() <= 0) {
-                Debug.Log("Agent has deposisted all food");
-            }
-        }
-
-    }
-
 }
