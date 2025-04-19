@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6469390480390452264}
   - component: {fileID: 4479097550134142220}
   - component: {fileID: 8111720288139862673}
+  - component: {fileID: 6125903389608372974}
   m_Layer: 6
   m_Name: AgentCube_Blue
   m_TagString: Untagged
@@ -90,6 +91,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6125903389608372974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 41902001815330996}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &845323699607671451
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,91 +796,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &5542783365361813177
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4867458935836346424}
-  - component: {fileID: 7983510725527229402}
-  - component: {fileID: 8158294244495933747}
-  m_Layer: 0
-  m_Name: Small_Wall
-  m_TagString: block
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &4867458935836346424
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5542783365361813177}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 4, y: 1, z: 0.32999998}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3887981853846396359}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7983510725527229402
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5542783365361813177}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8158294244495933747
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5542783365361813177}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6149113923646826671
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,20 +1076,20 @@ GameObject:
   - component: {fileID: 3586588434944278327}
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
-  - component: {fileID: 7039869131580968681}
-  - component: {fileID: 5926976418048991636}
-  - component: {fileID: 5729518069442870478}
+  - component: {fileID: 3879892247664422788}
+  - component: {fileID: 3951101079465718669}
+  - component: {fileID: 8390504711016312230}
+  - component: {fileID: 1841426132986401358}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
-  - component: {fileID: 8813810141994640850}
   - component: {fileID: 4155786854146672970}
   - component: {fileID: 5348884404428321261}
   - component: {fileID: 7887430557503516784}
   - component: {fileID: 7518629946175017511}
   - component: {fileID: -2325263815777301736}
+  - component: {fileID: 5754602932285685988}
   - component: {fileID: 6572964766931281634}
   - component: {fileID: 2381536804232584231}
-  - component: {fileID: 3734130453397303237}
   m_Layer: 6
   m_Name: Agent
   m_TagString: agent
@@ -1174,7 +1111,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6469390480390452264}
-  - {fileID: 4867458935836346424}
   - {fileID: 6244662626960454692}
   - {fileID: 1082443100923470327}
   m_Father: {fileID: 0}
@@ -1237,11 +1173,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -1372625422
   m_Radius: 0.5
-  m_Speed: 4
-  m_Acceleration: 4
+  m_Speed: 8
+  m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1273,14 +1209,14 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 5022602860645237092, guid: 2f1fdefcd1e3b174886a6050eb024d98, type: 3}
   m_InferenceDevice: 2
-  m_BehaviorType: 2
+  m_BehaviorType: 1
   m_BehaviorName: GridFoodCollector
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_DeterministicInference: 0
   m_ObservableAttributeHandling: 0
---- !u!114 &7039869131580968681
+--- !u!114 &3879892247664422788
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1293,61 +1229,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agentID: 1
-  fitnessScore: 0
   exhaustion: 0
-  refreshLLM: 0
-  maxFood: 3
-  foodCollected: 0
-  currentFood: 0
-  FitnessScore: 0
-  defaultBehavior: {fileID: 5729518069442870478}
+  defaultBehavior: {fileID: 1841426132986401358}
   currentAgentBehavior: {fileID: 0}
-  enemyCurrentlyDetected: 0
-  enemyPreviousDetected: 0
-  enemyTransform: {fileID: 0}
---- !u!114 &5926976418048991636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04f11643a90aaf842b3767b619b557ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  exhaustionRate: 0.1
-  n_blocks_required:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  smallWall: {fileID: 5542783365361813177}
-  ConstructionSite: {fileID: 0}
-  Destination: {fileID: 0}
-  destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
-    type: 3}
-  wallPrefab: {fileID: 5233713113548216580, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-    type: 3}
-  constructionSitePrefab: {fileID: 4878706031624230733, guid: 90840c85cce34c74085cf1526b32eb1d,
-    type: 3}
-  WallRotation: 50
-  moveSpeed: 20
-  acceleration: 9
-  rotationSpeed: 8
-  rangeThreshold: 1
-  pickupRange: 6
-  isHoldingWall: 0
-  destinationStopDistance: 2
-  startBehavior: 0
-  interrupt: 0
-  navAgent: {fileID: 3081395510317380987}
-  currentState: 0
---- !u!114 &5729518069442870478
+--- !u!114 &3951101079465718669
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1356,7 +1241,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 468d594e562f3ea49a5227331c22ec67, type: 3}
+  m_Script: {fileID: 11500000, guid: a11632dc52db4b64dbfdedfe77ec3de0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 0
+  navAgent: {fileID: 3081395510317380987}
+  habitat: {fileID: 0}
+  goTowardsStoppingDistance: 3
+  patrolRadius: 20
+  patrolInterval: 3
+  detectionRadius: 20
+  chaseDuration: 3
+  maxChaseDistance: 20
+  collisionDamage: 20
+--- !u!114 &8390504711016312230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1990cbd563521048adad39a290c4f9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
@@ -1364,13 +1271,48 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   exhaustionRate: 0.1
-  agent: {fileID: 3081395510317380987}
-  target: {x: 0, y: 0, z: 0}
-  wanderRadius: 15
-  goodMaterial: {fileID: 2100000, guid: 1fa34bebe866b534ab96a2fb50fa40d8, type: 2}
-  contribute: 1
+  targetBlock: {fileID: 0}
+  destinationObject: {fileID: 0}
+  navAgent: {fileID: 3081395510317380987}
+  startBehavior: 0
+  interrupt: 0
+  pickupRange: 3
+  isHoldingBlock: 0
+  destinationStopDistance: 1
+  distToDestination: 0
+  destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+    type: 3}
+  currentState: 0
+--- !u!114 &1841426132986401358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7ec228d560f48448c66a24b807ae29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 5000
+  exhaustionRate: 0.8
   m_EnvironmentSettings: {fileID: 0}
-  rotationSpeed: {x: 0, y: 50, z: 0}
+  area: {fileID: 0}
+  turnSpeed: 150
+  moveSpeed: 1
+  agentReset: 0
+  normalMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
+  badMaterial: {fileID: 2100000, guid: 88b9ae7af2c1748a0a1f63407587a601, type: 2}
+  goodMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
+  frozenMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
+  myLaser: {fileID: 8750545991374723211}
+  contribute: 1
+  useVectorObs: 0
+  useVectorFrozenFlag: 0
 --- !u!114 &8322022180366706281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1406,28 +1348,8 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   exhaustionRate: 0.5
-  agent: {fileID: 3081395510317380987}
+  agent: {fileID: 0}
   target: {x: 105.93, y: 7.1, z: 107.9}
---- !u!114 &8813810141994640850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 524334921fde35c4187815186e352b07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  exhaustionRate: 0.1
-  fleeDistance: 10
-  rotationSpeed: 5
-  sampleDistance: 2
 --- !u!114 &4155786854146672970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1473,7 +1395,8 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  m_RaysPerDirection: 0
+  - Default
+  m_RaysPerDirection: 40
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
   m_RayLength: 70
@@ -1485,7 +1408,7 @@ MonoBehaviour:
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 1
+  m_StartVerticalOffset: 0
   m_EndVerticalOffset: 0
 --- !u!114 &7518629946175017511
 MonoBehaviour:
@@ -1504,7 +1427,8 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  m_RaysPerDirection: 0
+  - Default
+  m_RaysPerDirection: 30
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
   m_RayLength: 70
@@ -1516,8 +1440,8 @@ MonoBehaviour:
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 2
-  m_EndVerticalOffset: 6
+  m_StartVerticalOffset: 0
+  m_EndVerticalOffset: 5
 --- !u!114 &-2325263815777301736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1535,6 +1459,7 @@ MonoBehaviour:
   - food
   - agent
   - wall
+  - Default
   m_RaysPerDirection: 30
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
@@ -1548,7 +1473,23 @@ MonoBehaviour:
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
-  m_EndVerticalOffset: -3
+  m_EndVerticalOffset: -1.5
+--- !u!114 &5754602932285685988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7042152a288c6e54c9e82fbb531364a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapCamera: {fileID: 0}
+  mapWidth: 200
+  mapHeight: 200
+  serverUrl: http://127.0.0.1:12345/map
 --- !u!114 &6572964766931281634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1614,27 +1555,7 @@ MonoBehaviour:
   foodPortionValue: 10
   healingPerTick: 5
   healingInterval: 1
-  hungerDamage: 5
-  hungerDamageThreshold: 30
-  hungerDecay: 10
-  hungerDecayInterval: 10
   healthBar: {fileID: 8190683321543600135}
---- !u!114 &3734130453397303237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7042152a288c6e54c9e82fbb531364a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapCamera: {fileID: 0}
-  mapWidth: 200
-  mapHeight: 200
-  serverUrl: http://127.0.0.1:12345/map
 --- !u!1 &8750545991374723211
 GameObject:
   m_ObjectHideFlags: 0

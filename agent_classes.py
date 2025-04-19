@@ -24,7 +24,7 @@ class AgentResponse(BaseModel):
         description="Reasoning behind the agent's next action selection",
     )
 
-    next_action: Literal["FoodGathererAgent", "RestBehavior", "MoveBehavior", "FleeBehavior"] = Field(
+    next_action: Literal["FoodGathererAgent", "RestBehavior", "MoveBehavior"] = Field(
         ...,
         description="The next action to take for the agent",
     )

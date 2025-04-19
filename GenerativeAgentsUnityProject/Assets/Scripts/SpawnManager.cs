@@ -164,28 +164,20 @@ public class SpawnManager : MonoBehaviour
             activeFoodSpawnPoints.Add(tempList[index]);
             tempList.RemoveAt(index);
         }
-
         foreach (Transform spawnPoint in foodSpawnPoints)
         {
             SphereCollider sc = spawnPoint.GetComponent<SphereCollider>();
-            FoodSpawnPointStatus status = spawnPoint.GetComponent<FoodSpawnPointStatus>();
-
-            if (status == null)
+            if (sc != null)
             {
-                // If the component doesn't exist, add it.
-                status = spawnPoint.gameObject.AddComponent<FoodSpawnPointStatus>();
-            }
-        
-            if (activeFoodSpawnPoints.Contains(spawnPoint))
-            {
-                sc.radius = foodSpawnRadius;
-                sc.enabled = true;
-                status.HasFood = true;  // This spawn point is active and has food.
-            }
-            else
-            {
-                sc.enabled = false;
-                status.HasFood = false; // This spawn point is inactive and has no food.
+                if (activeFoodSpawnPoints.Contains(spawnPoint))
+                {
+                    sc.radius = foodSpawnRadius;
+                    sc.enabled = true;
+                }
+                else
+                {
+                    sc.enabled = false;
+                }
             }
         }
         string log = "Day " + timeManager.Days + " - Active Food Spawn Points: ";
@@ -269,30 +261,18 @@ public class SpawnManager : MonoBehaviour
             Debug.LogWarning("No spawn points found for " + prefab.name);
             return;
         }
-         Debug.Log($"✅ Spawning {maxCount} {prefab.name}(s) across {spawnPoints.Count} points");
-
-        int totalToSpawn = maxCount;
-        int points = spawnPoints.Count;
-
-        // Base count per point, plus any remainder
-        int baseCount = totalToSpawn / points;
-        int remainder = totalToSpawn % points;
-
-        int spawnedSoFar = 0;
-
-        for (int i = 0; i < points; i++)
+        Debug.Log($"✅ Spawning {maxCount} {prefab.name}(s)");
+        int totalSpawned = 0;
+        foreach (Transform point in spawnPoints)
         {
-            if (spawnedSoFar >= totalToSpawn)
+            if (totalSpawned >= maxCount)
                 break;
 
-            // Distribute the “extra” one per the first `remainder` points
-            int countThisPoint = baseCount + (i < remainder ? 1 : 0);
-
-            Transform point = spawnPoints[i];
-            for (int j = 0; j < countThisPoint; j++)
+            int countPerPoint = Mathf.Min(maxCount - totalSpawned, 5); // Limit spawns per point
+            for (int i = 0; i < countPerPoint; i++)
             {
-                Vector3 pos = GetRandomPositionAround(point.position, spawnRadius);
-                GameObject newObj = Instantiate(prefab, pos, Quaternion.identity);
+                Vector3 randomPosition = GetRandomPositionAround(point.position, spawnRadius);
+                GameObject newObj = Instantiate(prefab, randomPosition, Quaternion.identity);
                 spawnedList.Add(newObj);
 
                 if (prefab == agentPrefab)
@@ -320,8 +300,8 @@ public class SpawnManager : MonoBehaviour
                     markerManager?.RegisterMarker(newObj);
                 }
 
-                spawnedSoFar++;
-                if (spawnedSoFar >= totalToSpawn)
+                totalSpawned++;
+                if (totalSpawned >= maxCount)
                     break;
             }
         }

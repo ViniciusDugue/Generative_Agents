@@ -52,7 +52,7 @@ public class AgentHealth : MonoBehaviour
         canTakeDamage = true; // Re-enable damage
     }
 
-    public void TakeDamage(int damage)
+    void TakeDamage(int damage)
     {
         currentHealth -= damage;
         if(slider != null)

@@ -55,13 +55,25 @@ public class TimeManager : MonoBehaviour
         Minutes = 0;
         Days = 1;
         Debug.Log("Starting time set to 8:00 AM.");
+
+        // Start the time progression (using your accelerated time).
+        // Other initialization code remains the same.
     }
 
     private void Update()
     {
-        // 1 day/night cycle = 4 minutes
+        // Original time progression (1 game minute per real second):
+        // tempSecond += Time.deltaTime;
+        // if (tempSecond >= 1)
+        // {
+        //     Minutes += 1;
+        //     tempSecond = 0;
+        // }
+
+        // New time progression: full day (1440 game minutes) passes in 4 minutes (240 seconds) of real time.
+        // That means 6 game minutes per real second.
         tempSecond += Time.deltaTime;
-        float secondsPerGameMinute = 1f / 6f;
+        float secondsPerGameMinute = 1f / 6f; // ~0.1667 seconds per game minute
         if (tempSecond >= secondsPerGameMinute)
         {
             int minutesToAdd = Mathf.FloorToInt(tempSecond / secondsPerGameMinute);
@@ -86,13 +98,6 @@ public class TimeManager : MonoBehaviour
             Hours = 0;
             Days++;
             Debug.Log("New day started. Day count: " + Days);
-
-            // Find all BehaviorManager instances in the scene.
-            BehaviorManager[] allAgents = GameObject.FindObjectsOfType<BehaviorManager>();
-            foreach (var bm in allAgents)
-            {
-                bm.ApplyDailyHungerPenalty();
-            }
         }
     }
 
