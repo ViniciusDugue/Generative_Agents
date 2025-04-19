@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class BuildWall_Agent : MonoBehaviour
+public class BuildWall_Agent : AgentBehavior
 {
     [Header("Required GameObjects")]
     public GameObject[] n_blocks_required;
