@@ -98,8 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roamWaitTime: 2
-  roamRange: 30
-  patrolRadius: 30
+  roamRange: 20
 --- !u!114 &2725671267940979465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,8 +111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a22ff306669744396b44a371bb711c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 30
-  angle: 360
+  radius: 5
+  angle: 120
   agent: {fileID: 0}
   targetMask:
     serializedVersion: 2
