@@ -269,18 +269,30 @@ public class SpawnManager : MonoBehaviour
             Debug.LogWarning("No spawn points found for " + prefab.name);
             return;
         }
-        Debug.Log($"✅ Spawning {maxCount} {prefab.name}(s)");
-        int totalSpawned = 0;
-        foreach (Transform point in spawnPoints)
+         Debug.Log($"✅ Spawning {maxCount} {prefab.name}(s) across {spawnPoints.Count} points");
+
+        int totalToSpawn = maxCount;
+        int points = spawnPoints.Count;
+
+        // Base count per point, plus any remainder
+        int baseCount = totalToSpawn / points;
+        int remainder = totalToSpawn % points;
+
+        int spawnedSoFar = 0;
+
+        for (int i = 0; i < points; i++)
         {
-            if (totalSpawned >= maxCount)
+            if (spawnedSoFar >= totalToSpawn)
                 break;
 
-            int countPerPoint = Mathf.Min(maxCount - totalSpawned, 5); // Limit spawns per point
-            for (int i = 0; i < countPerPoint; i++)
+            // Distribute the “extra” one per the first `remainder` points
+            int countThisPoint = baseCount + (i < remainder ? 1 : 0);
+
+            Transform point = spawnPoints[i];
+            for (int j = 0; j < countThisPoint; j++)
             {
-                Vector3 randomPosition = GetRandomPositionAround(point.position, spawnRadius);
-                GameObject newObj = Instantiate(prefab, randomPosition, Quaternion.identity);
+                Vector3 pos = GetRandomPositionAround(point.position, spawnRadius);
+                GameObject newObj = Instantiate(prefab, pos, Quaternion.identity);
                 spawnedList.Add(newObj);
 
                 if (prefab == agentPrefab)
@@ -308,8 +320,8 @@ public class SpawnManager : MonoBehaviour
                     markerManager?.RegisterMarker(newObj);
                 }
 
-                totalSpawned++;
-                if (totalSpawned >= maxCount)
+                spawnedSoFar++;
+                if (spawnedSoFar >= totalToSpawn)
                     break;
             }
         }

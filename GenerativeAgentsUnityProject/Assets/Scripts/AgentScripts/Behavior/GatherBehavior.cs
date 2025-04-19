@@ -3,7 +3,6 @@ using UnityEngine.AI;
 
 public class GatherBehavior : AgentBehavior
 {
-    bool m_Satiated;
     public NavMeshAgent agent;
     public Vector3 target;
     public float wanderRadius = 15f;  // Radius for random wandering
@@ -13,7 +12,11 @@ public class GatherBehavior : AgentBehavior
     public Material goodMaterial;
     public bool contribute = true;
     public EnvironmentSettings m_EnvironmentSettings; // Custom class holding environmental variables, e.g., foodScore
-    public float rotationSpeed = 45f; // degrees per second
+    public Vector3 rotationSpeed = new Vector3(0, 50, 0); // Rotation speed in degrees per second
+
+    private bool shouldRotate = false;
+    private Rigidbody m_Rigidbody;
+
 
     /// <summary>
     /// Called when the script instance is loaded.
@@ -22,6 +25,8 @@ public class GatherBehavior : AgentBehavior
     {
         agent = GetComponent<NavMeshAgent>();
         target = transform.position;
+        m_Rigidbody = GetComponent<Rigidbody>(); // Assuming you have a Rigidbody component on the same GameObject.Rigidbody m_Rigidbody;
+
     }
     
     // Start is called before the first frame update.
@@ -30,6 +35,7 @@ public class GatherBehavior : AgentBehavior
         if (agent != null)
         {
             agent.isStopped = false;
+            m_Rigidbody.constraints = RigidbodyConstraints.None;
         }
         // Choose an initial random destination.
         target = GetRandomDestination();
@@ -41,16 +47,14 @@ public class GatherBehavior : AgentBehavior
         if (agent != null)
         {
             agent.isStopped = true;
+            shouldRotate = false;
+            m_Rigidbody.constraints = RigidbodyConstraints.None;
         }
     }
 
     // Update is called once per frame.
     void Update()
     {
-        // If the agent is satiated (has found food) then stop further updates.
-        if (m_Satiated)
-            return;
-
         // If the agent is close enough to its destination, choose a new target.
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
@@ -59,6 +63,11 @@ public class GatherBehavior : AgentBehavior
             target = GetRandomDestination();
             agent.SetDestination(target);
         }
+    }
+
+    void FixedUpdate()
+    {
+        transform.Rotate(rotationSpeed * Time.deltaTime);
     }
 
     /// <summary>
@@ -89,7 +98,9 @@ public class GatherBehavior : AgentBehavior
             Debug.Log("New food target set at: " + target);
         }
         else {
-            transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+            agent.isStopped = true;
+            m_Rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionX;
+            shouldRotate = true;
         }
             
     }
@@ -121,7 +132,6 @@ public class GatherBehavior : AgentBehavior
     /// </summary>
     void Satiate()
     {
-        m_Satiated = true;
         m_EffectTime = Time.time;
         GetComponentInChildren<Renderer>().material = goodMaterial;
     }

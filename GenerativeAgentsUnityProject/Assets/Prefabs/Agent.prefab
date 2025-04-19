@@ -1055,11 +1055,9 @@ GameObject:
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
   - component: {fileID: 7039869131580968681}
-  - component: {fileID: 8390504711016312230}
-  - component: {fileID: 1841426132986401358}
+  - component: {fileID: 5729518069442870478}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
-  - component: {fileID: 8813810141994640850}
   - component: {fileID: 4155786854146672970}
   - component: {fileID: 5348884404428321261}
   - component: {fileID: 7887430557503516784}
@@ -1207,11 +1205,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agentID: 1
+  fitnessScore: 0
   exhaustion: 0
-  defaultBehavior: {fileID: 1841426132986401358}
+  refreshLLM: 0
+  maxFood: 3
+  foodCollected: 0
+  currentFood: 0
+  FitnessScore: 0
+  defaultBehavior: {fileID: 5729518069442870478}
   currentAgentBehavior: {fileID: 0}
   enemyCurrentlyDetected: 0
---- !u!114 &1841426132986401358
+  enemyPreviousDetected: 0
+  enemyTransform: {fileID: 0}
+--- !u!114 &5729518069442870478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1220,27 +1226,43 @@ MonoBehaviour:
   m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7ec228d560f48448c66a24b807ae29, type: 3}
+  m_Script: {fileID: 11500000, guid: 468d594e562f3ea49a5227331c22ec67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
-  exhaustionRate: 0.8
-  m_EnvironmentSettings: {fileID: 0}
-  area: {fileID: 0}
-  turnSpeed: 150
-  moveSpeed: 1
-  agentReset: 0
-  normalMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
-  badMaterial: {fileID: 2100000, guid: 88b9ae7af2c1748a0a1f63407587a601, type: 2}
-  goodMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
-  frozenMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
-  myLaser: {fileID: 8750545991374723211}
+  MaxStep: 0
+  exhaustionRate: 0.1
+  agent: {fileID: 3081395510317380987}
+  target: {x: 0, y: 0, z: 0}
+  wanderRadius: 15
+  goodMaterial: {fileID: 2100000, guid: 1fa34bebe866b534ab96a2fb50fa40d8, type: 2}
   contribute: 1
-  useVectorObs: 0
-  useVectorFrozenFlag: 0
+  m_EnvironmentSettings: {fileID: 0}
+  rotationSpeed: 45
+--- !u!114 &8322022180366706281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 524334921fde35c4187815186e352b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.1
+  fleeRadius: 10
+  fleeSpeed: 5
+  predatorTag: enemyAgent
+  smoothFactor: 0.1
+  rotationSpeed: 5
 --- !u!114 &8322022180366706281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1275,31 +1297,10 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  exhaustionRate: 0.5
-  agent: {fileID: 3081395510317380987}
-  target: {x: 105.93, y: 7.1, z: 107.9}
---- !u!114 &8813810141994640850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 524334921fde35c4187815186e352b07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   exhaustionRate: 0.1
-  fleeRadius: 10
-  fleeSpeed: 5
-  predatorTag: enemyAgent
-  smoothFactor: 0.1
+  fleeDistance: 10
   rotationSpeed: 5
+  sampleDistance: 2
 --- !u!114 &4155786854146672970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1486,6 +1487,10 @@ MonoBehaviour:
   foodPortionValue: 10
   healingPerTick: 5
   healingInterval: 1
+  hungerDamage: 5
+  hungerDamageThreshold: 30
+  hungerDecay: 10
+  hungerDecayInterval: 10
   healthBar: {fileID: 8190683321543600135}
 --- !u!114 &3734130453397303237
 MonoBehaviour:
