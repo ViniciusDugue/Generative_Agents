@@ -1058,7 +1058,6 @@ GameObject:
   - component: {fileID: 5729518069442870478}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
-  - component: {fileID: 8813810141994640850}
   - component: {fileID: 4155786854146672970}
   - component: {fileID: 5348884404428321261}
   - component: {fileID: 7887430557503516784}
@@ -1249,6 +1248,28 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 524334921fde35c4187815186e352b07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.1
+  fleeRadius: 10
+  fleeSpeed: 5
+  predatorTag: enemyAgent
+  smoothFactor: 0.1
+  rotationSpeed: 5
+--- !u!114 &8322022180366706281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f9ef40be8594fe44a528c4efb6356b9, type: 3}
@@ -1270,25 +1291,6 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b8520a0e6090b6c42966fa34e182c016, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  exhaustionRate: 0.5
-  agent: {fileID: 3081395510317380987}
-  target: {x: 105.93, y: 7.1, z: 107.9}
---- !u!114 &8813810141994640850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 524334921fde35c4187815186e352b07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
