@@ -1054,10 +1054,8 @@ GameObject:
   - component: {fileID: 3586588434944278327}
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
-  - component: {fileID: 3879892247664422788}
-  - component: {fileID: 8390504711016312230}
-  - component: {fileID: 1841426132986401358}
-  - component: {fileID: 8813810141994640850}
+  - component: {fileID: 7039869131580968681}
+  - component: {fileID: 5729518069442870478}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
   - component: {fileID: 4155786854146672970}
@@ -1065,7 +1063,6 @@ GameObject:
   - component: {fileID: 7887430557503516784}
   - component: {fileID: 7518629946175017511}
   - component: {fileID: -2325263815777301736}
-  - component: {fileID: 5754602932285685988}
   - component: {fileID: 6572964766931281634}
   - component: {fileID: 2381536804232584231}
   - component: {fileID: 3734130453397303237}
@@ -1208,10 +1205,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agentID: 1
+  fitnessScore: 0
   exhaustion: 0
-  defaultBehavior: {fileID: 8813810141994640850}
+  refreshLLM: 0
+  maxFood: 3
+  foodCollected: 0
+  currentFood: 0
+  FitnessScore: 0
+  defaultBehavior: {fileID: 5729518069442870478}
   currentAgentBehavior: {fileID: 0}
---- !u!114 &8390504711016312230
+  enemyCurrentlyDetected: 0
+  enemyPreviousDetected: 0
+  enemyTransform: {fileID: 0}
+--- !u!114 &5729518069442870478
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1220,7 +1226,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1990cbd563521048adad39a290c4f9a, type: 3}
+  m_Script: {fileID: 11500000, guid: 468d594e562f3ea49a5227331c22ec67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
@@ -1228,49 +1234,14 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   exhaustionRate: 0.1
-  targetBlock: {fileID: 0}
-  destinationObject: {fileID: 0}
-  navAgent: {fileID: 3081395510317380987}
-  startBehavior: 0
-  interrupt: 0
-  pickupRange: 2
-  isHoldingBlock: 0
-  destinationStopDistance: 1
-  distToDestination: 0
-  destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
-    type: 3}
-  currentState: 0
---- !u!114 &1841426132986401358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7ec228d560f48448c66a24b807ae29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
-  exhaustionRate: 0.8
-  m_EnvironmentSettings: {fileID: 0}
-  area: {fileID: 0}
-  turnSpeed: 150
-  moveSpeed: 1
-  agentReset: 0
-  normalMaterial: {fileID: 2100000, guid: c9fa44c2c3f8ce74ca39a3355ea42631, type: 2}
-  badMaterial: {fileID: 2100000, guid: 88b9ae7af2c1748a0a1f63407587a601, type: 2}
-  goodMaterial: {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
-  frozenMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
-  myLaser: {fileID: 8750545991374723211}
+  agent: {fileID: 3081395510317380987}
+  target: {x: 0, y: 0, z: 0}
+  wanderRadius: 15
+  goodMaterial: {fileID: 2100000, guid: 1fa34bebe866b534ab96a2fb50fa40d8, type: 2}
   contribute: 1
-  useVectorObs: 0
-  useVectorFrozenFlag: 0
---- !u!114 &8813810141994640850
+  m_EnvironmentSettings: {fileID: 0}
+  rotationSpeed: 45
+--- !u!114 &8322022180366706281
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1326,9 +1297,10 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  exhaustionRate: 0.5
-  agent: {fileID: 3081395510317380987}
-  target: {x: 105.93, y: 7.1, z: 107.9}
+  exhaustionRate: 0.1
+  fleeDistance: 10
+  rotationSpeed: 5
+  sampleDistance: 2
 --- !u!114 &4155786854146672970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1374,8 +1346,7 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - Default
-  m_RaysPerDirection: 40
+  m_RaysPerDirection: 0
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
   m_RayLength: 70
@@ -1387,7 +1358,7 @@ MonoBehaviour:
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0
+  m_StartVerticalOffset: 1
   m_EndVerticalOffset: 0
 --- !u!114 &7518629946175017511
 MonoBehaviour:
@@ -1406,8 +1377,7 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - Default
-  m_RaysPerDirection: 30
+  m_RaysPerDirection: 0
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
   m_RayLength: 70
@@ -1419,8 +1389,8 @@ MonoBehaviour:
   m_UseBatchedRaycasts: 1
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0
-  m_EndVerticalOffset: 5
+  m_StartVerticalOffset: 2
+  m_EndVerticalOffset: 6
 --- !u!114 &-2325263815777301736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1438,7 +1408,6 @@ MonoBehaviour:
   - food
   - agent
   - wall
-  - Default
   m_RaysPerDirection: 30
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
@@ -1452,23 +1421,7 @@ MonoBehaviour:
   rayHitColor: {r: 1, g: 0, b: 0, a: 1}
   rayMissColor: {r: 1, g: 1, b: 1, a: 1}
   m_StartVerticalOffset: 0
-  m_EndVerticalOffset: -1.5
---- !u!114 &5754602932285685988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7042152a288c6e54c9e82fbb531364a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapCamera: {fileID: 0}
-  mapWidth: 200
-  mapHeight: 200
-  serverUrl: http://127.0.0.1:12345/map
+  m_EndVerticalOffset: -3
 --- !u!114 &6572964766931281634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1534,6 +1487,10 @@ MonoBehaviour:
   foodPortionValue: 10
   healingPerTick: 5
   healingInterval: 1
+  hungerDamage: 5
+  hungerDamageThreshold: 30
+  hungerDecay: 10
+  hungerDecayInterval: 10
   healthBar: {fileID: 8190683321543600135}
 --- !u!114 &3734130453397303237
 MonoBehaviour:
