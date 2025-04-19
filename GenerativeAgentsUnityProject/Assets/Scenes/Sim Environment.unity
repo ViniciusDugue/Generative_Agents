@@ -16148,7 +16148,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1919913112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16167,14 +16167,14 @@ MonoBehaviour:
     type: 3}
   agentPrefab: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
     type: 3}
-  maxFood: 0
+  maxFood: 20
   maxEnemies: 15
   maxAgents: 1
   spawnHeightOffset: 0
   foodSpawnRadius: 8
   enemySpawnRadius: 8
   agentSpawnRadius: 8
-  dailyActiveFoodSpawnCount: 2
+  dailyActiveFoodSpawnCount: 3
   dailyActiveEnemySpawnCount: 3
   timeManager: {fileID: 1134269976}
 --- !u!4 &1919913113
@@ -16742,7 +16742,7 @@ PrefabInstance:
     - target: {fileID: 1841426132986401358, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1841426132986401358, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
@@ -16802,12 +16802,12 @@ PrefabInstance:
     - target: {fileID: 6918375715167313049, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6918375715167313049, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
@@ -16817,7 +16817,7 @@ PrefabInstance:
     - target: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8390504711016312230, guid: 3011ae46c3f59ae489428973e29076bd,
         type: 3}
@@ -18704,6 +18704,16 @@ PrefabInstance:
     - target: {fileID: 530312542090748953, guid: 5fd2083b2b3c5cb42883f203b33352c4,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156623430993633719, guid: 5fd2083b2b3c5cb42883f203b33352c4,
+        type: 3}
+      propertyPath: m_Radius
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4156623430993633719, guid: 5fd2083b2b3c5cb42883f203b33352c4,
+        type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8316424405763230828, guid: 5fd2083b2b3c5cb42883f203b33352c4,
