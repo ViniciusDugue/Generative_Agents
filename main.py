@@ -7,10 +7,14 @@ from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
 from pydantic_ai import Agent, BinaryContent, RunContext
 # from pydantic_ai import Agent, BinaryContent, RunContext
+from dataclasses import asdict
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.messages import ModelMessagesTypeAdapter
 from pydantic_ai.providers.openai import OpenAIProvider
-from agent_classes import AgentResponse  # Keep AgentResponse for output
+from AgentClasses import AgentResponse  # Keep AgentResponse for output
+from AgentManager import AgentManager  # Import the AgentManager class
+from pydantic_core import to_jsonable_python, to_json
 import base64
 import os
 import json
@@ -21,7 +25,7 @@ import base64
 
 # Load environment variables from .env file
 load_dotenv()
-OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
+API_KEY = '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'
 
 sys_prompt = """
     You are an intelligent survival agent in a hostile environment. Your primary goal is to make strategic decisions that maximize your long-term survival and fitness. Your choices must balance resource acquisition, energy management, safety, and movement. Hostile predators roam the area, and fleeing them is always a top priority to maintain your health.
@@ -117,10 +121,10 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 model = OpenAIModel('meta-llama/llama-4-maverick',
     provider=OpenAIProvider(
         base_url='https://openrouter.ai/api/v1',
-        api_key='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',
+        api_key=API_KEY,
     ),
 )
-settings = ModelSettings(temperature=0)
+settings = ModelSettings(temperature=0.0)
 
 survival_agent = Agent(
     model=model,
@@ -137,14 +141,29 @@ agent_map_data = {}
 # Define the FastAPI endpoint
 @app.post("/nlp")
 async def process_input(request: Request):
+    manager = AgentManager()
     try:
         input_data = await request.json()
         if not input_data:
             raise HTTPException(status_code=400, detail="input_data is required")
-        input_json_str = json.dumps(input_data)
+        
+        # Validate agentID exists and is valid
+        agent_id = input_data.get("agentID")
+        if agent_id is None:
+            raise HTTPException(status_code=400, detail="agentID is required")
+        try:
+            agent_id = int(agent_id)  # Ensure it's an integer
+        except (ValueError, TypeError):
+            raise HTTPException(status_code=400, detail="agentID must be an integer")
+        
         map_data = None
         result = None
-            
+        input_json_str = json.dumps(input_data)
+
+        # Register the agent if not already registered
+        manager.register_entity(agent_id, sys_prompt, model)
+
+        # Print all input data except mapData
         for key, value in input_data.items():
             if key != "mapData" and value is not None:
                 print(f"{key}: {value}")
@@ -154,21 +173,30 @@ async def process_input(request: Request):
 
         # Pass Map Data if it exists, otherwise run normally
         if map_data:
-            result = await survival_agent.run(
+            result = await manager.get_agent(agent_id).run(
                 [
                     input_json_str,
                     BinaryContent(data=map_data, media_type='image/png'),  
                 ],
-                model_settings=settings
+                model_settings=settings,
+                message_history=manager.get_message_history(agent_id)
             )
-        elif map_data is None:
-            result = await survival_agent.run(
+        else:
+            result = await manager.get_agent(agent_id).run(
                 [
                     input_json_str,
                 ],
-                model_settings=settings
+                model_settings=settings,
+                message_history=manager.get_message_history(agent_id)
             )
-        
+
+         # Process the agent's message history.
+        history_step_1 = result.all_messages()
+        filtered_history = await filter_message_history(history_step_1)
+        as_python_objects = to_jsonable_python(filtered_history)
+        restored_history = ModelMessagesTypeAdapter.validate_python(as_python_objects)
+        manager.update_message_history(agent_id, restored_history)
+
         print(result.data)
         return result.data
     except Exception as e:
@@ -190,13 +218,40 @@ async def process_map_with_llm(request: Request):
     except Exception as e:
         print("Error processing /map:", e)
         raise HTTPException(status_code=500, detail=str(e))
-
-
-
-
-
+    
+async def filter_message_history(messages) -> list:
+    filtered = []
+    for message in messages:
+        # Convert the message to a dict using model_dump()
+        msg_dict = asdict(message)  # Assuming it's a Pydantic v2 model
+        new_parts = []
+        # Ensure msg_dict has a "parts" key and that it’s iterable.
+        for part in msg_dict.get("parts", []):
+            # Handle ToolCallPart separately
+            if part.get("part_kind") == "tool-call":
+                # Ensure required fields are present
+                if not all(k in part for k in ["tool_name", "args"]):
+                    # If required fields are missing, skip or replace with default values
+                    part = {
+                        "tool_name": "unknown",
+                        "args": {},
+                        "part_kind": "tool-call",
+                    }
+                new_parts.append(part)
+            else:
+                # Handle other parts
+                if isinstance(part.get("content"), str):
+                    new_parts.append(part)
+                else:
+                    new_parts.append({
+                        "content": "[Image attached]",
+                        "part_kind": part.get("part_kind")
+                    })
+        msg_dict["parts"] = new_parts
+        filtered.append(msg_dict)
+    return filtered
 
 
 # Run the FastAPI app
 if __name__ == "__main__":
-    uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
+    uvicorn.run("main:app", host="127.0.0.1", port=12345, reload=True)
