@@ -8622,12 +8622,12 @@ PrefabInstance:
     - target: {fileID: 6918375715167313049, guid: 6e25fa16c8dd1104ea38cfd8da264260,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6918375715167313049, guid: 6e25fa16c8dd1104ea38cfd8da264260,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
         type: 3}
@@ -8637,13 +8637,64 @@ PrefabInstance:
     - target: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
+        type: 3}
+      insertIndex: 6
+      addedObject: {fileID: 1106683081}
   m_SourcePrefab: {fileID: 100100000, guid: 6e25fa16c8dd1104ea38cfd8da264260, type: 3}
+--- !u!1 &1106683079 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
+    type: 3}
+  m_PrefabInstance: {fileID: 1106683078}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &1106683080 stripped
+NavMeshAgent:
+  m_CorrespondingSourceObject: {fileID: 3081395510317380987, guid: 6e25fa16c8dd1104ea38cfd8da264260,
+    type: 3}
+  m_PrefabInstance: {fileID: 1106683078}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1106683081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106683079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04f11643a90aaf842b3767b619b557ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  n_blocks_required: []
+  smallWall: {fileID: 6779169298882350811, guid: ce752448e70d045499ee40a5c872e6a5,
+    type: 3}
+  ConstructionSite: {fileID: 0}
+  Destination: {fileID: 0}
+  destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+    type: 3}
+  wallPrefab: {fileID: 5233713113548216580, guid: 92dd388cc35a17e4fa6f6985b46be24a,
+    type: 3}
+  constructionSitePrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+    type: 3}
+  WallRotation: 0
+  moveSpeed: 5
+  acceleration: 5
+  rotationSpeed: 5
+  rangeThreshold: 1
+  pickupRange: 2
+  isHoldingWall: 0
+  destinationStopDistance: 1
+  startBehavior: 0
+  interrupt: 0
+  navAgent: {fileID: 1106683080}
+  currentState: 0
 --- !u!1 &1109993040
 GameObject:
   m_ObjectHideFlags: 0

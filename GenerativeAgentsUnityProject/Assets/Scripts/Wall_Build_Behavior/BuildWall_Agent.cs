@@ -66,7 +66,7 @@ public class BuildWall_Agent : MonoBehaviour
         startBehavior =true; 
         interrupt = false;
         // This will be called by llm to set initial values for behavior
-        //SetWallAgentData(Vector3 constructionSitePos, Vector3 destinationPos, List<GameObject> targetBlockList);
+        //SetWallAgentData(constructionSitePos, destinationPos, targetBlockList);
     }
 
     void OnDisable()
