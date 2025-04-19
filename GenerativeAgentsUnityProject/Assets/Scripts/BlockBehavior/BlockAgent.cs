@@ -1,391 +1,186 @@
 using UnityEngine;
-using Unity.MLAgents;
-using Unity.MLAgents.Actuators;
-using Unity.MLAgents.Sensors;
-using Random = UnityEngine.Random;
-using System.Collections.Generic; 
+using UnityEngine.AI;
+using System.Collections;
 
-public class BlockAgent : Agent
+public class BlockAgent : AgentBehavior
 {
-    public BlockEnvironmentSettings m_EnvironmentSettings;
-    public GameObject area;
-    [SerializeField] public BlockSpawner blockSpawner;
-    Rigidbody m_AgentRb;
-    float m_LaserLength;
-    // Speed of agent rotation.
-    public float turnSpeed = 300;
-
-    // Speed of agent movement.
-    public float moveSpeed = 2;
-    public Material normalMaterial;
-    public GameObject myLaser;
-
-    [SerializeField] public Vector3 targetBlockPos;
-    [SerializeField] public Vector3 targetBlockDestinationPos;
-    [SerializeField] private float minDropDistance = 2f;
-    [SerializeField] private float minPickUpDistance = 5f;
-    // [SerializeField] private float progressRewardWeight = 1f;
-    [SerializeField] private float dropReward = 1f;
-    [SerializeField] private float pickUpReward = 1f;
-
-    [SerializeField] private bool isHoldingTargetBlock;
-    [SerializeField] private float distanceFromDestination;
-    [SerializeField] private float distanceFromTargetBlock;
-    [SerializeField] public Vector3 previousPosition;
-    [SerializeField] public Vector3 currentPosition;
-
-    public List<GameObject> spawnedBlocksPerAgent = new List<GameObject>();
-    [SerializeField] public GameObject targetBlock;
-    [SerializeField] public GameObject destinationObject;
-    [SerializeField] public Vector3 targetDirection;
-
-    [SerializeField] private float progressReward;
-    [SerializeField] private float progressReward_Debug;
-    [SerializeField] private float pickUpReward_Debug;
-    [SerializeField] private float dropReward_Debug;
-    [SerializeField] private float totalReward_Debug;
-    [SerializeField] private float alignment;
-    [SerializeField] private float alignmentAngleThreshold = 30f;
-
-    public bool contribute;
-    public bool useVectorObs;
-    [Tooltip("Use only the frozen flag in vector observations. If \"Use Vector Obs\" " +
-             "is checked, this option has no effect. This option is necessary for the " +
-             "VisualFoodCollector scene.")]
-    public bool useVectorFrozenFlag;
-
-    EnvironmentParameters m_ResetParams;
-
-    #region Override Functs
-    public override void Initialize()
-    {   
-        //initialize variable values
-        previousPosition = Vector3.zero;
-        currentPosition = Vector3.zero;
-
-        gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
-        m_AgentRb = GetComponent<Rigidbody>();
-        blockSpawner = area.GetComponent<BlockSpawner>();
-        m_EnvironmentSettings = FindObjectOfType<BlockEnvironmentSettings>();
-        m_ResetParams = Academy.Instance.EnvironmentParameters;
-        SetResetParameters();
-    }
-    
-    public override void CollectObservations(VectorSensor sensor)
+    // enum table for all block agent behavior states
+    public enum AgentState
     {
-        if (!useVectorObs) return;
-
-        var localVelocity = transform.InverseTransformDirection(m_AgentRb.velocity);
-        
-        // Agent velocity
-        sensor.AddObservation(localVelocity);
-        
-        // Agent rotation/orientation
-        sensor.AddObservation(transform.forward);
-
-        // Target block relative position (if not holding it)
-        if (!isHoldingTargetBlock)
-        {
-            Vector3 toTargetBlock = (targetBlock.transform.position - transform.position).normalized;
-            sensor.AddObservation(toTargetBlock);
-        }
-        
-        // Destination relative position (if holding the block)
-        if (isHoldingTargetBlock)
-        {
-            Vector3 toDestination = (destinationObject.transform.position - transform.position).normalized;
-            sensor.AddObservation(toDestination);
-        }
-
-        // Target direction for agent to move in to get to block/destination
-        sensor.AddObservation(targetDirection);
-        
-        // Whether the agent is holding the block (binary observation)
-        sensor.AddObservation(isHoldingTargetBlock ? 1.0f : 0.0f);
-
-        // how aligned the agent is towards the object
-        sensor.AddObservation(alignment);
-
-        sensor.AddObservation(distanceFromDestination);
-        sensor.AddObservation(distanceFromTargetBlock);
+        Idle,
+        MoveToBlock,
+        WaitBeforePickup,
+        PickUpBlock,
+        WaitAfterPickup,
+        MoveToDestination,
+        DropBlock
     }
 
+    public GameObject targetBlock;
+    public GameObject destinationObject;
+    public NavMeshAgent navAgent;
+    public bool startBehavior = false;
+    public bool interrupt = false;
+    public float pickupRange = 2f;
+    public bool isHoldingBlock;
+    public float destinationStopDistance = 1f;
+    public float distToDestination;
+    private bool dropAtFront = false;
+    public GameObject destinationPrefab;
+    public AgentState currentState = AgentState.Idle;
 
-    //User Controlls for agent
-    public override void Heuristic(in ActionBuffers actionsOut)
+    public static BlockAgent Instance;
+
+    protected override void Awake()
     {
-        var continuousActionsOut = actionsOut.ContinuousActions;
-        if (Input.GetKey(KeyCode.A))
-        {
-            continuousActionsOut[2] = 1;
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            continuousActionsOut[0] = 1;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            continuousActionsOut[2] = -1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            continuousActionsOut[0] = -1;
-        }
-
-        var discreteActionsOut = actionsOut.DiscreteActions;
-
-        discreteActionsOut[0] = Input.GetKey(KeyCode.Alpha7) ? 1 : 0; // pick up block
-        discreteActionsOut[1] = Input.GetKey(KeyCode.Alpha8) ? 1 : 0; // drop block in front of agent
-    }
-    
-    //called at beginning of every episode
-    //define end condition for episode like 5000 action steps, or calling EndEpisode()
-    //define number of actions per epoch like 50000
-    public override void OnEpisodeBegin()
-    {       
-        //update variables for progress reward
-        previousPosition = Vector3.zero;
-        currentPosition = transform.position;
-
-        m_AgentRb.velocity = Vector3.zero;
-        myLaser.transform.localScale = new Vector3(0f, 0f, 0f);
-        transform.position = new Vector3(Random.Range(-blockSpawner.range, blockSpawner.range),
-            2f, Random.Range(-blockSpawner.range, blockSpawner.range))
-            + area.transform.position;
-        transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
-
-        SetResetParameters();
-        Debug.Log("Episode complete.");
-        totalReward_Debug = 0;
-        pickUpReward_Debug = 0;
-        dropReward_Debug = 0;
-        progressReward_Debug = 0;
-        blockSpawner.ResetBlockArea();
-        // this is wrong. Should only reset the individual agents environment, not all the environments
-        //m_EnvironmentSettings.EnvironmentReset();
+        Instance = this;
     }
 
-    //called at every action step
-    public override void OnActionReceived(ActionBuffers actionBuffers)
-
-    {   
-        DropBlock(actionBuffers);
-        PickUpBlock(actionBuffers);
-        MoveAgent(actionBuffers);
-
-        //update variables for agent observations
-        Vector3 agentPosition = transform.position;
-        targetBlockDestinationPos = destinationObject.transform.position;
-        distanceFromDestination = Vector3.Distance(agentPosition, targetBlockDestinationPos);
-        distanceFromTargetBlock = Vector3.Distance(agentPosition, targetBlockPos);
-        targetBlockPos = targetBlock.transform.position;
-
-        CalculateProgressReward();
-    }
-
-    #endregion 
-
-    #region Actions
-    public void MoveAgent(ActionBuffers actionBuffers)
+    protected override void OnEnable()
     {
-        var dirToGo = Vector3.zero;
-        var rotateDir = Vector3.zero;
+        startBehavior = true;
+        interrupt = false;
+    }
 
-        var continuousActions = actionBuffers.ContinuousActions;
-        var discreteActions = actionBuffers.DiscreteActions;
+    protected override void OnDisable()
+    {
+        // not sure if you want an agent to continue its task after being interrupted.
+        currentState = AgentState.Idle;
+        startBehavior = false;
 
-        var forward = Mathf.Clamp(continuousActions[0], -1f, 1f);
-        var right = Mathf.Clamp(continuousActions[1], -1f, 1f);
-        var rotate = Mathf.Clamp(continuousActions[2], -1f, 1f);
-
-        dirToGo = transform.forward * forward;
-        dirToGo += transform.right * right;
-        rotateDir = -transform.up * rotate;
-
-        m_AgentRb.AddForce(dirToGo * moveSpeed, ForceMode.VelocityChange);
-        transform.Rotate(rotateDir, Time.fixedDeltaTime * turnSpeed);
-
-        if (m_AgentRb.velocity.sqrMagnitude > 25f) // slow it down
+        interrupt = false;
+        if (navAgent.isOnNavMesh)
         {
-            m_AgentRb.velocity *= 0.95f;
+            navAgent.isStopped = true;
         }
-
         else
         {
-            myLaser.transform.localScale = new Vector3(0f, 0f, 0f);
+            Debug.LogWarning("OnDisable: NavMeshAgent is not on a NavMesh.");
         }
-    }
 
-    // find closest block in the single environment
-    GameObject FindClosestBlock()
-    {
-        List<GameObject> blocks = blockSpawner.spawnedBlocks;
-
-        GameObject closest = null;
-        float closestDistance = Mathf.Infinity;
-
-        foreach (GameObject block in blocks)
+        if (isHoldingBlock)
         {
-            if (block == null) 
-            {
-                continue;
-            }
-
-            float distance = Vector3.Distance(transform.position, block.transform.position);
-            
-            // Only consider objects within the minimum distance
-            if (distance < closestDistance)
-            {
-                closest = block;
-                closestDistance = distance;
-            }
+            targetBlock.transform.SetParent(null);
+            targetBlock.transform.position = transform.position + transform.forward;
+            isHoldingBlock = false;
         }
-        return closest;
-    }
     
-    //called in update to keep block object above agent
-    void HoldBlockAboveAgent()
-    {
-        targetBlock.transform.position = transform.position + new Vector3(0, 2, 0);
+        // navAgent.SetDestination(transform.position);
     }
 
-    //if target block in range, pick it up
-    void PickUpBlock(ActionBuffers actionBuffers)
+    public void SetBlockAgentData(GameObject targetBlockObject, Vector3 destinationPos)
     {
-    
-        var discreteActions = actionBuffers.DiscreteActions;
+        targetBlock = targetBlockObject;
+        destinationObject = Instantiate(destinationPrefab, destinationPos,Quaternion.identity);
 
-        GameObject closestBlock = FindClosestBlock();
-        float pickUpDistance = Vector3.Distance(targetBlock.transform.position, closestBlock.transform.position);
-
-        if(discreteActions[0] > 0 && closestBlock == targetBlock && distanceFromTargetBlock <= minPickUpDistance && !isHoldingTargetBlock)
-        {
-            //make agent only able to pick up target block
-            isHoldingTargetBlock = true;
-            AddReward(pickUpReward);
-            pickUpReward_Debug +=pickUpReward;
-            totalReward_Debug += pickUpReward;
-        }
     }
-
-    //if in range, drop the targetblock onto the destination 
-    void DropBlock(ActionBuffers actionBuffers)
-    {
-        var discreteActions = actionBuffers.DiscreteActions;
-
-        if(discreteActions[1] > 0 && isHoldingTargetBlock && (distanceFromDestination <= minDropDistance))
-        {
-            isHoldingTargetBlock = false;
-            targetBlock.transform.position = destinationObject.transform.position + new Vector3(0, 1.5f, 0);
-
-            // need to change this back for inference
-            //blockSpawner.SetBlockMaterial(targetBlock, blockSpawner.blockMaterial);
-            AddReward(dropReward);
-            dropReward_Debug += dropReward;
-            totalReward_Debug += dropReward;
-            EndEpisode();
-        }
-    }
-    #endregion
-
-    #region Reward Functs
-    //calculates alignment of agent towards target directions(towards target block and destination)
-    // linear alignment
-    // public float CalculateFacingReward()
-    // {
-    //     targetDirection = isHoldingTargetBlock 
-    //         ? (destinationObject.transform.position - transform.position).normalized 
-    //         : (targetBlock.transform.position - transform.position).normalized;
-
-    //     // normalized to [-1, 1] range
-    //     alignment = Vector3.Dot(transform.forward, targetDirection); 
-    //     return alignment;
-    // }
-
-    //linear alignment with degree cone threshold. If outside the angle threshold from target and is positive, then set it to 0
-    public float CalculateFacingReward()
-    {
-        targetDirection = isHoldingTargetBlock 
-            ? (destinationObject.transform.position - transform.position).normalized 
-            : (targetBlock.transform.position - transform.position).normalized;
-
-        float dotProduct = Vector3.Dot(transform.forward, targetDirection);
-
-        float angle = Mathf.Acos(Mathf.Clamp(dotProduct, -1f, 1f)) * Mathf.Rad2Deg;
-
-        alignment = (angle <= alignmentAngleThreshold) ? dotProduct : 0f;
-
-        return alignment;
-    }
-
-    // logarithmic alignment(penalizes going in circles and also not facing towards target direction even more)
-    // public float CalculateFacingReward()
-    // {
-    //     targetDirection = isHoldingTargetBlock
-    //         ? (destinationObject.transform.position - transform.position).normalized
-    //         : (targetBlock.transform.position - transform.position).normalized;
-
-    //     // Calculate alignment (ranges from -1 to 1)
-    //     float rawAlignment = Vector3.Dot(transform.forward, targetDirection); 
-
-    //     // Logarithmic transformation for both reward (positive) and penalty (negative)
-    //     float logAlignment;
-    //     if (rawAlignment > 0)
-    //     {
-    //         logAlignment = Mathf.Log10(1 + (rawAlignment * 9));
-    //     }
-    //     else
-    //     {
-    //         logAlignment = -Mathf.Log10(1 + (-rawAlignment * 9));
-    //     }
-
-    //     alignment = logAlignment;
-    //     return logAlignment;
-    // }
-
-    //Rewards agent for moving towards target areas and Penalizes moving away
-    public void CalculateProgressReward()
-    {
-        float alignment = CalculateFacingReward(); 
-
-        float forwardVelocity = Vector3.Dot(m_AgentRb.velocity.normalized, transform.forward);
-        float progressFactor = Mathf.Clamp(forwardVelocity, 0, 1);
-
-        progressReward = (m_AgentRb.velocity.magnitude * progressFactor * alignment) * 0.01f;
-        progressReward_Debug += progressReward;
-        //AddReward(progressReward);
-
-        //totalReward_Debug += progressReward;
-    }
-
-
-    
-
-    #endregion
-
-    #region Other
     void Update()
     {
-        if(isHoldingTargetBlock)
+        // holds the block above agent
+        if (targetBlock != null && targetBlock.transform.parent == transform)
         {
-            HoldBlockAboveAgent();
+            targetBlock.transform.position = transform.position + new Vector3(0f, 1.5f, 0f);
+        }
+        if (interrupt)
+        {
+            navAgent.isStopped = true;
+            if (currentState == AgentState.MoveToDestination)
+            {
+                dropAtFront = true;
+            }
+        }
+        else
+        {
+            navAgent.isStopped = false;
+        }
+        switch (currentState)
+        {
+            // idle position for start and interrupt
+            case AgentState.Idle:
+                if (startBehavior)
+                {
+                    currentState = AgentState.MoveToBlock;
+                    if (targetBlock != null)
+                    {
+                        navAgent.SetDestination(targetBlock.transform.position);
+                    }
+                }
+                break;
+            // move towards the block
+            case AgentState.MoveToBlock:
+                if (targetBlock != null)
+                {
+                    navAgent.SetDestination(targetBlock.transform.position);
+                    float distToBlock = Vector3.Distance(transform.position, targetBlock.transform.position);
+                    if (distToBlock <= pickupRange && !interrupt)
+                    {
+                        currentState = AgentState.WaitBeforePickup;
+                        StartCoroutine(WaitBeforePickupCoroutine());
+                    }
+                }
+                break;
+            case AgentState.WaitBeforePickup:
+                break;
+            // pick up the block
+            case AgentState.PickUpBlock:
+                if (targetBlock != null)
+                {
+                    targetBlock.transform.SetParent(transform);
+                }
+                isHoldingBlock = true;
+                currentState = AgentState.WaitAfterPickup;
+                StartCoroutine(WaitAfterPickupCoroutine());
+                break;
+            //wait after pickup
+            case AgentState.WaitAfterPickup:
+                break;
+            case AgentState.MoveToDestination:
+                if (destinationObject != null)
+                {
+                    navAgent.SetDestination(destinationObject.transform.position);
+                    distToDestination = Vector3.Distance(transform.position, destinationObject.transform.position);
+                    if (distToDestination <= destinationStopDistance && !interrupt)
+                    {
+                        currentState = AgentState.DropBlock;
+                    }
+                }
+                break;
+            // drop block by swetting to position of destination
+            case AgentState.DropBlock:
+                if (targetBlock != null)
+                {
+                    targetBlock.transform.SetParent(null);
+                    if (dropAtFront)
+                    {
+                        isHoldingBlock = false;
+                        targetBlock.transform.position = transform.position + transform.forward;
+                    }
+                    else if (destinationObject != null)
+                    {
+                        targetBlock.transform.position = destinationObject.transform.position;
+                    }
+                }
+                currentState = AgentState.Idle;
+                startBehavior = false;
+                dropAtFront = false;
+                break;
         }
     }
-    public void SetLaserLengths()
-    {
-        m_LaserLength = m_ResetParams.GetWithDefault("laser_length", 1.0f);
-    }
 
-    public void SetAgentScale()
+    //wait before picking up block
+    IEnumerator WaitBeforePickupCoroutine()
     {
-        float agentScale = m_ResetParams.GetWithDefault("agent_scale", 1.0f);
-        gameObject.transform.localScale = new Vector3(agentScale, agentScale, agentScale);
+        yield return new WaitForSeconds(1f);
+        currentState = AgentState.PickUpBlock;
     }
-
-    public void SetResetParameters()
+    // wait coroutine after picking up block
+    IEnumerator WaitAfterPickupCoroutine()
     {
-        SetLaserLengths();
-        SetAgentScale();
+        yield return new WaitForSeconds(1f);
+        currentState = AgentState.MoveToDestination;
+        if (destinationObject != null)
+        {
+            navAgent.SetDestination(destinationObject.transform.position);
+        }
     }
-    #endregion
 }

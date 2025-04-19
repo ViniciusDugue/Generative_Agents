@@ -32,17 +32,10 @@ TagManager:
   - tile
   - key
   - enemyAgent
-<<<<<<< HEAD
-  - destination
-  - targetBlock
-  - Built_Wall
-  - Built_Small_Wall
-  - ConstructionSite
-=======
   - foodSpawn
   - enemySpawn
   - agentSpawn
->>>>>>> origin/sim_env
+  - habitat
   layers:
   - Default
   - TransparentFX

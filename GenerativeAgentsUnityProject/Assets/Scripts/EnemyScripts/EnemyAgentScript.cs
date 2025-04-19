@@ -1,146 +1,154 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
 
 public class EnemyAgentScript : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float moveSpeed = 2f; // Consistent movement speed for both roaming and chasing
-    public float roamRange = 20f; // Range for random roaming around the current position
-    public float roamWaitTime = 2f; // Time to wait at each roam position
+    [Tooltip("Time to wait at each roam position.")]
+    public float roamWaitTime = 2f;  
+    [Tooltip("Range used for selecting a random roam target.")]
+    public float roamRange = 20f;    
+    [Tooltip("Maximum distance from the spawn point the enemy is allowed to wander.")]
+    public float patrolRadius = 20f; 
 
-    private Transform targetAgent; // Current target agent
-    private Vector3 roamTarget; // Target position for roaming
-    private bool isChasing = false; // Whether the enemy is currently chasing
-
-    // Reference to the FieldOfView component
-    private FieldOfView fieldOfView;
-
-    // Flags to control enemy behavior
-    private bool isPaused = false; // Indicates if the enemy is currently paused
+    // Private variables
+    private Transform targetAgent;      // The agent (player) to chase
+    private bool isChasing = false;     // Are we chasing the agent?
+    private bool isPaused = false;      // Is the enemy temporarily paused?
+    private FieldOfView fieldOfView;    // Reference to the FieldOfView component
+    private NavMeshAgent navAgent;      // The NavMeshAgent for navigation
+    private Vector3 roamTarget;         // The current roam destination when not chasing
+    private Vector3 spawnPosition;      // The enemy’s spawn position (center of patrol)
 
     void Start()
     {
-        // Get the FieldOfView component attached to the same GameObject
+        // Save the spawn position as the center of patrol.
+        spawnPosition = transform.position;
+        
+        // Get and verify the FieldOfView component.
         fieldOfView = GetComponent<FieldOfView>();
         if (fieldOfView == null)
         {
+            Debug.LogError("EnemyAgentScript: FieldOfView component is missing!");
             enabled = false;
             return;
         }
-
-        // Start the roaming behavior
+        
+        // Get and verify the NavMeshAgent component.
+        navAgent = GetComponent<NavMeshAgent>();
+        if (navAgent == null)
+        {
+            Debug.LogError("EnemyAgentScript: NavMeshAgent component is missing!");
+            enabled = false;
+            return;
+        }
+        
+        // Start the roaming behavior.
         StartCoroutine(Roam());
     }
 
     void Update()
     {
-        // If the enemy is paused, do not execute any movement or chasing logic
         if (isPaused)
             return;
 
-        // Use FieldOfView to determine if an agent is visible
+        // If the FieldOfView shows an agent.
         if (fieldOfView.canSeeAgent)
         {
-            // Get the target agent from FieldOfView
-            targetAgent = fieldOfView.agent != null ? fieldOfView.agent.transform : null;
-
+            targetAgent = (fieldOfView.agent != null) ? fieldOfView.agent.transform : null;
             if (targetAgent != null && targetAgent.CompareTag("agent"))
             {
-                if (!isChasing)
+                float distFromSpawn = Vector3.Distance(targetAgent.position, spawnPosition);
+                // Debug.Log("Distance from target to spawn: " + distFromSpawn + " (patrolRadius: " + patrolRadius + ")");
+
+                // Chase only if within the allowed patrol area.
+                if (distFromSpawn <= patrolRadius)
                 {
-                    // Start chasing the target agent
                     isChasing = true;
+                    navAgent.SetDestination(targetAgent.position);
+                    Debug.Log("Chasing agent: " + targetAgent.name);
                 }
-                // Chase the target agent
-                ChaseAgent();
+                else
+                {
+                    isChasing = false;
+                    navAgent.SetDestination(GetReturnDestination());
+                    Debug.Log("Agent left patrol radius, returning to patrol area.");
+                }
             }
             else
             {
-                // If the detected object is not tagged as "agent", ignore it
-                targetAgent = null;
-                if (isChasing)
-                {
-                    // Resume roaming if currently chasing
-                    isChasing = false;
-                }
+                isChasing = false;
+                navAgent.SetDestination(GetReturnDestination());
             }
         }
         else
         {
+            // If we lose sight of the agent while chasing, return to our roam target.
             if (isChasing)
             {
-                // If no agent is in view, resume roaming
                 isChasing = false;
+                navAgent.SetDestination(GetReturnDestination());
+                Debug.Log("Lost sight of agent, resuming patrol.");
             }
         }
     }
 
-    void ChaseAgent()
+    // Returns the destination for the enemy when not chasing.
+    private Vector3 GetReturnDestination()
     {
-        if (targetAgent == null) return;
-
-        // Move towards the target agent at constant speed
-        Vector3 direction = (targetAgent.position - transform.position).normalized;
-        transform.position = Vector3.MoveTowards(transform.position, targetAgent.position, moveSpeed * Time.deltaTime);
-
-        // Smoothly rotate towards the target
-        if (direction != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-        }
+        if (Vector3.Distance(transform.position, spawnPosition) > patrolRadius)
+            return spawnPosition;
+        else
+            return roamTarget;
     }
 
+    // Roaming coroutine: periodically picks a new roam target within roamRange clamped to patrolRadius.
     IEnumerator Roam()
     {
         while (true)
         {
-            // If the enemy is paused or chasing, skip roaming
             if (isPaused || isChasing)
             {
                 yield return null;
                 continue;
             }
 
-            // Generate a new random roam target relative to the current position
-            roamTarget = transform.position + new Vector3(
+            // Generate a random offset within roamRange.
+            Vector3 randomOffset = new Vector3(
                 Random.Range(-roamRange, roamRange),
-                0, // Keep the same Y position to prevent floating or sinking
+                0,
                 Random.Range(-roamRange, roamRange)
             );
 
-            // Move towards the roam target at constant speed
-            while (Vector3.Distance(transform.position, roamTarget) > 0.5f)
+            // Set a new roam target relative to the spawnPosition.
+            roamTarget = spawnPosition + randomOffset;
+            // Clamp roamTarget to be within the patrolRadius.
+            if (Vector3.Distance(roamTarget, spawnPosition) > patrolRadius)
             {
-                // If the enemy is paused or starts chasing, exit the roaming loop
-                if (isPaused || isChasing)
-                {
-                    break;
-                }
-
-                Vector3 direction = (roamTarget - transform.position).normalized;
-
-                // Move towards the roam target smoothly
-                transform.position = Vector3.MoveTowards(transform.position, roamTarget, moveSpeed * Time.deltaTime);
-
-                // Smoothly rotate towards the roam target
-                if (direction != Vector3.zero)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(direction);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
-                }
-
-                yield return null; // Wait until the next frame
+                roamTarget = spawnPosition + Vector3.ClampMagnitude(roamTarget - spawnPosition, patrolRadius);
             }
 
-            // Wait briefly before choosing a new roam target
+            navAgent.SetDestination(roamTarget);
+            // Debug.Log("Roaming to: " + roamTarget);
+
+            // Wait until close to the roam target or until roamWaitTime expires.
+            float elapsedTime = 0f;
+            while (Vector3.Distance(transform.position, roamTarget) > 0.5f && elapsedTime < roamWaitTime)
+            {
+                if (isPaused || isChasing)
+                    break;
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
             yield return new WaitForSeconds(roamWaitTime);
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        // Check if the enemy collided with a Food Gatherer Agent
+        // Pause movement on collision with an agent (if desired).
         if (collision.gameObject.CompareTag("agent"))
         {
             if (!isPaused)
@@ -150,32 +158,35 @@ public class EnemyAgentScript : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Pauses the enemy's movement and behavior for a specified duration.
-    /// </summary>
-    /// <param name="pauseDuration">Duration in seconds to pause movement.</param>
     IEnumerator PauseMovement(float pauseDuration)
     {
         isPaused = true;
+        float originalSpeed = navAgent.speed;
+        navAgent.speed = 0;
 
-        // Optionally, change color to indicate pause
         Renderer rend = GetComponent<Renderer>();
-        Color originalColor = Color.white;
+        Color originalColor = (rend != null) ? rend.material.color : Color.white;
         if (rend != null)
         {
-            originalColor = rend.material.color;
             rend.material.color = Color.gray;
         }
 
-        // Wait for the pause duration
         yield return new WaitForSeconds(pauseDuration);
 
-        // Revert color back to original
         if (rend != null)
         {
             rend.material.color = originalColor;
         }
-
+        navAgent.speed = originalSpeed;
         isPaused = false;
+    }
+
+    // Draw a wire sphere to visualize the patrol radius.
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        // If the game is running, use spawnPosition; otherwise, use the current position.
+        Vector3 center = Application.isPlaying ? spawnPosition : transform.position;
+        Gizmos.DrawWireSphere(center, patrolRadius);
     }
 }

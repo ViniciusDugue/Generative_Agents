@@ -87,15 +87,13 @@ NavMeshProjectSettings:
     buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
-<<<<<<< HEAD
-=======
     debug:
       m_Flags: 0
   - serializedVersion: 3
     agentTypeID: -1372625422
     agentRadius: 0.5
     agentHeight: 1
-    agentSlope: 22
+    agentSlope: 35
     agentClimb: 0.4
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
@@ -107,7 +105,6 @@ NavMeshProjectSettings:
     buildHeightMesh: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
->>>>>>> origin/sim_env
     debug:
       m_Flags: 0
   m_SettingNames:
