@@ -15,7 +15,7 @@ public class FoodScript : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
         Debug.Log("Food Respawned.");
     }
