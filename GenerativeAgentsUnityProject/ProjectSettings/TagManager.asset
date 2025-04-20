@@ -36,6 +36,8 @@ TagManager:
   - enemySpawn
   - agentSpawn
   - habitat
+  - destination
+  - Default
   layers:
   - Default
   - TransparentFX
@@ -46,9 +48,9 @@ TagManager:
   - Target
   - Obstruction
   - invisible
-  - 
-  - 
-  - 
+  - FoodSpawn
+  - EnemySpawn
+  - AgentSpawn
   - 
   - 
   - 
