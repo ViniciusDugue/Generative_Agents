@@ -8,12 +8,14 @@ public class SpawnManager : MonoBehaviour
     public GameObject foodPrefab;
     public GameObject enemyPrefab;
     public GameObject agentPrefab;
-
+    public GameObject pestPrefab;
+    
     [Header("Spawn Settings")]
     public int maxFood = 10;
     public int maxEnemies = 5;
     public int maxAgents = 5;
     public float spawnHeightOffset = 0.5f;
+    public int maxPests = 6;
 
     [Header("Spawn Radii (Units)")]
     public float foodSpawnRadius = 5f;
@@ -32,6 +34,7 @@ public class SpawnManager : MonoBehaviour
     private List<GameObject> spawnedFood = new List<GameObject>();
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> spawnedAgents = new List<GameObject>();
+    private List<GameObject> spawnedPests = new List<GameObject>();
 
     // Spawn point lists for food and enemy.
     private List<Transform> foodSpawnPoints = new List<Transform>();
@@ -44,9 +47,6 @@ public class SpawnManager : MonoBehaviour
 
     private MapMarkerManager markerManager;
 
-    [Header("Time Manager Reference")]
-    public TimeManager timeManager;
-
     // Track the previous day/night state.
     private bool lastIsDaytime;
 
@@ -55,14 +55,7 @@ public class SpawnManager : MonoBehaviour
         markerManager = FindFirstObjectByType<MapMarkerManager>();
         FindSpawnPoints();
 
-        if (timeManager == null)
-        {
-            timeManager = FindObjectOfType<TimeManager>();
-        }
-        if (timeManager != null)
-        {
-            lastIsDaytime = timeManager.IsDayTime;
-        }
+        lastIsDaytime = TimeManager.Instance.IsDayTime;
     }
 
     private void Start()
@@ -83,7 +76,7 @@ public class SpawnManager : MonoBehaviour
         SpawnAgentsAtHub();
 
         // Continue with food and enemy spawning based on current time.
-        if (timeManager != null && timeManager.IsDayTime)
+        if (TimeManager.Instance != null && TimeManager.Instance.IsDayTime)
         {
             RandomizeFoodSpawnPoints();
             SpawnFoodAtActivePoints();
@@ -95,12 +88,12 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
-        if (timeManager != null)
+        if (TimeManager.Instance != null)
         {
-            if (timeManager.IsDayTime != lastIsDaytime)
+            if (TimeManager.Instance.IsDayTime != lastIsDaytime)
             {
-                lastIsDaytime = timeManager.IsDayTime;
-                if (timeManager.IsDayTime)
+                lastIsDaytime = TimeManager.Instance.IsDayTime;
+                if (TimeManager.Instance.IsDayTime)
                 {
                     Debug.Log("Daytime started - updating food and enemy spawns.");
                     
@@ -110,6 +103,7 @@ public class SpawnManager : MonoBehaviour
 
                     RandomizeEnemySpawnPoints();
                     DespawnObjects(spawnedEnemies);
+                    DespawnObjects(spawnedPests);
                     SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
                 }
                 else
@@ -123,6 +117,8 @@ public class SpawnManager : MonoBehaviour
                     ActivateAllEnemySpawnPoints();
                     SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
 
+                    SpawnPests();
+                    
                     // Agents remain spawned from the initial hub.
                 }
             }
@@ -188,7 +184,7 @@ public class SpawnManager : MonoBehaviour
                 status.HasFood = false; // This spawn point is inactive and has no food.
             }
         }
-        string log = "Day " + timeManager.Days + " - Active Food Spawn Points: ";
+        string log = "Day " + TimeManager.Instance.Days + " - Active Food Spawn Points: ";
         foreach (Transform activePoint in activeFoodSpawnPoints)
         {
             log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
@@ -224,7 +220,7 @@ public class SpawnManager : MonoBehaviour
                 }
             }
         }
-        string log = "Day " + timeManager.Days + " - Active Enemy Spawn Points (Daytime): ";
+        string log = "Day " + TimeManager.Instance.Days + " - Active Enemy Spawn Points (Daytime): ";
         foreach (Transform activePoint in activeEnemySpawnPoints)
         {
             log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
@@ -246,7 +242,7 @@ public class SpawnManager : MonoBehaviour
                 sc.enabled = true;
             }
         }
-        string log = "Day " + timeManager.Days + " - Active Enemy Spawn Points (Nighttime - ALL): ";
+        string log = "Day " + TimeManager.Instance.Days + " - Active Enemy Spawn Points (Nighttime - ALL): ";
         foreach (Transform activePoint in activeEnemySpawnPoints)
         {
             log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
@@ -259,6 +255,21 @@ public class SpawnManager : MonoBehaviour
     {
         DespawnObjects(spawnedFood);
         SpawnObjects(activeFoodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
+    }
+
+    private void SpawnPests()
+    {
+        // wipe out old pests so we never exceed maxPests
+        DespawnObjects(spawnedPests);
+
+        // uses the same activeEnemySpawnPoints list you just activated
+        SpawnObjects(
+            activeEnemySpawnPoints,
+            pestPrefab,
+            maxPests,
+            spawnedPests,
+            enemySpawnRadius
+        );
     }
 
     // Generic spawn method.

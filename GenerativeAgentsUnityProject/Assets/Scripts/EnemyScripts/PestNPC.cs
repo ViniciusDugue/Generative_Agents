@@ -111,7 +111,7 @@ public class PestNPC : MonoBehaviour
                 {
                     currentState = PestState.GoToHabitatWithFood;
                 }
-                else if(Habitat.Instance.foodPortionsAvailable<=0)
+                else if(Habitat.Instance.storedFood<=0)
                 {
                     // If no food is in habitat, keep wandering
 

@@ -27,8 +27,12 @@ public class Habitat : MonoBehaviour
     private List<AgentHeal> waitingAgents = new List<AgentHeal>();
     private SphereCollider triggerCollider;
 
+    public static Habitat Instance;
+
     void Awake()
     {
+        Instance = this;
+
         // Ensure we have a trigger collider at the right radius
         triggerCollider = GetComponent<SphereCollider>();
         triggerCollider.isTrigger = true;
@@ -233,5 +237,14 @@ public class Habitat : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(spawn.transform.position, radius);
         }
+    }
+
+    public void RemoveFood(int foodRemoved)
+    {   
+        if(storedFood - foodRemoved>0)
+        {
+            storedFood -=foodRemoved;
+        }
+        
     }
 }
