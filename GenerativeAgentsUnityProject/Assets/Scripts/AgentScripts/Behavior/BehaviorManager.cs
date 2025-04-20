@@ -53,7 +53,7 @@ public class BehaviorManager : MonoBehaviour
     private AgentHealth agentHealth;
     private Habitat agentHabitat; 
     private GatherBehavior gatherBehavior; 
-    private float depositedFood = 0;
+    public float depositedFood = 0;
     private bool hasDepositedFood = false;
 
     // NEW: Time tracking for enemy detection.

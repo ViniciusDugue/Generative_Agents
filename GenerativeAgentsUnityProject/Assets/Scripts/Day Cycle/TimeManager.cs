@@ -92,7 +92,14 @@ public class TimeManager : MonoBehaviour
             foreach (var bm in allAgents)
             {
                 bm.ApplyDailyHungerPenalty();
+
+                AgentHeal heal = bm.GetComponent<AgentHeal>();
+                if (heal != null)
+                {
+                    heal.foodPortionsReceived = 0; // Reset meter
+                }
             }
+            
         }
     }
 
