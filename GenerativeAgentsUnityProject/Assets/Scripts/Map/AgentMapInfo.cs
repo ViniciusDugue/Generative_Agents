@@ -2,26 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PersonalMap : MonoBehaviour
+public class AgentMapInfo : MonoBehaviour
 {
-
     public float detectionRange = 1000f; // Agent's personal sensor range.
-
-
     public List<MarkerData> knownMarkers = new List<MarkerData>();
-
-    // Static list to hold all PersonalMap instances.
-    public static List<PersonalMap> allPersonalMaps = new List<PersonalMap>();
-
-    private void Awake()
-    {
-        allPersonalMaps.Add(this);
-    }
-
-    private void OnDestroy()
-    {
-        allPersonalMaps.Remove(this);
-    }
 
     private void OnEnable()
     {
@@ -69,4 +53,5 @@ public class PersonalMap : MonoBehaviour
             position = obj.transform.position;
         }
     }
+
 }
