@@ -67,11 +67,8 @@ public class SpawnManager : MonoBehaviour
         {
             lastIsDaytime = timeManager.IsDayTime;
         }
-    }
 
-    private void Start()
-    {
-        // Reposition the habitat only once at simulation start
+        // Reposition the habitat on Sim Awake
         GameObject habitatObj = GameObject.FindWithTag("habitat");
         if (habitatObj != null)
         {
@@ -83,7 +80,7 @@ public class SpawnManager : MonoBehaviour
             Debug.LogWarning("No habitat found to reposition.");
         }
 
-        // Spawn agents at the central hub only once at simulation start.
+        // Spawn agents at the central hub only once at simulation awake.
         SpawnAgentsAtHub();
 
         // Continue with food and enemy spawning based on current time.
