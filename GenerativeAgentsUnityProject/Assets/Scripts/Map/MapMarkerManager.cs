@@ -6,6 +6,8 @@ public class MapMarkerManager : MonoBehaviour
 {
     public Camera mapCamera;
     // public RectTransform mapContainer;
+    [Header("Map Prefab")]
+    public GameObject mapPrefab;
 
     [Header("Marker Prefabs")]
     public GameObject agentMarkerPrefab;
@@ -21,6 +23,7 @@ public class MapMarkerManager : MonoBehaviour
     // These will hold our map containers
     private RectTransform userMapContainer;
     private RectTransform agentMapContainer;
+    private readonly Vector3 defaultAgentMapLocation = new Vector3(-100f, 0f, -50f);
 
     // Dictionaries to track markers for each map type.
     private Dictionary<GameObject, GameObject> userMarkers = new Dictionary<GameObject, GameObject>();
@@ -28,6 +31,13 @@ public class MapMarkerManager : MonoBehaviour
 
     // Hardcoded map resolution - set to (700,700) or (225,225) as needed
     public Vector2 mapResolution = new Vector2(700, 700);
+
+    // Agent Information to be Marked
+    [HideInInspector]
+    public GameObject[] agentList;
+    // Information about all agents knowledge about the environment (stuff to be marked)
+    private static List<AgentMapInfo> allAgentMapInfos = new List<AgentMapInfo>(); 
+    public Dictionary<string, GameObject> agentMapDict = new Dictionary<string, GameObject>();
 
     // Dictionary to keep track of markers by their associated tracked objects.
     // private Dictionary<GameObject, GameObject> markers = new Dictionary<GameObject, GameObject>();
@@ -37,6 +47,12 @@ public class MapMarkerManager : MonoBehaviour
     // private float scanTimer = 0f;
 
     private void Awake()
+    {
+        registerAgents();
+        createAgentMaps();
+    }
+
+    private void Start()
     {
         // Get all RectTransform components in this object's hierarchy, including nested ones
         RectTransform[] allMaps = GetComponentsInChildren<RectTransform>(true);
@@ -77,6 +93,52 @@ public class MapMarkerManager : MonoBehaviour
         MarkerEventManager.OnMarkerRemoved -= OnMarkerRemovedHandler;
     }
 
+    void registerAgents() {
+        // Register all Personal Maps for each Agent
+        agentList = GameObject.FindGameObjectsWithTag("Agent");
+        if (agentList.Length == 0) 
+        {
+            Debug.LogWarning("No Agents Found"); 
+            return; // Exit the method if no agents are found;
+        }
+        
+        foreach(GameObject agent in agentList) {
+            var info = agent.GetComponent<AgentMapInfo>();
+            BehaviorManager bm = agent.GetComponent<BehaviorManager>();
+            if (info != null) {
+                Debug.Log("Adding Personal Map for " + agent.name);
+                allAgentMapInfos.Add(info);
+                
+            }
+        }
+    }
+
+    void createAgentMaps() {
+    // How much to shift each successive map along X (in UI units)
+    Vector3 rectMapOffset = new Vector3(-50, 0, 0);
+    int idx = 0;
+
+    // Loop over every agent in the scene (assumes agentList is already populated)
+    for (int i = 0; i < agentList.Length; i++) {
+        // Instantiate a copy of the mapPrefab as a child of this GameObject
+        GameObject agentMap = Instantiate(mapPrefab, this.transform, false);
+        agentMap.name = $"AgentMap-{idx}";
+
+        // Calculate where to place it: start from a base location, then offset by
+        // rectMapOffset multiplied by the loop index i
+        Vector2 newPos = defaultAgentMapLocation + rectMapOffset * i;
+
+        // Apply the computed position to the RectTransform's anchoredPosition
+        agentMap.GetComponent<RectTransform>().anchoredPosition = newPos;
+
+        // Store the new map in a dictionary for quick lookup by name later
+        agentMapDict.Add(agentMap.name, agentMap);
+
+        idx++;
+    }
+}
+
+
     // Called when a marker spawn event is raised.
     private void OnMarkerSpawnedHandler(GameObject trackedObject, MarkerEventManager.MarkerType markerType)
     {
@@ -99,9 +161,9 @@ public class MapMarkerManager : MonoBehaviour
             if (markerType == MarkerEventManager.MarkerType.Food || markerType == MarkerEventManager.MarkerType.FoodSpawn)
             {
                 bool discovered = false;
-                foreach (PersonalMap pm in PersonalMap.allPersonalMaps)
+                foreach (AgentMapInfo pm in AgentMapManager.allAgentMapInfos)
                 {
-                    foreach (PersonalMap.MarkerData data in pm.knownMarkers)
+                    foreach (AgentMapInfo.MarkerData data in pm.knownMarkers)
                     {
                         // Only register if at least one agent has discovered this object.
                         if (data.markerType == markerType && data.discoveredObject == trackedObject)
