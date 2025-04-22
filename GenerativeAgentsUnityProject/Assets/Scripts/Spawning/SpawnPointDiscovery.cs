@@ -8,7 +8,7 @@ public class SpawnPointDiscovery : MonoBehaviour
     public float detectionRange = 5f;
 
     private SpawnManager spawnManager;
-    private PersonalMap personalMap;
+    private AgentMapInfo agentMapInfo;
 
     // Keep track of already discovered spawn points.
     private HashSet<Transform> discoveredSpawnPoints = new HashSet<Transform>();
@@ -21,11 +21,11 @@ public class SpawnPointDiscovery : MonoBehaviour
             Debug.LogError("SpawnManager not found in the scene.");
         }
 
-        // Attempt to get the PersonalMap component on the agent.
-        personalMap = GetComponent<PersonalMap>();
-        if (personalMap == null)
+        // Attempt to get the agentMapInfo component on the agent.
+        agentMapInfo = GetComponent<AgentMapInfo>();
+        if (agentMapInfo == null)
         {
-            Debug.LogWarning("PersonalMap component not found on agent; discoveries won't be recorded in agent memory.");
+            Debug.LogWarning("AgentMapInfo component not found on agent; discoveries won't be recorded in agent memory.");
         }
     }
 
@@ -43,15 +43,15 @@ public class SpawnPointDiscovery : MonoBehaviour
             {
                 discoveredSpawnPoints.Add(spawnPoint);
 
-                // Optionally record the discovery in the agent's PersonalMap.
-                if (personalMap != null)
+                // Optionally record the discovery in the agent's AgentMapInfo.
+                if (agentMapInfo != null)
                 {
-                    PersonalMap.MarkerData spawnMarkerData = new PersonalMap.MarkerData()
+                    AgentMapInfo.MarkerData spawnMarkerData = new AgentMapInfo.MarkerData()
                     {
                         discoveredObject = spawnPoint.gameObject,
                         markerType = MarkerEventManager.MarkerType.FoodSpawn
                     };
-                    personalMap.knownMarkers.Add(spawnMarkerData);
+                    agentMapInfo.knownMarkers.Add(spawnMarkerData);
                 }
 
                 // Raise an event for the discovered food spawn point.
@@ -65,15 +65,15 @@ public class SpawnPointDiscovery : MonoBehaviour
                     {
                         if (food != null)
                         {
-                            // Optionally record the food discovery in the agent's PersonalMap.
-                            if (personalMap != null)
+                            // Optionally record the food discovery in the agent's AgentMapInfo.
+                            if (agentMapInfo != null)
                             {
-                                PersonalMap.MarkerData foodMarkerData = new PersonalMap.MarkerData()
+                                AgentMapInfo.MarkerData foodMarkerData = new AgentMapInfo.MarkerData()
                                 {
                                     discoveredObject = food,
                                     markerType = MarkerEventManager.MarkerType.Food
                                 };
-                                personalMap.knownMarkers.Add(foodMarkerData);
+                                agentMapInfo.knownMarkers.Add(foodMarkerData);
                             }
                             // Raise an event for the discovered food.
                             MarkerEventManager.MarkerSpawned(food, MarkerEventManager.MarkerType.Food);

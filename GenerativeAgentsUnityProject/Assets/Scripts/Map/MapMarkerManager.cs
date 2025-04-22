@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class MapMarkerManager : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class MapMarkerManager : MonoBehaviour
     // Information about all agents knowledge about the environment (stuff to be marked)
     private static List<AgentMapInfo> allAgentMapInfos = new List<AgentMapInfo>(); 
     public Dictionary<string, GameObject> agentMapDict = new Dictionary<string, GameObject>();
+    //event that tracks when the agentMapDict is fully updated
+    public static event Action<Dictionary<string, GameObject>> mapDictFullyBuilt;
 
     // Dictionary to keep track of markers by their associated tracked objects.
     // private Dictionary<GameObject, GameObject> markers = new Dictionary<GameObject, GameObject>();
@@ -46,14 +49,11 @@ public class MapMarkerManager : MonoBehaviour
     // private float scanInterval = 1f;
     // private float scanTimer = 0f;
 
-    private void Awake()
+    private void Start()
     {
         registerAgents();
         createAgentMaps();
-    }
 
-    private void Start()
-    {
         // Get all RectTransform components in this object's hierarchy, including nested ones
         RectTransform[] allMaps = GetComponentsInChildren<RectTransform>(true);
 
@@ -95,7 +95,7 @@ public class MapMarkerManager : MonoBehaviour
 
     void registerAgents() {
         // Register all Personal Maps for each Agent
-        agentList = GameObject.FindGameObjectsWithTag("Agent");
+        agentList = GameObject.FindGameObjectsWithTag("agent");
         if (agentList.Length == 0) 
         {
             Debug.LogWarning("No Agents Found"); 
@@ -136,6 +136,7 @@ public class MapMarkerManager : MonoBehaviour
 
         idx++;
     }
+    mapDictFullyBuilt?.Invoke(agentMapDict); // Notify listeners that the map dictionary is fully built.);
 }
 
 
@@ -161,9 +162,10 @@ public class MapMarkerManager : MonoBehaviour
             if (markerType == MarkerEventManager.MarkerType.Food || markerType == MarkerEventManager.MarkerType.FoodSpawn)
             {
                 bool discovered = false;
-                foreach (AgentMapInfo pm in AgentMapManager.allAgentMapInfos)
+                foreach (GameObject agent in agentList)
                 {
-                    foreach (AgentMapInfo.MarkerData data in pm.knownMarkers)
+                    AgentMapInfo agentMapInfo = agent.GetComponent<AgentMapInfo>();
+                    foreach (AgentMapInfo.MarkerData data in agentMapInfo.knownMarkers)
                     {
                         // Only register if at least one agent has discovered this object.
                         if (data.markerType == markerType && data.discoveredObject == trackedObject)
