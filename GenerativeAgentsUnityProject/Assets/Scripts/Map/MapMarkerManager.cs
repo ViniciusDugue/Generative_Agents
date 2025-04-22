@@ -95,6 +95,7 @@ public class MapMarkerManager : MonoBehaviour
         catch (Exception ex) { Debug.LogError($"[MapMarkerManager] OnMarkerRemoved error: {ex}"); }
     }
 
+
     void CreateAgentMaps()
     {
         if (mapPrefab == null || agentCameraPrefab == null)
@@ -103,60 +104,46 @@ public class MapMarkerManager : MonoBehaviour
             return;
         }
 
-        // Clear out old maps
-        foreach (Transform child in agentMapsContainer)
-            Destroy(child.gameObject);
+        int total = agentInfos.Length;
+        float totalW = mapsPerRow * agentMapSize.x + (mapsPerRow - 1) * gridSpacing.x;
+        int rows     = Mathf.CeilToInt(total / (float)mapsPerRow);
+        float totalH = rows * agentMapSize.y + (rows - 1) * gridSpacing.y;
+        Vector2 origin = new Vector2(-totalW / 2 + agentMapSize.x / 2,
+                                    totalH / 2 - agentMapSize.y / 2);
 
-        // For each agent, spin up one UI map + one off‑screen camera
-        for (int i = 0; i < agentInfos.Length; i++)
+        for (int i = 0; i < total; i++)
         {
             var info = agentInfos[i];
-
-            // 1) Instantiate the UI map under your GridLayoutGroup container:
-            var mapGO = Instantiate(mapPrefab, agentMapsContainer, false);
+            GameObject mapGO = Instantiate(mapPrefab, transform, false);
             mapGO.name = $"AgentMap-{i}";
-            var canvasRT = mapGO
-            .GetComponentsInChildren<RectTransform>(true)
-            .First(rt => rt.CompareTag("agentmap"));
 
-            // 2) Build a transparent RenderTexture for your markers:
-            var rt = new RenderTexture(
-                (int)agentMapSize.x,
-                (int)agentMapSize.y,
-                /*depth:*/ 16
-            );
+            // find the 'agentmap' container
+            var canvasRT = mapGO.GetComponentsInChildren<RectTransform>(true)
+                                .FirstOrDefault(rt => rt.CompareTag("agentmap"));
+            if (canvasRT == null)
+            {
+                Debug.LogError($"'{mapGO.name}' missing child tagged 'agentmap'.");
+                continue;
+            }
 
-            // 3) Instantiate a world‑space camera (no parent!)
-            var cam = Instantiate(agentCameraPrefab);
-            cam.name = $"AgentCam-{i}";
-            cam.targetTexture = rt;
-
-            // → Make sure your agentCameraPrefab is set to Orthographic
-            //    and Clear Flags = Solid Color with alpha=0,
-            //    Culling Mask only includes your marker layers.
-            // → Now position it above the agent and point straight down:
-            var agentPos = info.gameObject.transform.position;
-            cam.transform.position = agentPos + Vector3.up * 100f; 
-            cam.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-
-            // 4) In the UI, leave your static RawImage alone (it shows the 2DMapTexture),
-            //    then add a second RawImage for the RT overlay:
-            var overlayGO = new GameObject("MarkerOverlay", typeof(RawImage));
-            overlayGO.transform.SetParent(canvasRT, false);
-            var overlay = overlayGO.GetComponent<RawImage>();
-            overlay.texture = rt;
-            // stretch it full‑size:
-            overlay.rectTransform.anchorMin    = Vector2.zero;
-            overlay.rectTransform.anchorMax    = Vector2.one;
-            overlay.rectTransform.offsetMin    = Vector2.zero;
-            overlay.rectTransform.offsetMax    = Vector2.zero;
-
-            // 5) Cache references for marker logic, etc.
             agentMapContainers[info]  = canvasRT;
             agentMarkersByAgent[info] = new Dictionary<GameObject, GameObject>();
-            agentCameras[info]        = cam;
+
+            // tile in grid
+            int col = i % mapsPerRow, row = i / mapsPerRow;
+            float x = origin.x + col * (agentMapSize.x + gridSpacing.x);
+            float y = origin.y - row * (agentMapSize.y + gridSpacing.y);
+            canvasRT.anchoredPosition = new Vector2(x, y);
+
+            // instantiate a camera for off‑screen encoding
+            Camera cam = Instantiate(agentCameraPrefab, transform, false);
+            var rt = new RenderTexture((int)agentMapSize.x, (int)agentMapSize.y, 16);
+            cam.targetTexture = rt;
+            agentCameras[info] = cam;
+
         }
     }
+
 
     private void OnMarkerSpawned(GameObject obj, MarkerEventManager.MarkerType type)
     {
@@ -189,7 +176,6 @@ public class MapMarkerManager : MonoBehaviour
             if (prefab) dict[obj] = Instantiate(prefab, container);
         }
     }
-
     private void OnMarkerRemoved(GameObject obj)
     {
         if (obj == null) return;
