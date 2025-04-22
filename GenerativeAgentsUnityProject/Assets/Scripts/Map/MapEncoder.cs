@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Net.Http;
 using System.Collections;
 using System.Threading.Tasks;
+using System.Drawing.Text;
+using System.Collections.Generic;
 
 public class MapEncoder : MonoBehaviour
 {
@@ -13,12 +15,34 @@ public class MapEncoder : MonoBehaviour
     public string serverUrl = "http://127.0.0.1:12345/map";
     private Texture2D capturedTexture;
     private static readonly HttpClient httpClient = new HttpClient();
+    private BehaviorManager bm;
+    private int agentID;
 
     [System.Serializable]
     public class MapPayload
     {
         public int agent_id;
         public string map_base64;
+    }
+
+    void OnEnable()
+    {
+        MapMarkerManager.mapDictFullyBuilt += AssignMapCamera;
+    }
+    void OnDisable()
+    {
+        MapMarkerManager.mapDictFullyBuilt -= AssignMapCamera;
+    }
+
+    void Start() {
+        bm = GetComponent<BehaviorManager>();
+        agentID = bm.agentID;
+    }
+
+    public void AssignMapCamera(Dictionary<string, GameObject> agentMapDict) {
+        GameObject mapObj = agentMapDict[$"AgentMap-{agentID+1}"];
+        Camera camera = mapObj.transform.GetChild(0).GetComponent<Camera>();
+        mapCamera = camera;
     }
 
 

@@ -352,20 +352,20 @@ public class SpawnManager : MonoBehaviour
                     newAgent.AddComponent<AgentController>();
                 }
 
-                // Ensure the agent has a MapEncoder component.
-                MapEncoder mapEncoder = newAgent.GetComponent<MapEncoder>() 
-                                        ?? newAgent.AddComponent<MapEncoder>();
-                // Locate the 2D map camera and assign it.
-                GameObject mapCameraObj = GameObject.Find("AgentCamera");
-                if(mapCameraObj != null)
-                {
-                    mapEncoder.mapCamera = mapCameraObj.GetComponent<Camera>();
-                }
-                else
-                {
-                    Debug.LogWarning("2DMapCamera not found!");
-                }
-                mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
+                // // Ensure the agent has a MapEncoder component.
+                // MapEncoder mapEncoder = newAgent.GetComponent<MapEncoder>() 
+                //                         ?? newAgent.AddComponent<MapEncoder>();
+                // // Locate the 2D map camera and assign it.
+                // GameObject mapCameraObj = GameObject.Find("AgentCamera");
+                // if(mapCameraObj != null)
+                // {
+                //     mapEncoder.mapCamera = mapCameraObj.GetComponent<Camera>();
+                // }
+                // else
+                // {
+                //     Debug.LogWarning("2DMapCamera not found!");
+                // }
+                // mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
 
                 // Register the agent marker via the event system.
                 MarkerEventManager.MarkerSpawned(newAgent, MarkerEventManager.MarkerType.Agent);

@@ -122,7 +122,7 @@ public class MapMarkerManager : MonoBehaviour
     for (int i = 0; i < agentList.Length; i++) {
         // Instantiate a copy of the mapPrefab as a child of this GameObject
         GameObject agentMap = Instantiate(mapPrefab, this.transform, false);
-        agentMap.name = $"AgentMap-{idx}";
+        agentMap.name = $"AgentMap-{idx+1}";
 
         // Calculate where to place it: start from a base location, then offset by
         // rectMapOffset multiplied by the loop index i
