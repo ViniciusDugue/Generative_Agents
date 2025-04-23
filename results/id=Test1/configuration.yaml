@@ -2,11 +2,20 @@ default_settings: null
 behaviors:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
   MultipleFoodGatherer:
     trainer_type: poca
 =======
 <<<<<<< HEAD
 =======
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
   BlockAgent4:
     trainer_type: ppo
@@ -15,8 +24,17 @@ behaviors:
     trainer_type: poca
 >>>>>>> main
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
 =======
+>>>>>>> Block_Agent_Behavior
+=======
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
     hyperparameters:
       batch_size: 1024

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8845188772354738456}
   - component: {fileID: 4849597536679415534}
   - component: {fileID: 1493371971608653027}
-  - component: {fileID: 3569045005745446048}
+  - component: {fileID: 1324148181853094168}
   m_Layer: 0
   m_Name: Block
   m_TagString: block
@@ -134,9 +134,9 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
---- !u!208 &3569045005745446048
+--- !u!208 &1324148181853094168
 NavMeshObstacle:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
