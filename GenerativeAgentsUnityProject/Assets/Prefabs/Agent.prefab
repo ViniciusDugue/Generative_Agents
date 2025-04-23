@@ -1140,6 +1140,7 @@ GameObject:
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
   - component: {fileID: 7039869131580968681}
+  - component: {fileID: 6318067621239014252}
   - component: {fileID: 1713156178617753578}
   - component: {fileID: 5926976418048991636}
   - component: {fileID: 5729518069442870478}
@@ -1154,7 +1155,6 @@ GameObject:
   - component: {fileID: 6572964766931281634}
   - component: {fileID: 2381536804232584231}
   - component: {fileID: 3734130453397303237}
-  - component: {fileID: 750497147253736037}
   m_Layer: 6
   m_Name: Agent
   m_TagString: agent
@@ -1307,6 +1307,34 @@ MonoBehaviour:
   enemyCurrentlyDetected: 0
   enemyPreviousDetected: 0
   enemyTransform: {fileID: 0}
+--- !u!114 &6318067621239014252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f64878361cc1f04387529c6e6f6291b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
+  exhaustionRate: 0.1
+  targetBlock: {fileID: 0}
+  destinationObject: {fileID: 0}
+  navAgent: {fileID: 3081395510317380987}
+  startBehavior: 0
+  interrupt: 0
+  pickupRange: 2
+  isHoldingBlock: 0
+  destinationStopDistance: 1
+  distToDestination: 0
+  destinationPrefab: {fileID: 0}
+  currentState: 0
 --- !u!114 &1713156178617753578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1378,7 +1406,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468d594e562f3ea49a5227331c22ec67, type: 3}
   m_Name: 
@@ -1659,28 +1687,6 @@ MonoBehaviour:
   mapWidth: 200
   mapHeight: 200
   serverUrl: http://127.0.0.1:12345/map
---- !u!114 &750497147253736037
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a11632dc52db4b64dbfdedfe77ec3de0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 0
-  navAgent: {fileID: 0}
-  habitat: {fileID: 0}
-  goTowardsStoppingDistance: 3
-  patrolRadius: 20
-  patrolInterval: 3
-  detectionRadius: 20
-  chaseDuration: 3
-  maxChaseDistance: 20
-  collisionDamage: 20
 --- !u!1 &8750545991374723211
 GameObject:
   m_ObjectHideFlags: 0
