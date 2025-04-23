@@ -3,6 +3,7 @@ import openai
 from fastapi import FastAPI, HTTPException, Request
 import uvicorn
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 from enum import Enum
 from typing import Union
@@ -19,6 +20,8 @@ import logging
 import base64
 # Dictionary to store map data for each agent
 
+>>>>>>> main
+=======
 >>>>>>> main
 
 # Load environment variables from .env file
@@ -108,6 +111,9 @@ survival_agent = Agent(
 # Create FastAPI app
 app = FastAPI()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> main
 
 # Call the LLM with the JSON schema
 async def NLP(input_string: str):
@@ -164,6 +170,7 @@ async def process_input(request: Request):
 
 # Run the FastAPI app
 if __name__ == "__main__":
+<<<<<<< HEAD
     uvicorn.run("unity:app", host="localhost", port=12345)
 =======
 # Define the FastAPI endpoint
@@ -234,4 +241,7 @@ async def process_map_with_llm(request: Request):
 # Run the FastAPI app
 if __name__ == "__main__":
     uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
+>>>>>>> main
+=======
+    uvicorn.run("unity:app", host="localhost", port=12345)
 >>>>>>> main
