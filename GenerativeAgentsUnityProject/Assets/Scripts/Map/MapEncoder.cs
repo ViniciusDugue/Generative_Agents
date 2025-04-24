@@ -39,12 +39,34 @@ public class MapEncoder : MonoBehaviour
         agentID = bm.agentID;
     }
 
-    public void AssignMapCamera(Dictionary<string, GameObject> agentMapDict) {
-        GameObject mapObj = agentMapDict[$"AgentMap-{agentID+1}"];
-        Camera camera = mapObj.transform.GetChild(0).GetComponent<Camera>();
-        mapCamera = camera;
-    }
+    // public void AssignMapCamera(Dictionary<string, GameObject> agentMapDict) {
+    //     GameObject mapObj = agentMapDict[$"AgentMap-{agentID}"];
+    //     Camera camera = mapObj.transform.GetChild(0).GetComponent<Camera>();
+    //     mapCamera = camera;
+    // }
 
+    public void AssignMapCamera(Dictionary<string, GameObject> agentMapDict)
+    {
+        // Grab the same agentID you used when naming the map prefab
+        var bm = GetComponent<BehaviorManager>();
+        if (bm == null)
+        {
+            Debug.LogError("[MapEncoder] No BehaviorManager on this GameObject!");
+            return;
+        }
+
+        int id  = bm.agentID;
+        string key = $"AgentMap-{id}";
+
+        if (!agentMapDict.TryGetValue(key, out GameObject mapObj))
+        {
+            Debug.LogError($"[MapEncoder] No map with key '{key}' found!");
+            return;
+        }
+
+        // Assign its camera
+        mapCamera = mapObj.GetComponentInChildren<Camera>();
+    }
 
     public async void CaptureAndSendMap(int agentID)
     {

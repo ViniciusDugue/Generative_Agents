@@ -56,6 +56,8 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("spawn manager awake");
+
         markerManager = FindFirstObjectByType<MapMarkerManager>();
         FindSpawnPoints();
 
@@ -162,7 +164,7 @@ public class SpawnManager : MonoBehaviour
 
         for (int i = 0; i < countToSelect; i++)
         {
-            int index = Random.Range(0, tempList.Count);
+            int index = UnityEngine.Random.Range(0, tempList.Count);
             activeFoodSpawnPoints.Add(tempList[index]);
             tempList.RemoveAt(index);
         }
@@ -193,7 +195,7 @@ public class SpawnManager : MonoBehaviour
         List<Transform> tempList = new List<Transform>(enemySpawnPoints);
         for (int i = 0; i < countToSelect; i++)
         {
-            int index = Random.Range(0, tempList.Count);
+            int index = UnityEngine.Random.Range(0, tempList.Count);
             activeEnemySpawnPoints.Add(tempList[index]);
             tempList.RemoveAt(index);
         }
@@ -337,7 +339,7 @@ public class SpawnManager : MonoBehaviour
             Vector3 hubPos = habitat.centralHubPoint.position;
             for (int i = 0; i < maxAgents; i++)
             {
-                Vector3 spawnPos = hubPos + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+                Vector3 spawnPos = hubPos + new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f));
                 GameObject newAgent = Instantiate(agentPrefab, spawnPos, Quaternion.identity);
                 spawnedAgents.Add(newAgent);
 
@@ -384,8 +386,8 @@ public class SpawnManager : MonoBehaviour
     // Returns a random position within a circle around a center.
     private Vector3 GetRandomPositionAround(Vector3 center, float radius)
     {
-        float randomAngle = Random.Range(0f, Mathf.PI * 2);
-        float randomDistance = Random.Range(0f, radius);
+        float randomAngle = UnityEngine.Random.Range(0f, Mathf.PI * 2);
+        float randomDistance = UnityEngine.Random.Range(0f, radius);
         float xOffset = Mathf.Cos(randomAngle) * randomDistance;
         float zOffset = Mathf.Sin(randomAngle) * randomDistance;
         return new Vector3(center.x + xOffset, center.y + spawnHeightOffset, center.z + zOffset);
