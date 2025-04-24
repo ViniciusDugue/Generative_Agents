@@ -42,6 +42,12 @@ public class SpawnManager : MonoBehaviour
     private List<Transform> activeEnemySpawnPoints = new List<Transform>();
     private List<Transform> agentSpawnPoints = new List<Transform>();
 
+    // Expose read-only counts for the UI
+    public int AgentCount   => spawnedAgents.Count;
+    public int EnemyCount   => spawnedEnemies.Count;
+    public int FoodCount    => spawnedFood.Count;
+
+
     private MapMarkerManager markerManager;
 
     [Header("Time Manager Reference")]
@@ -436,4 +442,5 @@ public class SpawnManager : MonoBehaviour
     {
         // Not needed here since agents are spawned from the central hub.
     }
+
 }
