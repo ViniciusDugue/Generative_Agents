@@ -49,9 +49,9 @@ TagManager:
   - Target
   - Obstruction
   - invisible
-  - 
-  - 
-  - 
+  - FoodSpawn
+  - EnemySpawn
+  - AgentSpawn
   - 
   - 
   - 
