@@ -13,26 +13,8 @@ public class BehaviorManager : MonoBehaviour
     private static int globalAgentID = 1;  // Shared counter for unique IDs
     public float fitnessScore = 0.0f;
     public float exhaustion;
-    // Private field
-    [SerializeField] private int _hunger;
-
-    // Public property with get and set
-    public int Hunger
-    {
-        get { return _hunger; }
-        set 
-        { 
-            if (value >= 0 && value <= 10) // Example validation: hunger should be between 0 and 10
-            {
-                _hunger = value;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "Hunger must be between 0 and 10.");
-            }
-        }
-    }
-    [SerializeField]
+    [SerializeField] public int CurrentHunger => agentHeal.CurrentHunger;
+    
     public bool refreshLLM = false;
 
     [Header("Advanced Variables")]
@@ -71,6 +53,7 @@ public class BehaviorManager : MonoBehaviour
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
     private float enemyOutOfRangeStartTime = -1f;
     private AgentHealth agentHealth;
+    private AgentHeal agentHeal;
     private Habitat agentHabitat; 
     private GatherBehavior gatherBehavior; 
     private float depositedFood = 0;
@@ -124,6 +107,7 @@ public class BehaviorManager : MonoBehaviour
         StartCoroutine(pollLLM());
 
         // Get References
+        agentHeal = GetComponent<AgentHeal>();
         agentHealth = GetComponent<AgentHealth>();
         gatherBehavior = GetComponent<GatherBehavior>();
         agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
@@ -146,14 +130,7 @@ public class BehaviorManager : MonoBehaviour
             esclatedDetectedEnemyToLLM();
             // enemyPreviousDetected = enemyCurrentlyDetected; 
         }
-
-        // Update enemy detection.
-        // CheckEnemyDetection();
-
-        // Determine whether an enemy is currently detected.
         
-        
-
         // (The rest of your Update code for manual behavior switching remains unchanged)
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
@@ -432,7 +409,7 @@ public class BehaviorManager : MonoBehaviour
         float curHealth = agentHealth.currentHealth;
         float habitatFood = agentHabitat.storedFood; 
 
-        FitnessScore += 10 * habitatFood + 5 * currentFood + 7*(depositedFood)
+        FitnessScore = 10 * habitatFood + 5 * currentFood + 7*(depositedFood)
         - 10 * (agentHealth.maxHealth -agentHealth.currentHealth);
         return FitnessScore;
     }
@@ -478,8 +455,8 @@ public class BehaviorManager : MonoBehaviour
     }
 
     public void eatPersonalFoodSupply() {
-        if (_hunger <= requiredFood) {
-            _hunger += 1;  // Increase hunger by 1 unit for each food consumed.= 1;
+        if (CurrentHunger <= requiredFood) {
+            agentHeal.ReceiveFood(1);  // Increase hunger by 1 unit for each food consumed.= 1;
             currentFood -= 1;
         }
     }
@@ -494,9 +471,9 @@ public class BehaviorManager : MonoBehaviour
         // Using depositedFood as the count of food this agent deposited today.
         // int deposited = Mathf.RoundToInt(depositedFood);
 
-        if (_hunger < requiredFood)
+        if (CurrentHunger < requiredFood)
         {
-            int missingFood = requiredFood - _hunger;
+            int missingFood = requiredFood - CurrentHunger;
             // Parameter: Percentage of max health damage per missing food portion.
             float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
             AgentHealth agentHealth = GetComponent<AgentHealth>();
@@ -504,7 +481,7 @@ public class BehaviorManager : MonoBehaviour
             {
                 // Calculate total damage.
                 int damage = Mathf.RoundToInt(missingFood * damagePercentagePerPortion * agentHealth.maxHealth);
-                Debug.Log($"Agent {agentID} did not consume enough food. Missing {_hunger} portions. Applying {damage} damage.");
+                Debug.Log($"Agent {agentID} did not consume enough food. Missing {missingFood} portions. Applying {damage} damage.");
                 agentHealth.TakeDamage(damage);
             }
             else

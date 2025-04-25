@@ -16,7 +16,8 @@ using NUnit.Framework.Constraints;
 public class Client : MonoBehaviour
 {
     public TextMeshProUGUI displayText;
-    private Habitat agentHabitat;
+    private GameObject habitat;
+    private Habitat habitatComponent;
     private Dictionary<int, GameObject> agentDict = new Dictionary<int, GameObject>();
 
     private HttpClient client;
@@ -36,7 +37,9 @@ public class Client : MonoBehaviour
         }
 
         // Assign Reference
-        agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
+        habitat = GameObject.FindGameObjectWithTag("habitat");
+        habitatComponent = habitat.GetComponent<Habitat>();
+
     }
 
     public void RegisterAgent(GameObject agent)
@@ -146,13 +149,15 @@ public class Client : MonoBehaviour
             agentID = bm.agentID,
             currentAction = bm.currentAgentBehavior.GetType().Name,  // Default action
             currentPosition = new { x = position.x, z = position.z },
+            currentHunger = bm.CurrentHunger,
             maxFood = 3, // Placeholder, replace with actual maxFood
             currentFood = bm.getFood(),
-            storedFood = agentHabitat.storedFood,
+            storedFood = habitatComponent.storedFood,
             fitness = bm.fitnessScore,
             health = 100,  // Placeholder, replace with actual health
             enemyCurrentlyDetected = bm.enemyCurrentlyDetected,
             exhaustion = bm.exhaustion,
+            habitatLocation = new {x = habitatComponent.transform.position.x, z =habitatComponent.transform.position.z},
             activeFoodLocations = GetFoodLocationsAsList(bm.activeFoodLocations),
             foodLocations = GetFoodLocationsAsList(bm.foodLocations),
             mapData = mapData,

@@ -12,7 +12,8 @@ public class AgentHeal : MonoBehaviour
     [Tooltip("The maximum hunger value. When hunger is full, healing begins.")]
     public int maxHunger = 100;
     [Tooltip("Current hunger level. Agents start out hungry.")]
-    public int currentHunger = 0;
+    [SerializeField] private int currentHunger = 0;
+    public int CurrentHunger => currentHunger;
     [Tooltip("Amount of food needed to fill hunger (per portion).")]
     public int foodPortionValue = 10;
 
