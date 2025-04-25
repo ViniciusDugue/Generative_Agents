@@ -6,7 +6,7 @@ using System;
 public class MarkerEventManager : MonoBehaviour
 {
     // Enum to differentiate between various marker types.
-    public enum MarkerType { Agent, Enemy, Food, FoodSpawn }
+    public enum MarkerType { Agent, Enemy, Food, FoodSpawn, EnemySpawn }
 
     // Event triggered when an object should have a marker spawned.
     public static event Action<GameObject, MarkerType> OnMarkerSpawned;

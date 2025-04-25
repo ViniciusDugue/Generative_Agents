@@ -15,9 +15,15 @@ public class MapMarkerManager : MonoBehaviour
 
     [Header("Marker Prefabs")]
     public GameObject agentMarkerPrefab;
+    public GameObject allyMarkerPrefab;
     public GameObject enemyMarkerPrefab;
+    public GameObject enemySpawnPointMarkerPrefab;
     public GameObject foodMarkerPrefab;
     public GameObject foodSpawnPointMarkerPrefab;
+    public GameObject activeFoodSpawnPointMarkerPrefab;
+
+    // Reference for spawn‐point data
+    private SpawnManager spawnManager;
 
     [Header("Map Resolutions")]
     public Vector2 userMapResolution  = new Vector2(700, 700);
@@ -47,6 +53,7 @@ public class MapMarkerManager : MonoBehaviour
     {
         MarkerEventManager.OnMarkerSpawned += OnMarkerSpawnedHandler;
         MarkerEventManager.OnMarkerRemoved += OnMarkerRemovedHandler;
+        spawnManager = FindObjectOfType<SpawnManager>();
     }
 
     private void Start()
@@ -171,60 +178,119 @@ public class MapMarkerManager : MonoBehaviour
 
     private void OnMarkerSpawnedHandler(GameObject trackedObject, MarkerEventManager.MarkerType markerType)
     {
-        // — USER MAP —
-        if (userMapContainer != null
-         && trackedObject != null
-         && !userMarkers.ContainsKey(trackedObject))
+        if (trackedObject == null) 
+            return;
+
+        // ── USER MAP ── (unchanged) 
+        if (userMapContainer != null && trackedObject != null && !userMarkers.ContainsKey(trackedObject))
         {
-            GameObject prefab = GetPrefabForMarker(markerType);
-            if (prefab != null)
+            GameObject uprefab = null;
+
+            switch (markerType)
             {
-                var m = Instantiate(prefab, userMapContainer);
-                m.name = trackedObject.name + "_UserMarker";
-                userMarkers[trackedObject] = m;
+                // For FoodSpawn, pick active vs inactive prefab
+                case MarkerEventManager.MarkerType.FoodSpawn:
+                    bool isActive = spawnManager.ActiveFoodSpawnPoints
+                                    .Contains(trackedObject.transform);
+                    uprefab = isActive
+                            ? activeFoodSpawnPointMarkerPrefab
+                            : foodSpawnPointMarkerPrefab;
+                    break;
+
+                // Everything else uses the standard mapping
+                default:
+                    uprefab = GetPrefabForMarker(markerType);
+                    break;
+            }
+
+            if (uprefab != null)
+            {
+                var umarker = Instantiate(uprefab, userMapContainer);
+                umarker.name = trackedObject.name + "_UserMarker";
+                umarker.transform.SetAsLastSibling();
+                userMarkers[trackedObject] = umarker;
             }
         }
 
-        // — AGENT MAPS —
-        if (trackedObject == null) return;
-        GameObject agentPrefab = GetPrefabForMarker(markerType);
-        if (agentPrefab == null)    return;
-
+        // ── AGENT MAPS ──
         foreach (var kv in agentMapContainers)
         {
-            AgentMapInfo info       = kv.Key;
-            RectTransform container = kv.Value;
+            var info      = kv.Key;       // the AgentMapInfo for this map
+            var container = kv.Value;     // its RectTransform
+            GameObject prefab = null;
+            bool shouldShow = false;
 
-            // Only Food/FoodSpawn if discovered; otherwise always show Agent/Enemy
-            bool discovered = false;
-            if (markerType == MarkerEventManager.MarkerType.Food ||
-                markerType == MarkerEventManager.MarkerType.FoodSpawn)
+            switch (markerType)
             {
-                foreach (var md in info.knownMarkers)
-                {
-                    if (md.discoveredObject == trackedObject && md.markerType == markerType)
+                // Always show your own agent and your allies
+                case MarkerEventManager.MarkerType.Agent:
+                    prefab     = (trackedObject == info.gameObject)
+                                ? agentMarkerPrefab 
+                                : allyMarkerPrefab;
+                    shouldShow = true;
+                    break;
+
+                // Always show enemies on every map
+                case MarkerEventManager.MarkerType.Enemy:
+                    prefab     = enemyMarkerPrefab;
+                    shouldShow = true;
+                    break;
+
+                // FOOD: only if this agent discovered that piece of food
+                case MarkerEventManager.MarkerType.Food:
+                    if (info.knownMarkers.Exists(md =>
+                            md.discoveredObject == trackedObject &&
+                            md.markerType     == MarkerEventManager.MarkerType.Food))
                     {
-                        discovered = true;
-                        break;
+                        prefab     = foodMarkerPrefab;
+                        shouldShow = true;
                     }
-                }
+                    break;
+
+                // FOOD SPAWN: only if discovered, then pick active vs inactive prefab
+                case MarkerEventManager.MarkerType.FoodSpawn:
+                    if (info.knownMarkers.Exists(md =>
+                            md.discoveredObject == trackedObject &&
+                            md.markerType     == MarkerEventManager.MarkerType.FoodSpawn))
+                    {
+                        bool isActive = spawnManager.ActiveFoodSpawnPoints.Contains(trackedObject.transform);
+                        prefab     = isActive
+                                    ? activeFoodSpawnPointMarkerPrefab
+                                    : foodSpawnPointMarkerPrefab;
+                        shouldShow = true;
+                    }
+                    break;
+
+                // ENEMY SPAWN: only if discovered
+                case MarkerEventManager.MarkerType.EnemySpawn:
+                    if (info.knownMarkers.Exists(md =>
+                            md.discoveredObject == trackedObject &&
+                            md.markerType     == MarkerEventManager.MarkerType.EnemySpawn))
+                    {
+                        prefab     = enemySpawnPointMarkerPrefab;
+                        shouldShow = true;
+                    }
+                    break;
             }
-            else discovered = true;
 
-            if (!discovered) continue;
+            if (!shouldShow || prefab == null)
+                continue;
 
-            // Spawn & track
-            var agentMarker = Instantiate(agentPrefab, container);
-            agentMarker.name = $"{trackedObject.name}_AgentMarker_for_{info.gameObject.name}";
+            // instantiate on *this* agent’s map only
+            var marker = Instantiate(prefab, container);
+            marker.name = $"{trackedObject.name}_{markerType}_for_{info.gameObject.name}";
+            marker.transform.SetAsLastSibling();    // bring to front
 
+            // track it so we can remove later
             if (!agentMarkers.TryGetValue(trackedObject, out var list))
             {
                 list = new List<GameObject>();
                 agentMarkers[trackedObject] = list;
             }
-            list.Add(agentMarker);
+            list.Add(marker);
         }
     }
+
 
     private void OnMarkerRemovedHandler(GameObject trackedObject)
     {
@@ -305,11 +371,27 @@ public class MapMarkerManager : MonoBehaviour
     {
         switch (markerType)
         {
-            case MarkerEventManager.MarkerType.Agent:     return agentMarkerPrefab;
-            case MarkerEventManager.MarkerType.Enemy:     return enemyMarkerPrefab;
-            case MarkerEventManager.MarkerType.Food:      return foodMarkerPrefab;
-            case MarkerEventManager.MarkerType.FoodSpawn: return foodSpawnPointMarkerPrefab;
-            default:                                      return null;
+            // on the USER map, ALL agents are “allies” (triangles)
+            case MarkerEventManager.MarkerType.Agent:
+                return allyMarkerPrefab;
+
+            // enemies use the enemy icon
+            case MarkerEventManager.MarkerType.Enemy:
+                return enemyMarkerPrefab;
+
+            // food & food‐spawn as before
+            case MarkerEventManager.MarkerType.Food:
+                return foodMarkerPrefab;
+
+            case MarkerEventManager.MarkerType.FoodSpawn:
+                return foodSpawnPointMarkerPrefab;
+
+            // ← NEW: enemy‐spawn now shows up too
+            case MarkerEventManager.MarkerType.EnemySpawn:
+                return enemySpawnPointMarkerPrefab;
+
+            default:
+                return null;
         }
     }
 }

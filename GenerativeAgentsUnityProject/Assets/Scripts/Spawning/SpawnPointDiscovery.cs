@@ -34,58 +34,73 @@ public class SpawnPointDiscovery : MonoBehaviour
         if (spawnManager == null)
             return;
 
-        // Iterate through all active food spawn points.
-        foreach (Transform spawnPoint in spawnManager.ActiveFoodSpawnPoints)
+        // ── Discover *all* food spawn points ──
+        foreach (Transform spawnPoint in spawnManager.FoodSpawnPoints)
         {
             float distance = Vector3.Distance(transform.position, spawnPoint.position);
-            // If within range and not already discovered:
             if (distance <= detectionRange && !discoveredSpawnPoints.Contains(spawnPoint))
             {
                 discoveredSpawnPoints.Add(spawnPoint);
 
-                // Optionally record the discovery in the agent's AgentMapInfo.
+                // Record the spawn‐point discovery
                 if (agentMapInfo != null)
                 {
-                    AgentMapInfo.MarkerData spawnMarkerData = new AgentMapInfo.MarkerData()
+                    var spawnData = new AgentMapInfo.MarkerData()
                     {
                         discoveredObject = spawnPoint.gameObject,
-                        markerType = MarkerEventManager.MarkerType.FoodSpawn
+                        markerType       = MarkerEventManager.MarkerType.FoodSpawn
                     };
-                    agentMapInfo.knownMarkers.Add(spawnMarkerData);
+                    agentMapInfo.knownMarkers.Add(spawnData);
                 }
 
-                // Raise an event for the discovered food spawn point.
                 MarkerEventManager.MarkerSpawned(spawnPoint.gameObject, MarkerEventManager.MarkerType.FoodSpawn);
-                Debug.Log($"{gameObject.name} discovered spawn point: {spawnPoint.name}");
+                Debug.Log($"{gameObject.name} discovered food spawn point: {spawnPoint.name}");
 
-                // Check if there is food spawned from this spawn point.
+                // If any food is mapped here, discover it too
                 if (spawnManager.FoodSpawnMapping.TryGetValue(spawnPoint, out List<GameObject> foodList))
                 {
                     foreach (GameObject food in foodList)
                     {
-                        if (food != null)
+                        if (food == null) continue;
+
+                        if (agentMapInfo != null)
                         {
-                            // Optionally record the food discovery in the agent's AgentMapInfo.
-                            if (agentMapInfo != null)
+                            var foodData = new AgentMapInfo.MarkerData()
                             {
-                                AgentMapInfo.MarkerData foodMarkerData = new AgentMapInfo.MarkerData()
-                                {
-                                    discoveredObject = food,
-                                    markerType = MarkerEventManager.MarkerType.Food
-                                };
-                                agentMapInfo.knownMarkers.Add(foodMarkerData);
-                            }
-                            // Raise an event for the discovered food.
-                            MarkerEventManager.MarkerSpawned(food, MarkerEventManager.MarkerType.Food);
-                            Debug.Log($"{gameObject.name} discovered food: {food.name} from spawn point: {spawnPoint.name}");
+                                discoveredObject = food,
+                                markerType       = MarkerEventManager.MarkerType.Food
+                            };
+                            agentMapInfo.knownMarkers.Add(foodData);
                         }
+                        MarkerEventManager.MarkerSpawned(food, MarkerEventManager.MarkerType.Food);
+                        Debug.Log($"{gameObject.name} discovered food: {food.name} at {spawnPoint.name}");
                     }
-                }
-                else
-                {
-                    Debug.Log($"{gameObject.name} did not find any food mapped for spawn point: {spawnPoint.name}");
                 }
             }
         }
+
+        // ── Discover *all* enemy spawn points ──
+        foreach (Transform spawnPoint in spawnManager.EnemySpawnPoints)
+        {
+            float distance = Vector3.Distance(transform.position, spawnPoint.position);
+            if (distance <= detectionRange && !discoveredSpawnPoints.Contains(spawnPoint))
+            {
+                discoveredSpawnPoints.Add(spawnPoint);
+
+                if (agentMapInfo != null)
+                {
+                    var enemySpawnData = new AgentMapInfo.MarkerData()
+                    {
+                        discoveredObject = spawnPoint.gameObject,
+                        markerType       = MarkerEventManager.MarkerType.EnemySpawn
+                    };
+                    agentMapInfo.knownMarkers.Add(enemySpawnData);
+                }
+
+                MarkerEventManager.MarkerSpawned(spawnPoint.gameObject, MarkerEventManager.MarkerType.EnemySpawn);
+                Debug.Log($"{gameObject.name} discovered enemy spawn point: {spawnPoint.name}");
+            }
+        }
     }
+
 }

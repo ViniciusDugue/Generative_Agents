@@ -47,6 +47,9 @@ public class SpawnManager : MonoBehaviour
     public List<Transform> ActiveFoodSpawnPoints { get { return activeFoodSpawnPoints; } }
     private Dictionary<Transform, List<GameObject>> foodSpawnMapping = new Dictionary<Transform, List<GameObject>>();
 
+    public List<Transform> FoodSpawnPoints  => foodSpawnPoints;
+    public List<Transform> EnemySpawnPoints => enemySpawnPoints;
+
 
     [Header("Time Manager Reference")]
     public TimeManager timeManager;
