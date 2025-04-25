@@ -38,6 +38,7 @@ TagManager:
   - habitat
   - destination
   - Default
+  - pest
   layers:
   - Default
   - TransparentFX

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.ComponentModel;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -19,14 +20,14 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField] private Light globalLight;
 
-    private int minutes;
+    [SerializeField] private int minutes;
     public int Minutes
     {
         get { return minutes; }
         set { minutes = value; OnMinutesChange(value); }
     }
 
-    private int hours = 8;
+    [SerializeField] private int hours = 8;
     public int Hours
     {
         get { return hours; }
@@ -41,14 +42,20 @@ public class TimeManager : MonoBehaviour
     }
 
     // Exposed boolean for day/night state.
-    public bool IsDayTime { get; private set; }
+    [SerializeField] private bool isDayTime;
+    public bool IsDayTime { get => isDayTime; private set => isDayTime = value; }
 
     // To detect changes and avoid spamming logs.
     private bool lastIsDayTime;
 
     private float tempSecond;
+    public static TimeManager Instance;
+    private void Awake()
+    {
+        Instance = this;   
+    }
 
-        private void Start()
+    private void Start()
     {
         // Always start at 8:00 AM.
         Hours = 8;
@@ -61,7 +68,7 @@ public class TimeManager : MonoBehaviour
     {
         // 1 day/night cycle = 4 minutes
         tempSecond += Time.deltaTime;
-        float secondsPerGameMinute = 1f / 6f;
+        float secondsPerGameMinute = 1f / 48f;
         if (tempSecond >= secondsPerGameMinute)
         {
             int minutesToAdd = Mathf.FloorToInt(tempSecond / secondsPerGameMinute);

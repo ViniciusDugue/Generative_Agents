@@ -77,6 +77,7 @@ public class FoodGathererAgent : AgentBehavior
     //agent model outputs/action buffers are turned into actions onto the environment
     public void MoveAgent(ActionBuffers actionBuffers)
     {
+        Debug.Log("Manually Moving Agent");
         m_Shoot = false;
 
         if (Time.time > m_FrozenTime + 4f && m_Frozen)
@@ -200,7 +201,7 @@ public class FoodGathererAgent : AgentBehavior
     {
         var continuousActionsOut = actionsOut.ContinuousActions;
         if (Input.GetKey(KeyCode.A))
-        {
+        {   
             continuousActionsOut[2] = 1;
         }
         if (Input.GetKey(KeyCode.W))
