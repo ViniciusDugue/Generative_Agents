@@ -61,7 +61,21 @@ public class AgentUIManager : MonoBehaviour
 
         UpdateFoodIcons(); // Draw food icons immediately
         UpdateAgentStats();
-    }
+
+        // → Zoom & lock-on camera to this agent
+        var camCtrl = Camera.main.GetComponent<CameraController>();
+        if (camCtrl != null)
+        {
+            // start the lock-on
+            camCtrl.LockOnToAgent(agentHealth.transform);
+            // snap camera in at the min-zoom distance
+            camCtrl.transform.position = 
+                agentHealth.transform.position 
+                - camCtrl.transform.forward * camCtrl.minZoom;
+            // optional: immediately look at the agent
+            camCtrl.transform.LookAt(agentHealth.transform.position);
+        }
+        }
 
     public void HideAgentStats()
     {
