@@ -15,6 +15,10 @@ public class AgentHeal : MonoBehaviour
     public int currentHunger = 0;
     [Tooltip("Amount of food needed to fill hunger (per portion).")]
     public int foodPortionValue = 10;
+   
+    [HideInInspector]
+    public int foodPortionsReceived = 0;
+
 
     [Header("Healing Settings")]
     [Tooltip("Health restored per healing tick once hunger is full.")]
@@ -60,7 +64,8 @@ public class AgentHeal : MonoBehaviour
         {
             currentHunger = maxHunger;
         }
-        // Debug.Log($"{gameObject.name} received food. Hunger: {currentHunger}/{maxHunger}");
+
+        foodPortionsReceived++;
 
         // Once hunger is full, start the healing process.
         if (currentHunger >= maxHunger && !isHealing)
