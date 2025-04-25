@@ -192,6 +192,14 @@ public class Client : MonoBehaviour
                 // Attempt to switch Agent Behavior to nextAction
                 Debug.Log($"[Client] Attempting to switch behavior for Agent {agentID} to {nextAction}");
                 agentDict[agentID].GetComponent<BehaviorManager>().SwitchBehavior(nextAction);
+                
+                // Check if the response contains the key "eatPersonalFoodSupply" and call the method if it does
+                if (responseJson.TryGetValue("eatPersonalFoodSupply", out var raw) &&
+                    bool.TryParse(raw?.ToString(), out bool eatFood) &&   // accepts "True", "true", "FALSE", etc.
+                    eatFood)
+                {
+                    agentDict[agentID].GetComponent<BehaviorManager>().eatPersonalFoodSupply();
+                }
 
                 // If a location is provided, update move target
                 if (responseJson.ContainsKey("location"))

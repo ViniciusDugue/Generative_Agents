@@ -13,10 +13,30 @@ public class BehaviorManager : MonoBehaviour
     private static int globalAgentID = 1;  // Shared counter for unique IDs
     public float fitnessScore = 0.0f;
     public float exhaustion;
+    // Private field
+    [SerializeField] private int _hunger;
+
+    // Public property with get and set
+    public int Hunger
+    {
+        get { return _hunger; }
+        set 
+        { 
+            if (value >= 0 && value <= 10) // Example validation: hunger should be between 0 and 10
+            {
+                _hunger = value;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "Hunger must be between 0 and 10.");
+            }
+        }
+    }
     [SerializeField]
     public bool refreshLLM = false;
 
     [Header("Advanced Variables")]
+    [SerializeField] private int requiredFood = 5;
     [Tooltip("Maximum amount of food the agent can carry at once.")]
     [SerializeField]
     private int maxFood = 3;
@@ -457,6 +477,12 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
+    public void eatPersonalFoodSupply() {
+        if (_hunger <= requiredFood) {
+            _hunger += 1;  // Increase hunger by 1 unit for each food consumed.= 1;
+            currentFood -= 1;
+        }
+    }
     // Optionally, add a method to reset this flag for the next cycle/day.
     public void ResetFoodDepositFlag()
     {
@@ -465,14 +491,12 @@ public class BehaviorManager : MonoBehaviour
 
     public void ApplyDailyHungerPenalty()
     {
-        // Required food portions per day.
-        int requiredFood = 5;
         // Using depositedFood as the count of food this agent deposited today.
-        int deposited = Mathf.RoundToInt(depositedFood);
+        // int deposited = Mathf.RoundToInt(depositedFood);
 
-        if (deposited < requiredFood)
+        if (_hunger < requiredFood)
         {
-            int missingFood = requiredFood - deposited;
+            int missingFood = requiredFood - _hunger;
             // Parameter: Percentage of max health damage per missing food portion.
             float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
             AgentHealth agentHealth = GetComponent<AgentHealth>();
@@ -480,7 +504,7 @@ public class BehaviorManager : MonoBehaviour
             {
                 // Calculate total damage.
                 int damage = Mathf.RoundToInt(missingFood * damagePercentagePerPortion * agentHealth.maxHealth);
-                Debug.Log($"Agent {agentID} did not consume enough food. Missing {missingFood} portions. Applying {damage} damage.");
+                Debug.Log($"Agent {agentID} did not consume enough food. Missing {_hunger} portions. Applying {damage} damage.");
                 agentHealth.TakeDamage(damage);
             }
             else
@@ -490,7 +514,7 @@ public class BehaviorManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Agent {agentID} met the food requirement with {deposited} portions.");
+            Debug.Log($"Agent {agentID} met the food requirement with {requiredFood} portions.");
         }
 
         // Reset the daily food tally for the next day.

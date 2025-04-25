@@ -24,7 +24,12 @@ class AgentResponse(BaseModel):
         description="Reasoning behind the agent's next action selection",
     )
 
-    next_action: Literal["FoodGathererAgent", "RestBehavior", "MoveBehavior", "FleeBehavior"] = Field(
+    eatCurrentFoodSupply: bool = Field(
+        ...,
+        description="Whether the agent should eat from their personal food supply",
+    )
+    
+    next_action: Literal["GatherBehavior", "RestBehavior", "MoveBehavior", "FleeBehavior"] = Field(
         ...,
         description="The next action to take for the agent",
     )
@@ -39,7 +44,7 @@ class AgentResponse(BaseModel):
         json_schema_extra = {
             "example": {
                 "reasoning": "The agent is hungry, is located on a food tile and needs to gather food to maintain energy levels.",
-                "next_action": "FoodGathererAgent",
+                "next_action": "GatherBehavior",
                 "location": {"x": 1.0, "z": 3.0}
             }
         }
