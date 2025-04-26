@@ -56,6 +56,9 @@ public class BehaviorManager : MonoBehaviour
     public float depositedFood = 0;
     private bool hasDepositedFood = false;
 
+    public AgentBehaviorUI agentBehaviorUI;
+    public string reasoning;
+    
     // NEW: Time tracking for enemy detection.
     private float enemyDetectionBuffer = 5f;
 
@@ -217,6 +220,8 @@ public class BehaviorManager : MonoBehaviour
             // Switch and enable new AgentBehavior  
             currentAgentBehavior = newBehavior;
             currentAgentBehavior.enabled = true;
+
+            agentBehaviorUI.UpdateBehaviorUI();
 
             // Stop previous exhaustion coroutine and restart with the new exhaustion rate
             StartExhaustionCoroutine();
@@ -380,7 +385,7 @@ public class BehaviorManager : MonoBehaviour
                                 Debug.Log("Active Food location found!");
                             }
                             else{
-                                Debug.Log("Food location found!");
+                                //Debug.Log("Food location found!");
                             }
                             
                         }
@@ -400,7 +405,7 @@ public class BehaviorManager : MonoBehaviour
                         enemyTransform = goHit.transform;
                         enemyCurrentlyDetected = true;
                         // lastEnemyDetectionTime = Time.time;
-                        Debug.Log($"Enemies Detected by Agent {agentID}!");
+                        //Debug.Log($"Enemies Detected by Agent {agentID}!");
                     }
                 }
             }
