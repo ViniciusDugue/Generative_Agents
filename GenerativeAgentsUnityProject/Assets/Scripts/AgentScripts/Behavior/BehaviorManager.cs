@@ -57,7 +57,8 @@ public class BehaviorManager : MonoBehaviour
     private bool hasDepositedFood = false;
 
     public AgentBehaviorUI agentBehaviorUI;
-
+    public string reasoning;
+    
     // NEW: Time tracking for enemy detection.
     private float enemyDetectionBuffer = 5f;
 
