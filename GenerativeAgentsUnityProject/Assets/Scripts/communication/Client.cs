@@ -152,7 +152,7 @@ public class Client : MonoBehaviour
             currentHunger = bm.CurrentHunger,
             maxFood = 3, // Placeholder, replace with actual maxFood
             currentFood = bm.getFood(),
-            storedFood = habitatComponent.storedFood,
+            habitatStoredFood = habitatComponent.storedFood,
             fitness = bm.fitnessScore,
             health = 100,  // Placeholder, replace with actual health
             enemyCurrentlyDetected = bm.enemyCurrentlyDetected,
