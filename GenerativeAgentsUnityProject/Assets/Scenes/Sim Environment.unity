@@ -4513,7 +4513,7 @@ RectTransform:
   m_Children:
   - {fileID: 825484876}
   - {fileID: 196684843}
-  m_Father: {fileID: 1462184294}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -8505,6 +8505,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7039869131580968681, guid: 6e25fa16c8dd1104ea38cfd8da264260,
+        type: 3}
+      propertyPath: agentBehaviorUI
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
         type: 3}
       propertyPath: m_Name
@@ -9226,6 +9231,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7275002512134994195, guid: 6e25fa16c8dd1104ea38cfd8da264260,
+        type: 3}
+      propertyPath: targetBlock
+      value: 
+      objectReference: {fileID: 1336944208}
+    - target: {fileID: 7275002512134994195, guid: 6e25fa16c8dd1104ea38cfd8da264260,
+        type: 3}
+      propertyPath: destinationObject
+      value: 
+      objectReference: {fileID: 1461692188}
     - target: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
         type: 3}
       propertyPath: m_Name
@@ -16018,8 +16033,7 @@ Transform:
   m_LocalPosition: {x: 44.87785, y: 37.785885, z: 3.9241304}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1462184294}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1820291427
@@ -20094,3 +20108,6 @@ SceneRoots:
   - {fileID: 1403463071}
   - {fileID: 1291865324}
   - {fileID: 1366792880}
+  - {fileID: 1048430073}
+  - {fileID: 565406884}
+  - {fileID: 1812354328}
