@@ -116,6 +116,9 @@ public class AgentHeal : MonoBehaviour
 
     private void Die()
     {
+        EndSimMetricsUI.Instance.IncrementDeadAgents();
+        SpawnManager.Instance.aliveAgents.Remove(this.gameObject);
+        
         Debug.Log($"{gameObject.name} has died.");
         gameObject.SetActive(false);
     }
