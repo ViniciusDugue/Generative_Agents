@@ -53,7 +53,7 @@ public class BehaviorManager : MonoBehaviour
     private AgentHealth agentHealth;
     private Habitat agentHabitat; 
     private GatherBehavior gatherBehavior; 
-    private float depositedFood = 0;
+    public float depositedFood = 0;
     private bool hasDepositedFood = false;
 
     public AgentBehaviorUI agentBehaviorUI;
@@ -382,6 +382,7 @@ public class BehaviorManager : MonoBehaviour
                             FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
                             if (status != null && status.HasFood) {
                                 activeFoodLocations.Add(goHit.transform);
+                                EndSimMetricsUI.Instance.IncrementFoodLocationsDiscovered();
                                 Debug.Log("Active Food location found!");
                             }
                             else{
