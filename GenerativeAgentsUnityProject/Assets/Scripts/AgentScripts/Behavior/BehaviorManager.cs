@@ -382,6 +382,7 @@ public class BehaviorManager : MonoBehaviour
                             FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
                             if (status != null && status.HasFood) {
                                 activeFoodLocations.Add(goHit.transform);
+                                EndSimMetricsUI.Instance.IncrementFoodLocationsDiscovered();
                                 Debug.Log("Active Food location found!");
                             }
                             else{
