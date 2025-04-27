@@ -34,6 +34,7 @@ public class SpawnManager : MonoBehaviour
     private List<GameObject> spawnedFood = new List<GameObject>();
     private List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> spawnedAgents = new List<GameObject>();
+    public List<GameObject> aliveAgents = new List<GameObject>();
     private List<GameObject> spawnedPests = new List<GameObject>();
 
     // Spawn point lists for food and enemy.
@@ -46,7 +47,8 @@ public class SpawnManager : MonoBehaviour
     private List<Transform> agentSpawnPoints = new List<Transform>();
 
     private MapMarkerManager markerManager;
-
+    
+    public static SpawnManager Instance;
     // Track the previous day/night state.
     private bool lastIsDaytime;
 
@@ -55,6 +57,7 @@ public class SpawnManager : MonoBehaviour
         markerManager = FindFirstObjectByType<MapMarkerManager>();
         FindSpawnPoints();
 
+        Instance = this;
         lastIsDaytime = TimeManager.Instance.IsDayTime;
     }
 
@@ -346,11 +349,13 @@ public class SpawnManager : MonoBehaviour
         {
             Habitat habitat = habitatObj.GetComponent<Habitat>();
             Vector3 hubPos = habitat.centralHubPoint.position;
+
             for (int i = 0; i < maxAgents; i++)
             {
                 Vector3 spawnPos = hubPos + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
                 GameObject newAgent = Instantiate(agentPrefab, spawnPos, Quaternion.identity);
                 spawnedAgents.Add(newAgent);
+                aliveAgents.Add(newAgent);
 
                 // Ensure the agent has a BehaviorManager component.
                 BehaviorManager behaviorManager = newAgent.GetComponent<BehaviorManager>() 

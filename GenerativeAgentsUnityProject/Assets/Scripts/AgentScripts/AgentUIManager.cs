@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems; // Needed to detect UI clicks
+using UnityEngine.EventSystems;
+using TMPro;
 
 public class AgentUIManager : MonoBehaviour
 {
@@ -19,11 +20,19 @@ public class AgentUIManager : MonoBehaviour
     public GameObject foodContainer;     // Parent with HorizontalLayoutGroup
     public GameObject foodIconPrefab;    // Food sprite prefab to show per unit of food
 
+    public TextMeshProUGUI agentIDText;
+    public TextMeshProUGUI exhaustionText;
+    public TextMeshProUGUI foodHeldText;
+    public TextMeshProUGUI foodDepositedText;
+    public TextMeshProUGUI fitnessText;
+    public TextMeshProUGUI behaviorText;
+
     private AgentHealth currentAgent;
 
     private BehaviorManager currentBehavior;
     private int lastKnownFood = -1; // To track food change
 
+    private AgentHeal currentHeal;
 
     void Awake()
     {
@@ -48,9 +57,25 @@ public class AgentUIManager : MonoBehaviour
         healthSlider.maxValue = agentHealth.maxHealth;
         healthSlider.value = agentHealth.currentHealth;
         fillImage.color = healthGradient.Evaluate(healthSlider.normalizedValue);
+        currentHeal = agentHealth.GetComponent<AgentHeal>();
 
         UpdateFoodIcons(); // Draw food icons immediately
-    }
+        UpdateAgentStats();
+
+        // → Zoom & lock-on camera to this agent
+        var camCtrl = Camera.main.GetComponent<CameraController>();
+        if (camCtrl != null)
+        {
+            // start the lock-on
+            camCtrl.LockOnToAgent(agentHealth.transform);
+            // snap camera in at the min-zoom distance
+            camCtrl.transform.position = 
+                agentHealth.transform.position 
+                - camCtrl.transform.forward * camCtrl.minZoom;
+            // optional: immediately look at the agent
+            camCtrl.transform.LookAt(agentHealth.transform.position);
+        }
+        }
 
     public void HideAgentStats()
     {
@@ -58,33 +83,53 @@ public class AgentUIManager : MonoBehaviour
         agentPanel.SetActive(false);
     }
 
+    private void UpdateAgentStats()
+    {
+        if (currentBehavior == null) return;
+
+        agentIDText.text = $"ID: {currentBehavior.agentID}";
+        exhaustionText.text = $"Exhaustion: {currentBehavior.exhaustion:F1}";
+        foodHeldText.text = $"Carrying: {currentBehavior.getFood()}";
+        foodDepositedText.text = $"Deposited: {currentBehavior.depositedFood}";
+        fitnessText.text = $"Fitness: {currentBehavior.FitnessScore:F1}";
+
+        if (currentBehavior.currentAgentBehavior != null)
+            behaviorText.text = $"Behavior: {currentBehavior.currentAgentBehavior.GetType().Name}";
+        else
+            behaviorText.text = "Behavior: Unknown";
+    }
+
     private void UpdateFoodIcons()
     {
-        if (currentBehavior == null || foodContainer == null) return;
+        if (currentHeal == null || foodContainer == null)
+            return;
 
-        int currentFood = currentBehavior.getFood();
-        if (currentFood == lastKnownFood) return; // Skip if nothing changed
+        int consumedFood = currentHeal.foodPortionsReceived; // from AgentHeal
+        int maxPortions = 5;
 
-        lastKnownFood = currentFood;
+        // Skip if there's no change
+        if (consumedFood == lastKnownFood) return;
 
-        // Clear existing
+        lastKnownFood = consumedFood;
+
+        // Clear old icons
         foreach (Transform child in foodContainer.transform)
             Destroy(child.gameObject);
 
-        int maxFood = 5;
-        for (int i = 0; i < maxFood; i++)
+        // Instantiate icons based on consumption
+        for (int i = 0; i < maxPortions; i++)
         {
             GameObject icon = Instantiate(foodIconPrefab, foodContainer.transform);
-
             Image img = icon.GetComponent<Image>();
             if (img != null)
             {
                 Color c = img.color;
-                c.a = (i < currentFood) ? 1f : 0.2f;
+                c.a = (i < consumedFood) ? 1f : 0.2f;
                 img.color = c;
             }
         }
     }
+
 
     void Update()
     {
@@ -106,7 +151,7 @@ public class AgentUIManager : MonoBehaviour
             }
             else
             {
-                // ✅ Safe access even if we hit a child visual or food object
+                // Safe access even if we hit a child visual or food object
                 AgentHealth clickedHealth = hit.collider.GetComponentInParent<AgentHealth>();
                 BehaviorManager behavior = hit.collider.GetComponentInParent<BehaviorManager>();
 
@@ -121,14 +166,14 @@ public class AgentUIManager : MonoBehaviour
             }
         }
 
-        // 🔁 Live health bar updates if active
+        // Live updates if active
         if (currentAgent != null && agentPanel.activeSelf)
         {
             healthSlider.value = currentAgent.currentHealth;
             fillImage.color = healthGradient.Evaluate(healthSlider.normalizedValue);
 
-            // Food live update
             UpdateFoodIcons();
+            UpdateAgentStats();
         }
     }
 }

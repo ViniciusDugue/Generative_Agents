@@ -237,6 +237,7 @@ public class BuildWall_Agent : AgentBehavior
             if (block != null)
                 Destroy(block);
         }
+        EndSimMetricsUI.Instance.IncrementWallsBuilt();
         currentWallInstance = Instantiate(wallPrefab, ConstructionSite.transform.position, Quaternion.Euler(0, WallRotation, 0));
         
         currentState = AgentState.MoveToWall;
@@ -281,7 +282,7 @@ public class BuildWall_Agent : AgentBehavior
         {
             Destroy(currentWallInstance);
         }
-
+        EndSimMetricsUI.Instance.IncrementWallsPlaced();
         currentWallInstance = Instantiate(wallPrefab, Destination.transform.position + new Vector3(0, 2f, 0), Quaternion.Euler(0, WallRotation, 0));
         smallWall.SetActive(false);
         currentState = AgentState.Idle;
