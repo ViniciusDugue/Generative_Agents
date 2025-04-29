@@ -7,7 +7,17 @@
 <<<<<<< HEAD
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
         "BlockAgent4.Policy.Entropy.mean": {
@@ -145,9 +155,21 @@
         "BlockAgent4.IsTraining.mean": {
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -333,13 +355,29 @@
         },
         "MultipleFoodGatherer.IsTraining.mean": {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> main
 =======
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
 <<<<<<< HEAD
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
@@ -351,12 +389,27 @@
         },
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
         "MultipleFoodGatherer.IsTraining.sum": {
 =======
 <<<<<<< HEAD
 =======
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
         "BlockAgent4.IsTraining.sum": {
@@ -364,9 +417,21 @@
         "MultipleFoodGatherer.IsTraining.sum": {
 >>>>>>> main
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -380,12 +445,27 @@
         "timer_format_version": "0.1.0",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
         "start_time_seconds": "1741475202",
 =======
 <<<<<<< HEAD
 =======
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
         "start_time_seconds": "1741077461",
@@ -393,9 +473,21 @@
         "start_time_seconds": "1741475202",
 >>>>>>> main
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -406,6 +498,7 @@
         "communication_protocol_version": "1.5.0",
         "pytorch_version": "1.13.1+cu117",
         "numpy_version": "1.23.5",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         "end_time_seconds": "1741078251"
@@ -446,6 +539,7 @@
                                     "children": {
                                         "TorchPolicy.evaluate": {
 =======
+=======
 <<<<<<< HEAD
         "end_time_seconds": "1741475899"
     },
@@ -484,6 +578,88 @@
                                     "self": 0.8061144133098423,
                                     "children": {
                                         "TorchPolicy.evaluate": {
+=======
+        "end_time_seconds": "1741078251"
+    },
+    "total": 789.7566808999982,
+    "count": 1,
+    "self": 0.008656700141727924,
+    "children": {
+        "run_training.setup": {
+            "total": 0.04945589997805655,
+            "count": 1,
+            "self": 0.04945589997805655
+        },
+        "TrainerController.start_learning": {
+            "total": 789.6985682998784,
+            "count": 1,
+            "self": 0.3974971887655556,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 5.609037999995053,
+                    "count": 1,
+                    "self": 5.609037999995053
+                },
+                "TrainerController.advance": {
+                    "total": 783.6300109112635,
+                    "count": 25355,
+                    "self": 0.39408416533842683,
+                    "children": {
+                        "env_step": {
+                            "total": 713.245820132317,
+                            "count": 25355,
+                            "self": 630.603315613931,
+                            "children": {
+                                "SubprocessEnvManager._take_step": {
+                                    "total": 82.38500090129673,
+                                    "count": 25357,
+                                    "self": 1.302021375624463,
+                                    "children": {
+                                        "TorchPolicy.evaluate": {
+=======
+>>>>>>> main
+<<<<<<< HEAD
+        "end_time_seconds": "1741475899"
+    },
+    "total": 696.8088628998958,
+    "count": 1,
+    "self": 0.004227399826049805,
+    "children": {
+        "run_training.setup": {
+            "total": 0.0501054001506418,
+            "count": 1,
+            "self": 0.0501054001506418
+        },
+        "TrainerController.start_learning": {
+            "total": 696.7545300999191,
+            "count": 1,
+            "self": 0.2322643978986889,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 13.19186420016922,
+                    "count": 1,
+                    "self": 13.19186420016922
+                },
+                "TrainerController.advance": {
+                    "total": 683.2644413018133,
+                    "count": 15640,
+                    "self": 0.24332659621722996,
+                    "children": {
+                        "env_step": {
+                            "total": 544.3843388203532,
+                            "count": 15640,
+                            "self": 494.5532712948043,
+                            "children": {
+                                "SubprocessEnvManager._take_step": {
+                                    "total": 49.67239660420455,
+                                    "count": 15640,
+                                    "self": 0.8061144133098423,
+                                    "children": {
+                                        "TorchPolicy.evaluate": {
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
                                             "total": 48.86628219089471,
                                             "count": 15640,
                                             "self": 48.86628219089471
@@ -564,6 +740,13 @@
                                     "self": 1.302021375624463,
                                     "children": {
                                         "TorchPolicy.evaluate": {
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
                                             "total": 81.08297952567227,
@@ -612,9 +795,21 @@
                                             "self": 48.86628219089471
 >>>>>>> main
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -622,6 +817,7 @@
                                     }
                                 },
                                 "workers": {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                                     "total": 0.25750361708924174,
@@ -639,10 +835,50 @@
                                                     "count": 3,
                                                     "is_parallel": true,
                                                     "self": 0.0005058001261204481,
+=======
+<<<<<<< HEAD
+                                    "total": 0.15867092134431005,
+                                    "count": 15640,
+                                    "self": 0.0,
+                                    "children": {
+                                        "worker_root": {
+                                            "total": 683.2920231798198,
+                                            "count": 15640,
+                                            "is_parallel": true,
+                                            "self": 208.0817831978202,
+                                            "children": {
+                                                "steps_from_proto": {
+                                                    "total": 0.0012684999965131283,
+                                                    "count": 1,
+                                                    "is_parallel": true,
+                                                    "self": 0.00019309972412884235,
+=======
+                                    "total": 0.25750361708924174,
+                                    "count": 25355,
+                                    "self": 0.0,
+                                    "children": {
+                                        "worker_root": {
+                                            "total": 740.8753630018327,
+                                            "count": 25355,
+                                            "is_parallel": true,
+                                            "self": 178.4720396148041,
+                                            "children": {
+                                                "steps_from_proto": {
+                                                    "total": 0.0022871000692248344,
+                                                    "count": 3,
+                                                    "is_parallel": true,
+                                                    "self": 0.0005058001261204481,
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
                                                     "children": {
                                                         "_process_rank_one_or_two_observation": {
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
                                     "total": 0.15867092134431005,
                                     "count": 15640,
                                     "self": 0.0,
@@ -662,6 +898,10 @@
                                                         "_process_rank_one_or_two_observation": {
 =======
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
                                     "total": 0.25750361708924174,
                                     "count": 25355,
                                     "self": 0.0,
@@ -697,6 +937,13 @@
                                                     "self": 0.0005058001261204481,
                                                     "children": {
                                                         "_process_rank_one_or_two_observation": {
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
                                                             "total": 0.0017812999431043863,
@@ -722,9 +969,21 @@
                                                     "children": {
                                                         "_process_rank_one_or_two_observation": {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -733,13 +992,29 @@
                                                             "is_parallel": true,
                                                             "self": 0.001075400272384286
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> main
 =======
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
 <<<<<<< HEAD
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
@@ -748,6 +1023,7 @@
                                                     }
                                                 },
                                                 "UnityEnvironment.step": {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
                                                     "total": 562.4010362869594,
@@ -778,6 +1054,7 @@
                                                                     "count": 101412,
                                                                     "is_parallel": true,
 =======
+=======
 <<<<<<< HEAD
                                                     "total": 475.2089714820031,
                                                     "count": 15640,
@@ -806,6 +1083,68 @@
                                                                     "total": 13.679123314097524,
                                                                     "count": 62560,
                                                                     "is_parallel": true,
+=======
+                                                    "total": 562.4010362869594,
+                                                    "count": 25355,
+                                                    "is_parallel": true,
+                                                    "self": 5.896947885630652,
+                                                    "children": {
+                                                        "UnityEnvironment._generate_step_input": {
+                                                            "total": 3.67297549219802,
+                                                            "count": 25355,
+                                                            "is_parallel": true,
+                                                            "self": 3.67297549219802
+                                                        },
+                                                        "communicator.exchange": {
+                                                            "total": 536.1543219948653,
+                                                            "count": 25355,
+                                                            "is_parallel": true,
+                                                            "self": 536.1543219948653
+                                                        },
+                                                        "steps_from_proto": {
+                                                            "total": 16.67679091426544,
+                                                            "count": 25353,
+                                                            "is_parallel": true,
+                                                            "self": 3.0457614024635404,
+                                                            "children": {
+                                                                "_process_rank_one_or_two_observation": {
+                                                                    "total": 13.631029511801898,
+                                                                    "count": 101412,
+                                                                    "is_parallel": true,
+=======
+>>>>>>> main
+<<<<<<< HEAD
+                                                    "total": 475.2089714820031,
+                                                    "count": 15640,
+                                                    "is_parallel": true,
+                                                    "self": 5.722330157179385,
+                                                    "children": {
+                                                        "UnityEnvironment._generate_step_input": {
+                                                            "total": 3.6987932147458196,
+                                                            "count": 15640,
+                                                            "is_parallel": true,
+                                                            "self": 3.6987932147458196
+                                                        },
+                                                        "communicator.exchange": {
+                                                            "total": 450.0749082916882,
+                                                            "count": 15640,
+                                                            "is_parallel": true,
+                                                            "self": 450.0749082916882
+                                                        },
+                                                        "steps_from_proto": {
+                                                            "total": 15.712939818389714,
+                                                            "count": 15640,
+                                                            "is_parallel": true,
+                                                            "self": 2.03381650429219,
+                                                            "children": {
+                                                                "_process_rank_one_or_two_observation": {
+                                                                    "total": 13.679123314097524,
+                                                                    "count": 62560,
+                                                                    "is_parallel": true,
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
                                                                     "self": 13.679123314097524
 =======
 <<<<<<< HEAD
@@ -864,6 +1203,13 @@
                                                                     "total": 13.631029511801898,
                                                                     "count": 101412,
                                                                     "is_parallel": true,
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
                                                                     "self": 13.631029511801898
@@ -898,9 +1244,21 @@
                                                                     "self": 13.679123314097524
 >>>>>>> main
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -918,6 +1276,50 @@
                         "trainer_advance": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+                            "total": 69.99010661360808,
+                            "count": 25355,
+                            "self": 0.6221356349997222,
+                            "children": {
+                                "process_trajectory": {
+                                    "total": 25.540951979346573,
+                                    "count": 25355,
+                                    "self": 25.393378779524937,
+                                    "children": {
+                                        "RLTrainer._checkpoint": {
+                                            "total": 0.14757319982163608,
+                                            "count": 2,
+                                            "self": 0.14757319982163608
+=======
+                            "total": 138.63677588524297,
+                            "count": 15640,
+                            "self": 0.2916959875728935,
+                            "children": {
+                                "process_trajectory": {
+                                    "total": 68.13074709801003,
+                                    "count": 15640,
+                                    "self": 68.04879089794122,
+                                    "children": {
+                                        "RLTrainer._checkpoint": {
+                                            "total": 0.08195620006881654,
+                                            "count": 1,
+                                            "self": 0.08195620006881654
+=======
+<<<<<<< HEAD
+                            "total": 138.63677588524297,
+                            "count": 15640,
+                            "self": 0.2916959875728935,
+                            "children": {
+                                "process_trajectory": {
+                                    "total": 68.13074709801003,
+                                    "count": 15640,
+                                    "self": 68.04879089794122,
+                                    "children": {
+                                        "RLTrainer._checkpoint": {
+                                            "total": 0.08195620006881654,
+                                            "count": 1,
+                                            "self": 0.08195620006881654
+=======
                             "total": 69.99010661360808,
                             "count": 25355,
                             "self": 0.6221356349997222,
@@ -946,6 +1348,7 @@
                                             "count": 1,
                                             "self": 0.08195620006881654
 >>>>>>> main
+>>>>>>> main
 =======
 <<<<<<< HEAD
                             "total": 138.63677588524297,
@@ -961,6 +1364,10 @@
                                             "total": 0.08195620006881654,
                                             "count": 1,
                                             "self": 0.08195620006881654
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
 =======
 <<<<<<< HEAD
                             "total": 69.99010661360808,
@@ -1020,6 +1427,13 @@
                                             "total": 0.08195620006881654,
                                             "count": 1,
                                             "self": 0.08195620006881654
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -1029,8 +1443,16 @@
                                 "_update_policy": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
                                     "total": 70.21433279966004,
                                     "count": 41,
                                     "self": 33.24795239814557,
@@ -1038,6 +1460,13 @@
 =======
 <<<<<<< HEAD
 =======
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
                                     "total": 43.82701899926178,
@@ -1054,9 +1483,21 @@
                                     "self": 33.24795239814557,
                                     "children": {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -1065,13 +1506,29 @@
                                             "count": 1431,
                                             "self": 36.96638040151447
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> main
 =======
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
 <<<<<<< HEAD
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
 =======
 >>>>>>> main
 >>>>>>> Block_Agent_Behavior
@@ -1091,6 +1548,7 @@
                 "TrainerController._save_models": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     "total": 0.06202159984968603,
                     "count": 1,
                     "self": 0.0075286999344825745,
@@ -1098,6 +1556,7 @@
                         "RLTrainer._checkpoint": {
                             "total": 0.05449289991520345,
                             "count": 1,
+=======
 =======
 <<<<<<< HEAD
                     "total": 0.06595960003323853,
@@ -1107,6 +1566,28 @@
                         "RLTrainer._checkpoint": {
                             "total": 0.057336799800395966,
                             "count": 1,
+=======
+                    "total": 0.06202159984968603,
+                    "count": 1,
+                    "self": 0.0075286999344825745,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.05449289991520345,
+                            "count": 1,
+=======
+>>>>>>> main
+<<<<<<< HEAD
+                    "total": 0.06595960003323853,
+                    "count": 1,
+                    "self": 0.008622800232842565,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.057336799800395966,
+                            "count": 1,
+<<<<<<< HEAD
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
                             "self": 0.057336799800395966
 =======
 <<<<<<< HEAD
@@ -1125,6 +1606,13 @@
                         "RLTrainer._checkpoint": {
                             "total": 0.05449289991520345,
                             "count": 1,
+>>>>>>> Block_Agent_Behavior
+<<<<<<< HEAD
+>>>>>>> main
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
                             "self": 0.05449289991520345
@@ -1139,9 +1627,21 @@
                             "self": 0.057336799800395966
 >>>>>>> main
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> main
+=======
+<<<<<<< HEAD
+>>>>>>> Block_Agent_Behavior
+=======
+>>>>>>> Block_Agent_Behavior
+>>>>>>> main
+<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main

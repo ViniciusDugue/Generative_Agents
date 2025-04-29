@@ -15,6 +15,10 @@ public class AgentHeal : MonoBehaviour
     public int currentHunger = 0;
     [Tooltip("Amount of food needed to fill hunger (per portion).")]
     public int foodPortionValue = 10;
+   
+    [HideInInspector]
+    public int foodPortionsReceived = 0;
+
 
     [Header("Healing Settings")]
     [Tooltip("Health restored per healing tick once hunger is full.")]
@@ -47,9 +51,6 @@ public class AgentHeal : MonoBehaviour
             healthBar.SetMaxHealth(maxHealth);
             healthBar.SetHealth(maxHealth);
         }
-
-        // Start the hunger decay routine.
-        StartCoroutine(HungerDecayRoutine());
     }
 
     /// <summary>
@@ -63,7 +64,8 @@ public class AgentHeal : MonoBehaviour
         {
             currentHunger = maxHunger;
         }
-        // Debug.Log($"{gameObject.name} received food. Hunger: {currentHunger}/{maxHunger}");
+
+        foodPortionsReceived++;
 
         // Once hunger is full, start the healing process.
         if (currentHunger >= maxHunger && !isHealing)
@@ -97,31 +99,6 @@ public class AgentHeal : MonoBehaviour
     }
 
     /// <summary>
-    /// Every hungerDecayInterval seconds, reduce hunger by hungerDecay.
-    /// If hunger falls at or below hungerDamageThreshold, apply starvation damage.
-    /// </summary>
-    private IEnumerator HungerDecayRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(hungerDecayInterval);
-            currentHunger -= hungerDecay;
-            if (currentHunger < 0)
-                currentHunger = 0;
-            // Debug.Log($"{gameObject.name} hunger decayed: {currentHunger}/{maxHunger}");
-            if (currentHunger <= hungerDamageThreshold)
-            {
-                AgentHealth agentHealth = GetComponent<AgentHealth>();
-                if (agentHealth != null)
-                {
-                    agentHealth.TakeDamage(hungerDamage);
-                    // Debug.Log($"{gameObject.name} takes {hungerDamage} damage due to starvation.");
-                }
-            }
-        }
-    }
-
-    /// <summary>
     /// Optional: Called if the agent takes damage (e.g., from enemy collisions).
     /// </summary>
     public void TakeDamage(int damage)
@@ -139,6 +116,9 @@ public class AgentHeal : MonoBehaviour
 
     private void Die()
     {
+        EndSimMetricsUI.Instance.IncrementDeadAgents();
+        SpawnManager.Instance.aliveAgents.Remove(this.gameObject);
+        
         Debug.Log($"{gameObject.name} has died.");
         gameObject.SetActive(false);
     }
