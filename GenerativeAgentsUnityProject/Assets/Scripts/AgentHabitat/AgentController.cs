@@ -22,18 +22,6 @@ public class AgentController : MonoBehaviour
         allAgents.Add(this);
     }
 
-    // Static list that holds references to all AgentController instances.
-    public static List<AgentController> allAgents = new List<AgentController>();
-
-    // Static variable tracking the currently controlled agent's index.
-    public static int selectedAgentIndex = 0;
-
-    private void Awake()
-    {
-        // Register this agent.
-        allAgents.Add(this);
-    }
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();

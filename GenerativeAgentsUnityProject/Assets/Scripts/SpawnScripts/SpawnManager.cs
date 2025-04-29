@@ -47,7 +47,7 @@ public class SpawnManager : MonoBehaviour
     private List<Transform> agentSpawnPoints = new List<Transform>();
 
     private MapMarkerManager markerManager;
-<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scripts/Spawning/SpawnManager.cs
+    public static SpawnManager Instance;
 
     public List<Transform> ActiveFoodSpawnPoints { get { return activeFoodSpawnPoints; } }
     private Dictionary<Transform, List<GameObject>> foodSpawnMapping = new Dictionary<Transform, List<GameObject>>();
@@ -59,21 +59,17 @@ public class SpawnManager : MonoBehaviour
     [Header("Time Manager Reference")]
     public TimeManager timeManager;
 
-=======
-    
-    public static SpawnManager Instance;
->>>>>>> main:GenerativeAgentsUnityProject/Assets/Scripts/SpawnScripts/SpawnManager.cs
     // Track the previous day/night state.
     private bool lastIsDaytime;
 
     private void Awake()
     {
+        Instance = this;
         Debug.Log("spawn manager awake");
 
         markerManager = FindFirstObjectByType<MapMarkerManager>();
         FindSpawnPoints();
 
-<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scripts/Spawning/SpawnManager.cs
         if (timeManager == null)
         {
             timeManager = FindObjectOfType<TimeManager>();
@@ -82,11 +78,6 @@ public class SpawnManager : MonoBehaviour
         {
             lastIsDaytime = timeManager.IsDayTime;
         }
-=======
-        Instance = this;
-        lastIsDaytime = TimeManager.Instance.IsDayTime;
-    }
->>>>>>> main:GenerativeAgentsUnityProject/Assets/Scripts/SpawnScripts/SpawnManager.cs
 
         // Reposition the habitat on Sim Awake
         GameObject habitatObj = GameObject.FindWithTag("habitat");
@@ -213,15 +204,6 @@ public class SpawnManager : MonoBehaviour
                 status.HasFood = false; // This spawn point is inactive and has no food.
             }
         }
-<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scripts/Spawning/SpawnManager.cs
-=======
-        string log = "Day " + TimeManager.Instance.Days + " - Active Food Spawn Points: ";
-        foreach (Transform activePoint in activeFoodSpawnPoints)
-        {
-            log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
-        }
-        Debug.Log(log);
->>>>>>> main:GenerativeAgentsUnityProject/Assets/Scripts/SpawnScripts/SpawnManager.cs
     }
 
     // Randomizes active enemy spawn points (daytime only).
