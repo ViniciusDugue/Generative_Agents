@@ -47,22 +47,15 @@ public class SpawnManager : MonoBehaviour
     private List<Transform> agentSpawnPoints = new List<Transform>();
 
     private MapMarkerManager markerManager;
-<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scripts/Spawning/SpawnManager.cs
-
     public List<Transform> ActiveFoodSpawnPoints { get { return activeFoodSpawnPoints; } }
     private Dictionary<Transform, List<GameObject>> foodSpawnMapping = new Dictionary<Transform, List<GameObject>>();
 
     public List<Transform> FoodSpawnPoints  => foodSpawnPoints;
     public List<Transform> EnemySpawnPoints => enemySpawnPoints;
 
-
     [Header("Time Manager Reference")]
     public TimeManager timeManager;
 
-=======
-    
-    public static SpawnManager Instance;
->>>>>>> main:GenerativeAgentsUnityProject/Assets/Scripts/SpawnScripts/SpawnManager.cs
     // Track the previous day/night state.
     private bool lastIsDaytime;
 
@@ -73,7 +66,6 @@ public class SpawnManager : MonoBehaviour
         markerManager = FindFirstObjectByType<MapMarkerManager>();
         FindSpawnPoints();
 
-<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scripts/Spawning/SpawnManager.cs
         if (timeManager == null)
         {
             timeManager = FindObjectOfType<TimeManager>();
@@ -82,12 +74,9 @@ public class SpawnManager : MonoBehaviour
         {
             lastIsDaytime = timeManager.IsDayTime;
         }
-=======
         Instance = this;
-        lastIsDaytime = TimeManager.Instance.IsDayTime;
-    }
->>>>>>> main:GenerativeAgentsUnityProject/Assets/Scripts/SpawnScripts/SpawnManager.cs
-
+        lastIsDaytime = timeManager.IsDayTime;
+    
         // Reposition the habitat on Sim Awake
         GameObject habitatObj = GameObject.FindWithTag("habitat");
         if (habitatObj != null)
@@ -99,12 +88,11 @@ public class SpawnManager : MonoBehaviour
         {
             Debug.LogWarning("No habitat found to reposition.");
         }
-
         // Spawn agents at the central hub only once at simulation awake.
         SpawnAgentsAtHub();
 
         // Continue with food and enemy spawning based on current time.
-        if (TimeManager.Instance != null && TimeManager.Instance.IsDayTime)
+        if (timeManager != null && timeManager.IsDayTime)
         {
             RandomizeFoodSpawnPoints();
             SpawnFoodAtActivePoints();
@@ -116,12 +104,12 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
-        if (TimeManager.Instance != null)
+        if (timeManager != null)
         {
-            if (TimeManager.Instance.IsDayTime != lastIsDaytime)
+            if (timeManager.IsDayTime != lastIsDaytime)
             {
-                lastIsDaytime = TimeManager.Instance.IsDayTime;
-                if (TimeManager.Instance.IsDayTime)
+                lastIsDaytime = timeManager.IsDayTime;
+                if (timeManager.IsDayTime)
                 {
                     Debug.Log("Daytime started - updating food and enemy spawns.");
                     
@@ -213,15 +201,12 @@ public class SpawnManager : MonoBehaviour
                 status.HasFood = false; // This spawn point is inactive and has no food.
             }
         }
-<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scripts/Spawning/SpawnManager.cs
-=======
-        string log = "Day " + TimeManager.Instance.Days + " - Active Food Spawn Points: ";
+        string log = "Day " + timeManager.Days + " - Active Food Spawn Points: ";
         foreach (Transform activePoint in activeFoodSpawnPoints)
         {
             log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
         }
         Debug.Log(log);
->>>>>>> main:GenerativeAgentsUnityProject/Assets/Scripts/SpawnScripts/SpawnManager.cs
     }
 
     // Randomizes active enemy spawn points (daytime only).
@@ -252,7 +237,7 @@ public class SpawnManager : MonoBehaviour
                 }
             }
         }
-        string log = "Day " + TimeManager.Instance.Days + " - Active Enemy Spawn Points (Daytime): ";
+        string log = "Day " + timeManager.Days + " - Active Enemy Spawn Points (Daytime): ";
         foreach (Transform activePoint in activeEnemySpawnPoints)
         {
             log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
@@ -274,7 +259,7 @@ public class SpawnManager : MonoBehaviour
                 sc.enabled = true;
             }
         }
-        string log = "Day " + TimeManager.Instance.Days + " - Active Enemy Spawn Points (Nighttime - ALL): ";
+        string log = "Day " + timeManager.Days + " - Active Enemy Spawn Points (Nighttime - ALL): ";
         foreach (Transform activePoint in activeEnemySpawnPoints)
         {
             log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
