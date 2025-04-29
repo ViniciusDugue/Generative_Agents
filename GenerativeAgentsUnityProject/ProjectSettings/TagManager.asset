@@ -36,12 +36,6 @@ TagManager:
   - enemySpawn
   - agentSpawn
   - habitat
-<<<<<<< HEAD
-=======
-  - Default
-  - usermap
-  - agentmap
->>>>>>> main
   - destination
   - Default
   - pest
@@ -55,9 +49,9 @@ TagManager:
   - Target
   - Obstruction
   - invisible
-  - FoodSpawn
-  - EnemySpawn
-  - AgentSpawn
+  - 
+  - 
+  - 
   - 
   - 
   - 

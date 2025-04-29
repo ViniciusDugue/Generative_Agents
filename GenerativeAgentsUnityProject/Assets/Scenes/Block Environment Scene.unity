@@ -119,11 +119,8 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1001 &44732336
 PrefabInstance:
@@ -194,10 +191,7 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
 ========
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!1 &990482 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
@@ -210,14 +204,10 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 933024498}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
 --- !u!1 &72536002
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,21 +506,15 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 148645275}
   m_CullTransparentMesh: 1
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 --- !u!1001 &164140297
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1001 &180646553
 ========
 --- !u!1001 &164140297
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -538,16 +522,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 ========
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
-<<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-========
->>>>>>> main
     - target: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
         type: 3}
       propertyPath: m_Name
@@ -616,14 +595,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
     - target: {fileID: 1537121661968964, guid: 5889392e3f05b448a8a06c5def6c2dec, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -665,16 +640,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5889392e3f05b448a8a06c5def6c2dec, type: 3}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 ========
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
-<<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-========
->>>>>>> main
 --- !u!1001 &298763333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -743,14 +713,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
 --- !u!1 &300307284
 GameObject:
   m_ObjectHideFlags: 0
@@ -2455,11 +2421,8 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 739982171}
   m_CullTransparentMesh: 1
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1001 &751179136
 PrefabInstance:
@@ -2547,10 +2510,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!1 &752650118
 GameObject:
   m_ObjectHideFlags: 0
@@ -2823,12 +2783,9 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 797357477}
   m_CullTransparentMesh: 1
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 --- !u!1001 &933024498
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1 &800299921 stripped
 GameObject:
@@ -2840,10 +2797,7 @@ GameObject:
 ========
 --- !u!1001 &933024498
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2851,11 +2805,8 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
         type: 3}
@@ -2879,10 +2830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
 ========
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2899,137 +2847,94 @@ PrefabInstance:
       value: 21.82
       objectReference: {fileID: 0}
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
 ========
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
 ========
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
 ========
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
 ========
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
 ========
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
 ========
     - target: {fileID: 1394895375423969293, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3037,10 +2942,7 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
 ========
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
     - target: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
         type: 3}
       propertyPath: m_Name
@@ -3067,14 +2969,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bcd5cf5acf56994d9e286e0bdaa1857, type: 3}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
 --- !u!1 &952496129
 GameObject:
   m_ObjectHideFlags: 0
@@ -3566,11 +3464,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1 &1058905141 stripped
 GameObject:
@@ -3606,10 +3501,7 @@ MonoBehaviour:
   currentState: 0
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!1 &1096839653
 GameObject:
   m_ObjectHideFlags: 0
@@ -3960,16 +3852,11 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 ========
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
-<<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-========
->>>>>>> main
 --- !u!1001 &1195691989
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4038,14 +3925,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
 --- !u!1 &1226101405
 GameObject:
   m_ObjectHideFlags: 0
@@ -4079,21 +3962,15 @@ MonoBehaviour:
   settingsMenu: {fileID: 1550462341}
   aboutUsMenu: {fileID: 1284322913}
   contactUsMenu: {fileID: 1564149915}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
   environment: {fileID: 1085209483655516394}
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
   environment: {fileID: 1781001275198794132}
 ========
   environment: {fileID: 1085209483655516394}
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!4 &1226101407
 Transform:
   m_ObjectHideFlags: 0
@@ -7489,11 +7366,8 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1001 &1821685844
 PrefabInstance:
@@ -7576,10 +7450,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 9bcd5cf5acf56994d9e286e0bdaa1857, type: 3}
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!1 &1833685550
 GameObject:
   m_ObjectHideFlags: 0
@@ -7614,16 +7485,11 @@ Transform:
   - {fileID: 1756310101}
   m_Father: {fileID: 1132938895}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 ========
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
-<<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-========
->>>>>>> main
 --- !u!1001 &1849919592
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7707,14 +7573,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
 --- !u!1 &1850606479
 GameObject:
   m_ObjectHideFlags: 0
@@ -7724,20 +7586,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1850606481}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
   - component: {fileID: 1850606482}
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 ========
   - component: {fileID: 1850606482}
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
   m_Layer: 0
   m_Name: Block EnvironmentSettings
   m_TagString: Untagged
@@ -7760,16 +7616,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 ========
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
-<<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-========
->>>>>>> main
 --- !u!114 &1850606482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7782,14 +7633,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05f8b74e76b534f44b81678bd01fb53a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main
 --- !u!1 &1867690071
 GameObject:
   m_ObjectHideFlags: 0
@@ -8245,11 +8092,8 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1 &2033342168 stripped
 GameObject:
@@ -8259,10 +8103,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!1 &2042382915
 GameObject:
   m_ObjectHideFlags: 0
@@ -8399,11 +8240,8 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2042382915}
   m_CullTransparentMesh: 1
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1001 &2061149035
 PrefabInstance:
@@ -8475,10 +8313,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!1 &2065181058
 GameObject:
   m_ObjectHideFlags: 0
@@ -8825,7 +8660,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2139024606}
   m_CullTransparentMesh: 1
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 --- !u!1 &1085209483655516394 stripped
 GameObject:
@@ -8835,8 +8669,6 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7644437233541876714
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
 --- !u!1 &1781001275198794132 stripped
 GameObject:
@@ -8854,10 +8686,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7644437233541876714
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -8865,7 +8694,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 4269459706618981007, guid: e39e5a12828781a44b0816844fb54905,
         type: 3}
@@ -8894,8 +8722,6 @@ PrefabInstance:
       objectReference: {fileID: 1683601348}
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 214163019970931652, guid: ae5189902a95a6545b4d99fb215b1330,
         type: 3}
@@ -9007,186 +8833,128 @@ PrefabInstance:
       objectReference: {fileID: 1683601348}
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     - target: {fileID: 9059413293505729833, guid: ae5189902a95a6545b4d99fb215b1330,
 ========
     - target: {fileID: 7266833503025523259, guid: e39e5a12828781a44b0816844fb54905,
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9194,8 +8962,6 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e39e5a12828781a44b0816844fb54905, type: 3}
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
     m_RemovedComponents:
     - {fileID: 4029907176010456968, guid: ae5189902a95a6545b4d99fb215b1330, type: 3}
@@ -9220,10 +8986,7 @@ PrefabInstance:
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e39e5a12828781a44b0816844fb54905, type: 3}
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -9233,11 +8996,8 @@ SceneRoots:
   - {fileID: 1254277198}
   - {fileID: 1850606481}
   - {fileID: 1226101407}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
-=======
->>>>>>> main
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
   - {fileID: 4421323624968569464}
   - {fileID: 180646553}
@@ -9247,10 +9007,7 @@ SceneRoots:
   - {fileID: 751179136}
   - {fileID: 1821685844}
 ========
-<<<<<<< HEAD
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>> main
   - {fileID: 7644437233541876714}
   - {fileID: 180646553}
   - {fileID: 164140297}
@@ -9258,11 +9015,7 @@ SceneRoots:
   - {fileID: 1195691989}
   - {fileID: 933024498}
   - {fileID: 298763333}
-<<<<<<< HEAD
 <<<<<<<< HEAD:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 ========
 >>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
 >>>>>>>> main:GenerativeAgentsUnityProject/Assets/Scenes/Block Environment Scene.unity
-=======
->>>>>>>> Block_Agent_Behavior:GenerativeAgentsUnityProject/Assets/Scenes/Block New Environment Scene.unity
->>>>>>> main

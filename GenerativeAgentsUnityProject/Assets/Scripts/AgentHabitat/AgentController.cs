@@ -1,13 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-<<<<<<< HEAD
 using UnityEngine;
-=======
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
->>>>>>> main
 
 public class AgentController : MonoBehaviour
 {
@@ -51,7 +44,6 @@ public class AgentController : MonoBehaviour
     // Checks if the user has pressed a number key (1 to 9) to switch agent control.
     void CheckForAgentSwitch()
     {
-<<<<<<< HEAD
         // We'll check for keys 1 through 9.
         for (int i = 0; i < 9; i++)
         {
@@ -67,30 +59,6 @@ public class AgentController : MonoBehaviour
                 else
                 {
                     Debug.Log("Agent " + (agentIndex + 1) + " not available.");
-=======
-        // Listen for keys "1" through "9"
-        for (int i = 0; i < 9; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                int desiredID = i + 1; // "1" ⇒ ID 1, "2" ⇒ ID 2, etc.
-
-                // Safely look up the agent with that agentID
-                AgentController target = allAgents.FirstOrDefault(a =>
-                {
-                    var bm = a.GetComponent<BehaviorManager>();
-                    return bm != null && bm.agentID == desiredID;
-                });
-
-                if (target != null)
-                {
-                    selectedAgentIndex = allAgents.IndexOf(target);
-                    Debug.Log($"Switched control to Agent {desiredID}");
-                }
-                else
-                {
-                    Debug.Log($"Agent {desiredID} not available.");
->>>>>>> main
                 }
             }
         }
@@ -114,8 +82,4 @@ public class AgentController : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main

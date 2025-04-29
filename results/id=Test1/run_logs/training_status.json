@@ -1,7 +1,6 @@
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
     "BlockAgent4": {
         "checkpoints": [
             {
@@ -19,7 +18,6 @@
                 "reward": 0.0,
                 "creation_time": 1741078251.4428,
                 "auxillary_file_paths": [
-=======
 =======
 <<<<<<< HEAD
     "MultipleFoodGatherer": {
@@ -39,48 +37,6 @@
                 "reward": null,
                 "creation_time": 1741475899.2446146,
                 "auxillary_file_paths": [
-=======
-    "BlockAgent4": {
-        "checkpoints": [
-            {
-                "steps": 199988,
-                "file_path": "results\\id=Test1\\BlockAgent4\\BlockAgent4-199988.onnx",
-                "reward": 12.5,
-                "creation_time": 1741077878.8003757,
-                "auxillary_file_paths": [
-                    "results\\id=Test1\\BlockAgent4\\BlockAgent4-199988.pt"
-                ]
-            },
-            {
-                "steps": 399943,
-                "file_path": "results\\id=Test1\\BlockAgent4\\BlockAgent4-399943.onnx",
-                "reward": 0.0,
-                "creation_time": 1741078251.4428,
-                "auxillary_file_paths": [
-=======
->>>>>>> main
-<<<<<<< HEAD
-    "MultipleFoodGatherer": {
-        "checkpoints": [
-            {
-                "steps": 499968,
-                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.onnx",
-                "reward": null,
-                "creation_time": 1741475899.1247644,
-                "auxillary_file_paths": [
-                    "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-499968.pt"
-                ]
-            },
-            {
-                "steps": 500480,
-                "file_path": "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.onnx",
-                "reward": null,
-                "creation_time": 1741475899.2446146,
-                "auxillary_file_paths": [
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
->>>>>>> main
                     "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
 =======
 <<<<<<< HEAD
@@ -119,13 +75,6 @@
                 "reward": 0.0,
                 "creation_time": 1741078251.4428,
                 "auxillary_file_paths": [
->>>>>>> Block_Agent_Behavior
-<<<<<<< HEAD
->>>>>>> main
-=======
-<<<<<<< HEAD
-=======
->>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
                     "results\\id=Test1\\BlockAgent4\\BlockAgent4-399943.pt"
@@ -159,21 +108,9 @@
                     "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
 >>>>>>> main
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> main
-=======
-<<<<<<< HEAD
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
->>>>>>> main
-<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
@@ -183,13 +120,11 @@
         "final_checkpoint": {
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             "steps": 400007,
             "file_path": "results\\id=Test1\\BlockAgent4.onnx",
             "reward": 0.0,
             "creation_time": 1741078251.500976,
             "auxillary_file_paths": [
-=======
 =======
 <<<<<<< HEAD
             "steps": 500480,
@@ -197,24 +132,6 @@
             "reward": null,
             "creation_time": 1741475899.2446146,
             "auxillary_file_paths": [
-=======
-            "steps": 400007,
-            "file_path": "results\\id=Test1\\BlockAgent4.onnx",
-            "reward": 0.0,
-            "creation_time": 1741078251.500976,
-            "auxillary_file_paths": [
-=======
->>>>>>> main
-<<<<<<< HEAD
-            "steps": 500480,
-            "file_path": "results\\id=Test1\\MultipleFoodGatherer.onnx",
-            "reward": null,
-            "creation_time": 1741475899.2446146,
-            "auxillary_file_paths": [
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
->>>>>>> main
                 "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
 =======
 <<<<<<< HEAD
@@ -229,13 +146,6 @@
             "reward": 0.0,
             "creation_time": 1741078251.500976,
             "auxillary_file_paths": [
->>>>>>> Block_Agent_Behavior
-<<<<<<< HEAD
->>>>>>> main
-=======
-<<<<<<< HEAD
-=======
->>>>>>> main
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main
                 "results\\id=Test1\\BlockAgent4\\BlockAgent4-400007.pt"
@@ -248,21 +158,9 @@
                 "results\\id=Test1\\MultipleFoodGatherer\\MultipleFoodGatherer-500480.pt"
 >>>>>>> main
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 >>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> main
-=======
-<<<<<<< HEAD
->>>>>>> Block_Agent_Behavior
-=======
->>>>>>> Block_Agent_Behavior
->>>>>>> main
-<<<<<<< HEAD
 =======
 >>>>>>> Block_Agent_Behavior
 >>>>>>> main

@@ -5,11 +5,6 @@ import uvicorn
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
-=======
-<<<<<<< HEAD
->>>>>>> main
-<<<<<<< HEAD
-=======
 from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
@@ -27,10 +22,6 @@ import base64
 
 >>>>>>> main
 =======
->>>>>>> main
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
 >>>>>>> main
 
 # Load environment variables from .env file
@@ -121,16 +112,7 @@ survival_agent = Agent(
 app = FastAPI()
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
->>>>>>> main
-=======
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> main
->>>>>>> Block_Agent_Behavior
 >>>>>>> main
 
 # Call the LLM with the JSON schema
@@ -191,12 +173,6 @@ if __name__ == "__main__":
 <<<<<<< HEAD
     uvicorn.run("unity:app", host="localhost", port=12345)
 =======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-    uvicorn.run("unity:app", host="localhost", port=12345)
-=======
->>>>>>> main
 # Define the FastAPI endpoint
 @app.post("/nlp")
 async def process_input(request: Request):
@@ -268,8 +244,4 @@ if __name__ == "__main__":
 >>>>>>> main
 =======
     uvicorn.run("unity:app", host="localhost", port=12345)
->>>>>>> main
-<<<<<<< HEAD
-=======
->>>>>>> Block_Agent_Behavior
 >>>>>>> main

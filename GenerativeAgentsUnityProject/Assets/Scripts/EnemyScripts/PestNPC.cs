@@ -228,10 +228,6 @@ public class PestNPC : MonoBehaviour
             {
                 // Call RemoveFood on the habitat singleton.
                 Habitat.Instance.RemoveFood(foodPortionsConsumed);
-<<<<<<< HEAD
-=======
-                EndSimMetricsUI.Instance.IncrementFoodEatenByPests();
->>>>>>> main
             }
         }
     }
