@@ -191,6 +191,7 @@ public class Client : MonoBehaviour
 
                 string nextAction = responseJson["next_action"].ToString();
                 string reasoning = responseJson.ContainsKey("reasoning") ? responseJson["reasoning"].ToString() : "No reasoning provided";
+                agent.GetComponent<BehaviorManager>().reasoning = reasoning;
                 Debug.Log($"[Client] LLM returned next_action: {nextAction}");
                 Debug.Log($"[Client] Agent Reasoning: {reasoning}");
 
