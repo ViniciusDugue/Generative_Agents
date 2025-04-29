@@ -67,13 +67,21 @@ public class EnemyAgentScript : MonoBehaviour
                 {
                     isChasing = true;
                     navAgent.SetDestination(targetAgent.position);
+<<<<<<< HEAD
                     Debug.Log("Chasing agent: " + targetAgent.name);
+=======
+                    // Debug.Log("Chasing agent: " + targetAgent.name);
+>>>>>>> main
                 }
                 else
                 {
                     isChasing = false;
                     navAgent.SetDestination(GetReturnDestination());
+<<<<<<< HEAD
                     Debug.Log("Agent left patrol radius, returning to patrol area.");
+=======
+                    // Debug.Log("Agent left patrol radius, returning to patrol area.");
+>>>>>>> main
                 }
             }
             else

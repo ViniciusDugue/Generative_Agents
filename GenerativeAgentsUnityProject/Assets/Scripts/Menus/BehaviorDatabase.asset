@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1aa510ed2af3374a9e7a77b4b921d12, type: 3}
+  m_Name: BehaviorDatabase
+  m_EditorClassIdentifier: 
+  visuals:
+  - behaviorName: RestBehavior
+    icon: {fileID: 21300000, guid: 996bf21ad311fc14baaa2cae74df9068, type: 3}
+    displayName: Resting
+  - behaviorName: MoveBehavior
+    icon: {fileID: 21300000, guid: 5d7efe4ee873e604c97c8c82f78fc285, type: 3}
+    displayName: Moving To
+  - behaviorName: FleeBehavior
+    icon: {fileID: 21300000, guid: b3c333c39ccf5094c9ead4613e4afc60, type: 3}
+    displayName: Fleeing
+  - behaviorName: GatherBehavior
+    icon: {fileID: 21300000, guid: 76f9b1473d8d6fb439798d9b819af773, type: 3}
+    displayName: Gathering Food
+  - behaviorName: GuardHabitat_Behavior
+    icon: {fileID: 21300000, guid: 05b0ab47715c59f46a758f15af93a96c, type: 3}
+    displayName: Guarding Habitat
+  - behaviorName: MoveBlockBehavior
+    icon: {fileID: 21300000, guid: 58165d71f8ad852429a1c701f7b5b8ed, type: 3}
+    displayName: Moving Block
+  - behaviorName: BuildWall_Agent
+    icon: {fileID: 21300000, guid: b12f633152b359744805b980344049b8, type: 3}
+    displayName: Building Wall
+  defaultVisual:
+    behaviorName: FleeBehavior
+    icon: {fileID: 21300000, guid: b3c333c39ccf5094c9ead4613e4afc60, type: 3}
+    displayName: Fleeing

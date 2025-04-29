@@ -166,7 +166,11 @@ public class CameraController : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
     void LockOnToAgent(Transform agent)
+=======
+    public void LockOnToAgent(Transform agent)
+>>>>>>> main
     {
         lockedAgent = agent;
         isLockedOn = true;

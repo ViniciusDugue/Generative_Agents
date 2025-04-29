@@ -63,6 +63,10 @@ public class MoveBlockBehavior : AgentBehavior
 
         if (isHoldingBlock)
         {
+<<<<<<< HEAD
+=======
+            EndSimMetricsUI.Instance.IncrementBlocksMoved();
+>>>>>>> main
             holdingBlock?.SetActive(false);
             targetBlock = Instantiate(blockPrefab, transform.position + transform.forward + new Vector3(0f,1f,0f), Quaternion.identity);
             isHoldingBlock = false;
@@ -152,7 +156,12 @@ public class MoveBlockBehavior : AgentBehavior
             // drop block by swetting to position of destination
             case AgentState.DropBlock:
                 holdingBlock?.SetActive(false);
+<<<<<<< HEAD
 
+=======
+                
+                EndSimMetricsUI.Instance.IncrementBlocksMoved();
+>>>>>>> main
                 if (dropAtFront)
                 {
                     isHoldingBlock = false;

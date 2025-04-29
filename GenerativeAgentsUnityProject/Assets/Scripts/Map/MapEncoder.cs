@@ -4,6 +4,11 @@ using UnityEngine;
 using System.Net.Http;
 using System.Collections;
 using System.Threading.Tasks;
+<<<<<<< HEAD
+=======
+using System.Drawing.Text;
+using System.Collections.Generic;
+>>>>>>> main
 
 public class MapEncoder : MonoBehaviour
 {
@@ -13,6 +18,11 @@ public class MapEncoder : MonoBehaviour
     public string serverUrl = "http://127.0.0.1:12345/map";
     private Texture2D capturedTexture;
     private static readonly HttpClient httpClient = new HttpClient();
+<<<<<<< HEAD
+=======
+    private BehaviorManager bm;
+    private int agentID;
+>>>>>>> main
 
     [System.Serializable]
     public class MapPayload
@@ -21,6 +31,51 @@ public class MapEncoder : MonoBehaviour
         public string map_base64;
     }
 
+<<<<<<< HEAD
+=======
+    void OnEnable()
+    {
+        MapMarkerManager.mapDictFullyBuilt += AssignMapCamera;
+    }
+    void OnDisable()
+    {
+        MapMarkerManager.mapDictFullyBuilt -= AssignMapCamera;
+    }
+
+    void Start() {
+        bm = GetComponent<BehaviorManager>();
+        agentID = bm.agentID;
+    }
+
+    // public void AssignMapCamera(Dictionary<string, GameObject> agentMapDict) {
+    //     GameObject mapObj = agentMapDict[$"AgentMap-{agentID}"];
+    //     Camera camera = mapObj.transform.GetChild(0).GetComponent<Camera>();
+    //     mapCamera = camera;
+    // }
+
+    public void AssignMapCamera(Dictionary<string, GameObject> agentMapDict)
+    {
+        // Grab the same agentID you used when naming the map prefab
+        var bm = GetComponent<BehaviorManager>();
+        if (bm == null)
+        {
+            Debug.LogError("[MapEncoder] No BehaviorManager on this GameObject!");
+            return;
+        }
+
+        int id  = bm.agentID;
+        string key = $"AgentMap-{id}";
+
+        if (!agentMapDict.TryGetValue(key, out GameObject mapObj))
+        {
+            Debug.LogError($"[MapEncoder] No map with key '{key}' found!");
+            return;
+        }
+
+        // Assign its camera
+        mapCamera = mapObj.GetComponentInChildren<Camera>();
+    }
+>>>>>>> main
 
     public async void CaptureAndSendMap(int agentID)
     {

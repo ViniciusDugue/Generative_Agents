@@ -119,6 +119,12 @@ public class GatherBehavior : AgentBehavior
             {
                 Debug.LogError("FoodScript is null on collided object!");
             }
+<<<<<<< HEAD
+=======
+
+            EndSimMetricsUI.Instance.IncrementFoodCollected();
+            
+>>>>>>> main
             Satiate();
             collision.gameObject.GetComponent<FoodScript>().OnEaten();
             this.gameObject.GetComponent<BehaviorManager>().updateFoodCount();

@@ -15,6 +15,13 @@ public class AgentHeal : MonoBehaviour
     public int currentHunger = 0;
     [Tooltip("Amount of food needed to fill hunger (per portion).")]
     public int foodPortionValue = 10;
+<<<<<<< HEAD
+=======
+   
+    [HideInInspector]
+    public int foodPortionsReceived = 0;
+
+>>>>>>> main
 
     [Header("Healing Settings")]
     [Tooltip("Health restored per healing tick once hunger is full.")]
@@ -47,9 +54,12 @@ public class AgentHeal : MonoBehaviour
             healthBar.SetMaxHealth(maxHealth);
             healthBar.SetHealth(maxHealth);
         }
+<<<<<<< HEAD
 
         // Start the hunger decay routine.
         StartCoroutine(HungerDecayRoutine());
+=======
+>>>>>>> main
     }
 
     /// <summary>
@@ -63,7 +73,12 @@ public class AgentHeal : MonoBehaviour
         {
             currentHunger = maxHunger;
         }
+<<<<<<< HEAD
         // Debug.Log($"{gameObject.name} received food. Hunger: {currentHunger}/{maxHunger}");
+=======
+
+        foodPortionsReceived++;
+>>>>>>> main
 
         // Once hunger is full, start the healing process.
         if (currentHunger >= maxHunger && !isHealing)
@@ -97,6 +112,7 @@ public class AgentHeal : MonoBehaviour
     }
 
     /// <summary>
+<<<<<<< HEAD
     /// Every hungerDecayInterval seconds, reduce hunger by hungerDecay.
     /// If hunger falls at or below hungerDamageThreshold, apply starvation damage.
     /// </summary>
@@ -122,6 +138,8 @@ public class AgentHeal : MonoBehaviour
     }
 
     /// <summary>
+=======
+>>>>>>> main
     /// Optional: Called if the agent takes damage (e.g., from enemy collisions).
     /// </summary>
     public void TakeDamage(int damage)
@@ -139,6 +157,12 @@ public class AgentHeal : MonoBehaviour
 
     private void Die()
     {
+<<<<<<< HEAD
+=======
+        EndSimMetricsUI.Instance.IncrementDeadAgents();
+        SpawnManager.Instance.aliveAgents.Remove(this.gameObject);
+        
+>>>>>>> main
         Debug.Log($"{gameObject.name} has died.");
         gameObject.SetActive(false);
     }
