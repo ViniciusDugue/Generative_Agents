@@ -47,23 +47,39 @@ public class SpawnManager : MonoBehaviour
     private List<Transform> agentSpawnPoints = new List<Transform>();
 
     private MapMarkerManager markerManager;
-    
     public static SpawnManager Instance;
+
+    public List<Transform> ActiveFoodSpawnPoints { get { return activeFoodSpawnPoints; } }
+    private Dictionary<Transform, List<GameObject>> foodSpawnMapping = new Dictionary<Transform, List<GameObject>>();
+
+    public List<Transform> FoodSpawnPoints  => foodSpawnPoints;
+    public List<Transform> EnemySpawnPoints => enemySpawnPoints;
+
+
+    [Header("Time Manager Reference")]
+    public TimeManager timeManager;
+
     // Track the previous day/night state.
     private bool lastIsDaytime;
 
     private void Awake()
     {
+        Instance = this;
+        Debug.Log("spawn manager awake");
+
         markerManager = FindFirstObjectByType<MapMarkerManager>();
         FindSpawnPoints();
 
-        Instance = this;
-        lastIsDaytime = TimeManager.Instance.IsDayTime;
-    }
+        if (timeManager == null)
+        {
+            timeManager = FindObjectOfType<TimeManager>();
+        }
+        if (timeManager != null)
+        {
+            lastIsDaytime = timeManager.IsDayTime;
+        }
 
-    private void Start()
-    {
-        // Reposition the habitat only once at simulation start
+        // Reposition the habitat on Sim Awake
         GameObject habitatObj = GameObject.FindWithTag("habitat");
         if (habitatObj != null)
         {
@@ -75,7 +91,7 @@ public class SpawnManager : MonoBehaviour
             Debug.LogWarning("No habitat found to reposition.");
         }
 
-        // Spawn agents at the central hub only once at simulation start.
+        // Spawn agents at the central hub only once at simulation awake.
         SpawnAgentsAtHub();
 
         // Continue with food and enemy spawning based on current time.
@@ -157,9 +173,10 @@ public class SpawnManager : MonoBehaviour
         activeFoodSpawnPoints.Clear();
         int countToSelect = Mathf.Min(dailyActiveFoodSpawnCount, foodSpawnPoints.Count);
         List<Transform> tempList = new List<Transform>(foodSpawnPoints);
+
         for (int i = 0; i < countToSelect; i++)
         {
-            int index = Random.Range(0, tempList.Count);
+            int index = UnityEngine.Random.Range(0, tempList.Count);
             activeFoodSpawnPoints.Add(tempList[index]);
             tempList.RemoveAt(index);
         }
@@ -187,12 +204,6 @@ public class SpawnManager : MonoBehaviour
                 status.HasFood = false; // This spawn point is inactive and has no food.
             }
         }
-        string log = "Day " + TimeManager.Instance.Days + " - Active Food Spawn Points: ";
-        foreach (Transform activePoint in activeFoodSpawnPoints)
-        {
-            log += (activePoint.name ?? activePoint.position.ToString()) + "; ";
-        }
-        Debug.Log(log);
     }
 
     // Randomizes active enemy spawn points (daytime only).
@@ -203,7 +214,7 @@ public class SpawnManager : MonoBehaviour
         List<Transform> tempList = new List<Transform>(enemySpawnPoints);
         for (int i = 0; i < countToSelect; i++)
         {
-            int index = Random.Range(0, tempList.Count);
+            int index = UnityEngine.Random.Range(0, tempList.Count);
             activeEnemySpawnPoints.Add(tempList[index]);
             tempList.RemoveAt(index);
         }
@@ -309,6 +320,16 @@ public class SpawnManager : MonoBehaviour
                 GameObject newObj = Instantiate(prefab, pos, Quaternion.identity);
                 spawnedList.Add(newObj);
 
+                // If it's food, store it in the mapping.
+                if (prefab == foodPrefab)
+                {
+                    if (!foodSpawnMapping.ContainsKey(point))
+                    {
+                        foodSpawnMapping[point] = new List<GameObject>();
+                    }
+                    foodSpawnMapping[point].Add(newObj);
+                }
+
                 if (prefab == agentPrefab)
                 {
                     BehaviorManager behaviorManager = newObj.GetComponent<BehaviorManager>() 
@@ -321,18 +342,26 @@ public class SpawnManager : MonoBehaviour
                         newObj.AddComponent<AgentController>();
                     }
 
-                    // Register marker for agent.
-                    markerManager?.RegisterMarker(newObj);
+                    // Raise a marker event using MarkerEventManager.
+                    Debug.Log("Firing MarkerSpawned for " + newObj.name);
+                    MarkerEventManager.MarkerSpawned(newObj, MarkerEventManager.MarkerType.Agent);
 
                     // Notify the Client about the new agent.
                     Client client = FindFirstObjectByType<Client>();
                     client?.RegisterAgent(newObj);
                 }
-                else
+                else if (prefab == enemyPrefab)
                 {
-                    // Register marker for enemies and food.
-                    markerManager?.RegisterMarker(newObj);
+                    MarkerEventManager.MarkerSpawned(newObj, MarkerEventManager.MarkerType.Enemy);
                 }
+                // else if (prefab == foodPrefab)
+                // {
+                //     // Register marker for enemies only; skip food to wait for discovery.
+                //     if (prefab != foodPrefab)
+                //     {
+                //         markerManager?.RegisterMarker(newObj);
+                //     }
+                // }
 
                 spawnedSoFar++;
                 if (spawnedSoFar >= totalToSpawn)
@@ -341,7 +370,12 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    // Spawns agents at the central hub (Habitat).
+    public Dictionary<Transform, List<GameObject>> FoodSpawnMapping
+    {
+        get { return foodSpawnMapping; }
+    }
+
+        // Spawns agents at the central hub (Habitat).
     private void SpawnAgentsAtHub()
     {
         GameObject habitatObj = GameObject.FindWithTag("habitat");
@@ -352,7 +386,7 @@ public class SpawnManager : MonoBehaviour
 
             for (int i = 0; i < maxAgents; i++)
             {
-                Vector3 spawnPos = hubPos + new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+                Vector3 spawnPos = hubPos + new Vector3(UnityEngine.Random.Range(-1f, 1f), 0, UnityEngine.Random.Range(-1f, 1f));
                 GameObject newAgent = Instantiate(agentPrefab, spawnPos, Quaternion.identity);
                 spawnedAgents.Add(newAgent);
                 aliveAgents.Add(newAgent);
@@ -368,23 +402,23 @@ public class SpawnManager : MonoBehaviour
                     newAgent.AddComponent<AgentController>();
                 }
 
-                // Ensure the agent has a MapEncoder component.
-                MapEncoder mapEncoder = newAgent.GetComponent<MapEncoder>() 
-                                        ?? newAgent.AddComponent<MapEncoder>();
-                // Locate the 2D map camera and assign it.
-                GameObject mapCameraObj = GameObject.Find("AgentCamera");
-                if(mapCameraObj != null)
-                {
-                    mapEncoder.mapCamera = mapCameraObj.GetComponent<Camera>();
-                }
-                else
-                {
-                    Debug.LogWarning("2DMapCamera not found!");
-                }
-                mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
+                // // Ensure the agent has a MapEncoder component.
+                // MapEncoder mapEncoder = newAgent.GetComponent<MapEncoder>() 
+                //                         ?? newAgent.AddComponent<MapEncoder>();
+                // // Locate the 2D map camera and assign it.
+                // GameObject mapCameraObj = GameObject.Find("AgentCamera");
+                // if(mapCameraObj != null)
+                // {
+                //     mapEncoder.mapCamera = mapCameraObj.GetComponent<Camera>();
+                // }
+                // else
+                // {
+                //     Debug.LogWarning("2DMapCamera not found!");
+                // }
+                // mapEncoder.serverUrl = "http://127.0.0.1:12345/map";
 
-                // Register marker for this agent.
-                markerManager?.RegisterMarker(newAgent);
+                // Register the agent marker via the event system.
+                MarkerEventManager.MarkerSpawned(newAgent, MarkerEventManager.MarkerType.Agent);
 
                 // Notify the Client about the new agent.
                 Client client = FindFirstObjectByType<Client>();
@@ -400,8 +434,8 @@ public class SpawnManager : MonoBehaviour
     // Returns a random position within a circle around a center.
     private Vector3 GetRandomPositionAround(Vector3 center, float radius)
     {
-        float randomAngle = Random.Range(0f, Mathf.PI * 2);
-        float randomDistance = Random.Range(0f, radius);
+        float randomAngle = UnityEngine.Random.Range(0f, Mathf.PI * 2);
+        float randomDistance = UnityEngine.Random.Range(0f, radius);
         float xOffset = Mathf.Cos(randomAngle) * randomDistance;
         float zOffset = Mathf.Sin(randomAngle) * randomDistance;
         return new Vector3(center.x + xOffset, center.y + spawnHeightOffset, center.z + zOffset);
@@ -414,7 +448,8 @@ public class SpawnManager : MonoBehaviour
         {
             if (obj != null)
             {
-                markerManager?.RemoveMarker(obj);
+                // markerManager?.RemoveMarker(obj);
+                MarkerEventManager.MarkerRemoved(obj);
                 Destroy(obj);
             }
         }

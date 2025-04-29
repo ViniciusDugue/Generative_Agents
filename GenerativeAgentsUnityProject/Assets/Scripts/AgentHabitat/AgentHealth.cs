@@ -65,6 +65,16 @@ public class AgentHealth : MonoBehaviour
     void Die()
     {
         Debug.Log($"{gameObject.name} has died.");
+
+        // Remove marker from all MapMarkerManager instances.
+        MapMarkerManager[] markerManagers = FindObjectsOfType<MapMarkerManager>();
+        foreach (MapMarkerManager manager in markerManagers)
+        {
+            MarkerEventManager.MarkerRemoved(gameObject);
+        }
+
+        // Deactivate the agent.
         gameObject.SetActive(false);
     }
+
 }

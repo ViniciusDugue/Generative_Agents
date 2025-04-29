@@ -3251,6 +3251,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 343436095}
+  - component: {fileID: 343436096}
   m_Layer: 0
   m_Name: MapController
   m_TagString: Untagged
@@ -3274,6 +3275,28 @@ Transform:
   - {fileID: 2146238846}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &343436096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343436093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26e3075bd05af2542ab58646066d3877, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapCamera: {fileID: 175141912}
+  agentMarkerPrefab: {fileID: 7955253016905973970, guid: 76dfd58fbc427ea46848a9b9ea890aea,
+    type: 3}
+  enemyMarkerPrefab: {fileID: 1174300385508847463, guid: d3b2c3a7f342c9a40a524fdccc370f2b,
+    type: 3}
+  foodMarkerPrefab: {fileID: 2576113170972691007, guid: 6a5722ef3f4e9824a9874fc7599112b9,
+    type: 3}
+  foodSpawnPointMarkerPrefab: {fileID: 7726337879876815179, guid: 7fb84dab4bdb4e14597f10fe38092e05,
+    type: 3}
+  mapResolution: {x: 700, y: 700}
 --- !u!1 &362201285
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,10 +3402,9 @@ GameObject:
   - component: {fileID: 376374310}
   - component: {fileID: 376374309}
   - component: {fileID: 376374308}
-  - component: {fileID: 376374311}
   m_Layer: 5
   m_Name: AgentMap
-  m_TagString: Untagged
+  m_TagString: agentmap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3471,27 +3493,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &376374311
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 376374306}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e3075bd05af2542ab58646066d3877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapCamera: {fileID: 175141912}
-  mapContainer: {fileID: 376374307}
-  agentMarkerPrefab: {fileID: 7955253016905973970, guid: 76dfd58fbc427ea46848a9b9ea890aea,
-    type: 3}
-  enemyMarkerPrefab: {fileID: 1174300385508847463, guid: d3b2c3a7f342c9a40a524fdccc370f2b,
-    type: 3}
-  foodMarkerPrefab: {fileID: 2576113170972691007, guid: 6a5722ef3f4e9824a9874fc7599112b9,
-    type: 3}
-  mapResolution: {x: 225, y: 225}
 --- !u!1 &396934360
 GameObject:
   m_ObjectHideFlags: 0
@@ -16797,10 +16798,9 @@ GameObject:
   - component: {fileID: 1841739960}
   - component: {fileID: 1841739959}
   - component: {fileID: 1841739958}
-  - component: {fileID: 1841739962}
   m_Layer: 5
   m_Name: UserMap
-  m_TagString: Untagged
+  m_TagString: usermap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -16889,27 +16889,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1841739962
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841739957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e3075bd05af2542ab58646066d3877, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapCamera: {fileID: 175141912}
-  mapContainer: {fileID: 1841739961}
-  agentMarkerPrefab: {fileID: 7955253016905973970, guid: 76dfd58fbc427ea46848a9b9ea890aea,
-    type: 3}
-  enemyMarkerPrefab: {fileID: 1174300385508847463, guid: d3b2c3a7f342c9a40a524fdccc370f2b,
-    type: 3}
-  foodMarkerPrefab: {fileID: 2576113170972691007, guid: 6a5722ef3f4e9824a9874fc7599112b9,
-    type: 3}
-  mapResolution: {x: 700, y: 700}
 --- !u!1 &1843151015
 GameObject:
   m_ObjectHideFlags: 0
@@ -17631,6 +17610,13 @@ MonoBehaviour:
     type: 3}
   agentPrefab: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
     type: 3}
+  maxFood: 10
+  maxEnemies: 5
+  maxAgents: 1
+  spawnHeightOffset: 0
+  foodSpawnRadius: 8
+  enemySpawnRadius: 8
+  agentSpawnRadius: 8
   pestPrefab: {fileID: 3161814729104669398, guid: 28b525e8d56e4cc45819eee6bd3899bf,
     type: 3}
   maxFood: 10
@@ -18198,6 +18184,114 @@ Transform:
   - {fileID: 232204537}
   m_Father: {fileID: 259046999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2014711432
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -2325263815777301736, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666538100298051283, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1841426132986401358, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_EnvironmentSettings
+      value: 
+      objectReference: {fileID: 452731252}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 52.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 41.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3887981853846396359, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918375715167313049, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6918375715167313049, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7518629946175017511, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887430557503516784, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_Name
+      value: Agent
+      objectReference: {fileID: 0}
+    - target: {fileID: 8148831817186536054, guid: 3011ae46c3f59ae489428973e29076bd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3011ae46c3f59ae489428973e29076bd, type: 3}
 --- !u!1 &2015667540
 GameObject:
   m_ObjectHideFlags: 0

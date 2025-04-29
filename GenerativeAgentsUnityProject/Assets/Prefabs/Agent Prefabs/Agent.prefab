@@ -1491,7 +1491,8 @@ GameObject:
   - component: {fileID: -2325263815777301736}
   - component: {fileID: 6572964766931281634}
   - component: {fileID: 2381536804232584231}
-  - component: {fileID: 3734130453397303237}
+  - component: {fileID: 2371115499887372965}
+  - component: {fileID: 8790101154741555419}
   m_Layer: 6
   m_Name: Agent
   m_TagString: agent
@@ -2014,7 +2015,7 @@ MonoBehaviour:
   hungerDecay: 10
   hungerDecayInterval: 10
   healthBar: {fileID: 8190683321543600135}
---- !u!114 &3734130453397303237
+--- !u!114 &2371115499887372965
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2023,13 +2024,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7042152a288c6e54c9e82fbb531364a7, type: 3}
+  m_Script: {fileID: 11500000, guid: 521ebfeead22a7442abe66ffe36575a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapCamera: {fileID: 0}
-  mapWidth: 200
-  mapHeight: 200
-  serverUrl: http://127.0.0.1:12345/map
+  detectionRange: 5
+--- !u!114 &8790101154741555419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cc71e3a04b80404b8aea159c4e556ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRange: 1000
 --- !u!1 &8750545991374723211
 GameObject:
   m_ObjectHideFlags: 0

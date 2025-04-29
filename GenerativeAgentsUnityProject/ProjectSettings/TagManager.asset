@@ -36,6 +36,9 @@ TagManager:
   - enemySpawn
   - agentSpawn
   - habitat
+  - Default
+  - usermap
+  - agentmap
   - destination
   - Default
   - pest
