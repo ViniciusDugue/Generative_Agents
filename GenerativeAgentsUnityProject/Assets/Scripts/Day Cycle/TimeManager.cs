@@ -68,7 +68,7 @@ public class TimeManager : MonoBehaviour
     {
         // 1 day/night cycle = 4 minutes
         tempSecond += Time.deltaTime;
-        float secondsPerGameMinute = 1f / 48f;
+        float secondsPerGameMinute = 1f / 2f;
         if (tempSecond >= secondsPerGameMinute)
         {
             int minutesToAdd = Mathf.FloorToInt(tempSecond / secondsPerGameMinute);

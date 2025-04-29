@@ -1476,8 +1476,8 @@ GameObject:
   - component: {fileID: 3586588434944278327}
   - component: {fileID: 3081395510317380987}
   - component: {fileID: 148164363397645315}
-  - component: {fileID: 7275002512134994195}
   - component: {fileID: 7039869131580968681}
+  - component: {fileID: 7275002512134994195}
   - component: {fileID: 1713156178617753578}
   - component: {fileID: 5926976418048991636}
   - component: {fileID: 5729518069442870478}
@@ -1621,7 +1621,7 @@ MonoBehaviour:
   m_UseChildActuators: 1
   m_DeterministicInference: 0
   m_ObservableAttributeHandling: 0
---- !u!114 &7275002512134994195
+--- !u!114 &7039869131580968681
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1629,6 +1629,35 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02c4cddf4e1a5ce4899f142631ad628c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agentID: 1
+  fitnessScore: 0
+  exhaustion: 0
+  refreshLLM: 0
+  requiredFood: 5
+  maxFood: 3
+  foodCollected: 0
+  currentFood: 0
+  FitnessScore: 0
+  defaultBehavior: {fileID: 5729518069442870478}
+  currentAgentBehavior: {fileID: 0}
+  enemyCurrentlyDetected: 0
+  enemyPreviousDetected: 0
+  enemyTransform: {fileID: 0}
+  depositedFood: 0
+  agentBehaviorUI: {fileID: 4543071310847813651}
+  reasoning: 
+--- !u!114 &7275002512134994195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148831817186536054}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6c44b58edb9cd54fb8ceaa2ec0ee31c, type: 3}
   m_Name: 
@@ -1653,32 +1682,6 @@ MonoBehaviour:
   holdingBlock: {fileID: 1571550313658887239}
   blockPrefab: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
     type: 3}
---- !u!114 &7039869131580968681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c4cddf4e1a5ce4899f142631ad628c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentID: 1
-  fitnessScore: 0
-  exhaustion: 0
-  refreshLLM: 0
-  maxFood: 3
-  foodCollected: 0
-  currentFood: 0
-  FitnessScore: 0
-  defaultBehavior: {fileID: 5729518069442870478}
-  currentAgentBehavior: {fileID: 0}
-  enemyCurrentlyDetected: 0
-  enemyPreviousDetected: 0
-  enemyTransform: {fileID: 0}
-  agentBehaviorUI: {fileID: 4543071310847813651}
 --- !u!114 &1713156178617753578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1750,7 +1753,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468d594e562f3ea49a5227331c22ec67, type: 3}
   m_Name: 
@@ -2008,6 +2011,7 @@ MonoBehaviour:
   maxHunger: 100
   currentHunger: 0
   foodPortionValue: 10
+  foodPortionsReceived: 0
   healingPerTick: 5
   healingInterval: 1
   hungerDamage: 5

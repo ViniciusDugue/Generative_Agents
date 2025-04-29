@@ -25,10 +25,12 @@ import base64
 
 # Load environment variables from .env file
 load_dotenv()
-API_KEY = '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'
+API_KEY = os.getenv('OPEN_API_KEY')
 
 sys_prompt = """
-    You are an intelligent survival agent in a hostile environment. Your primary goal is to make strategic decisions that maximize your long-term survival and fitness. Your choices must balance resource acquisition, energy management, safety, and movement. Hostile predators roam the area, and fleeing them is always a top priority to maintain your health.
+    You are an intelligent survival agent in a hostile environment. Your primary goal is to make strategic decisions 
+    that maximize your long-term survival and fitness. Your choices must balance resource acquisition, hunger, safety, and movement. 
+    Hostile predators roam the area, and fleeing them is always a top priority to maintain your health.
 
 Environment & Map:
 - The arena is a 120x120 unit area.  
@@ -42,14 +44,15 @@ Environment & Map:
 Food & Resource System:
 - Food items spawn only at designated 'Active' food locations; not every food location will have food.
 - Food appearance is random each day, so 'Active' food locations will switch to different food locations daily.
-- Each agent can collect up to 3 food items at a time before reaching capacity.
+- If currentFood >= maxFood, no more food can be collected until some is deposited at the habitat or eaten.
 - Food must be deposited at your habitat to be stored and used later.
-- Food can only be collected via the FoodGathererAgent Action; this should be used whenever there is food nearby.
-- Agents can only eat and heal at the habitat.
-- Daily survival requires at least 5 food items. For every 100 points of exhaustion, one extra food item is needed; for every 20 points of health lost, one extra food item is required to heal.
+- Food can only be collected via the GatherBehavior Action; this should be used whenever there is food nearby.
+- Agents can eat the food in their inventory, or store it at their habitat. Storing it at the habitat will increase your fitness score.
+- Daily survival requires at least 5 food items. 
+- For every 100 points of exhaustion, one extra food item is needed; for every 20 points of health lost, one extra food item is required to heal.
   
 Available Actions & Effects:
-- **FoodGathererAgent:**  
+- **GatherBehavior:**  
   *Effect:* Searches for and collects food items at the current location.  
   *Cost:* +0.8 exhaustion per second.  
   *Purpose:* Boosts fitness by increasing food collected.
@@ -73,7 +76,7 @@ Survival Considerations:
 - Fleeing is used only when an enemy is detected.
 - Food only exists at known food locations; gathering food requires exploration.
 - MoveBehavior should be used only if there is a known target location.
-- If exhaustion reaches 100, you will begin losing health and cannot move until you rest.
+- If exhaustion reaches 100, you will gain additional hunger.
 - The agent’s actions should always aim to maximize long-term survival while increasing a calculated fitness score.
 
 Fitness Score Calculation:
@@ -94,18 +97,19 @@ Fitness is computed from several factors with weighted coefficients:
   
 Agent Inputs (provided every 20 seconds):
   - **agentID:** int – Unique identifier for you.
-  - **currentAction:** string – The name of your current behavior (e.g., FoodGathererAgent, FleeBehavior, etc.).
+  - **currentAction:** string – The name of your current behavior (e.g., GatherBehavior, FleeBehavior, etc.).
   - **currentPosition:** { x: float, z: float } – Your current position in the environment.
+  - **Hunger**: int — Represent how full the agent with the number of food items the agent has eaten today. (Eating 5 items means the agent is fully satisfied.)
   - **maxFood:** int – The maximum number of food items you can carry (currently 3).
   - **currentFood:** int – The number of food items you are currently holding.
-  - **storedFood:** int – The number of food items stored at your habitat.
+  - **habitatStoredFood:** int – The number of food items stored at your habitat.
   - **fitness:** float – A pre-calculated overall survival metric summarizing your current state.
   - **health:** int – Your current health (0 to 100).
   - **enemyCurrentlyDetected:** bool – True if an enemy is in sight.
   - **exhaustion:** int – Your current exhaustion level.
+  - **habitatLocation:** { x: float, z: float } – The location of your habitat.
   - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
   - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
-  - **mapData:** (image or map representation) – Additional map data if available.
 
 Fitness Score Overview:
   - This score is a weighted sum of your stored food, collected food, deposited food, health loss, food stolen, and the accessibility of your base and food locations to enemies.
@@ -116,6 +120,35 @@ Fitness Score Overview:
 "If your fitness score is low, prioritize actions that boost your survival (e.g., FoodGathererAgent or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
 Respond with the chosen ACTION (and location if using MoveBehavior) along with any necessary brief rationale.
 
+### EXAMPLE
+<user>
+{
+  "agentID": 1,
+  "currentAction": "GatherBehavior",
+  "currentPosition": { "x": 98.00892, "z": 92.4902039 },
+  "currentHunger": 100,
+  "maxFood": 3,
+  "currentFood": 3,
+  "habitatStoredFood": 0,
+  "fitness": 0.0,
+  "health": 100,
+  "enemyCurrentlyDetected": false,
+  "exhaustion": 27.7000141,
+  "habitatLocation": { "x": 65.6, "z": 111.9 },
+  "activeFoodLocations": [ { "x": 98.1, "z": 92.6 } ],
+  "foodLocations":   [ { "x": 98.1, "z": 92.6 } ],
+}
+</user>
+
+<assistant>
+{
+    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food.",
+    "eatCurrentFoodSupply": true,
+    "next_action": "MoveBehavior",
+    "location": { "x": 65.6, "z": 111.9 }
+}
+</assistant>
+
 """
 
 model = OpenAIModel('meta-llama/llama-4-maverick',
@@ -124,7 +157,9 @@ model = OpenAIModel('meta-llama/llama-4-maverick',
         api_key=API_KEY,
     ),
 )
-settings = ModelSettings(temperature=0.0)
+settings = ModelSettings(temperature=0.0, 
+                         max_tokens=8192)
+
 
 survival_agent = Agent(
     model=model,
@@ -158,7 +193,6 @@ async def process_input(request: Request):
         
         map_data = None
         result = None
-        input_json_str = json.dumps(input_data)
 
         # Register the agent if not already registered
         manager.register_entity(agent_id, sys_prompt, model)
@@ -171,6 +205,7 @@ async def process_input(request: Request):
         if "mapData" in input_data and input_data["mapData"] is not None:
             map_data = base64.b64decode(input_data.pop("mapData"))
 
+        input_json_str = json.dumps(input_data)
         # Pass Map Data if it exists, otherwise run normally
         if map_data:
             result = await manager.get_agent(agent_id).run(

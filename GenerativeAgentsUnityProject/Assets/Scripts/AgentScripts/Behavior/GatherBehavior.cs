@@ -14,10 +14,6 @@ public class GatherBehavior : AgentBehavior
     public EnvironmentSettings m_EnvironmentSettings; // Custom class holding environmental variables, e.g., foodScore
     public Vector3 rotationSpeed = new Vector3(0, 50, 0); // Rotation speed in degrees per second
 
-    private bool shouldRotate = false;
-    private Rigidbody m_Rigidbody;
-
-
     /// <summary>
     /// Called when the script instance is loaded.
     /// </summary>
@@ -25,8 +21,6 @@ public class GatherBehavior : AgentBehavior
     {
         agent = GetComponent<NavMeshAgent>();
         target = transform.position;
-        m_Rigidbody = GetComponent<Rigidbody>(); // Assuming you have a Rigidbody component on the same GameObject.Rigidbody m_Rigidbody;
-
     }
     
     // Start is called before the first frame update.
@@ -35,7 +29,6 @@ public class GatherBehavior : AgentBehavior
         if (agent != null)
         {
             agent.isStopped = false;
-            m_Rigidbody.constraints = RigidbodyConstraints.None;
         }
         // Choose an initial random destination.
         target = GetRandomDestination();
@@ -47,8 +40,6 @@ public class GatherBehavior : AgentBehavior
         if (agent != null)
         {
             agent.isStopped = true;
-            shouldRotate = false;
-            m_Rigidbody.constraints = RigidbodyConstraints.None;
         }
     }
 
@@ -96,13 +87,7 @@ public class GatherBehavior : AgentBehavior
             target = foodLocation;
             agent.SetDestination(target);
             Debug.Log("New food target set at: " + target);
-        }
-        else {
-            agent.isStopped = true;
-            m_Rigidbody.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezePositionX;
-            shouldRotate = true;
-        }
-            
+        }   
     }
 
     /// <summary>

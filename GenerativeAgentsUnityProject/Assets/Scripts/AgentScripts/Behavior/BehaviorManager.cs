@@ -13,10 +13,12 @@ public class BehaviorManager : MonoBehaviour
     private static int globalAgentID = 1;  // Shared counter for unique IDs
     public float fitnessScore = 0.0f;
     public float exhaustion;
-    [SerializeField]
+    [SerializeField] public int CurrentHunger => agentHeal.CurrentHunger;
+    
     public bool refreshLLM = false;
 
     [Header("Advanced Variables")]
+    [SerializeField] private int requiredFood = 5;
     [Tooltip("Maximum amount of food the agent can carry at once.")]
     [SerializeField]
     private int maxFood = 3;
@@ -51,6 +53,7 @@ public class BehaviorManager : MonoBehaviour
     public HashSet<Transform> foodLocations = new HashSet<Transform>();
     private float enemyOutOfRangeStartTime = -1f;
     private AgentHealth agentHealth;
+    private AgentHeal agentHeal;
     private Habitat agentHabitat; 
     private GatherBehavior gatherBehavior; 
     public float depositedFood = 0;
@@ -107,6 +110,7 @@ public class BehaviorManager : MonoBehaviour
         StartCoroutine(pollLLM());
 
         // Get References
+        agentHeal = GetComponent<AgentHeal>();
         agentHealth = GetComponent<AgentHealth>();
         gatherBehavior = GetComponent<GatherBehavior>();
         agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
@@ -129,14 +133,7 @@ public class BehaviorManager : MonoBehaviour
             esclatedDetectedEnemyToLLM();
             // enemyPreviousDetected = enemyCurrentlyDetected; 
         }
-
-        // Update enemy detection.
-        // CheckEnemyDetection();
-
-        // Determine whether an enemy is currently detected.
         
-        
-
         // (The rest of your Update code for manual behavior switching remains unchanged)
         if (Input.GetKeyDown(KeyCode.Q)) // Example: Switch to first behavior
         {
@@ -418,7 +415,7 @@ public class BehaviorManager : MonoBehaviour
         float curHealth = agentHealth.currentHealth;
         float habitatFood = agentHabitat.storedFood; 
 
-        FitnessScore += 10 * habitatFood + 5 * currentFood + 7*(depositedFood)
+        FitnessScore = 10 * habitatFood + 5 * currentFood + 7*(depositedFood)
         - 10 * (agentHealth.maxHealth -agentHealth.currentHealth);
         return FitnessScore;
     }
@@ -463,6 +460,12 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
+    public void eatPersonalFoodSupply() {
+        if (CurrentHunger <= requiredFood) {
+            agentHeal.ReceiveFood(1);  // Increase hunger by 1 unit for each food consumed.= 1;
+            currentFood -= 1;
+        }
+    }
     // Optionally, add a method to reset this flag for the next cycle/day.
     public void ResetFoodDepositFlag()
     {
@@ -471,14 +474,12 @@ public class BehaviorManager : MonoBehaviour
 
     public void ApplyDailyHungerPenalty()
     {
-        // Required food portions per day.
-        int requiredFood = 5;
         // Using depositedFood as the count of food this agent deposited today.
-        int deposited = Mathf.RoundToInt(depositedFood);
+        // int deposited = Mathf.RoundToInt(depositedFood);
 
-        if (deposited < requiredFood)
+        if (CurrentHunger < requiredFood)
         {
-            int missingFood = requiredFood - deposited;
+            int missingFood = requiredFood - CurrentHunger;
             // Parameter: Percentage of max health damage per missing food portion.
             float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
             AgentHealth agentHealth = GetComponent<AgentHealth>();
@@ -496,7 +497,7 @@ public class BehaviorManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Agent {agentID} met the food requirement with {deposited} portions.");
+            Debug.Log($"Agent {agentID} met the food requirement with {requiredFood} portions.");
         }
 
         // Reset the daily food tally for the next day.
