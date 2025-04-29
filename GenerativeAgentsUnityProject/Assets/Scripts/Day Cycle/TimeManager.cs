@@ -1,4 +1,5 @@
 using System.Collections;
+using System.ComponentModel;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -19,14 +20,14 @@ public class TimeManager : MonoBehaviour
 
     [SerializeField] private Light globalLight;
 
-    private int minutes;
+    [SerializeField] private int minutes;
     public int Minutes
     {
         get { return minutes; }
         set { minutes = value; OnMinutesChange(value); }
     }
 
-    private int hours = 8;
+    [SerializeField] private int hours = 8;
     public int Hours
     {
         get { return hours; }
@@ -41,39 +42,33 @@ public class TimeManager : MonoBehaviour
     }
 
     // Exposed boolean for day/night state.
-    public bool IsDayTime { get; private set; }
+    [SerializeField] private bool isDayTime;
+    public bool IsDayTime { get => isDayTime; private set => isDayTime = value; }
 
     // To detect changes and avoid spamming logs.
     private bool lastIsDayTime;
 
     private float tempSecond;
+    public static TimeManager Instance;
+    private void Awake()
+    {
+        Instance = this;   
+    }
 
-        private void Start()
+    private void Start()
     {
         // Always start at 8:00 AM.
         Hours = 8;
         Minutes = 0;
         Days = 1;
         Debug.Log("Starting time set to 8:00 AM.");
-
-        // Start the time progression (using your accelerated time).
-        // Other initialization code remains the same.
     }
 
     private void Update()
     {
-        // Original time progression (1 game minute per real second):
-        // tempSecond += Time.deltaTime;
-        // if (tempSecond >= 1)
-        // {
-        //     Minutes += 1;
-        //     tempSecond = 0;
-        // }
-
-        // New time progression: full day (1440 game minutes) passes in 4 minutes (240 seconds) of real time.
-        // That means 6 game minutes per real second.
+        // 1 day/night cycle = 4 minutes
         tempSecond += Time.deltaTime;
-        float secondsPerGameMinute = 1f / 6f; // ~0.1667 seconds per game minute
+        float secondsPerGameMinute = 1f / 48f;
         if (tempSecond >= secondsPerGameMinute)
         {
             int minutesToAdd = Mathf.FloorToInt(tempSecond / secondsPerGameMinute);
@@ -98,6 +93,13 @@ public class TimeManager : MonoBehaviour
             Hours = 0;
             Days++;
             Debug.Log("New day started. Day count: " + Days);
+
+            // Find all BehaviorManager instances in the scene.
+            BehaviorManager[] allAgents = GameObject.FindObjectsOfType<BehaviorManager>();
+            foreach (var bm in allAgents)
+            {
+                bm.ApplyDailyHungerPenalty();
+            }
         }
     }
 

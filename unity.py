@@ -2,6 +2,11 @@ from dotenv import load_dotenv
 import openai
 from fastapi import FastAPI, HTTPException, Request
 import uvicorn
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
 from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
@@ -17,11 +22,23 @@ import logging
 import base64
 # Dictionary to store map data for each agent
 
+>>>>>>> main
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
 
 # Load environment variables from .env file
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPEN_API_KEY")
 
+<<<<<<< HEAD
+# Access the environment variables
+api_key = os.getenv("API_KEY")
+
+# Create OpenAI client
+client = openai.OpenAI(
+    api_key=api_key,
+=======
 sys_prompt = """
     You are an intelligent agent in a survival environment. Your primary goal is to make strategic decisions that maximize 
     your long-term survival and efficiency. Your choices should balance resource acquisition, energy management, 
@@ -91,14 +108,80 @@ survival_agent = Agent(
     model=model,
     system_prompt=sys_prompt,
     result_type=AgentResponse  # Still use AgentResponse for output validation
+>>>>>>> main
 )
 
 # Create FastAPI app
 app = FastAPI()
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
+
+# Call the LLM with the JSON schema
+async def NLP(input_string: str):
+    context = (
+        "Please answer the following prompt in JSON format with the following fields: "
+        "'Agent_ID', 'Health', and 'Next_Action'. "
+        "The Agent_ID should be a string representing the agent's ID number. "
+        "Health should indicate the current health points of the agent. "
+        "Next_Action should describe what the agent is currently doing."
+        "Prompt: "
+    )
+=======
+>>>>>>> main
 
 # Dictionary to store map data for each agent
 agent_map_data = {}
 
+<<<<<<< HEAD
+    chat_completion = client.chat.completions.create(
+        model="mistralai/Mistral-7B-Instruct-v0.1",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an AI agent in a hostile, survival environment that answers in JSON.",
+            },
+            {
+                "role": "user",
+                "content": contextualized_input,
+            },
+        ],
+    )
+
+    return chat_completion.choices[0].message.content
+
+# Define the FastAPI endpoint
+@app.post("/nlp/")
+async def process_input(request: Request):
+    try:
+        # Get the raw input data from the client
+        input_data = await request.json()
+        input_string = input_data.get("input_string")
+
+        if not input_string:
+            raise HTTPException(status_code=400, detail="input_string is required")
+
+        # Call the NLP function with the input string
+        response_json = await NLP(input_string)
+
+        # Return the raw JSON response to the client
+        return json.loads(response_json)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Run the FastAPI app
+if __name__ == "__main__":
+<<<<<<< HEAD
+    uvicorn.run("unity:app", host="localhost", port=12345)
+=======
+<<<<<<< HEAD
+    uvicorn.run("unity:app", host="localhost", port=12345)
+=======
 # Define the FastAPI endpoint
 @app.post("/nlp")
 async def process_input(request: Request):
@@ -167,3 +250,8 @@ async def process_map_with_llm(request: Request):
 # Run the FastAPI app
 if __name__ == "__main__":
     uvicorn.run("unity:app", host="127.0.0.1", port=12345, reload=True)
+>>>>>>> main
+=======
+    uvicorn.run("unity:app", host="localhost", port=12345)
+>>>>>>> main
+>>>>>>> Block_Agent_Behavior
