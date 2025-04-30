@@ -25,7 +25,9 @@ import base64
 
 # Load environment variables from .env file
 load_dotenv()
-API_KEY = os.getenv('OPEN_API_KEY')
+API_KEY = os.getenv("OPEN_API_KEY")
+if not API_KEY:
+    raise RuntimeError("Missing OPENAI_API_KEY in .env!")
 
 sys_prompt = """
     You are an intelligent survival agent in a hostile environment. Your primary goal is to make strategic decisions 
