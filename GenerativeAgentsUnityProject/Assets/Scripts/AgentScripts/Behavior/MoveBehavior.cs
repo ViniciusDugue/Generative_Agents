@@ -8,7 +8,7 @@ public class MoveBehavior : AgentBehavior
     public NavMeshAgent agent;
     public Vector3 target;
 
-    override protected void Awake()
+    void Awake()
     {
         target = this.gameObject.transform.position;
         agent = GetComponent<NavMeshAgent>();
@@ -19,7 +19,7 @@ public class MoveBehavior : AgentBehavior
         Debug.Log($"MoveBehavior target set to: {target}");
     }
 
-    protected override void OnEnable()
+    void OnEnable()
     {
 
         if (agent != null)
@@ -28,7 +28,7 @@ public class MoveBehavior : AgentBehavior
         }
     }
 
-    protected override void OnDisable()
+    void OnDisable()
     {
         if (agent != null)
         {

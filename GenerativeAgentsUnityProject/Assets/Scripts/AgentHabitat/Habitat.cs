@@ -23,6 +23,7 @@ public class Habitat : MonoBehaviour
     [Header("In‑Sim Variables")]
     [SerializeField]
     public int storedFood = 0;
+    public int storedBlocks = 0;
 
     private List<AgentHeal> waitingAgents = new List<AgentHeal>();
     private SphereCollider triggerCollider;

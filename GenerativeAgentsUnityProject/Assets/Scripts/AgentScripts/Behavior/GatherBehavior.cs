@@ -17,14 +17,14 @@ public class GatherBehavior : AgentBehavior
     /// <summary>
     /// Called when the script instance is loaded.
     /// </summary>
-    protected override void Awake()
+    void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         target = transform.position;
     }
     
     // Start is called before the first frame update.
-    protected override void  OnEnable()
+    void OnEnable()
     {
         if (agent != null)
         {
@@ -35,7 +35,7 @@ public class GatherBehavior : AgentBehavior
         agent.SetDestination(target);
     }
 
-    protected override void  OnDisable()
+    void  OnDisable()
     {
         if (agent != null)
         {

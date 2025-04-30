@@ -31,18 +31,18 @@ public class BlockAgent : AgentBehavior
 
     public static BlockAgent Instance;
 
-    protected override void Awake()
+    void Awake()
     {
         Instance = this;
     }
 
-    protected override void OnEnable()
+    void OnEnable()
     {
         startBehavior = true;
         interrupt = false;
     }
 
-    protected override void OnDisable()
+    void OnDisable()
     {
         // not sure if you want an agent to continue its task after being interrupted.
         currentState = AgentState.Idle;

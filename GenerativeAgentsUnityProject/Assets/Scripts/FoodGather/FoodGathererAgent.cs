@@ -4,7 +4,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Random = UnityEngine.Random;
 
-public class FoodGathererAgent : AgentBehavior
+public class FoodGathererAgent : Agent
 {
     public EnvironmentSettings m_EnvironmentSettings;
     public GameObject area;

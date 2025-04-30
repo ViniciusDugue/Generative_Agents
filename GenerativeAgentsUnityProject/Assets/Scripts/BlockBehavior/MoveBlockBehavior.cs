@@ -4,7 +4,6 @@ using System.Collections;
 
 public class MoveBlockBehavior : AgentBehavior
 {
-    // enum table for all block agent behavior states
     public enum AgentState
     {
         Idle,
@@ -12,181 +11,146 @@ public class MoveBlockBehavior : AgentBehavior
         WaitBeforePickup,
         PickUpBlock,
         WaitAfterPickup,
-        MoveToDestination,
-        DropBlock
+        MoveToHabitat,
+        DropBlockAtHabitat
     }
 
-    public GameObject targetBlock;
-    public GameObject destinationObject;
-    public NavMeshAgent navAgent;
-    public bool startBehavior = false;
-    public bool interrupt = false;
-    public float pickupRange = 2f;
-    public bool isHoldingBlock;
-    public float destinationStopDistance = 1f;
-    public float distToDestination;
-    private bool dropAtFront = false;
-    public GameObject destinationPrefab;
-    public AgentState currentState = AgentState.Idle;
-
-    public GameObject holdingBlock;
+    [Header("Block")]    
     public GameObject blockPrefab;
+    public GameObject targetBlock;
+
+    [Header("Agent Settings")]
+    public NavMeshAgent navAgent;
+    public float pickupRange = 2f;
+    public float destinationStopDistance = 1f;
+
+    [Header("Visuals")]
+    public GameObject holdingBlock;
+
+    [Header("Control Flags")]
+    private bool startBehavior = false;
+    private bool interrupt = false;
+    public AgentState currentState = AgentState.Idle;
 
     public static MoveBlockBehavior Instance;
 
-    protected override void Awake()
+    void Awake()
     {
         Instance = this;
+        holdingBlock?.SetActive(false);
     }
 
-    protected override void OnEnable()
+    void OnEnable()
     {
         startBehavior = true;
         interrupt = false;
     }
 
-    protected override void OnDisable()
+    void OnDisable()
     {
-        // not sure if you want an agent to continue its task after being interrupted.
+        // Reset state and stop agent
         currentState = AgentState.Idle;
         startBehavior = false;
-
         interrupt = false;
         if (navAgent.isOnNavMesh)
-        {
             navAgent.isStopped = true;
-        }
-        else
-        {
-            Debug.LogWarning("OnDisable: NavMeshAgent is not on a NavMesh.");
-        }
 
-        if (isHoldingBlock)
+        // Hide holding visual
+        holdingBlock?.SetActive(false);
+
+        // Spawn a new block in front of the agent
+        if (blockPrefab != null)
         {
-            EndSimMetricsUI.Instance.IncrementBlocksMoved();
-            holdingBlock?.SetActive(false);
-            targetBlock = Instantiate(blockPrefab, transform.position + transform.forward + new Vector3(0f,1f,0f), Quaternion.identity);
-            isHoldingBlock = false;
+            Vector3 spawnPos = transform.position + transform.forward * pickupRange;
+            Instantiate(blockPrefab, spawnPos, Quaternion.identity);
         }
-    
-        // navAgent.SetDestination(transform.position);
     }
 
-    public void SetBlockAgentData(GameObject targetBlockObject, Vector3 destinationPos)
+    /// <summary>
+    /// Assign which block to fetch; the agent will auto‐deliver to Habitat.Instance.
+    /// </summary>
+    public void SetBlockAgentData(GameObject targetBlockObject)
     {
         targetBlock = targetBlockObject;
-        destinationObject = Instantiate(destinationPrefab, destinationPos,Quaternion.identity);
-
     }
+
     void Update()
     {
-
+        // Honor interruption flag
+        navAgent.isStopped = interrupt;
         if (interrupt)
-        {
-            navAgent.isStopped = true;
-            if (currentState == AgentState.MoveToDestination)
-            {
-                dropAtFront = true;
-            }
-        }
-        else
-        {
-            navAgent.isStopped = false;
-        }
+            return;
+
         switch (currentState)
         {
-            // idle position for start and interrupt
             case AgentState.Idle:
-                if (startBehavior)
+                if (startBehavior && targetBlock != null)
                 {
                     currentState = AgentState.MoveToBlock;
-                    if (targetBlock != null)
-                    {
-                        navAgent.SetDestination(targetBlock.transform.position);
-                    }
+                    navAgent.SetDestination(targetBlock.transform.position);
                 }
                 break;
-            // move towards the block
+
             case AgentState.MoveToBlock:
                 if (targetBlock != null)
                 {
                     navAgent.SetDestination(targetBlock.transform.position);
-                    float distToBlock = Vector3.Distance(transform.position, targetBlock.transform.position);
-                    if (distToBlock <= pickupRange && !interrupt)
+                    if (Vector3.Distance(transform.position, targetBlock.transform.position) <= pickupRange)
                     {
                         currentState = AgentState.WaitBeforePickup;
                         StartCoroutine(WaitBeforePickupCoroutine());
                     }
                 }
                 break;
+
             case AgentState.WaitBeforePickup:
+                // waiting…
                 break;
-            // pick up the block
+
             case AgentState.PickUpBlock:
-                // holds the block above agent
                 if (targetBlock != null)
                 {
                     Destroy(targetBlock);
                     targetBlock = null;
-
                     holdingBlock?.SetActive(true);
                 }
-
-                isHoldingBlock = true;
                 currentState = AgentState.WaitAfterPickup;
                 StartCoroutine(WaitAfterPickupCoroutine());
                 break;
-            //wait after pickup
+
             case AgentState.WaitAfterPickup:
+                // waiting…
                 break;
-            case AgentState.MoveToDestination:
-                if (destinationObject != null)
+
+            case AgentState.MoveToHabitat:
+                if (Habitat.Instance != null)
                 {
-                    navAgent.SetDestination(destinationObject.transform.position);
-                    distToDestination = Vector3.Distance(transform.position, destinationObject.transform.position);
-                    if (distToDestination <= destinationStopDistance && !interrupt)
-                    {
-                        currentState = AgentState.DropBlock;
-                    }
+                    Vector3 habitatPos = Habitat.Instance.transform.position;
+                    navAgent.SetDestination(habitatPos);
+                    if (Vector3.Distance(transform.position, habitatPos) <= destinationStopDistance)
+                        currentState = AgentState.DropBlockAtHabitat;
                 }
                 break;
-            // drop block by swetting to position of destination
-            case AgentState.DropBlock:
+
+            case AgentState.DropBlockAtHabitat:
                 holdingBlock?.SetActive(false);
-                
+                Habitat.Instance.storedBlocks++;
                 EndSimMetricsUI.Instance.IncrementBlocksMoved();
-                if (dropAtFront)
-                {
-                    isHoldingBlock = false;
-                    targetBlock = Instantiate(blockPrefab, transform.position + transform.forward+ new Vector3(0f,1f,0f), Quaternion.identity);
-                }
-                else if (destinationObject != null)
-                {   
-                    isHoldingBlock = false;
-                    targetBlock = Instantiate(blockPrefab, transform.position + transform.forward+ new Vector3(0f,1f,0f), Quaternion.identity);
-                }
                 currentState = AgentState.Idle;
                 startBehavior = false;
-                dropAtFront = false;
                 break;
         }
     }
 
-    //wait before picking up block
-    IEnumerator WaitBeforePickupCoroutine()
+    private IEnumerator WaitBeforePickupCoroutine()
     {
         yield return new WaitForSeconds(1f);
         currentState = AgentState.PickUpBlock;
     }
-    // wait coroutine after picking up block
-    IEnumerator WaitAfterPickupCoroutine()
+
+    private IEnumerator WaitAfterPickupCoroutine()
     {
         yield return new WaitForSeconds(1f);
-        currentState = AgentState.MoveToDestination;
-        if (destinationObject != null)
-        {
-            navAgent.SetDestination(destinationObject.transform.position);
-        }
+        currentState = AgentState.MoveToHabitat;
     }
 }
-

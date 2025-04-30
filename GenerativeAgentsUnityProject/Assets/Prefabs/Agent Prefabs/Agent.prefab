@@ -1475,7 +1475,6 @@ GameObject:
   - component: {fileID: 5279344047456461428}
   - component: {fileID: 3586588434944278327}
   - component: {fileID: 3081395510317380987}
-  - component: {fileID: 148164363397645315}
   - component: {fileID: 7039869131580968681}
   - component: {fileID: 7275002512134994195}
   - component: {fileID: 1713156178617753578}
@@ -1484,11 +1483,7 @@ GameObject:
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
   - component: {fileID: 8813810141994640850}
-  - component: {fileID: 4155786854146672970}
   - component: {fileID: 5348884404428321261}
-  - component: {fileID: 7887430557503516784}
-  - component: {fileID: 7518629946175017511}
-  - component: {fileID: -2325263815777301736}
   - component: {fileID: 6572964766931281634}
   - component: {fileID: 2381536804232584231}
   - component: {fileID: 2371115499887372965}
@@ -1578,7 +1573,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -1372625422
   m_Radius: 0.5
-  m_Speed: 4
+  m_Speed: 8
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -1590,37 +1585,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &148164363397645315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BrainParameters:
-    VectorObservationSize: 0
-    NumStackedVectorObservations: 1
-    m_ActionSpec:
-      m_NumContinuousActions: 3
-      BranchSizes: 02000000
-    VectorActionSize: 
-    VectorActionDescriptions: []
-    VectorActionSpaceType: 0
-    hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 2f1fdefcd1e3b174886a6050eb024d98, type: 3}
-  m_InferenceDevice: 2
-  m_BehaviorType: 2
-  m_BehaviorName: GridFoodCollector
-  TeamId: 0
-  m_UseChildSensors: 1
-  m_UseChildActuators: 1
-  m_DeterministicInference: 0
-  m_ObservableAttributeHandling: 0
 --- !u!114 &7039869131580968681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1628,7 +1592,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 02c4cddf4e1a5ce4899f142631ad628c, type: 3}
   m_Name: 
@@ -1657,31 +1621,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6c44b58edb9cd54fb8ceaa2ec0ee31c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   exhaustionRate: 0.1
   targetBlock: {fileID: 0}
-  destinationObject: {fileID: 0}
   navAgent: {fileID: 3081395510317380987}
-  startBehavior: 0
-  interrupt: 0
   pickupRange: 2
-  isHoldingBlock: 0
   destinationStopDistance: 1
-  distToDestination: 0
-  destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
-    type: 3}
-  currentState: 0
   holdingBlock: {fileID: 1571550313658887239}
-  blockPrefab: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
-    type: 3}
+  storedBlocks: 0
+  currentState: 0
 --- !u!114 &1713156178617753578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1716,10 +1668,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f11643a90aaf842b3767b619b557ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   exhaustionRate: 0.1
   n_blocks_required:
   - {fileID: 0}
@@ -1753,15 +1701,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 468d594e562f3ea49a5227331c22ec67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   exhaustionRate: 0.1
   agent: {fileID: 3081395510317380987}
   target: {x: 0, y: 0, z: 0}
@@ -1782,10 +1726,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9ef40be8594fe44a528c4efb6356b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   exhaustionRate: 0.1
   rotationSpeed: {x: 0, y: 100, z: 0}
 --- !u!114 &4361704349902786676
@@ -1800,10 +1740,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8520a0e6090b6c42966fa34e182c016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   exhaustionRate: 0.5
   agent: {fileID: 3081395510317380987}
   target: {x: 105.93, y: 7.1, z: 107.9}
@@ -1819,29 +1755,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 524334921fde35c4187815186e352b07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
   exhaustionRate: 0.1
   fleeDistance: 10
   rotationSpeed: 5
   sampleDistance: 2
---- !u!114 &4155786854146672970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DecisionPeriod: 5
-  DecisionStep: 0
-  TakeActionsBetweenDecisions: 1
 --- !u!114 &5348884404428321261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1855,99 +1772,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugCommandLineOverride: 
---- !u!114 &7887430557503516784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SensorName: RayPerceptionSensor1
-  m_DetectableTags:
-  - food
-  - agent
-  - wall
-  m_RaysPerDirection: 0
-  m_MaxRayDegrees: 180
-  m_SphereCastRadius: 0.5
-  m_RayLength: 70
-  m_RayLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967291
-  m_ObservationStacks: 1
-  m_AlternatingRayOrder: 1
-  m_UseBatchedRaycasts: 1
-  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
-  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 1
-  m_EndVerticalOffset: 0
---- !u!114 &7518629946175017511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SensorName: RayPerceptionSensor2
-  m_DetectableTags:
-  - food
-  - agent
-  - wall
-  m_RaysPerDirection: 0
-  m_MaxRayDegrees: 180
-  m_SphereCastRadius: 0.5
-  m_RayLength: 70
-  m_RayLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967291
-  m_ObservationStacks: 1
-  m_AlternatingRayOrder: 1
-  m_UseBatchedRaycasts: 1
-  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
-  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 2
-  m_EndVerticalOffset: 6
---- !u!114 &-2325263815777301736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6bb6b867a41448888c1cd4f99643ad71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SensorName: RayPerceptionSensor3
-  m_DetectableTags:
-  - food
-  - agent
-  - wall
-  m_RaysPerDirection: 30
-  m_MaxRayDegrees: 180
-  m_SphereCastRadius: 0.5
-  m_RayLength: 70
-  m_RayLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967291
-  m_ObservationStacks: 1
-  m_AlternatingRayOrder: 1
-  m_UseBatchedRaycasts: 1
-  rayHitColor: {r: 1, g: 0, b: 0, a: 1}
-  rayMissColor: {r: 1, g: 1, b: 1, a: 1}
-  m_StartVerticalOffset: 0
-  m_EndVerticalOffset: -3
 --- !u!114 &6572964766931281634
 MonoBehaviour:
   m_ObjectHideFlags: 0
