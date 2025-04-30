@@ -5,6 +5,7 @@ using System.Collections;
 using System.Reflection;
 using UnityEngine;
 using Unity.MLAgents.Sensors;
+using AgentDataStructures;
 
 public class BehaviorManager : MonoBehaviour
 {
@@ -65,6 +66,13 @@ public class BehaviorManager : MonoBehaviour
     // NEW: Time tracking for enemy detection.
     private float enemyDetectionBuffer = 5f;
 
+    [Header("Block Tracking (Inspector)")]
+    public List<BlockPositionEntry> blockPositionsList = new List<BlockPositionEntry>();
+    public List<BlockMappingEntry>  blockMappingsList = new List<BlockMappingEntry>();
+
+    // Internal dictionaries for fast lookups
+    private Dictionary<string, Vector3>  _blockPositionsDict  = new Dictionary<string, Vector3>();
+    private Dictionary<string, GameObject> _blockMappingsDict = new Dictionary<string, GameObject>();
 
     public bool UpdateLLM
     {
@@ -404,6 +412,33 @@ public class BehaviorManager : MonoBehaviour
                         enemyCurrentlyDetected = true;
                         // lastEnemyDetectionTime = Time.time;
                         //Debug.Log($"Enemies Detected by Agent {agentID}!");
+                    }
+
+                    if (goHit.tag == "block")
+                    {
+                        string blockName = goHit.name;
+                        Vector3 pos = goHit.transform.position;
+
+                        // 1) Add to dictionary & list of positions
+                        if (!_blockPositionsDict.ContainsKey(blockName))
+                        {
+                            _blockPositionsDict[blockName] = pos;
+                            blockPositionsList.Add(new BlockPositionEntry {
+                                blockName = blockName,
+                                position  = pos
+                            });
+                            Debug.Log($"[BlockDetected] {blockName} @ {pos}");
+                        }
+
+                        // 2) Add to dictionary & list of mappings
+                        if (!_blockMappingsDict.ContainsKey(blockName))
+                        {
+                            _blockMappingsDict[blockName] = goHit;
+                            blockMappingsList.Add(new BlockMappingEntry {
+                                blockName   = blockName,
+                                blockObject = goHit
+                            });
+                        }
                     }
                 }
             }
