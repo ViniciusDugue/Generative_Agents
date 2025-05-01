@@ -67,12 +67,13 @@ public class BehaviorManager : MonoBehaviour
     private float enemyDetectionBuffer = 5f;
 
     [Header("Block Tracking (Inspector)")]
-    public List<BlockPositionEntry> blockPositionsList = new List<BlockPositionEntry>();
-    public List<BlockMappingEntry>  blockMappingsList = new List<BlockMappingEntry>();
+    [Header("Block Tracking (Inspector)")]
+    public List<BlockPositionEntry>  blockPositionsList  = new();
+    public List<BlockMappingEntry>   blockMappingsList   = new();
 
-    // Internal dictionaries for fast lookups
-    private Dictionary<string, Vector3>  blockPositionsDict  = new Dictionary<string, Vector3>();
-    private Dictionary<string, GameObject> blockMappingsDict = new Dictionary<string, GameObject>();
+    // internal lookup
+    private Dictionary<string, Vector2>    blockPositionsDict  = new();
+    private Dictionary<string, GameObject> blockMappingsDict   = new();
     public static readonly List<BehaviorManager> AllManagers = new();
 
     public bool UpdateLLM
@@ -288,7 +289,40 @@ public class BehaviorManager : MonoBehaviour
         }
 
     }
-        
+    
+    public void SetMoveBlockData(string blockName)
+    {
+        // look up the GameObject reference
+        if (!blockMappingsDict.TryGetValue(blockName, out var blockObj))
+        {
+            Debug.LogWarning($"[BehaviorManager] No block named “{blockName}” known to Agent {agentID}");
+            return;
+        }
+
+        // find your MoveBlockBehavior instance on this same GameObject
+        if (behaviors.ContainsKey("MoveBlockBehavior"))
+        {
+            MoveBlockBehavior MoveBlockBehavior = (MoveBlockBehavior)behaviors["MoveBlockBehavior"];
+            MoveBlockBehavior.SetBlockAgentData(blockObj);
+        }
+        else
+        {
+            Debug.LogError($"[BehaviorManager] MoveBlockBehavior not found on Agent {agentID}");
+        }
+    }
+    
+    public void RemoveBlock(string blockName)
+    {
+        // 1) private dicts
+        blockPositionsDict .Remove(blockName);
+        blockMappingsDict.Remove(blockName);
+
+        // 2) visible lists
+        blockPositionsList.RemoveAll (e => e.blockName == blockName);
+        blockMappingsList .RemoveAll (e => e.blockName == blockName);
+
+        Debug.Log($"[BehaviorManager] Block “{blockName}” removed from Agent {agentID}");
+    }
 
     private void StartExhaustionCoroutine()
     {
@@ -424,29 +458,30 @@ public class BehaviorManager : MonoBehaviour
                         // lastEnemyDetectionTime = Time.time;
                         //Debug.Log($"Enemies Detected by Agent {agentID}!");
                     }
-
                     if (goHit.tag == "block")
                     {
-                        string blockName = goHit.name;
-                        Vector3 pos = goHit.transform.position;
+                        string name = goHit.name;
+                        // project into XZ‐plane
+                        Vector3 pos3 = goHit.transform.position;
+                        Vector2 pos2 = new Vector2(pos3.x, pos3.z);
 
-                        // 1) Add to dictionary & list of positions
-                        if (!blockPositionsDict.ContainsKey(blockName))
+                        // 1) record position
+                        if (!blockPositionsDict.ContainsKey(name))
                         {
-                            blockPositionsDict[blockName] = pos;
+                            blockPositionsDict[name] = pos2;
                             blockPositionsList.Add(new BlockPositionEntry {
-                                blockName = blockName,
-                                position  = pos
+                                blockName = name,
+                                position  = pos2
                             });
-                            Debug.Log($"[BlockDetected] {blockName} @ {pos}");
+                            Debug.Log($"[BlockDetected] {name} @ {pos2}");
                         }
 
-                        // 2) Add to dictionary & list of mappings
-                        if (!blockMappingsDict.ContainsKey(blockName))
+                        // 2) record mapping
+                        if (!blockMappingsDict.ContainsKey(name))
                         {
-                            blockMappingsDict[blockName] = goHit;
+                            blockMappingsDict[name] = goHit;
                             blockMappingsList.Add(new BlockMappingEntry {
-                                blockName   = blockName,
+                                blockName   = name,
                                 blockObject = goHit
                             });
                         }
@@ -548,19 +583,6 @@ public class BehaviorManager : MonoBehaviour
 
         // Reset the daily food tally for the next day.
         depositedFood = 0;
-    }
-
-    public void RemoveBlock(string blockName)
-    {
-        // 1) private dicts
-        blockPositionsDict .Remove(blockName);
-        blockMappingsDict.Remove(blockName);
-
-        // 2) visible lists
-        blockPositionsList.RemoveAll (e => e.blockName == blockName);
-        blockMappingsList .RemoveAll (e => e.blockName == blockName);
-
-        Debug.Log($"[BehaviorManager] Block “{blockName}” removed from Agent {agentID}");
     }
 
 

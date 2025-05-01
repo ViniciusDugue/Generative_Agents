@@ -6,14 +6,14 @@ namespace AgentDataStructures
     [Serializable]
     public class BlockPositionEntry
     {
-        public string blockName;
-        public Vector3 position;
+        public string   blockName;
+        public Vector2  position;
     }
 
     [Serializable]
     public class BlockMappingEntry
     {
-        public string blockName;
+        public string     blockName;
         public GameObject blockObject;
     }
 }
