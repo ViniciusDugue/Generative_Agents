@@ -71,8 +71,9 @@ public class BehaviorManager : MonoBehaviour
     public List<BlockMappingEntry>  blockMappingsList = new List<BlockMappingEntry>();
 
     // Internal dictionaries for fast lookups
-    private Dictionary<string, Vector3>  _blockPositionsDict  = new Dictionary<string, Vector3>();
-    private Dictionary<string, GameObject> _blockMappingsDict = new Dictionary<string, GameObject>();
+    private Dictionary<string, Vector3>  blockPositionsDict  = new Dictionary<string, Vector3>();
+    private Dictionary<string, GameObject> blockMappingsDict = new Dictionary<string, GameObject>();
+    public static readonly List<BehaviorManager> AllManagers = new();
 
     public bool UpdateLLM
     {
@@ -92,6 +93,16 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        AllManagers.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        AllManagers.Remove(this);
+    }
+    
     void Start()
     {
         // Populate the dictionary with all Agent components, using their script names as keys
@@ -420,9 +431,9 @@ public class BehaviorManager : MonoBehaviour
                         Vector3 pos = goHit.transform.position;
 
                         // 1) Add to dictionary & list of positions
-                        if (!_blockPositionsDict.ContainsKey(blockName))
+                        if (!blockPositionsDict.ContainsKey(blockName))
                         {
-                            _blockPositionsDict[blockName] = pos;
+                            blockPositionsDict[blockName] = pos;
                             blockPositionsList.Add(new BlockPositionEntry {
                                 blockName = blockName,
                                 position  = pos
@@ -431,9 +442,9 @@ public class BehaviorManager : MonoBehaviour
                         }
 
                         // 2) Add to dictionary & list of mappings
-                        if (!_blockMappingsDict.ContainsKey(blockName))
+                        if (!blockMappingsDict.ContainsKey(blockName))
                         {
-                            _blockMappingsDict[blockName] = goHit;
+                            blockMappingsDict[blockName] = goHit;
                             blockMappingsList.Add(new BlockMappingEntry {
                                 blockName   = blockName,
                                 blockObject = goHit
@@ -538,5 +549,19 @@ public class BehaviorManager : MonoBehaviour
         // Reset the daily food tally for the next day.
         depositedFood = 0;
     }
+
+    public void RemoveBlock(string blockName)
+    {
+        // 1) private dicts
+        blockPositionsDict .Remove(blockName);
+        blockMappingsDict.Remove(blockName);
+
+        // 2) visible lists
+        blockPositionsList.RemoveAll (e => e.blockName == blockName);
+        blockMappingsList .RemoveAll (e => e.blockName == blockName);
+
+        Debug.Log($"[BehaviorManager] Block “{blockName}” removed from Agent {agentID}");
+    }
+
 
 }

@@ -42,6 +42,9 @@ TagManager:
   - destination
   - Default
   - pest
+  - targetBlock
+  - ConstructionSite
+  - Built_Wall
   layers:
   - Default
   - TransparentFX
@@ -55,7 +58,7 @@ TagManager:
   - FoodSpawn
   - EnemySpawn
   - AgentSpawn
-  - 
+  - Block
   - 
   - 
   - 

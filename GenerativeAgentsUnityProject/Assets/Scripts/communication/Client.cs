@@ -162,6 +162,7 @@ public class Client : MonoBehaviour
             foodLocations = GetFoodLocationsAsList(bm.foodLocations),
             mapData = mapData,
             blocksStored = habitatComponent.storedBlocks,
+            blockPositions = bm.blockPositionsList,
         };
 
         string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
