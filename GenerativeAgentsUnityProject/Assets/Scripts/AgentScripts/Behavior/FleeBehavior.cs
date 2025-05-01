@@ -1,3 +1,4 @@
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,7 +29,7 @@ public class FleeBehavior : AgentBehavior
     private Transform lastEnemy;
     private Vector3 fleeDestination;
 
-    private void Awake()
+    protected override void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         behaviorManager = GetComponent<BehaviorManager>();
