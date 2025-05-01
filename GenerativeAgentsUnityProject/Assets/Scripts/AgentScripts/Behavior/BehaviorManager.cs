@@ -13,12 +13,12 @@ public class BehaviorManager : MonoBehaviour
     private static int globalAgentID = 1;  // Shared counter for unique IDs
     public float fitnessScore = 0.0f;
     public float exhaustion;
+    [SerializeField] public int RequiredFood => agentHeal.RequiredFood;
     [SerializeField] public int CurrentHunger => agentHeal.CurrentHunger;
     
     public bool refreshLLM = false;
 
     [Header("Advanced Variables")]
-    [SerializeField] private int requiredFood = 5;
     [Tooltip("Maximum amount of food the agent can carry at once.")]
     [SerializeField]
     private int maxFood = 3;
@@ -163,6 +163,7 @@ public class BehaviorManager : MonoBehaviour
 
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
         }
+        calculateFitnessScore();
     }
 
     
@@ -394,12 +395,9 @@ public class BehaviorManager : MonoBehaviour
                     {
                         Debug.Log("Food is Found");
                         if(gatherBehavior != null) {
-                            gatherBehavior.SetFoodTarget(goHit);
                             gatherBehavior.isGathering = true;
+                            gatherBehavior.SetFoodTarget(goHit);
                         }
-                    }
-                    else if(goHit.tag != "food") {
-                        gatherBehavior.isGathering = false;
                     }
 
                     // Check if the hit object is an enemy agent
@@ -466,7 +464,7 @@ public class BehaviorManager : MonoBehaviour
     }
 
     public void eatPersonalFoodSupply() {
-        if (CurrentHunger <= requiredFood) {
+        if (CurrentHunger <= RequiredFood) {
             agentHeal.ReceiveFood(1);  // Increase hunger by 1 unit for each food consumed.= 1;
             currentFood -= 1;
         }
@@ -482,9 +480,9 @@ public class BehaviorManager : MonoBehaviour
         // Using depositedFood as the count of food this agent deposited today.
         // int deposited = Mathf.RoundToInt(depositedFood);
 
-        if (CurrentHunger < requiredFood)
+        if (CurrentHunger < RequiredFood)
         {
-            int missingFood = requiredFood - CurrentHunger;
+            int missingFood = RequiredFood - CurrentHunger;
             // Parameter: Percentage of max health damage per missing food portion.
             float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
             AgentHealth agentHealth = GetComponent<AgentHealth>();
@@ -502,7 +500,7 @@ public class BehaviorManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Agent {agentID} met the food requirement with {requiredFood} portions.");
+            Debug.Log($"Agent {agentID} met the food requirement with {RequiredFood} portions.");
         }
 
         // Reset the daily food tally for the next day.

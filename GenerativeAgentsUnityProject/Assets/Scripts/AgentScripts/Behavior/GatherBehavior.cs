@@ -36,13 +36,13 @@ public class GatherBehavior : AgentBehavior
         agent.updatePosition = true;
 
         // 1) Turn off auto-braking so it never slows before goal
-        agent.autoBraking = false;
+        // agent.autoBraking = false;
 
         // 2) Make the brake zone almost zero
-        agent.stoppingDistance = 2f;
+        // agent.stoppingDistance = 2f;
 
         // 3) Crank up acceleration so it snaps to speed
-        agent.acceleration = 20f;
+        // agent.acceleration = 20f;
 
         target = Vector3.positiveInfinity;
     }
@@ -56,7 +56,10 @@ public class GatherBehavior : AgentBehavior
         }
         // Choose an initial random destination.
         resetTargetCoroutine = StartCoroutine(ResetTarget());
-        PickNewWanderTarget();
+        if(!isGathering) {
+            PickNewWanderTarget();
+        }
+        
     }
 
     protected override void  OnDisable()
@@ -173,12 +176,18 @@ public class GatherBehavior : AgentBehavior
     public void SetFoodTarget(GameObject food)
     {
         isGathering = true;
+        StopCoroutine(ResetTarget());
         // If we already have a food target that still exists, bail out
         if (currentFood != null)
             return;
 
-        if (!manager.canCarryMoreFood())
+        if (!manager.canCarryMoreFood()) // TODO: Fix this logic
+        {
+            agent.isStopped = true;
+            Debug.Log("Agent is full, cannot carry any more food");
             return;
+        }
+            
 
         // Assign and chase
         currentFood = food;
@@ -207,10 +216,38 @@ public class GatherBehavior : AgentBehavior
             Satiate();
             collision.gameObject.GetComponent<FoodScript>().OnEaten();
             this.gameObject.GetComponent<BehaviorManager>().updateFoodCount();
+
+            // Remove this food so you don’t chase it again
+            currentFood = null;
+
+            // If you can still carry more *and* there are other active food spawns, BehaviorManager
+            // will raycast them and call SetFoodTarget again automatically.
+            // Otherwise, we’ve got nothing left (or we’re full), so clear gathering:
+            if (!manager.canCarryMoreFood())
+            {
+                ClearFoodTarget();
+                // If we’re full, we want to just stand still:
+            //     if (!manager.canCarryMoreFood())
+            //         agent.isStopped = true;
+            }
         }
 
     }
 
+    /// <summary>
+    /// Call this when we’ve eaten the last food or canCarryMoreFood() is false.
+    /// </summary>
+    public void ClearFoodTarget()
+    {
+        // Stop chasing
+        isGathering   = false;
+        currentFood   = null;
+        agent.isStopped = true;
+        // // restart wander logic
+        // if (resetTargetCoroutine == null)
+        //     resetTargetCoroutine = StartCoroutine(ResetTarget());
+        // PickNewWanderTarget();
+    }
 
     /// <summary>
     /// Sets the agent state to satiated and provides visual feedback by changing material.
@@ -259,4 +296,7 @@ public class GatherBehavior : AgentBehavior
             // loop and refresh origin automatically
         }
     }
+
+
+
 }
