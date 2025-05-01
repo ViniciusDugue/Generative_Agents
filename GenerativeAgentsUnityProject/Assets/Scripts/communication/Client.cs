@@ -11,7 +11,7 @@ using UnityEditor.UIElements;
 using System.Net;
 using System;
 using NUnit.Framework.Constraints;
-
+using AgentDataStructures;
 
 public class Client : MonoBehaviour
 {
@@ -161,8 +161,8 @@ public class Client : MonoBehaviour
             activeFoodLocations = GetFoodLocationsAsList(bm.activeFoodLocations),
             foodLocations = GetFoodLocationsAsList(bm.foodLocations),
             mapData = mapData,
-            blocksStored = habitatComponent.storedBlocks,
-            blockPositions = bm.blockPositionsList,
+            habitatStoredBlocks = habitatComponent.storedBlocks,
+            blockLocations = GetBlockLocationsAsList(bm.blockPositionsList),
         };
 
         string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);
@@ -219,6 +219,16 @@ public class Client : MonoBehaviour
                 {
                     Debug.LogWarning("[Client] No location provided in LLM response.");
                 }
+
+                if (responseJson.ContainsKey("blockToMove"))
+                {
+                    Debug.Log($"[Client] Setting move target for Agent {agentID} using location from response.");
+                    agentDict[agentID].GetComponent<BehaviorManager>().SetMoveBlockData(responseJson["blockToMove"].ToString());
+                }
+                else
+                {
+                    Debug.LogWarning("[Client] No location provided in LLM response.");
+                }
             }
             else
             {
@@ -250,6 +260,26 @@ public class Client : MonoBehaviour
             positionsList.Add(positionDict);
         }
         return positionsList;
+    }
+
+    // inside your Client class, after GetFoodLocationsAsList:
+    private List<Dictionary<string, Dictionary<string, float>>> GetBlockLocationsAsList(List<BlockPositionEntry> blocks)
+    {
+        var list = new List<Dictionary<string, Dictionary<string, float>>>();
+        foreach (var entry in blocks)
+        {
+            // Unity's Vector2 stores x and y; we treat y as your "z" axis
+            var coords = new Dictionary<string, float>
+            {
+                ["x"] = entry.position.x,
+                ["z"] = entry.position.y
+            };
+            list.Add(new Dictionary<string, Dictionary<string, float>>
+            {
+                [entry.blockName] = coords
+            });
+        }
+        return list;
     }
 
 }

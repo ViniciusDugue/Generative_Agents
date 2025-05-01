@@ -74,6 +74,11 @@ Available Actions & Effects:
   *Cost:* +0.5 exhaustion per second.  
   *Purpose:* Allows relocation to food sources or strategic positions.
 
+- **MoveBlockBehavior:**  
+*Effect:* Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.  
+*Cost:* +0.5 exhaustion per second.  
+*Purpose:* Allows relocation to food sources or strategic positions.
+
 Survival Considerations:
 - Fleeing is used only when an enemy is detected.
 - Food only exists at known food locations; gathering food requires exploration.
@@ -112,6 +117,8 @@ Agent Inputs (provided every 20 seconds):
   - **habitatLocation:** { x: float, z: float } – The location of your habitat.
   - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
   - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
+  - **habitatStoredBlocks:** int – The number of food items you are currently holding.
+  - **blockLocations:** list of {blockname: string,  blockLocation:{ x: float, z: float } } – Known block locations in the environment.
 
 Fitness Score Overview:
   - This score is a weighted sum of your stored food, collected food, deposited food, health loss, food stolen, and the accessibility of your base and food locations to enemies.
@@ -139,6 +146,8 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
   "habitatLocation": { "x": 65.6, "z": 111.9 },
   "activeFoodLocations": [ { "x": 98.1, "z": 92.6 } ],
   "foodLocations":   [ { "x": 98.1, "z": 92.6 } ],
+  "habitatStoredBlocks": 5,
+  "blocklocations": [{"Block(1)":{"x": 60.2, "y": 40.5} }]
 }
 </user>
 
@@ -147,7 +156,8 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
     "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food.",
     "eatCurrentFoodSupply": true,
     "next_action": "MoveBehavior",
-    "location": { "x": 65.6, "z": 111.9 }
+    "location": { "x": 65.6, "z": 111.9 },
+    "blockToMove": "Block(1)",
 }
 </assistant>
 
