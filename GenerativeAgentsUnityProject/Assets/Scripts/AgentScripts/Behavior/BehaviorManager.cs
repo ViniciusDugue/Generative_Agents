@@ -317,6 +317,7 @@ public class BehaviorManager : MonoBehaviour
         {
             // If timer expires without interruption, set the flag to true.
             UpdateLLM = true;
+            mapDataExist = true;
             timer = interval;  // reset the timer after triggering
             lastUpdateLLM = UpdateLLM; // update the last known value
         }
@@ -393,8 +394,12 @@ public class BehaviorManager : MonoBehaviour
                     {
                         Debug.Log("Food is Found");
                         if(gatherBehavior != null) {
-                            gatherBehavior.SetFoodTarget(goHit.transform.position);
+                            gatherBehavior.SetFoodTarget(goHit);
+                            gatherBehavior.isGathering = true;
                         }
+                    }
+                    else if(goHit.tag != "food") {
+                        gatherBehavior.isGathering = false;
                     }
 
                     // Check if the hit object is an enemy agent

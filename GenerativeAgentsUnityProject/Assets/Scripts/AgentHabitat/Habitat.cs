@@ -170,7 +170,7 @@ public class Habitat : MonoBehaviour
             }
             else
             {
-                Debug.Log($"Waiting agents: {waitingAgents.Count} of expected {expectedAgentCount}.");
+                // Debug.Log($"Waiting agents: {waitingAgents.Count} of expected {expectedAgentCount}.");
             }
         }
     }
