@@ -16,7 +16,7 @@ public class Habitat : MonoBehaviour
     [Tooltip("Time interval (in seconds) at which food is dispensed.")]
     public float dispenseInterval = 5f;
     [Tooltip("The food portion value dispensed to each agent.")]
-    public int foodPortionValue = 10;
+    public int foodPortionValue = 1;
     [Tooltip("Expected number of agents (or threshold of agents) that should be registered before dispensing.")]
     public int expectedAgentCount = 2;
 
@@ -156,16 +156,19 @@ public class Habitat : MonoBehaviour
                     }
                 }
 
-                if (allDropped)
+                if (allDropped && storedFood > 0)
                 {
                     Debug.Log("All registered agents have dropped their food. Dispensing food based on fitness.");
                     DispenseFood();
                     waitingAgents.Clear();
                     break;
                 }
-                else
+                else if (!allDropped)
                 {
                     Debug.Log("Waiting for all agents to drop their food...");
+                }
+                else if (storedFood <= 0) {
+                    Debug.Log("No food available to dispense.");
                 }
             }
             else
@@ -188,13 +191,28 @@ public class Habitat : MonoBehaviour
         Debug.Log("Dispensing food in the following order:");
         foreach (var agent in sortedAgents)
         {
-            var bm = agent.GetComponent<BehaviorManager>();
-            float fitness = bm.calculateFitnessScore();
-            Debug.Log($"{agent.name}: Fitness = {fitness}, AgentID = {bm.agentID}");
+            if (storedFood > 0) {
+                // Get Agent Food & Fitness Metrics
+                var bm = agent.GetComponent<BehaviorManager>();
+                var ah = agent.GetComponent<AgentHeal>();
+                float fitness = bm.FitnessScore;
+                int remainingHunger = bm.RequiredFood - bm.CurrentHunger;
 
-            agent.ReceiveFood(foodPortionValue);
-            storedFood = Mathf.Max(0, storedFood - foodPortionValue);
-            Debug.Log($"Stored food remaining: {storedFood}");
+                Debug.Log($"{agent.name}: Fitness = {fitness}, AgentID = {bm.agentID}");
+                // Calculate if there's enough food to dispense to fully satisfy this agent
+                if (remainingHunger > storedFood) {
+                    Debug.Log("Not Enough Food to fully satisfy Agent Hunger");
+                    agent.ReceiveFood(storedFood);
+                    RemoveFood(storedFood);
+                    break;
+                }
+
+                // Dispense food to the agent
+                agent.ReceiveFood(remainingHunger);
+                RemoveFood(remainingHunger);
+                Debug.Log($"Stored food remaining: {storedFood}");
+            }
+            
         }
     }
 
@@ -244,6 +262,9 @@ public class Habitat : MonoBehaviour
         if(storedFood - foodRemoved>0)
         {
             storedFood -=foodRemoved;
+        }
+        else{
+            storedFood = 0;
         }
         
     }
