@@ -9,8 +9,8 @@ public class AgentHeal : MonoBehaviour
     public int currentHealth;
 
     [Header("Hunger Settings")]
-    [Tooltip("The maximum hunger value. When hunger is full, healing begins.")]
-    public int maxHunger = 100;
+    [Tooltip("The Required amount of Food to satisfy hunger. When hunger is full, healing begins.")]
+    public int RequiredFood = 5;
     [Tooltip("Current hunger level. Agents start out hungry.")]
     [SerializeField] private int currentHunger = 0;
     public int CurrentHunger => currentHunger;
@@ -45,7 +45,6 @@ public class AgentHeal : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        currentHunger = maxHunger;
 
         if (healthBar != null)
         {
@@ -61,15 +60,15 @@ public class AgentHeal : MonoBehaviour
     {
         // Increase hunger based on the food portion dispensed.
         currentHunger += portion;
-        if (currentHunger > maxHunger)
+        if (currentHunger > RequiredFood)
         {
-            currentHunger = maxHunger;
+            currentHunger = RequiredFood;
         }
 
         foodPortionsReceived++;
 
         // Once hunger is full, start the healing process.
-        if (currentHunger >= maxHunger && !isHealing)
+        if (currentHunger >= RequiredFood && !isHealing)
         {
             StartCoroutine(HealOverTime());
         }
@@ -82,7 +81,7 @@ public class AgentHeal : MonoBehaviour
     {
         isHealing = true;
         // Heal continuously every healingInterval until health is full.
-        while (currentHealth < maxHealth && currentHunger >= maxHunger)
+        while (currentHealth < maxHealth && currentHunger >= RequiredFood)
         {
             currentHealth += healingPerTick;
             if (currentHealth > maxHealth)
