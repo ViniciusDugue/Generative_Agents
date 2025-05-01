@@ -222,7 +222,7 @@ public class Client : MonoBehaviour
 
                 if (responseJson.ContainsKey("blockToMove"))
                 {
-                    Debug.Log($"[Client] Setting move target for Agent {agentID} using location from response.");
+                    Debug.Log($"[Client] Setting Block to return to Habitat for Agent {agentID}");
                     agentDict[agentID].GetComponent<BehaviorManager>().SetMoveBlockData(responseJson["blockToMove"].ToString());
                 }
                 else

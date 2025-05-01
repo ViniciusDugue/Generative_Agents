@@ -289,27 +289,52 @@ public class BehaviorManager : MonoBehaviour
         }
 
     }
-    
-    public void SetMoveBlockData(string blockName)
+
+    public void SetMoveBlockData(object blockToMove)
     {
-        // look up the GameObject reference
-        if (!blockMappingsDict.TryGetValue(blockName, out var blockObj))
+        if (blockToMove == null)
         {
-            Debug.LogWarning($"[BehaviorManager] No block named “{blockName}” known to Agent {agentID}");
+            Debug.LogWarning($"[BehaviorManager] SetMoveBlockData called with null on Agent {agentID}");
             return;
         }
 
-        // find your MoveBlockBehavior instance on this same GameObject
-        if (behaviors.ContainsKey("MoveBlockBehavior"))
+        // same pattern as SetMoveTarget
+        if (blockToMove is Newtonsoft.Json.Linq.JObject dict && dict["blockName"] != null)
         {
-            MoveBlockBehavior MoveBlockBehavior = (MoveBlockBehavior)behaviors["MoveBlockBehavior"];
-            MoveBlockBehavior.SetBlockAgentData(blockObj);
+            try
+            {
+                // extract your blockName
+                string blockName = dict["blockName"]!.ToObject<string>();
+                
+                // lookup
+                if (!blockMappingsDict.TryGetValue(blockName, out var blockObj))
+                {
+                    Debug.LogWarning($"[BehaviorManager] No block named “{blockName}” known to Agent {agentID}");
+                    return;
+                }
+
+                // hand off to your MoveBlockBehavior
+                if (behaviors.TryGetValue("MoveBlockBehavior", out var raw))
+                {
+                    var mb = raw as MoveBlockBehavior;
+                    mb!.SetBlockAgentData(blockObj);
+                }
+                else
+                {
+                    Debug.LogError($"[BehaviorManager] MoveBlockBehavior not found on Agent {agentID}");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[BehaviorManager] Error parsing blockToMove for Agent {agentID}: {e}");
+            }
         }
         else
         {
-            Debug.LogError($"[BehaviorManager] MoveBlockBehavior not found on Agent {agentID}");
+            Debug.LogError($"[BehaviorManager] SetMoveBlockData received invalid payload on Agent {agentID}");
         }
     }
+
     
     public void RemoveBlock(string blockName)
     {

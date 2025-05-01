@@ -1,7 +1,6 @@
 from pydantic import BaseModel, Field, ConfigDict
 from enum import Enum
 from typing import Literal, Optional
-
 class Location(BaseModel):
     """
     Represents the location with x, y, and z coordinates.
@@ -13,6 +12,14 @@ class Location(BaseModel):
     z: float = Field(
         ...,
         description="The z coordinate of the location"
+    )
+class BlockToMove(BaseModel):
+    """
+    Represents the block to Move to Habitat using a string blockname
+    """
+    blockName: str = Field(
+        ...,
+        description = "string of the blockname"
     )
 
 class AgentResponse(BaseModel):
@@ -29,7 +36,7 @@ class AgentResponse(BaseModel):
         description="Whether the agent should eat from their personal food supply",
     )
     
-    next_action: Literal["GatherBehavior", "RestBehavior", "MoveBehavior", "FleeBehavior"] = Field(
+    next_action: Literal["GatherBehavior", "RestBehavior", "MoveBehavior", "FleeBehavior","MoveBlockBehavior"] = Field(
         ...,
         description="The next action to take for the agent",
     )
@@ -37,6 +44,10 @@ class AgentResponse(BaseModel):
     location: Optional[Location] = Field(
         default=None,
         description="The location to move to if the next action is MoveTo",
+    )
+    blockToMove: Optional[BlockToMove] = Field(
+        default=None,
+        description="The Block to Move to the Habitat if the next action is MoveBlockBehavior",
     )
 
     # Optional: Add a Config class to customize JSON schema
