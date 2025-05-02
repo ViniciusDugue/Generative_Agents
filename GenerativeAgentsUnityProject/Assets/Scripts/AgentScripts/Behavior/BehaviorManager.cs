@@ -174,7 +174,7 @@ public class BehaviorManager : MonoBehaviour
             // Mark that an enemy is detected.
             enemyPreviousDetected = true;
             UpdateLLM = true;
-            mapDataExist = true;
+            mapDataExist = false;
         }
         else if (enemyCurrentlyDetected && enemyPreviousDetected) 
         {
@@ -194,7 +194,7 @@ public class BehaviorManager : MonoBehaviour
             enemyPreviousDetected = false;
             enemyOutOfRangeStartTime = -1f;
             UpdateLLM = true;
-            mapDataExist = true;
+            mapDataExist = false;
             // lastLLMPromptTime = Time.time;
             
         }
@@ -355,7 +355,7 @@ public class BehaviorManager : MonoBehaviour
     {
         RayPerceptionSensorComponent3D[] rayPerceptionSensorComponents = GetComponents<RayPerceptionSensorComponent3D>();
 
-        float maxDetectionDistance = 20.5f; // Set your max detection distance here
+        float maxDetectionDistance = 25.5f; // Set your max detection distance here
         enemyCurrentlyDetected = false;
 
 
@@ -393,7 +393,6 @@ public class BehaviorManager : MonoBehaviour
 
                     if(goHit.tag == "food")
                     {
-                        Debug.Log("Food is Found");
                         if(gatherBehavior != null) {
                             gatherBehavior.isGathering = true;
                             gatherBehavior.SetFoodTarget(goHit);

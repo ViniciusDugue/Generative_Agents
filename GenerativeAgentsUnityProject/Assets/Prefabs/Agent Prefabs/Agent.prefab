@@ -2125,8 +2125,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapCamera: {fileID: 0}
-  mapWidth: 200
-  mapHeight: 200
+  mapWidth: 400
+  mapHeight: 400
   serverUrl: http://127.0.0.1:12345/map
 --- !u!1 &8750545991374723211
 GameObject:

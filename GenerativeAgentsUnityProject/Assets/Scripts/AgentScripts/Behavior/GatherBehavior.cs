@@ -25,6 +25,9 @@ public class GatherBehavior : AgentBehavior
     private Coroutine resetTargetCoroutine;
     private GameObject currentFood = null;  // track what we’re chasing
 
+    // Misc
+    private Vector3 rotationSpeed = new Vector3(0, 100, 0); // Rotation speed in degrees per second
+
     protected override void Awake()
     {
         agent   = GetComponent<NavMeshAgent>();
@@ -72,11 +75,15 @@ public class GatherBehavior : AgentBehavior
             StopCoroutine(resetTargetCoroutine);
     }
 
+    void FixedUpdate()
+    {
+        if (!manager.canCarryMoreFood())
+            transform.Rotate(rotationSpeed * Time.deltaTime);
+    }
+
     // Update is called once per frame.
     void Update()
     {
-        
-
         // Debug: log partial/invalid paths
         if (!agent.pathPending && agent.pathStatus != NavMeshPathStatus.PathComplete)
         {
@@ -183,7 +190,7 @@ public class GatherBehavior : AgentBehavior
 
         if (!manager.canCarryMoreFood()) // TODO: Fix this logic
         {
-            agent.isStopped = true;
+            // agent.isStopped = true;
             Debug.Log("Agent is full, cannot carry any more food");
             return;
         }
@@ -203,7 +210,11 @@ public class GatherBehavior : AgentBehavior
     /// <param name="collision">Collision information</param>
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("food") && this.gameObject.GetComponent<BehaviorManager>().canCarryMoreFood())
+        if (!manager.canCarryMoreFood())
+            ClearFoodTarget();
+            
+
+        if (collision.gameObject.CompareTag("food") && manager.canCarryMoreFood())
         {
             Debug.Log("food collision");
             if (collision.gameObject.GetComponent<FoodScript>() == null)
@@ -223,13 +234,6 @@ public class GatherBehavior : AgentBehavior
             // If you can still carry more *and* there are other active food spawns, BehaviorManager
             // will raycast them and call SetFoodTarget again automatically.
             // Otherwise, we’ve got nothing left (or we’re full), so clear gathering:
-            if (!manager.canCarryMoreFood())
-            {
-                ClearFoodTarget();
-                // If we’re full, we want to just stand still:
-            //     if (!manager.canCarryMoreFood())
-            //         agent.isStopped = true;
-            }
         }
 
     }
@@ -242,7 +246,7 @@ public class GatherBehavior : AgentBehavior
         // Stop chasing
         isGathering   = false;
         currentFood   = null;
-        agent.isStopped = true;
+        agent.SetDestination(this.transform.position);
         // // restart wander logic
         // if (resetTargetCoroutine == null)
         //     resetTargetCoroutine = StartCoroutine(ResetTarget());
