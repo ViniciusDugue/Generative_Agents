@@ -39,6 +39,7 @@ public class MoveBehavior : AgentBehavior
     // Update is called once per frame
     void Update()
     {
+        agent.isStopped = false;
         if (agent != null && target != null)
         {
             agent.SetDestination(target);

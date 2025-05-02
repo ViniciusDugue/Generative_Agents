@@ -29,6 +29,15 @@ public class FleeBehavior : AgentBehavior
     private Transform lastEnemy;
     private Vector3 fleeDestination;
 
+    protected override void  OnEnable()
+    {
+        if (navMeshAgent != null)
+        {
+            navMeshAgent.isStopped = false;
+        }
+    }
+    
+    
     protected override void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
