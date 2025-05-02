@@ -1,0 +1,10 @@
+{
+    "reasoning": "The agent has a high fitness score and is not currently carrying food or blocks. There is a block nearby, so it should move towards the block to pick it up and bring it back to the habitat.",
+    "eatCurrentFoodSupply": false,
+    "next_action": "MoveBlockBehavior",
+    "location": null,
+    "blockToMove": {
+        "blockName": "Block(1)"
+    }
+  }
+  

@@ -7398,6 +7398,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClientManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1377341755644837911, guid: 2af478cf8e5e24e40b40cf83591324e9,
+        type: 3}
+      propertyPath: testResponseJson
+      value: 
+      objectReference: {fileID: 4900000, guid: 9c84e1ed366300140becc5e687629e2d, type: 3}
     - target: {fileID: 5230416444852310133, guid: 2af478cf8e5e24e40b40cf83591324e9,
         type: 3}
       propertyPath: m_LocalPosition.x

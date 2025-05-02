@@ -22,6 +22,77 @@ public class Client : MonoBehaviour
 
     private HttpClient client;
 
+    [Header("Test Harness")]
+    public TextAsset testResponseJson;
+
+    void Update()
+    {
+        // existing OnUpdateLLM behaviour…
+
+        // H key = run the canned‐response test
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            Debug.Log("[Client] H pressed, running canned response test");
+            ProcessServerResponse(testResponseJson.text);
+        }
+    }
+
+    private void ProcessServerResponse(string responseData)
+    {
+        Debug.Log("[Client] Processing canned response:\n" + responseData);
+
+        var responseJson = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseData);
+        if (responseJson == null)
+        {
+            Debug.LogError("[Client] Test failed to parse JSON.");
+            return;
+        }
+
+        // 1) next_action
+        if (!responseJson.TryGetValue("next_action", out var nextRaw))
+        {
+            Debug.LogError("[Client] no next_action in canned response");
+            return;
+        }
+        string nextAction = nextRaw.ToString();
+
+        // 2) reasoning
+        if (responseJson.TryGetValue("reasoning", out var r))
+            Debug.Log($"[Client] Test reasoning: {r}");
+        
+        // 3) switch behavior
+        // (for simplicity assume only one agent in dict or pick ID=1)
+        int testAgentId = 1;
+        if (agentDict.TryGetValue(testAgentId, out var go))
+        {
+            var bm = go.GetComponent<BehaviorManager>();
+            Debug.Log($"[Client] Test: switching Agent {testAgentId} to {nextAction}");
+            bm.SwitchBehavior(nextAction);
+
+            // 4) eatPersonalFoodSupply?
+            if (responseJson.TryGetValue("eatCurrentFoodSupply", out var eatRaw)
+                && bool.TryParse(eatRaw.ToString(), out var eat) && eat)
+            {
+                bm.eatPersonalFoodSupply();
+            }
+
+            // 5) If it supplied a move‐target (MoveBehavior)
+            if (responseJson.TryGetValue("location", out var locObj) && locObj != null)
+            {
+                Debug.Log("[Client] Test: MoveBehavior location provided");
+                bm.SetMoveTarget(locObj);
+            }
+
+            // 6) If it supplied a blockToMove
+            if (responseJson.TryGetValue("blockToMove", out var blockObj) && blockObj != null)
+            {
+                Debug.Log("[Client] Test: MoveBlockBehavior block provided");
+                bm.SetMoveBlockData(blockObj);
+            }
+        }
+        else Debug.LogError($"[Client] TestAgentId {testAgentId} not in agentDict");
+    }
+    
     void Start()
     {
         client = new HttpClient();
