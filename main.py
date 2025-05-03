@@ -5,7 +5,7 @@ import uvicorn
 from enum import Enum
 from typing import Union
 from pydantic import BaseModel, Field, ConfigDict
-from pydantic_ai import Agent, BinaryContent, RunContext
+from pydantic_ai import Agent, BinaryContent, RunContext, UnexpectedModelBehavior
 # from pydantic_ai import Agent, BinaryContent, RunContext
 from dataclasses import asdict
 from pydantic_ai.settings import ModelSettings
@@ -55,7 +55,7 @@ Available Actions & Effects:
 - **GatherBehavior:**  
   *Effect:* Searches for and collects food items at the current location.  
   *Cost:* +0.8 exhaustion per second.  
-  *Purpose:* Boosts fitness by increasing food collected.
+  *Purpose:* Boosts fitness by increasing food collected. SHOULD NOT USE WHEN CURRENT FOOD IS EQUAL TO MAX FOOD.
 
 - **RestBehavior:**  
   *Effect:* Rests to restore energy.  
@@ -117,7 +117,7 @@ Fitness Score Overview:
   - Use this score to help determine whether you should prioritize gathering food, resting, fleeing, or moving to a new location.
 
 
-"If your fitness score is low, prioritize actions that boost your survival (e.g., FoodGathererAgent or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
+"If your fitness score is low, prioritize actions that boost your survival (e.g., GatherBehavior or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
 Respond with the chosen ACTION (and location if using MoveBehavior) along with any necessary brief rationale.
 
 ### EXAMPLE
@@ -201,6 +201,7 @@ async def process_input(request: Request):
         for key, value in input_data.items():
             if key != "mapData" and value is not None:
                 print(f"{key}: {value}")
+        print()
         
         if "mapData" in input_data and input_data["mapData"] is not None:
             map_data = base64.b64decode(input_data.pop("mapData"))
@@ -234,6 +235,9 @@ async def process_input(request: Request):
 
         print(result.data)
         return result.data
+    except UnexpectedModelBehavior as e:
+        logging.error("Unexpected model behavior", exc_info=True)
+        logging.error(f"Map Data: {base64.b64encode(map_data)}")
     except Exception as e:
         logging.error("Error processing /nlp request", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e)) from e

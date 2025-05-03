@@ -13,12 +13,12 @@ public class BehaviorManager : MonoBehaviour
     private static int globalAgentID = 1;  // Shared counter for unique IDs
     public float fitnessScore = 0.0f;
     public float exhaustion;
+    [SerializeField] public int RequiredFood => agentHeal.RequiredFood;
     [SerializeField] public int CurrentHunger => agentHeal.CurrentHunger;
     
     public bool refreshLLM = false;
 
     [Header("Advanced Variables")]
-    [SerializeField] private int requiredFood = 5;
     [Tooltip("Maximum amount of food the agent can carry at once.")]
     [SerializeField]
     private int maxFood = 3;
@@ -163,6 +163,7 @@ public class BehaviorManager : MonoBehaviour
 
             Debug.Log($"UpdateLLM set to: {UpdateLLM}");
         }
+        calculateFitnessScore();
     }
 
     
@@ -173,7 +174,7 @@ public class BehaviorManager : MonoBehaviour
             // Mark that an enemy is detected.
             enemyPreviousDetected = true;
             UpdateLLM = true;
-            mapDataExist = true;
+            mapDataExist = false;
         }
         else if (enemyCurrentlyDetected && enemyPreviousDetected) 
         {
@@ -193,7 +194,7 @@ public class BehaviorManager : MonoBehaviour
             enemyPreviousDetected = false;
             enemyOutOfRangeStartTime = -1f;
             UpdateLLM = true;
-            mapDataExist = true;
+            mapDataExist = false;
             // lastLLMPromptTime = Time.time;
             
         }
@@ -317,6 +318,7 @@ public class BehaviorManager : MonoBehaviour
         {
             // If timer expires without interruption, set the flag to true.
             UpdateLLM = true;
+            mapDataExist = true;
             timer = interval;  // reset the timer after triggering
             lastUpdateLLM = UpdateLLM; // update the last known value
         }
@@ -353,7 +355,7 @@ public class BehaviorManager : MonoBehaviour
     {
         RayPerceptionSensorComponent3D[] rayPerceptionSensorComponents = GetComponents<RayPerceptionSensorComponent3D>();
 
-        float maxDetectionDistance = 20.5f; // Set your max detection distance here
+        float maxDetectionDistance = 25.5f; // Set your max detection distance here
         enemyCurrentlyDetected = false;
 
 
@@ -391,9 +393,9 @@ public class BehaviorManager : MonoBehaviour
 
                     if(goHit.tag == "food")
                     {
-                        Debug.Log("Food is Found");
                         if(gatherBehavior != null) {
-                            gatherBehavior.SetFoodTarget(goHit.transform.position);
+                            gatherBehavior.isGathering = true;
+                            gatherBehavior.SetFoodTarget(goHit);
                         }
                     }
 
@@ -445,12 +447,11 @@ public class BehaviorManager : MonoBehaviour
 
     public int DepositAllFood()
     {
-        if (!hasDepositedFood)
+        if (currentFood > 0)
         {
             int deposited = currentFood;
             depositedFood += currentFood;
             currentFood = 0;
-            hasDepositedFood = true;
             return deposited;
         }
         else
@@ -461,7 +462,7 @@ public class BehaviorManager : MonoBehaviour
     }
 
     public void eatPersonalFoodSupply() {
-        if (CurrentHunger <= requiredFood) {
+        if (CurrentHunger <= RequiredFood) {
             agentHeal.ReceiveFood(1);  // Increase hunger by 1 unit for each food consumed.= 1;
             currentFood -= 1;
         }
@@ -477,9 +478,9 @@ public class BehaviorManager : MonoBehaviour
         // Using depositedFood as the count of food this agent deposited today.
         // int deposited = Mathf.RoundToInt(depositedFood);
 
-        if (CurrentHunger < requiredFood)
+        if (CurrentHunger < RequiredFood)
         {
-            int missingFood = requiredFood - CurrentHunger;
+            int missingFood = RequiredFood - CurrentHunger;
             // Parameter: Percentage of max health damage per missing food portion.
             float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
             AgentHealth agentHealth = GetComponent<AgentHealth>();
@@ -497,7 +498,7 @@ public class BehaviorManager : MonoBehaviour
         }
         else
         {
-            Debug.Log($"Agent {agentID} met the food requirement with {requiredFood} portions.");
+            Debug.Log($"Agent {agentID} met the food requirement with {RequiredFood} portions.");
         }
 
         // Reset the daily food tally for the next day.
