@@ -447,12 +447,11 @@ public class BehaviorManager : MonoBehaviour
 
     public int DepositAllFood()
     {
-        if (!hasDepositedFood)
+        if (currentFood > 0)
         {
             int deposited = currentFood;
             depositedFood += currentFood;
             currentFood = 0;
-            hasDepositedFood = true;
             return deposited;
         }
         else

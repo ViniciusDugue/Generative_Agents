@@ -185,8 +185,9 @@ public class GatherBehavior : AgentBehavior
         isGathering = true;
         StopCoroutine(ResetTarget());
         // If we already have a food target that still exists, bail out
-        if (currentFood != null)
-            return;
+        if (food != currentFood && currentFood != null)
+            if(target == currentFood.transform.position)
+                return;
 
         if (!manager.canCarryMoreFood()) // TODO: Fix this logic
         {

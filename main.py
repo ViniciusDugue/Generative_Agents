@@ -55,7 +55,7 @@ Available Actions & Effects:
 - **GatherBehavior:**  
   *Effect:* Searches for and collects food items at the current location.  
   *Cost:* +0.8 exhaustion per second.  
-  *Purpose:* Boosts fitness by increasing food collected.
+  *Purpose:* Boosts fitness by increasing food collected. SHOULD NOT USE WHEN CURRENT FOOD IS EQUAL TO MAX FOOD.
 
 - **RestBehavior:**  
   *Effect:* Rests to restore energy.  
@@ -117,7 +117,7 @@ Fitness Score Overview:
   - Use this score to help determine whether you should prioritize gathering food, resting, fleeing, or moving to a new location.
 
 
-"If your fitness score is low, prioritize actions that boost your survival (e.g., FoodGathererAgent or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
+"If your fitness score is low, prioritize actions that boost your survival (e.g., GatherBehavior or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
 Respond with the chosen ACTION (and location if using MoveBehavior) along with any necessary brief rationale.
 
 ### EXAMPLE
