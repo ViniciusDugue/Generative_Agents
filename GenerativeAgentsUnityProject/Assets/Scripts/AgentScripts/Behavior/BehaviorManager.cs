@@ -505,4 +505,9 @@ public class BehaviorManager : MonoBehaviour
         depositedFood = 0;
     }
 
+    public void ClearDailyFoodLocations()
+    {
+        activeFoodLocations.Clear();
+    }
+
 }
