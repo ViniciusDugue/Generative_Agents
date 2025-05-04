@@ -24,6 +24,10 @@ public class Habitat : MonoBehaviour
     [SerializeField]
     public int storedFood = 0;
     public int storedBlocks = 0;
+    public int wallsBuilt = 0;
+
+    public List<GameObject> wallsList = new List<GameObject>();
+    private int nextWallIndex = 0;
 
     private List<AgentHeal> waitingAgents = new List<AgentHeal>();
     private SphereCollider triggerCollider;
@@ -247,5 +251,30 @@ public class Habitat : MonoBehaviour
             storedFood -=foodRemoved;
         }
         
+    }
+
+    public void BuildNextWall()
+    {
+        if (nextWallIndex < wallsList.Count || storedBlocks<3)
+        {
+            var wall = wallsList[nextWallIndex];
+            wall.SetActive(true);
+            Debug.Log($"[Habitat] Built wall #{nextWallIndex + 1}: {wall.name}");
+            nextWallIndex++;
+            wallsBuilt++;
+            storedBlocks-=3;
+            EndSimMetricsUI.Instance.IncrementWallsBuilt();
+        }
+        else
+        {
+            Debug.LogWarning("[Habitat] All walls have already been built! or Not Enough Stored Blocks.");
+        }
+    }
+
+    public GameObject GetNextWallToBuild()
+    {
+        if (nextWallIndex < wallsList.Count)
+            return wallsList[nextWallIndex];
+        return null;
     }
 }

@@ -3371,9 +3371,9 @@ MonoBehaviour:
   agentList: []
 --- !u!1 &347491049 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 5233713113548216580, guid: 92dd388cc35a17e4fa6f6985b46be24a,
+  m_CorrespondingSourceObject: {fileID: 2026412881704017209, guid: 5fd2083b2b3c5cb42883f203b33352c4,
     type: 3}
-  m_PrefabInstance: {fileID: 667182745}
+  m_PrefabInstance: {fileID: 3772322730700701152}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &362201285
 GameObject:
@@ -5927,74 +5927,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &667182745
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 49.838444
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.39
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 42.416576
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3750626473120895733, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5233713113548216580, guid: 92dd388cc35a17e4fa6f6985b46be24a,
-        type: 3}
-      propertyPath: m_Name
-      value: Wall
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 92dd388cc35a17e4fa6f6985b46be24a, type: 3}
 --- !u!1 &673653341
 GameObject:
   m_ObjectHideFlags: 0
@@ -17228,9 +17160,9 @@ MonoBehaviour:
     type: 3}
   maxFood: 25
   maxEnemies: 0
-  maxAgents: 5
+  maxAgents: 0
   spawnHeightOffset: 0.5
-  maxPests: 6
+  maxPests: 12
   foodSpawnRadius: 5
   enemySpawnRadius: 10
   agentSpawnRadius: 7
@@ -20024,26 +19956,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AgentHabitat
       objectReference: {fileID: 0}
-    - target: {fileID: 530312542090748953, guid: 5fd2083b2b3c5cb42883f203b33352c4,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156623430993633719, guid: 5fd2083b2b3c5cb42883f203b33352c4,
-        type: 3}
-      propertyPath: m_Radius
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4156623430993633719, guid: 5fd2083b2b3c5cb42883f203b33352c4,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8316424405763230828, guid: 5fd2083b2b3c5cb42883f203b33352c4,
-        type: 3}
-      propertyPath: storedBlocks
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8316424405763230828, guid: 5fd2083b2b3c5cb42883f203b33352c4,
         type: 3}
       propertyPath: centralHubPoint
@@ -20099,13 +20011,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 8616724075222474253, guid: 5fd2083b2b3c5cb42883f203b33352c4, type: 3}
-    - {fileID: 3589493285716425119, guid: 5fd2083b2b3c5cb42883f203b33352c4, type: 3}
-    - {fileID: 3669796084586074501, guid: 5fd2083b2b3c5cb42883f203b33352c4, type: 3}
-    - {fileID: 2593928993103001303, guid: 5fd2083b2b3c5cb42883f203b33352c4, type: 3}
-    - {fileID: 6290902795769687913, guid: 5fd2083b2b3c5cb42883f203b33352c4, type: 3}
-    - {fileID: 6769709450803623545, guid: 5fd2083b2b3c5cb42883f203b33352c4, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -20354,7 +20260,6 @@ SceneRoots:
   - {fileID: 1176040059}
   - {fileID: 2670863}
   - {fileID: 1432241853}
-  - {fileID: 667182745}
   - {fileID: 2073148499}
   - {fileID: 897397910}
   - {fileID: 629491498}

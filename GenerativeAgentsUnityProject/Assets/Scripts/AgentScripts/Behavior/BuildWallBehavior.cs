@@ -1,9 +1,8 @@
-// BuildWall_Agent.cs
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class BuildWall_Agent : AgentBehavior
+public class BuildWallBehavior : AgentBehavior
 {
     [Header("Required GameObjects")]
     public GameObject smallWall;

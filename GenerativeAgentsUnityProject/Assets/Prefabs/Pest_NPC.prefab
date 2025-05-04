@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2858048583756255063}
   - component: {fileID: 5686651432709186669}
   - component: {fileID: 4177207303605233846}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Health bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 6163824992301848763}
   - component: {fileID: 1184897937954422266}
   - component: {fileID: 693969012152348396}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 7901935427798288947}
   - component: {fileID: 3992485954395850340}
   - component: {fileID: 3246274249560485627}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pest_NPC
   m_TagString: pest
   m_Icon: {fileID: 0}
@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 6294060182801102630}
   - component: {fileID: 8821079928541905030}
   - component: {fileID: 7830284764447161141}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -434,7 +434,7 @@ GameObject:
   - component: {fileID: 3225341733480217908}
   - component: {fileID: 552071478042038801}
   - component: {fileID: 3031050383566291240}
-  m_Layer: 6
+  m_Layer: 10
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -547,7 +547,7 @@ GameObject:
   - component: {fileID: 4291602186373308367}
   - component: {fileID: 709313320823421748}
   - component: {fileID: 5136797716036784399}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
