@@ -29,7 +29,7 @@ public class FleeBehavior : AgentBehavior
     private Transform lastEnemy;
     private Vector3 fleeDestination;
 
-    protected override void  OnEnable()
+    void  OnEnable()
     {
         if (navMeshAgent != null)
         {
@@ -38,7 +38,7 @@ public class FleeBehavior : AgentBehavior
     }
     
     
-    protected override void Awake()
+    void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         behaviorManager = GetComponent<BehaviorManager>();

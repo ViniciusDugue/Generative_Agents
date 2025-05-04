@@ -28,7 +28,7 @@ public class GatherBehavior : AgentBehavior
     // Misc
     private Vector3 rotationSpeed = new Vector3(0, 100, 0); // Rotation speed in degrees per second
 
-    protected override void Awake()
+    void Awake()
     {
         agent   = GetComponent<NavMeshAgent>();
         manager = GetComponent<BehaviorManager>();
@@ -51,7 +51,7 @@ public class GatherBehavior : AgentBehavior
     }
     
     // Start is called before the first frame update.
-    protected override void  OnEnable()
+    void OnEnable()
     {
         if (agent != null)
         {
@@ -65,7 +65,7 @@ public class GatherBehavior : AgentBehavior
         
     }
 
-    protected override void  OnDisable()
+    void  OnDisable()
     {
         if (agent != null)
         {
