@@ -31,10 +31,10 @@ MonoBehaviour:
   - behaviorName: MoveBlockBehavior
     icon: {fileID: 21300000, guid: 58165d71f8ad852429a1c701f7b5b8ed, type: 3}
     displayName: Moving Block
-  - behaviorName: BuildWall_Agent
+  - behaviorName: BuildWallBehavior
     icon: {fileID: 21300000, guid: b12f633152b359744805b980344049b8, type: 3}
     displayName: Building Wall
   defaultVisual:
-    behaviorName: FleeBehavior
-    icon: {fileID: 21300000, guid: b3c333c39ccf5094c9ead4613e4afc60, type: 3}
-    displayName: Fleeing
+    behaviorName: RestBehavior
+    icon: {fileID: 21300000, guid: 97d115b63d23dc349a030a6caa4e2296, type: 3}
+    displayName: Resting

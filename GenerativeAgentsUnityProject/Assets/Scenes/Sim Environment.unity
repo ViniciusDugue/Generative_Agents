@@ -17160,7 +17160,7 @@ MonoBehaviour:
     type: 3}
   maxFood: 25
   maxEnemies: 0
-  maxAgents: 0
+  maxAgents: 5
   spawnHeightOffset: 0.5
   maxPests: 12
   foodSpawnRadius: 5

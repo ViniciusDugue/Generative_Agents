@@ -1,10 +1,7 @@
 {
-    "reasoning": "The agent has a high fitness score and is not currently carrying food or blocks. There is a block nearby, so it should move towards the block to pick it up and bring it back to the habitat.",
+    "reasoning": "There are enough stored blocks in Habitat so agent should build a wall to increase Habitat safety.",
     "eatCurrentFoodSupply": false,
-    "next_action": "MoveBlockBehavior",
+    "next_action": "BuildWallBehavior",
     "location": null,
-    "blockToMove": {
-        "blockName": "Block(1)"
-    }
-  }
-  
+    "blockToMove": null
+}

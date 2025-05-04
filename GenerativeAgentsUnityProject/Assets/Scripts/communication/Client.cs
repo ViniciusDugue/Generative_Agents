@@ -92,7 +92,7 @@ public class Client : MonoBehaviour
         }
         else Debug.LogError($"[Client] TestAgentId {testAgentId} not in agentDict");
     }
-    
+
     void Start()
     {
         client = new HttpClient();
@@ -234,6 +234,7 @@ public class Client : MonoBehaviour
             mapData = mapData,
             habitatStoredBlocks = habitatComponent.storedBlocks,
             blockLocations = GetBlockLocationsAsList(bm.blockPositionsList),
+            habitatWallsBuilt = habitatComponent.wallsBuilt,
         };
 
         string jsonString = JsonConvert.SerializeObject(agentData, Formatting.Indented);

@@ -53,13 +53,14 @@ Food:
 - Agents can eat the food in their inventory, or store it at their habitat. Storing it at the habitat will increase your fitness score.
 - Daily survival requires at least 5 food items. 
 - For every 100 points of exhaustion, one extra food item is needed; for every 20 points of health lost, one extra food item is required to heal.
+
 Block & Building System:
 - Blocks Spawn randomly on the map.
 - Blocks can be picked up and brought back to the Habitat using the MoveBlockBehavior Action; this should be used whenever a block is nearby
 - Picking up Blocks and storing them in your habitat will increase your fitness score
 - Blocks are stored in the Habitat
 - Every 3 blocks collected in the Habitat can be used to construct one of the 4 walls around the Habitat
-- Walls increase the safety of a Habitat by only allowing Agents to pass through them, not Enemies
+- Walls increase the Fitness Score and safety of a Habitat by only allowing Agents to pass through them, not Enemies
 - Building the 4 walls is the final goal of all agents as it guaruntees the safety of the Habitat
   
 Available Actions & Effects:
@@ -88,12 +89,18 @@ Available Actions & Effects:
   *Cost:* +0.8 exhaustion per second.  
   *Purpose:* Allows for bringing back blocks as building materials to the habitat for Wall Construction.
 
+- **BuildWallBehavior:**  
+  *Effect:* Goes towards habitat and builds the next wall using 3 stored blocks.  
+  *Cost:* +0.8 exhaustion per second.  
+  *Purpose:* Allows for increased Habitat safety and Fitness Score.
+
 Survival Considerations:
 - Fleeing is used only when an enemy is detected.
 - Food only exists at known food locations; gathering food requires exploration.
 - MoveBehavior should be used only if there is a known target location.
 - If exhaustion reaches 100, you will gain additional hunger.
 - If a Block is nearby and your hunger is satisfied, prioritize the MoveBlockBehavior
+- If there are 3 or more blocks stored in habitat, then prioritize the BuildWallBehavior
 - The agent’s actions should always aim to maximize long-term survival while increasing a calculated fitness score.
 
 Fitness Score Calculation:
@@ -103,13 +110,14 @@ Fitness is computed from several factors with weighted coefficients:
   - **Food_Deposited:** Food deposited at the habitat.
   - **Health Loss:** (Max_Health - Current_Health); higher loss reduces fitness.
   - **Food_Lost:** Food stolen from the habitat that day.
+  - **Walls_Built:** Number of walls built to protect the habitat
 
  Fitness Score Evaluation:
  The Fitness score is a weighted sum reflecting your items above. The weights are designed so that:
 
 - **Below 0:** You are in critical condition and likely to perish soon.
 - **Around 50:** You should be able to survive the day.
-- **Around 100:** You have enough food and resources to last about two days.
+- **Around 100:** You have enough food and resources to last about two days. You should prioritize block gathering and building walls.
 - **150+:** You are thriving and should focus on gathering blocks and building walls to protect your habitat.
   
 Agent Inputs (provided every 20 seconds):
@@ -129,11 +137,12 @@ Agent Inputs (provided every 20 seconds):
   - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
   - **habitatStoredBlocks:** int – The number of food items you are currently holding.
   - **blockLocations:** list of {blockname: string,  blockLocation:{ x: float, z: float } } – Known block locations in the environment.
+  - **habitatWallsBuilt:** int – The number of walls built out of 4 walls.
 
 Fitness Score Overview:
   - This score is a weighted sum of your stored food, collected food, deposited food, health loss, food stolen, blocks stored, walls built and the accessibility of your base and food locations to enemies.
   - A higher fitness score indicates better overall survival prospects.
-  - Use this score to help determine whether you should prioritize gathering food, resting, fleeing, or moving to a new location.
+  - Use this score to help determine whether you should prioritize gathering food, gathering blocks, building walls, resting, fleeing or moving to a new location.
 
 
 "If your fitness score is low, prioritize actions that boost your survival (e.g., FoodGathererAgent or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, finding Blocks, or Building Walls, while always ensuring you flee from predators if detected."
@@ -157,7 +166,8 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
   "activeFoodLocations": [ { "x": 98.1, "z": 92.6 } ],
   "foodLocations":   [ { "x": 98.1, "z": 92.6 } ],
   "habitatStoredBlocks": 5,
-  "blocklocations": [{"Block(1)":{"x": 60.2, "y": 40.5} }]
+  "blocklocations": [{"Block(1)":{"x": 60.2, "y": 40.5} }],
+  "habitatWallsBuilt": 1
 }
 </user>
 
@@ -181,15 +191,16 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
   "maxFood": 3,
   "currentFood": 3,
   "habitatStoredFood": 0,
-  "fitness": 0.0,
+  "fitness": 100.0,
   "health": 100,
   "enemyCurrentlyDetected": false,
   "exhaustion": 27.7000141,
   "habitatLocation": { "x": 65.6, "z": 111.9 },
   "activeFoodLocations": [ { "x": 98.1, "z": 92.6 } ],
   "foodLocations":   [ { "x": 98.1, "z": 92.6 } ],
-  "habitatStoredBlocks": 5,
-  "blocklocations": [{"Block(1)":{"x": 90.2, "y": 90.5} }]
+  "habitatStoredBlocks": 2,
+  "blocklocations": [{"Block(1)":{"x": 90.2, "y": 90.5} }],
+  "habitatWallsBuilt": 1
 }
 </user>
 
@@ -198,12 +209,43 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
     "reasoning": "The agent has found a block nearby, so it should go pick up the block and bring it back to the habitat",
     "eatCurrentFoodSupply": false,
     "next_action": "MoveBlockBehavior",
-    "blockToMove": "Block(1)", 
+    "blockToMove": "Block(1)",
 
 }
 </assistant>
 
-    
+### EXAMPLE 3
+<user>
+{
+  "agentID": 1,
+  "currentAction": "GatherBehavior",
+  "currentPosition": { "x": 98.00892, "z": 92.4902039 },
+  "currentHunger": 100,
+  "maxFood": 3,
+  "currentFood": 3,
+  "habitatStoredFood": 0,
+  "fitness": 130.0,
+  "health": 100,
+  "enemyCurrentlyDetected": false,
+  "exhaustion": 27.7000141,
+  "habitatLocation": { "x": 65.6, "z": 111.9 },
+  "activeFoodLocations": [ { "x": 41.1, "z": 92.6 } ],
+  "foodLocations":   [ { "x": 41.1, "z": 92.6 } ],
+  "habitatStoredBlocks": 5,
+  "blocklocations": [{"Block(1)":{"x": 60.2, "y": 90.5} }],
+  "habitatWallsBuilt": 1
+}
+</user>
+
+<assistant>
+{
+    "reasoning": "There are enough stored blocks in Habitat so agent should build a wall to increase Habitat safety.",
+    "eatCurrentFoodSupply": false,
+    "next_action": "BuildWallBehavior",
+    "location": null,
+    "blockToMove": null,
+}
+</assistant>
 
 """
 
