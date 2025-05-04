@@ -3369,12 +3369,6 @@ MonoBehaviour:
   userMapResolution: {x: 700, y: 700}
   agentMapResolution: {x: 225, y: 225}
   agentList: []
---- !u!1 &347491049 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2026412881704017209, guid: 5fd2083b2b3c5cb42883f203b33352c4,
-    type: 3}
-  m_PrefabInstance: {fileID: 3772322730700701152}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &362201285
 GameObject:
   m_ObjectHideFlags: 0
@@ -20216,7 +20210,7 @@ PrefabInstance:
         type: 3}
       propertyPath: initialTargetWall
       value: 
-      objectReference: {fileID: 347491049}
+      objectReference: {fileID: 0}
     - target: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
         type: 3}
       propertyPath: m_Name
