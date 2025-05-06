@@ -23,6 +23,8 @@ public class GatherBehavior : AgentBehavior
     [Header("target")]
     [SerializeField] private Vector3 target;
     private Coroutine resetTargetCoroutine;
+    private float _lastFoodTargetTime = 0f;
+    private const float kFoodTargetTimeout = 0.5f;
     private GameObject currentFood = null;  // track what we’re chasing
 
     // Misc
@@ -73,6 +75,9 @@ public class GatherBehavior : AgentBehavior
         }
         if (resetTargetCoroutine != null)
             StopCoroutine(resetTargetCoroutine);
+        
+        // If we were gathering food, release it
+        currentFood = null;
     }
 
     void FixedUpdate()
@@ -84,15 +89,6 @@ public class GatherBehavior : AgentBehavior
     // Update is called once per frame.
     void Update()
     {
-        // Debug: log partial/invalid paths
-        if (!agent.pathPending && agent.pathStatus != NavMeshPathStatus.PathComplete)
-        {
-            Debug.LogWarningFormat(
-                "{0} path status: {1}, isStale: {2}",
-                name, agent.pathStatus, agent.isPathStale
-            );
-        }
-
         // When arrived or stuck, pick a new wander point
         if (!agent.pathPending &&
             (!agent.hasPath || agent.remainingDistance <= agent.stoppingDistance * 2) &&
@@ -106,6 +102,16 @@ public class GatherBehavior : AgentBehavior
         if (resetTargetCoroutine == null)
             resetTargetCoroutine = StartCoroutine(ResetTarget());
         
+        if (isGathering && currentFood != null)
+        {           
+            if (Time.time - _lastFoodTargetTime > kFoodTargetTimeout)
+            {
+              Debug.Log("Food target timed out (>0.5s), clearing currentFood");
+              // either just null it:
+              currentFood = null;
+              isGathering = false;
+            }
+        }
     }
         /// <summary>
     /// Sets a new random destination on the NavMesh.
@@ -183,11 +189,19 @@ public class GatherBehavior : AgentBehavior
     public void SetFoodTarget(GameObject food)
     {
         isGathering = true;
-        StopCoroutine(ResetTarget());
+
+        // Stop the reset coroutine if it's running
+        if (resetTargetCoroutine != null) {
+            StopCoroutine(resetTargetCoroutine);
+            resetTargetCoroutine = null;
+        }
+
         // If we already have a food target that still exists, bail out
-        if (food != currentFood && currentFood != null)
+        if (food != currentFood && currentFood != null) {
+            _lastFoodTargetTime = Time.time;
             if(target == currentFood.transform.position)
                 return;
+        }
 
         if (!manager.canCarryMoreFood()) // TODO: Fix this logic
         {

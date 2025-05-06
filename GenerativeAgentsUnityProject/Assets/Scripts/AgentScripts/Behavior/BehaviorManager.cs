@@ -393,7 +393,7 @@ public class BehaviorManager : MonoBehaviour
 
                     if(goHit.tag == "food")
                     {
-                        if(gatherBehavior != null) {
+                        if(gatherBehavior != null && gatherBehavior.enabled) {
                             gatherBehavior.isGathering = true;
                             gatherBehavior.SetFoodTarget(goHit);
                         }
