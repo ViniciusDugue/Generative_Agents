@@ -11,12 +11,14 @@ public class AgentMapInfo : MonoBehaviour
     {
         // Subscribe to global marker spawn events.
         MarkerEventManager.OnMarkerSpawned += OnGlobalMarkerSpawned;
+        MarkerEventManager.OnMarkerRemoved += OnGlobalMarkerRemoved;
     }
 
     private void OnDisable()
     {
         // Unsubscribe from the global marker spawn events.
         MarkerEventManager.OnMarkerSpawned -= OnGlobalMarkerSpawned;
+        MarkerEventManager.OnMarkerRemoved -= OnGlobalMarkerRemoved;
     }
 
     // Called whenever a marker is spawned in the global event.
@@ -29,6 +31,15 @@ public class AgentMapInfo : MonoBehaviour
             knownMarkers.Add(newMarker);
             Debug.Log($"{gameObject.name} discovered {markerType} on {obj.name}");
         }
+    }
+
+    /// <summary>
+    /// Whenever any global marker is removed (food, spawn‑point, etc),
+    /// drop it from our knownMarkers so agents no longer “remember” it.
+    /// </summary>
+    private void OnGlobalMarkerRemoved(GameObject obj)
+    {
+        knownMarkers.RemoveAll(md => md.discoveredObject == obj);
     }
 
     // Optionally, provide a method to share map data.
