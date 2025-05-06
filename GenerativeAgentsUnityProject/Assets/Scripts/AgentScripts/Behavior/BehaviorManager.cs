@@ -116,6 +116,29 @@ public class BehaviorManager : MonoBehaviour
         agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
     }
 
+    private void OnEnable()
+    {
+        MarkerEventManager.OnMarkerRemoved += HandleMarkerRemoved;
+    }
+
+    private void OnDisable()
+    {
+        MarkerEventManager.OnMarkerRemoved -= HandleMarkerRemoved;
+    }
+
+    /// <summary>
+    /// As soon as a FoodSpawn-point fires MarkerRemoved, drop it from both sets.
+    /// </summary>
+    private void HandleMarkerRemoved(GameObject obj)
+    {
+        Transform t = obj.transform;
+        if (activeFoodLocations.Remove(t))
+            Debug.Log($"[Agent {agentID}] Removed active food location {t.name}");
+
+        if (foodLocations.Remove(t))
+            Debug.Log($"[Agent {agentID}] Removed known food location {t.name}");
+    }
+
     private void Update()
     {
         // Ensure current AgentBehavior is not null
