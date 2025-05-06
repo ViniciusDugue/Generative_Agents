@@ -8,6 +8,7 @@ public class MoveBehavior : AgentBehavior
     public NavMeshAgent agent;
     public Vector3 target;
     private BehaviorManager bm;
+    private bool promptLLM = false;
 
     override protected void Awake()
     {
@@ -43,14 +44,27 @@ public class MoveBehavior : AgentBehavior
     {
         agent.isStopped = false;
 
-        if (agent.remainingDistance <= agent.stoppingDistance * 2) {
-            bm.UpdateLLM = true;
-            bm.MapDataExist = true;
-        }
+        
+
+        
 
         if (agent != null && target != null)
         {
             agent.SetDestination(target);
         }
+
+        if(agent.remainingDistance > agent.stoppingDistance)
+            promptLLM = false; 
+
+        // once we’ve arrived (within stoppingDistance), fire exactly one update:
+        if (!agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance &&
+            !promptLLM)
+        {
+            bm.UpdateLLM = true;
+            bm.MapDataExist = true;
+            promptLLM = true;
+        }
+        
     }
 }
