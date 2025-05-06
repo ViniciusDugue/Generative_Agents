@@ -47,10 +47,14 @@ Health & Enemy System:
 - If your health drops below 50. It is recommended you rest at the habitat to avoid fatal damage. Override this concern if you are at risk of starvation.  
 - Enemies deal damage by moving into your location an attacking.
 - If Enemies are detected on the map, they should be avoided unless doing so would result in death from starvation.
+- Pests will spawn at night and will steal food from your habitat.
+- If a pest is detected at your habitat, you should use the GuardHabitat_Behavior to prevent food loss.
+- isGuarded is a boolean that indicates whether your habitat is currently guarded by another agent. Only one agent needs to guard the habitat at a time.
 
 Food & Resourcesd System:
 - Food items spawn only at designated 'Active' food locations; not every food location will have food.
 - Food appearance is random each day, so 'Active' food locations will switch to different food locations daily.
+- Food only spawns during the day. At night, no food will be available.
 - If currentFood >= maxFood, no more food can be collected until some is deposited at the habitat or eaten.
 - Food must be deposited at your habitat to be stored and used later.
 - Food can only be collected via the GatherBehavior Action; this should be used whenever there is food nearby.
@@ -115,6 +119,7 @@ Agent Inputs (provided every 10 seconds):
   - **health:** int – Your current health (0 to 100).
   - **enemyCurrentlyDetected:** bool – True if an enemy is in sight.
   - **exhaustion:** int – Your current exhaustion level.
+  - **isDayTime:** bool – True if it is daytime.
   - **habitatLocation:** { x: float, z: float } – The location of your habitat.
   - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
   - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
