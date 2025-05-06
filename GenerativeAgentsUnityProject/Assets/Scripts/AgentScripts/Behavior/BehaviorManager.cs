@@ -35,6 +35,11 @@ public class BehaviorManager : MonoBehaviour
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
     private Coroutine exhaustionCoroutine;
     private bool mapDataExist = false;
+    public bool MapDataExist
+{
+    get => mapDataExist;
+    set => mapDataExist = value;
+}
     private bool _updateLLM = false;
     public delegate void updateLLMBoolChangedHandler(int agentID, bool mapData);
     public event updateLLMBoolChangedHandler OnUpdateLLM;

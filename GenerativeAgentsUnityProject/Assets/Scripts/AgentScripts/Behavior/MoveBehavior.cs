@@ -7,11 +7,13 @@ public class MoveBehavior : AgentBehavior
 {
     public NavMeshAgent agent;
     public Vector3 target;
+    private BehaviorManager bm;
 
     override protected void Awake()
     {
         target = this.gameObject.transform.position;
         agent = GetComponent<NavMeshAgent>();
+        bm = GetComponent<BehaviorManager>();
     }
 
     public void setTarget(Vector3 newPosition) {
@@ -40,6 +42,12 @@ public class MoveBehavior : AgentBehavior
     void Update()
     {
         agent.isStopped = false;
+
+        if (agent.remainingDistance <= agent.stoppingDistance * 2) {
+            bm.UpdateLLM = true;
+            bm.MapDataExist = true;
+        }
+
         if (agent != null && target != null)
         {
             agent.SetDestination(target);
