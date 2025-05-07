@@ -84,6 +84,11 @@ Available Actions & Effects:
   *Cost:* +0.5 exhaustion per second.  
   *Purpose:* Allows relocation to food sources or strategic positions.
 
+- **GuardBehavior:**  
+  *Effect:* Guards the habitat and kills any pests. 
+  *Cost:* +0.8 exhaustion per second.  
+  *Purpose:* Prevents fitness score from decreasing by losing food.
+
 Survival Considerations:
 - Fleeing is used only when an enemy is detected.
 - Food only exists at known food locations; gathering food requires exploration.
@@ -120,6 +125,7 @@ Agent Inputs (provided every 10 seconds):
   - **enemyCurrentlyDetected:** bool – True if an enemy is in sight.
   - **exhaustion:** int – Your current exhaustion level.
   - **isDayTime:** bool – True if it is daytime.
+  - **isGuarded:** bool - True if the habitat is guarded
   - **habitatLocation:** { x: float, z: float } – The location of your habitat.
   - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
   - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
@@ -147,6 +153,8 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
   "health": 100,
   "enemyCurrentlyDetected": false,
   "exhaustion": 27.7000141,
+  "isDayTime": true,
+  "isGuarded": false,
   "habitatLocation": { "x": 65.6, "z": 111.9 },
   "activeFoodLocations": [ { "x": 98.1, "z": 92.6 } ],
   "foodLocations":   [ { "x": 98.1, "z": 92.6 } ],
@@ -155,7 +163,7 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 <assistant>
 {
-    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food.",
+    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food. It is still day so habitat does not need to be guarded.",
     "eatCurrentFoodSupply": true,
     "next_action": "MoveBehavior",
     "location": { "x": 65.6, "z": 111.9 }
@@ -177,6 +185,8 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
   "health": 100,
   "enemyCurrentlyDetected": false,
   "exhaustion": 50,
+  "isDayTime": true,
+  "isGuarded": false,
   "habitatLocation": { "x": 65.6, "z": 111.9 },
   "activeFoodLocations": [],
   "foodLocations":   [],
@@ -185,9 +195,39 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 <assistant>
 {
-    "reasoning": "The agent is low on hunger and has no known food locations. As such, it should go out searching using GatherBehavior.",
+    "reasoning": "The agent is low on hunger and has no known food locations. As such, it should go out searching using GatherBehavior. It is still day so habitat does not need to be guarded.",
     "eatCurrentFoodSupply": false,
     "next_action": "GatherBehavior",
+}
+</assistant>
+
+### EXAMPLE 3
+<user>
+{
+  "agentID": 1,
+  "currentAction": "RestBehavior",
+  "currentPosition": { "x": 65.6, "z": 111.9 },
+  "currentHunger": 5,
+  "maxFood": 3,
+  "currentFood": 0,
+  "habitatStoredFood": 12,
+  "fitness": 130.0,
+  "health": 100,
+  "enemyCurrentlyDetected": false,
+  "exhaustion": 50,
+  "isDayTime": false,
+  "isGuarded": true,
+  "habitatLocation": { "x": 65.6, "z": 111.9 },
+  "activeFoodLocations": [],
+  "foodLocations":   [],
+}
+</user>
+
+<assistant>
+{
+    "reasoning": "The agent is at its habitat and is being guarded. It should rest to regain energy.",
+    "eatCurrentFoodSupply": false,
+    "next_action": "RestBehavior",
 }
 </assistant>
 

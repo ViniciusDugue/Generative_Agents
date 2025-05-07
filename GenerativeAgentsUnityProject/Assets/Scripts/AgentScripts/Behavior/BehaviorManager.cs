@@ -383,7 +383,7 @@ public class BehaviorManager : MonoBehaviour
     {
         RayPerceptionSensorComponent3D[] rayPerceptionSensorComponents = GetComponents<RayPerceptionSensorComponent3D>();
 
-        float maxDetectionDistance = 25.5f; // Set your max detection distance here
+        float maxDetectionDistance = 35.5f; // Set your max detection distance here
         enemyCurrentlyDetected = false;
 
 

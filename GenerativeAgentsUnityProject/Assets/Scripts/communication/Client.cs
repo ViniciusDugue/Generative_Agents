@@ -159,6 +159,7 @@ public class Client : MonoBehaviour
             enemyCurrentlyDetected = bm.enemyPreviousDetected,
             exhaustion = bm.exhaustion,
             isDayTime = TimeManager.Instance.IsDayTime,
+            isGuarded = habitatComponent.isGuarded,
             habitatLocation = new {x = habitatComponent.transform.position.x, z =habitatComponent.transform.position.z},
             activeFoodLocations = GetFoodLocationsAsList(bm.activeFoodLocations),
             foodLocations = GetFoodLocationsAsList(bm.foodLocations),
