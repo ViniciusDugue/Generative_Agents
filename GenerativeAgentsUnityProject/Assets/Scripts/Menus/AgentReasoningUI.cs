@@ -11,10 +11,13 @@ public class AgentReasoningUI : MonoBehaviour
     public GameObject uiPanel; // Drag your Reasoning UI Panel here in the Inspector
     public TMP_Text reasoningText; // Drag your Text (for showing reasoning) here in the Inspector
 
+    public GameObject openButton;
+
     void Awake()
     {
-        Instance = this;
-        CloseUI(); // Start with it closed
+        // start closed, but show the open button
+        uiPanel.SetActive(false);
+        openButton.SetActive(false);
     }
 
     public void SetText(string reasoning)
@@ -25,10 +28,12 @@ public class AgentReasoningUI : MonoBehaviour
     public void OpenUI()
     {
         uiPanel.SetActive(true);
+        openButton.SetActive(false);
     }
 
     public void CloseUI()
     {
         uiPanel.SetActive(false);
+        openButton.SetActive(true);
     }
 }
