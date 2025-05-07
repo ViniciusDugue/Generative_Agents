@@ -25,7 +25,7 @@ MonoBehaviour:
   - behaviorName: GatherBehavior
     icon: {fileID: 21300000, guid: 76f9b1473d8d6fb439798d9b819af773, type: 3}
     displayName: Gathering Food
-  - behaviorName: GuardHabitat_Behavior
+  - behaviorName: GuardBehavior
     icon: {fileID: 21300000, guid: 05b0ab47715c59f46a758f15af93a96c, type: 3}
     displayName: Guarding Habitat
   - behaviorName: MoveBlockBehavior
