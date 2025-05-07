@@ -163,7 +163,7 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 <assistant>
 {
-    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food. It is still day so habitat does not need to be guarded.",
+    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food. It is still day so no pest are present and habitat does not need to be guarded.",
     "eatCurrentFoodSupply": true,
     "next_action": "MoveBehavior",
     "location": { "x": 65.6, "z": 111.9 }
@@ -195,7 +195,7 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 <assistant>
 {
-    "reasoning": "The agent is low on hunger and has no known food locations. As such, it should go out searching using GatherBehavior. It is still day so habitat does not need to be guarded.",
+    "reasoning": "The agent is low on hunger and has no known food locations. As such, it should go out searching using GatherBehavior. It is still day so no pest are present and habitat does not need to be guarded.",
     "eatCurrentFoodSupply": false,
     "next_action": "GatherBehavior",
 }

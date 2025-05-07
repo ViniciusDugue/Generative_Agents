@@ -5965,6 +5965,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ConstructionSite
       objectReference: {fileID: 0}
+    - target: {fileID: 4878706031624230733, guid: 90840c85cce34c74085cf1526b32eb1d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5833576618377633071, guid: 90840c85cce34c74085cf1526b32eb1d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8996,6 +9001,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Destination (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10778,6 +10788,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6454305978465144645, guid: c0ceb7df25eb974458898fe265f3e347,
+        type: 3}
+      propertyPath: reasoningUI
+      value: 
+      objectReference: {fileID: 1546681675}
     - target: {fileID: 6465166115341516930, guid: c0ceb7df25eb974458898fe265f3e347,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -11214,6 +11229,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TargetBlock (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3453558640031221506, guid: bc23a5d144fff3c4987bdd487277f56b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4039824473717437655, guid: bc23a5d144fff3c4987bdd487277f56b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11588,6 +11608,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TargetBlock (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3453558640031221506, guid: bc23a5d144fff3c4987bdd487277f56b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4039824473717437655, guid: bc23a5d144fff3c4987bdd487277f56b,
         type: 3}
@@ -12084,6 +12109,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TargetBlock
+      objectReference: {fileID: 0}
+    - target: {fileID: 3453558640031221506, guid: bc23a5d144fff3c4987bdd487277f56b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4039824473717437655, guid: bc23a5d144fff3c4987bdd487277f56b,
         type: 3}
@@ -13768,6 +13798,18 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1546681675 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7462496155544210315, guid: eee36a8283a106e4e9011ce6854ff5b2,
+    type: 3}
+  m_PrefabInstance: {fileID: 3796455922484054411}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a2e7c9eee6d3ac498b99b5d108af32b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1553564816
 GameObject:
   m_ObjectHideFlags: 0
@@ -18749,6 +18791,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Block
       objectReference: {fileID: 0}
+    - target: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19861,6 +19908,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Destination
+      objectReference: {fileID: 0}
+    - target: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
