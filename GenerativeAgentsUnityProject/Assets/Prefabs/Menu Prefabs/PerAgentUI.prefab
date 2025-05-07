@@ -721,7 +721,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiPanel: {fileID: 668258192516341233}
   reasoningText: {fileID: 7192780933838463344}
-  openButton: {fileID: 0}
+  openButton: {fileID: 1281767757965919245}
 --- !u!1 &7439279361859231702
 GameObject:
   m_ObjectHideFlags: 0
