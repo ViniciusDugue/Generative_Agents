@@ -27,6 +27,9 @@ public class AgentUIManager : MonoBehaviour
     public TextMeshProUGUI fitnessText;
     public TextMeshProUGUI behaviorText;
 
+    [Header("Agent Reasoning UI")]
+    public AgentReasoningUI reasoningUI; 
+
     private AgentHealth currentAgent;
 
     private BehaviorManager currentBehavior;
@@ -75,12 +78,17 @@ public class AgentUIManager : MonoBehaviour
             // optional: immediately look at the agent
             camCtrl.transform.LookAt(agentHealth.transform.position);
         }
-        }
+
+        // set & open the reasoning panel
+        reasoningUI.SetText( behavior.reasoning );
+        reasoningUI.OpenUI();
+    }
 
     public void HideAgentStats()
     {
         currentAgent = null;
         agentPanel.SetActive(false);
+        reasoningUI.CloseUI();
     }
 
     private void UpdateAgentStats()
