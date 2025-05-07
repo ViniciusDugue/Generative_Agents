@@ -70,6 +70,8 @@ public class BehaviorManager : MonoBehaviour
     // NEW: Time tracking for enemy detection.
     private float enemyDetectionBuffer = 5f;
 
+    // only count the very first discovery of each spawn, across all agents
+    private static readonly HashSet<Transform> _globallyDiscoveredFoodSpawns = new();
 
     public bool UpdateLLM
     {
@@ -411,18 +413,16 @@ public class BehaviorManager : MonoBehaviour
                     // Check if the hit object is a food spawn point
                     if (goHit.tag == "foodSpawn")
                     {
-                        if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                        var status = goHit.GetComponent<FoodSpawnPointStatus>();
+                        if (status != null && status.HasFood)
                         {
-                            FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
-                            if (status != null && status.HasFood) {
-                                activeFoodLocations.Add(goHit.transform);
+                            activeFoodLocations.Add(goHit.transform);
+
+                            if (_globallyDiscoveredFoodSpawns.Add(goHit.transform))
+                            {
                                 EndSimMetricsUI.Instance.IncrementFoodLocationsDiscovered();
                                 Debug.Log("Active Food location found!");
                             }
-                            else{
-                                //Debug.Log("Food location found!");
-                            }
-                            
                         }
                     }
 

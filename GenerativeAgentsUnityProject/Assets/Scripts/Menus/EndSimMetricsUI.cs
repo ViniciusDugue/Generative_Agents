@@ -36,6 +36,9 @@ public class EndSimMetricsUI : MonoBehaviour
     public GameObject uiPanel;
     public static EndSimMetricsUI Instance;
 
+    [Header("Other UI Panels To Hide")]
+    public GameObject[] panelsToHide;
+
     private void Awake()
     {
         Instance = this;
@@ -43,6 +46,11 @@ public class EndSimMetricsUI : MonoBehaviour
 
     public void OpenUI()
     {
+        Time.timeScale = 0f;
+
+        // Hide everything else
+        foreach (GameObject panel in panelsToHide)
+            panel.SetActive(false);
         
         uiPanel.SetActive(true);
         UpdateAllText();
@@ -56,6 +64,9 @@ public class EndSimMetricsUI : MonoBehaviour
 
     private void UpdateAllText()
     {
+        // Only want unique spawn points discovered, not what each agent discovers
+        ComputeUniqueFoodLocationsDiscovered();
+
         SetSimulationDays(TimeManager.Instance.Days);
         SetTotalAgents(SpawnManager.Instance.maxAgents);
 
@@ -68,6 +79,22 @@ public class EndSimMetricsUI : MonoBehaviour
         wallsBuiltText.text = $"Walls Built: {wallsBuilt}";
         wallsPlacedText.text = $"Walls Placed: {wallsPlaced}";
         simulationDurationText.text = $"Simulation Days Passed: {simulationDaysPassed}";
+    }
+
+    private void ComputeUniqueFoodLocationsDiscovered()
+    {
+        var uniqueSpawns = new HashSet<GameObject>();
+        foreach (var agent in SpawnManager.Instance.aliveAgents)
+        {
+            var info = agent.GetComponent<AgentMapInfo>();
+            if (info == null) continue;
+            foreach (var md in info.knownMarkers)
+            {
+                if (md.markerType == MarkerEventManager.MarkerType.FoodSpawn)
+                    uniqueSpawns.Add(md.discoveredObject);
+            }
+        }
+        foodLocationsDiscovered = uniqueSpawns.Count;
     }
 
     private void UpdateFitnessScores()
@@ -115,7 +142,7 @@ public class EndSimMetricsUI : MonoBehaviour
     public void IncrementFoodLocationsDiscovered() => foodLocationsDiscovered++;
     
     public void SetTotalAgents(int count) => totalAgents = count;
-    public void SetSimulationDays(int days) => simulationDaysPassed = days;
+    public void SetSimulationDays(int days) => simulationDaysPassed = days - 1;
 
     //EndSimMetricsUI.Instance.SetTotalAgents(maxAgents);
     //SetSimulationDays(TimeManager.Instance.Days);
