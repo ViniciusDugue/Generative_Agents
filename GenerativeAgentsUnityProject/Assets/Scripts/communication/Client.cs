@@ -126,6 +126,7 @@ public class Client : MonoBehaviour
     {
         MapEncoder mapEncoder = agent.GetComponent<MapEncoder>();
         BehaviorManager bm = agent.GetComponent<BehaviorManager>();
+        AgentHealth agentHealth = agent.GetComponent<AgentHealth>();
         int agentID = agent.GetComponent<BehaviorManager>().agentID;
         string mapData = null;
 
@@ -154,9 +155,11 @@ public class Client : MonoBehaviour
             currentFood = bm.getFood(),
             habitatStoredFood = habitatComponent.storedFood,
             fitness = bm.fitnessScore,
-            health = 100,  // Placeholder, replace with actual health
-            enemyCurrentlyDetected = bm.enemyCurrentlyDetected,
+            health = agentHealth.currentHealth,  
+            enemyCurrentlyDetected = bm.enemyPreviousDetected,
             exhaustion = bm.exhaustion,
+            isDayTime = TimeManager.Instance.IsDayTime,
+            isGuarded = habitatComponent.isGuarded,
             habitatLocation = new {x = habitatComponent.transform.position.x, z =habitatComponent.transform.position.z},
             activeFoodLocations = GetFoodLocationsAsList(bm.activeFoodLocations),
             foodLocations = GetFoodLocationsAsList(bm.foodLocations),
@@ -188,6 +191,7 @@ public class Client : MonoBehaviour
                     Debug.LogError("[Client] LLM response does not contain 'next_action'. Full response: " + responseData);
                     return;
                 }
+               
 
                 string nextAction = responseJson["next_action"].ToString();
                 string reasoning = responseJson.ContainsKey("reasoning") ? responseJson["reasoning"].ToString() : "No reasoning provided";

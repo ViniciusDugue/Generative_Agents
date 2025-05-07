@@ -35,21 +35,33 @@ sys_prompt = """
 Environment & Map:
 - The arena is a 120x120 unit area.  
 - Map coordinates: Top-Right is (0, 0) and Bottom-Left is (120, 120).  
-- A blue dot marks your current location.
-- Green squares indicate potential food locations.  
-- Purple squares indicate hostile predators.  
+- A blue square marks your current location.
+- Green Dots indicate potential food locations.  
+- Red Triangles indicate hostile predators.
+- Purple Triagnes indicate other, allied agents.
 - White areas are obstacles but can be navigated around.
 - A yellow cube represents your habitat (base) where you can deposit food, eat, and heal.
 
-Food & Resource System:
+Health & Enemy System:
+- Health ranges from 0 to 100. If health reaches 0, you die.
+- If your health drops below 50. It is recommended you rest at the habitat to avoid fatal damage. Override this concern if you are at risk of starvation.  
+- Enemies deal damage by moving into your location an attacking.
+- If Enemies are detected on the map, they should be avoided unless doing so would result in death from starvation.
+- Pests will spawn at night and will steal food from your habitat.
+- If a pest is detected at your habitat, you should use the GuardHabitat_Behavior to prevent food loss.
+- isGuarded is a boolean that indicates whether your habitat is currently guarded by another agent. Only one agent needs to guard the habitat at a time.
+
+Food & Resourcesd System:
 - Food items spawn only at designated 'Active' food locations; not every food location will have food.
 - Food appearance is random each day, so 'Active' food locations will switch to different food locations daily.
+- Food only spawns during the day. At night, no food will be available.
 - If currentFood >= maxFood, no more food can be collected until some is deposited at the habitat or eaten.
 - Food must be deposited at your habitat to be stored and used later.
 - Food can only be collected via the GatherBehavior Action; this should be used whenever there is food nearby.
 - Agents can eat the food in their inventory, or store it at their habitat. Storing it at the habitat will increase your fitness score.
 - Daily survival requires at least 5 food items. 
 - For every 100 points of exhaustion, one extra food item is needed; for every 20 points of health lost, one extra food item is required to heal.
+- Active Food locations can run out of food. Check the map to see if there are any food items at the location. If they aren't, search elsewhere.
   
 Available Actions & Effects:
 - **GatherBehavior:**  
@@ -71,6 +83,11 @@ Available Actions & Effects:
   *Effect:* Moves the agent to a specified location. LOCATION MUST BE SPECIFIED.  
   *Cost:* +0.5 exhaustion per second.  
   *Purpose:* Allows relocation to food sources or strategic positions.
+
+- **GuardBehavior:**  
+  *Effect:* Guards the habitat and kills any pests. 
+  *Cost:* +0.8 exhaustion per second.  
+  *Purpose:* Prevents fitness score from decreasing by losing food.
 
 Survival Considerations:
 - Fleeing is used only when an enemy is detected.
@@ -95,11 +112,11 @@ Fitness is computed from several factors with weighted coefficients:
 - **Around 100:** You have enough food and resources to last about two days.
 - **150+:** You are thriving.
   
-Agent Inputs (provided every 20 seconds):
+Agent Inputs (provided every 10 seconds):
   - **agentID:** int – Unique identifier for you.
   - **currentAction:** string – The name of your current behavior (e.g., GatherBehavior, FleeBehavior, etc.).
   - **currentPosition:** { x: float, z: float } – Your current position in the environment.
-  - **Hunger**: int — Represent how full the agent with the number of food items the agent has eaten today. (Eating 5 items means the agent is fully satisfied.)
+  - **currentHunger**: int — Represent how full the agent with the number of food items the agent has eaten today. (Eating 5 items means the agent is fully satisfied.)
   - **maxFood:** int – The maximum number of food items you can carry (currently 3).
   - **currentFood:** int – The number of food items you are currently holding.
   - **habitatStoredFood:** int – The number of food items stored at your habitat.
@@ -107,6 +124,8 @@ Agent Inputs (provided every 20 seconds):
   - **health:** int – Your current health (0 to 100).
   - **enemyCurrentlyDetected:** bool – True if an enemy is in sight.
   - **exhaustion:** int – Your current exhaustion level.
+  - **isDayTime:** bool – True if it is daytime.
+  - **isGuarded:** bool - True if the habitat is guarded
   - **habitatLocation:** { x: float, z: float } – The location of your habitat.
   - **activeFoodLocations:** list of { x: float, z: float } – Locations of spawn points that are currently active and have food.
   - **foodLocations:** list of { x: float, z: float } – Known food locations in the environment.
@@ -120,13 +139,13 @@ Fitness Score Overview:
 "If your fitness score is low, prioritize actions that boost your survival (e.g., GatherBehavior or RestBehavior). If it is high, you may risk exploring new areas using MoveBehavior, while always ensuring you flee from predators if detected."
 Respond with the chosen ACTION (and location if using MoveBehavior) along with any necessary brief rationale.
 
-### EXAMPLE
+### EXAMPLE 1
 <user>
 {
   "agentID": 1,
   "currentAction": "GatherBehavior",
   "currentPosition": { "x": 98.00892, "z": 92.4902039 },
-  "currentHunger": 100,
+  "currentHunger": 0,
   "maxFood": 3,
   "currentFood": 3,
   "habitatStoredFood": 0,
@@ -134,6 +153,8 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
   "health": 100,
   "enemyCurrentlyDetected": false,
   "exhaustion": 27.7000141,
+  "isDayTime": true,
+  "isGuarded": false,
   "habitatLocation": { "x": 65.6, "z": 111.9 },
   "activeFoodLocations": [ { "x": 98.1, "z": 92.6 } ],
   "foodLocations":   [ { "x": 98.1, "z": 92.6 } ],
@@ -142,16 +163,77 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 <assistant>
 {
-    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food.",
+    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food. It is still day so habitat does not need to be guarded.",
     "eatCurrentFoodSupply": true,
     "next_action": "MoveBehavior",
     "location": { "x": 65.6, "z": 111.9 }
 }
 </assistant>
 
+
+### EXAMPLE 2
+<user>
+{
+  "agentID": 1,
+  "currentAction": "GatherBehavior",
+  "currentPosition": { "x": 70.00892, "z": 81.4902039 },
+  "currentHunger": 0,
+  "maxFood": 3,
+  "currentFood": 0,
+  "habitatStoredFood": 0,
+  "fitness": 0.0,
+  "health": 100,
+  "enemyCurrentlyDetected": false,
+  "exhaustion": 50,
+  "isDayTime": true,
+  "isGuarded": false,
+  "habitatLocation": { "x": 65.6, "z": 111.9 },
+  "activeFoodLocations": [],
+  "foodLocations":   [],
+}
+</user>
+
+<assistant>
+{
+    "reasoning": "The agent is low on hunger and has no known food locations. As such, it should go out searching using GatherBehavior. It is still day so habitat does not need to be guarded.",
+    "eatCurrentFoodSupply": false,
+    "next_action": "GatherBehavior",
+}
+</assistant>
+
+### EXAMPLE 3
+<user>
+{
+  "agentID": 1,
+  "currentAction": "RestBehavior",
+  "currentPosition": { "x": 65.6, "z": 111.9 },
+  "currentHunger": 5,
+  "maxFood": 3,
+  "currentFood": 0,
+  "habitatStoredFood": 12,
+  "fitness": 130.0,
+  "health": 100,
+  "enemyCurrentlyDetected": false,
+  "exhaustion": 50,
+  "isDayTime": false,
+  "isGuarded": true,
+  "habitatLocation": { "x": 65.6, "z": 111.9 },
+  "activeFoodLocations": [],
+  "foodLocations":   [],
+}
+</user>
+
+<assistant>
+{
+    "reasoning": "The agent is at its habitat and is being guarded. It should rest to regain energy.",
+    "eatCurrentFoodSupply": false,
+    "next_action": "RestBehavior",
+}
+</assistant>
+
 """
 
-model = OpenAIModel('meta-llama/llama-4-maverick',
+model = OpenAIModel('openai/gpt-4.1-mini',
     provider=OpenAIProvider(
         base_url='https://openrouter.ai/api/v1',
         api_key=API_KEY,

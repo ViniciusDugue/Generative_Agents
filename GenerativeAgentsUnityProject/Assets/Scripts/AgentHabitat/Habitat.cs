@@ -28,6 +28,7 @@ public class Habitat : MonoBehaviour
     private SphereCollider triggerCollider;
 
     public static Habitat Instance;
+    public bool isGuarded;
 
     void Awake()
     {
@@ -104,6 +105,12 @@ public class Habitat : MonoBehaviour
         {
             waitingAgents.Add(agent);
             Debug.Log("Agent registered at habitat: " + agent.name);
+
+            // Check if the Agent is guarding the habitat
+            GuardBehavior guardBehavior = agent.GetComponent<GuardBehavior>();
+            if (guardBehavior.enabled == true) {
+                isGuarded = true;
+            }
         }
     }
 

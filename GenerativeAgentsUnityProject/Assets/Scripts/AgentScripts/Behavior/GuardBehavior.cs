@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
-public class GuardHabitat_Behavior : MonoBehaviour
+public class GuardBehavior : AgentBehavior
 {
     // all guardhabitat states
     public enum GuardState

@@ -1167,7 +1167,7 @@ Camera:
   m_Depth: -100
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4023
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 0bddbe4768bccbb42a4489722e8141d0, type: 2}
   m_TargetDisplay: 0
@@ -1395,7 +1395,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4023
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 0bddbe4768bccbb42a4489722e8141d0, type: 2}
   m_TargetDisplay: 0
@@ -1685,7 +1685,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 13.8, y: -70}
-  m_SizeDelta: {x: 927, y: 907}
+  m_SizeDelta: {x: 1186, y: 912}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &196684844
 MonoBehaviour:
@@ -4100,7 +4100,7 @@ Transform:
   m_GameObject: {fileID: 482179780}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.684, y: -7.993748, z: 82.602}
+  m_LocalPosition: {x: -9, y: -7.993748, z: 77.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6143,7 +6143,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &697519290
 Transform:
   m_ObjectHideFlags: 0
@@ -17769,7 +17769,7 @@ Transform:
   m_GameObject: {fileID: 1972899943}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.336006, y: -8.7, z: 18.815}
+  m_LocalPosition: {x: 35.63, y: -8.7, z: 11.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19733,8 +19733,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 449.7, y: 1430.5}
-  m_SizeDelta: {x: 927, y: 907}
+  m_AnchoredPosition: {x: 579.2, y: 1438}
+  m_SizeDelta: {x: 1186, y: 912}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2120585616
 MonoBehaviour:
@@ -20489,6 +20489,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 668258192516341233, guid: eee36a8283a106e4e9011ce6854ff5b2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 808737245518742731, guid: eee36a8283a106e4e9011ce6854ff5b2,
         type: 3}
       propertyPath: m_Name
