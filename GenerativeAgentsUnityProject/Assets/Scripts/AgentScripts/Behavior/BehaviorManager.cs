@@ -240,9 +240,16 @@ public class BehaviorManager : MonoBehaviour
         {
             Debug.Log($"Switching AgentBehavior to {behaviorName}");
 
+        try
+        {
             // Disable current AgentBehavior
             currentAgentBehavior.enabled = false;
-
+        }
+            catch (System.Exception e)
+        {
+            Debug.LogWarning($"Error disabling {currentAgentBehavior.GetType().Name}: {e.Message}");
+        }
+        
             // Switch and enable new AgentBehavior  
             currentAgentBehavior = newBehavior;
             currentAgentBehavior.enabled = true;
