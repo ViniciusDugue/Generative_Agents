@@ -4159,6 +4159,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8031660958890535824}
   - component: {fileID: 6713646452821681703}
+  - component: {fileID: 8341969034202815640}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -4202,11 +4203,49 @@ MonoBehaviour:
   aboutUsMenu: {fileID: 8864009243817398609}
   contactUsMenu: {fileID: 5265740928320758334}
   environmentContainer: {fileID: 0}
-  spawnManager: {fileID: 0}
-  agentsInput: {fileID: 0}
-  enemiesInput: {fileID: 0}
-  foodInput: {fileID: 0}
+  spawnManager: {fileID: 8341969034202815640}
+  agentsInput: {fileID: 8444670305300076253}
+  enemiesInput: {fileID: 7352149112206056509}
+  foodInput: {fileID: 3633372213185305106}
   playButton: {fileID: 0}
+--- !u!114 &8341969034202815640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771837050249347680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e531846e79f0b9c46acff202f3e913c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodPrefab: {fileID: 2548240240112861867, guid: d4383c6cb518b354e97730aa1b268c44,
+    type: 3}
+  enemyPrefab: {fileID: 659702081715010919, guid: f07e5f9a90e6c094c809fe384b89b525,
+    type: 3}
+  agentPrefab: {fileID: 8148831817186536054, guid: 6e25fa16c8dd1104ea38cfd8da264260,
+    type: 3}
+  pestPrefab: {fileID: 3161814729104669398, guid: 28b525e8d56e4cc45819eee6bd3899bf,
+    type: 3}
+  maxFood: 25
+  maxEnemies: 5
+  maxAgents: 3
+  spawnHeightOffset: 0.5
+  maxPests: 5
+  foodSpawnRadius: 5
+  enemySpawnRadius: 10
+  agentSpawnRadius: 7
+  dailyActiveFoodSpawnCount: 2
+  dailyActiveEnemySpawnCount: 2
+  spawnedFood: []
+  spawnedEnemies: []
+  spawnedAgents: []
+  aliveAgents: []
+  activeFoodSpawnPoints: []
+  activeEnemySpawnPoints: []
+  agentSpawnPoints: []
+  timeManager: {fileID: 0}
 --- !u!1 &3880415067590926810
 GameObject:
   m_ObjectHideFlags: 0
@@ -6268,14 +6307,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 2
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -6797,14 +6836,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 2
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
