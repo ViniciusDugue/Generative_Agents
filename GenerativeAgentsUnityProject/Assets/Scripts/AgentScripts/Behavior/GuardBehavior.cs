@@ -43,6 +43,16 @@ public class GuardBehavior : AgentBehavior
         currentState = GuardState.GoTowardsHabitat;
     }
 
+    protected override void OnEnable() {
+        if (navAgent != null)
+            navAgent.isStopped = false; 
+    }
+
+    protected override void OnDisable() {
+        if (navAgent != null)
+            navAgent.isStopped = true; 
+    }
+
     void Update()
     {
         // only check for pests if in patroling state

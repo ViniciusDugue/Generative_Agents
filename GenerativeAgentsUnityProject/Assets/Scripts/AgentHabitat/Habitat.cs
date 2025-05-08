@@ -163,7 +163,7 @@ public class Habitat : MonoBehaviour
                     }
                 }
 
-                if (allDropped && storedFood > 0)
+                if (storedFood > 0)
                 {
                     Debug.Log("All registered agents have dropped their food. Dispensing food based on fitness.");
                     DispenseFood();
