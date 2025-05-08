@@ -518,12 +518,14 @@ public class BehaviorManager : MonoBehaviour
             int missingFood = RequiredFood - CurrentHunger;
             // Parameter: Percentage of max health damage per missing food portion.
             float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
+            AgentHeal agentHeal = GetComponent<AgentHeal>(); // TODO: MODIFY AGENTHEAL TO CALL AGENTHEALTH INSTEAD
             AgentHealth agentHealth = GetComponent<AgentHealth>();
             if (agentHealth != null)
             {
                 // Calculate total damage.
                 int damage = Mathf.RoundToInt(missingFood * damagePercentagePerPortion * agentHealth.maxHealth);
                 Debug.Log($"Agent {agentID} did not consume enough food. Missing {missingFood} portions. Applying {damage} damage.");
+                agentHeal.TakeDamage(damage);
                 agentHealth.TakeDamage(damage);
             }
             else

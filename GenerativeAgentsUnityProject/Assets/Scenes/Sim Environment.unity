@@ -4100,7 +4100,7 @@ Transform:
   m_GameObject: {fileID: 482179780}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9, y: -7.993748, z: 77.4}
+  m_LocalPosition: {x: 1.69, y: -7.993748, z: 65.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17542,7 +17542,7 @@ MonoBehaviour:
   maxEnemies: 5
   maxAgents: 3
   spawnHeightOffset: 0.5
-  maxPests: 5
+  maxPests: 12
   foodSpawnRadius: 5
   enemySpawnRadius: 10
   agentSpawnRadius: 7
@@ -17641,7 +17641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1947210639
 Transform:
   m_ObjectHideFlags: 0
@@ -20466,6 +20466,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8316424405763230828, guid: 5fd2083b2b3c5cb42883f203b33352c4,
+        type: 3}
+      propertyPath: storedFood
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8316424405763230828, guid: 5fd2083b2b3c5cb42883f203b33352c4,
         type: 3}

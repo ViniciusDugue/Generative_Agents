@@ -29,6 +29,7 @@ public class Habitat : MonoBehaviour
 
     public static Habitat Instance;
     public bool isGuarded;
+    private float timer = 0f;
 
     void Awake()
     {
@@ -48,6 +49,23 @@ public class Habitat : MonoBehaviour
     {
         // Begin the periodic dispense check
         StartCoroutine(CheckForDispenseCondition());
+    }
+
+    void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer > 1f) {
+            timer = 0;
+            foreach (var agent in waitingAgents) {
+                GuardBehavior guardBehavior = agent.GetComponent<GuardBehavior>();
+                if (guardBehavior.enabled == true) {
+                    isGuarded = true;
+                }
+                else if (guardBehavior.enabled == false) {
+                    isGuarded = false;
+                }
+            }
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -168,7 +186,6 @@ public class Habitat : MonoBehaviour
                     Debug.Log("All registered agents have dropped their food. Dispensing food based on fitness.");
                     DispenseFood();
                     waitingAgents.Clear();
-                    break;
                 }
                 else if (!allDropped)
                 {
