@@ -173,7 +173,8 @@ public class AgentUIManager : MonoBehaviour
                 }
             }
         }
-
+        
+        reasoningUI.SetText(currentBehavior.reasoning);
         // Live updates if active
         if (currentAgent != null && agentPanel.activeSelf)
         {
@@ -183,5 +184,6 @@ public class AgentUIManager : MonoBehaviour
             UpdateFoodIcons();
             UpdateAgentStats();
         }
+        
     }
 }
