@@ -82,9 +82,9 @@ public class MoveBehavior : AgentBehavior
             agent.remainingDistance <= agent.stoppingDistance &&
             !promptLLM)
         {
-            bm.UpdateLLM = true;
-            bm.MapDataExist = true;
-            promptLLM = true;
+            // bm.UpdateLLM = true;
+            // bm.MapDataExist = true;
+            // promptLLM = true;
         }
         
     }
