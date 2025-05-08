@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MoveBlockBehavior : AgentBehavior
 {
@@ -15,71 +16,69 @@ public class MoveBlockBehavior : AgentBehavior
         DropBlockAtHabitat
     }
 
-    [Header("Block")]    
-    public GameObject blockPrefab;
-    public GameObject targetBlock;
+    [Header("Blocks To Move")]
+    [Tooltip("Assign all blocks that should be fetched in order.")]
+    public List<GameObject> targetBlocks = new List<GameObject>();
 
     [Header("Agent Settings")]
     public NavMeshAgent navAgent;
     public float pickupRange = 2f;
     public float destinationStopDistance = 1f;
-
+    public GameObject targetBlock;
     [Header("Visuals")]
     public GameObject holdingBlock;
 
-    [Header("Control Flags")]
+    [Header("Build Behavior")]
+    [Tooltip("Once all blocks are moved, this BuildWallBehavior will be enabled.")]
+    public BuildWallBehavior buildWallBehaviorToActivate;
+
+    [HideInInspector] public bool completeDepositing = false;
+
+    private int currentBlockIndex = 0;
+    private AgentState currentState = AgentState.Idle;
     private bool startBehavior = false;
     private bool interrupt = false;
-    public AgentState currentState = AgentState.Idle;
 
     public static MoveBlockBehavior Instance;
 
     void Awake()
     {
+        AgentBehaviorUI.Instance.UpdateAgentBehaviorUI("MoveBlockBehavior");
         Instance = this;
         holdingBlock?.SetActive(false);
     }
 
     void OnEnable()
     {
-        startBehavior = true;
+        // reset indices and flags
+        currentBlockIndex = 0;
+        completeDepositing = false;
         interrupt = false;
+        startBehavior = true;
+        currentState = AgentState.Idle;
+
+        // hide visuals
+        holdingBlock?.SetActive(false);
+
+        // set first target
+        if (targetBlocks != null && targetBlocks.Count > 0)
+            targetBlock = targetBlocks[0];
     }
 
     void OnDisable()
     {
-        // Reset state and stop agent
-        currentState = AgentState.Idle;
-        startBehavior = false;
-        interrupt = false;
+        // reset navAgent
         if (navAgent.isOnNavMesh)
             navAgent.isStopped = true;
-
-        // Hide holding visual
+        // hide visuals
         holdingBlock?.SetActive(false);
-
-        // Spawn a new block in front of the agent
-        if (blockPrefab != null)
-        {
-            Vector3 spawnPos = transform.position + transform.forward * pickupRange;
-            Instantiate(blockPrefab, spawnPos, Quaternion.identity);
-        }
-    }
-
-    /// <summary>
-    /// Assign which block to fetch; the agent will auto‐deliver to Habitat.Instance.
-    /// </summary>
-    public void SetBlockAgentData(GameObject targetBlockObject)
-    {
-        targetBlock = targetBlockObject;
     }
 
     void Update()
     {
-        // Honor interruption flag
+        // respect interrupt
         navAgent.isStopped = interrupt;
-        if (interrupt)
-            return;
+        if (interrupt) return;
 
         switch (currentState)
         {
@@ -108,12 +107,8 @@ public class MoveBlockBehavior : AgentBehavior
                 break;
 
             case AgentState.PickUpBlock:
-                if (targetBlock != null)
-                {
-                    Destroy(targetBlock);
-                    targetBlock = null;
-                    holdingBlock?.SetActive(true);
-                }
+                Destroy(targetBlock);
+                holdingBlock?.SetActive(true);
                 currentState = AgentState.WaitAfterPickup;
                 StartCoroutine(WaitAfterPickupCoroutine());
                 break;
@@ -133,11 +128,28 @@ public class MoveBlockBehavior : AgentBehavior
                 break;
 
             case AgentState.DropBlockAtHabitat:
+                // drop visual
                 holdingBlock?.SetActive(false);
                 Habitat.Instance.storedBlocks++;
                 EndSimMetricsUI.Instance.IncrementBlocksMoved();
-                currentState = AgentState.Idle;
-                startBehavior = false;
+
+                // move to next block or finish
+                currentBlockIndex++;
+                if (currentBlockIndex < targetBlocks.Count)
+                {
+                    // set up next
+                    targetBlock = targetBlocks[currentBlockIndex];
+                    startBehavior = true;
+                    currentState = AgentState.Idle;
+                }
+                else
+                {
+                    // all done
+                    completeDepositing = true;
+                    this.enabled = false;
+                    if (buildWallBehaviorToActivate != null)
+                        buildWallBehaviorToActivate.enabled = true;
+                }
                 break;
         }
     }

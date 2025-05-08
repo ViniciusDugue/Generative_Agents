@@ -4,5 +4,27 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Pyramids/Scenes/Pyramids.unity
+    guid: 35afbc150a44b4aa69ca04685486b5c4
+  - enabled: 0
+    path: Assets/Scenes/Test Environment.unity
+    guid: 8848e0a5e6c380646860636cd4fc73fe
+  - enabled: 0
+    path: Assets/FoodCollector/Scenes/FoodCollector.unity
+    guid: 74aeee1f5073c4998840fc784793f1ef
+  - enabled: 0
+    path: Assets/Scenes/Pest Sim Environment.unity
+    guid: 40b8b5ed34e37d647aad511ff2fa2362
+  - enabled: 0
+    path: Assets/Scenes/Block New Environment Scene.unity
+    guid: 2c9ad547c5a258e4cabe12d0bc14ef65
+  - enabled: 0
+    path: Assets/Scenes/Block Environment Scene.unity
+    guid: 462c0f5e8ca07fd4ba907aeb55da4dcf
+  - enabled: 1
+    path: Assets/Scenes/Sim Environment.unity
+    guid: ff1b3e959558937408bab941fff12d53
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0

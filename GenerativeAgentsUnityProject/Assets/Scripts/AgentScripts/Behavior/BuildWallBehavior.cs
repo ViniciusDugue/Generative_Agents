@@ -4,19 +4,6 @@ using System.Collections;
 
 public class BuildWallBehavior : AgentBehavior
 {
-    [Header("Required GameObjects")]
-    public GameObject smallWall;
-    public GameObject destinationPrefab;
-
-    [Header("Movement Settings")]
-    public NavMeshAgent navAgent;
-    public float destinationStopDistance = 1f;
-
-    [Header("Control Booleans")]
-    public bool startBehavior = false;
-    public bool interrupt = false;
-    public bool isHoldingWall = false;
-
     public enum AgentState
     {
         Idle,
@@ -26,26 +13,45 @@ public class BuildWallBehavior : AgentBehavior
         WaitAtBuildPosition,
         CreateWall
     }
-    public AgentState currentState = AgentState.Idle;
 
-    private bool waitingAtHabitat = false;
-    private bool waitingAtBuild = false;
+    [Header("Required GameObjects")]
+    [Tooltip("Visual prefab of the half-built wall carried by the agent.")]
+    public GameObject smallWall;
+    [Tooltip("Destination marker prefab for where to build.")]
+    public GameObject destinationPrefab;
+
+    [Header("Agent Settings")]
+    public NavMeshAgent navAgent;
+    public float destinationStopDistance = 1f;
+
+    [Header("Build Sequence")]
+    [Tooltip("Number of walls to build in total.")]
+    public int totalWalls = 4;
+
+    [HideInInspector] public bool completeBuilding = false;
+
+    private int wallsBuilt = 0;
+    private bool startBehavior = false;
+    private bool interrupt = false;
+    private AgentState currentState = AgentState.Idle;
     private GameObject destinationMarker;
 
     void OnEnable()
     {
-        startBehavior = true;
+        
+        wallsBuilt = 0;
+        completeBuilding = false;
         interrupt = false;
-        isHoldingWall = false;
+        startBehavior = true;
+        smallWall?.SetActive(false);
         currentState = AgentState.Idle;
     }
 
     void OnDisable()
     {
-        // simply disable carried visual and stop movement
+        // cleanup
         if (smallWall != null)
             smallWall.SetActive(false);
-        isHoldingWall = false;
         navAgent.isStopped = true;
         if (destinationMarker)
             Destroy(destinationMarker);
@@ -59,8 +65,13 @@ public class BuildWallBehavior : AgentBehavior
             return;
         }
 
+        // kick off first move
         if (startBehavior && currentState == AgentState.Idle)
+        {
+            AgentBehaviorUI.Instance.UpdateAgentBehaviorUI("BuildWallBehavior");
             currentState = AgentState.MoveToHabitat;
+        }
+            
 
         switch (currentState)
         {
@@ -89,54 +100,62 @@ public class BuildWallBehavior : AgentBehavior
                 break;
 
             case AgentState.CreateWall:
+                // perform build
                 Habitat.Instance.BuildNextWall();
                 Destroy(destinationMarker);
                 smallWall.SetActive(false);
-                currentState = AgentState.Idle;
-                startBehavior = false;
+
+                wallsBuilt++;
+                if (wallsBuilt < totalWalls)
+                {
+                    // queue the next one
+                    startBehavior = true;
+                    currentState = AgentState.Idle;
+                }
+                else
+                {
+                    // all done
+                    completeBuilding = true;
+                    this.enabled = false;
+                }
                 break;
         }
     }
 
-    IEnumerator WaitAtHabitatCoroutine()
+    private IEnumerator WaitAtHabitatCoroutine()
     {
         yield return new WaitForSeconds(1f);
-        waitingAtHabitat = false;
-        
+        startBehavior = false;
         SetBuildData();
         currentState = AgentState.MoveToBuildPosition;
     }
 
-    IEnumerator WaitAtBuildPositionCoroutine()
+    private IEnumerator WaitAtBuildPositionCoroutine()
     {
         yield return new WaitForSeconds(3f);
-        waitingAtBuild = false;
         currentState = AgentState.CreateWall;
     }
 
     /// <summary>
-    /// Sets the build target XZ and spawns the destination prefab marker.
+    /// Determines where the next wall goes and places a marker there.
     /// </summary>
-    public void SetBuildData()
+    private void SetBuildData()
     {
         var nextWall = Habitat.Instance.GetNextWallToBuild();
         Vector2 xz = new Vector2(nextWall.transform.position.x, nextWall.transform.position.z);
+
         if (destinationMarker)
             Destroy(destinationMarker);
         destinationMarker = SpawnDestinationMarker(xz);
     }
 
-    /// <summary>
-    /// Spawns the destination marker on the NavMesh at the requested XZ.
-    /// </summary>
     private GameObject SpawnDestinationMarker(Vector2 xz)
     {
         Vector3 origin = new Vector3(xz.x, transform.position.y + 10f, xz.y);
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(origin, out hit, 20f, NavMesh.AllAreas))
+        if (NavMesh.SamplePosition(origin, out NavMeshHit hit, 20f, NavMesh.AllAreas))
             return Instantiate(destinationPrefab, hit.position, Quaternion.identity);
 
-        Debug.LogWarning($"BuildWall_Agent: Cannot sample NavMesh at XZ=({xz.x},{xz.y})");
+        Debug.LogWarning($"BuildWallBehavior: Cannot sample NavMesh at XZ=({xz.x},{xz.y})");
         return null;
     }
 }
