@@ -1,116 +1,161 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
-    public GameObject mainMenu, settingsMenu, aboutUsMenu, contactUsMenu, environment; // References for menus and environment
+    [Header("Menus & Environment")]
+    public GameObject mainMenu;
+    public GameObject settingsMenu;
+    public GameObject aboutUsMenu;
+    public GameObject contactUsMenu;
+    public GameObject environmentContainer;
+
+    [Header("Spawn Manager")]
+    public SpawnManager spawnManager;
+
+    [Header("Simulation Size Inputs")]
+    public TMP_InputField agentsInput;
+    public TMP_InputField enemiesInput;
+    public TMP_InputField foodInput;
+
+    [Header("Play Button (assign in Inspector)")]
+    public Button playButton;
+
+    private int selectedAgents;
+    private int selectedEnemies;
+    private int selectedFood;
 
     void Start()
     {
-        // Find menus in the hierarchy
-        mainMenu = transform.Find("MainMenu")?.gameObject;
-        settingsMenu = transform.Find("SettingsMenu")?.gameObject;
-        aboutUsMenu = transform.Find("AboutUsMenu")?.gameObject;
-        contactUsMenu = transform.Find("ContactUsMenu")?.gameObject;
-        environment = GameObject.Find("Environment"); // Search globally for Environment
+        // sanity checks
+        if (spawnManager == null) Debug.LogError($"[{name}] SpawnManager not assigned!");
+        if (agentsInput==null||enemiesInput==null||foodInput==null)
+            Debug.LogError($"[{name}] One of the input fields is missing!");
+        if (mainMenu==null||environmentContainer==null)
+            Debug.LogError($"[{name}] One of the menu GameObjects is missing!");
+        if (playButton == null)
+            Debug.LogError($"[{name}] Play Button not assigned in the Inspector!");
 
-        // Debug logs to check references
-        Debug.Log($"MainMenu assigned: {mainMenu != null}");
-        Debug.Log($"SettingsMenu assigned: {settingsMenu != null}");
-        Debug.Log($"AboutUsMenu assigned: {aboutUsMenu != null}");
-        Debug.Log($"ContactUsMenu assigned: {contactUsMenu != null}");
-        Debug.Log($"Environment assigned: {environment != null}");
-
-        // Ensure none of the references are null
-        if (mainMenu == null || settingsMenu == null || aboutUsMenu == null || contactUsMenu == null || environment == null)
+        // populate the fields from your spawnManager defaults
+        if (spawnManager != null)
         {
-            Debug.LogError("One or more menus or the environment objects are not assigned or found!");
-            return; // Stop execution to prevent further null reference errors
+            agentsInput.text  = spawnManager.maxAgents.ToString();
+            enemiesInput.text = spawnManager.maxEnemies.ToString();
+            foodInput.text    = spawnManager.maxFood.ToString();
         }
 
-        // Set default states
-        mainMenu.SetActive(true);
-        settingsMenu.SetActive(false);
-        aboutUsMenu.SetActive(false);
-        contactUsMenu.SetActive(false);
-        environment.SetActive(false); // Environment is inactive by default
+        agentsInput.onEndEdit  .AddListener(OnAgentsInputChanged);
+        enemiesInput.onEndEdit .AddListener(OnEnemiesInputChanged);
+        foodInput.onEndEdit    .AddListener(OnFoodInputChanged);
 
-        Debug.Log("MenuManager initialized successfully.");
+        if (playButton != null)
+        {
+            playButton.onClick.RemoveAllListeners();
+            playButton.onClick.AddListener(() =>
+            {
+                Debug.Log("▶️ StartEnvironment() clicked");
+                StartEnvironment();
+            });
+        }
+
+        // prime our internal values
+        OnAgentsInputChanged(agentsInput.text);
+        OnEnemiesInputChanged(enemiesInput.text);
+        OnFoodInputChanged(foodInput.text);
+
+        // pause time until we hit Play
+        Time.timeScale = 0f;
+
+        OpenMainMenu();
     }
 
+    private void OnAgentsInputChanged(string txt)
+    {
+        if (int.TryParse(txt, out var v) && v >= 0)
+            selectedAgents = v;
+        else
+            agentsInput.text = selectedAgents.ToString();
+    }
+
+    private void OnEnemiesInputChanged(string txt)
+    {
+        if (int.TryParse(txt, out var v) && v >= 0)
+            selectedEnemies = v;
+        else
+            enemiesInput.text = selectedEnemies.ToString();
+    }
+
+    private void OnFoodInputChanged(string txt)
+    {
+        if (int.TryParse(txt, out var v) && v >= 0)
+            selectedFood = v;
+        else
+            foodInput.text = selectedFood.ToString();
+    }
 
     public void StartEnvironment()
     {
-        Debug.Log("StartEnvironment() called");
+        if (spawnManager == null) return;
 
-        if (environment != null)
-        {
-            environment.SetActive(true);
-            Debug.Log("Environment activated.");
-        }
-        else
-        {
-            Debug.LogError("Environment is not assigned!");
-        }
+        spawnManager.maxAgents  = selectedAgents;
+        spawnManager.maxEnemies = selectedEnemies;
+        spawnManager.maxFood    = selectedFood;
 
-        // Hide all menus
-        mainMenu?.SetActive(false);
-        settingsMenu?.SetActive(false);
-        aboutUsMenu?.SetActive(false);
-        contactUsMenu?.SetActive(false);
-        Debug.Log("Menus deactivated.");
+        // this kicks off your new InitializeSimulation()
+        spawnManager.InitializeSimulation();
+
+        // un-pause
+        Time.timeScale = 1f;
+
+        // swap to simulation view
+        environmentContainer.SetActive(true);
+        mainMenu       .SetActive(false);
+        settingsMenu   .SetActive(false);
+        aboutUsMenu    .SetActive(false);
+        contactUsMenu  .SetActive(false);
     }
+
+    // ─── Menu navigation ───────────────────────────────────────
 
     public void OpenMainMenu()
     {
-        // Show Main Menu and deactivate other menus and environment
         mainMenu.SetActive(true);
         settingsMenu.SetActive(false);
         aboutUsMenu.SetActive(false);
         contactUsMenu.SetActive(false);
-        environment.SetActive(false);
-
-        Debug.Log("Returned to Main Menu.");
+        environmentContainer.SetActive(false);
     }
 
     public void OpenSettingsMenu()
     {
-        // Show Settings Menu
         mainMenu.SetActive(false);
         settingsMenu.SetActive(true);
         aboutUsMenu.SetActive(false);
         contactUsMenu.SetActive(false);
-        environment.SetActive(false);
-
-        Debug.Log("Navigated to Settings Menu.");
+        environmentContainer.SetActive(false);
     }
 
     public void OpenAboutUsMenu()
     {
-        // Show About Us Menu
         mainMenu.SetActive(false);
         settingsMenu.SetActive(false);
         aboutUsMenu.SetActive(true);
         contactUsMenu.SetActive(false);
-        environment.SetActive(false);
-
-        Debug.Log("Navigated to About Us Menu.");
+        environmentContainer.SetActive(false);
     }
 
     public void OpenContactUsMenu()
     {
-        // Show Contact Us Menu
         mainMenu.SetActive(false);
         settingsMenu.SetActive(false);
         aboutUsMenu.SetActive(false);
         contactUsMenu.SetActive(true);
-        environment.SetActive(false);
-
-        Debug.Log("Navigated to Contact Us Menu.");
+        environmentContainer.SetActive(false);
     }
 
     public void BackToMainMenu()
     {
-        // Navigate back to Main Menu from any menu or environment
         OpenMainMenu();
     }
 }

@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class EndSimMetricsUI : MonoBehaviour
@@ -18,11 +16,11 @@ public class EndSimMetricsUI : MonoBehaviour
     public TMP_Text simulationDurationText;
 
     [Header("Fitness Score Display")]
-    public GameObject fitnessScorePrefab; // The Text prefab to instantiate
-    public Transform fitnessScoreContainer; // The Vertical Layout Group to parent them under
-    private List<GameObject> instantiatedFitnessTexts = new List<GameObject>(); // Track instantiated objects so we can clear them
+    public GameObject fitnessScorePrefab;    // prefab with a TMP_Text child
+    public Transform fitnessScoreContainer;  // vertical layout group parent
+    private List<GameObject> instantiatedFitnessTexts = new List<GameObject>();
 
-    [Header("Tracked Values")]
+    [Header("Tracked Values (you can increment these as your sim runs)")]
     public int totalAgents = 0;
     public int deadAgents = 0;
     public int foodCollected = 0;
@@ -33,6 +31,7 @@ public class EndSimMetricsUI : MonoBehaviour
     public int wallsPlaced = 0;
     public int simulationDaysPassed = 0;
 
+    [Header("Panel")]
     public GameObject uiPanel;
     public static EndSimMetricsUI Instance;
 
@@ -41,9 +40,11 @@ public class EndSimMetricsUI : MonoBehaviour
         Instance = this;
     }
 
+    /// <summary>
+    /// Call this when you want to pop open the metrics screen.
+    /// </summary>
     public void OpenUI()
     {
-        
         uiPanel.SetActive(true);
         UpdateAllText();
         UpdateFitnessScores();
@@ -56,74 +57,68 @@ public class EndSimMetricsUI : MonoBehaviour
 
     private void UpdateAllText()
     {
-        SetSimulationDays(TimeManager.Instance.Days);
-        SetTotalAgents(SpawnManager.Instance.maxAgents);
+        var mgr = SpawnManager.Instance;
+        var tm  = TimeManager.Instance;
 
-        totalAgentsText.text = $"Total Agents Count: {totalAgents}";
-        agentsAliveText.text = $"Agents Alive: {totalAgents - deadAgents}";
-        foodCollectedText.text = $"Food Collected: {foodCollected}";
-        foodLocationsDiscoveredText.text = $"Food Locations Discovered: {foodLocationsDiscovered}";
-        foodEatenByPestsText.text = $"Food Eaten by Pests: {foodEatenByPests}";
+        if (mgr != null)
+        {
+            totalAgents       = mgr.spawnedAgents.Count;
+            int alive         = mgr.aliveAgents.Count;
+            int food          = mgr.spawnedFood.Count;
+            int spots         = mgr.ActiveFoodSpawnPoints.Count;
+            int pests         = mgr.SpawnedPestsCount;
+
+            totalAgentsText.text             = $"Total Agents: {totalAgents}";
+            agentsAliveText.text             = $"Agents Alive: {alive}";
+            foodCollectedText.text           = $"Food Collected: {food}";
+            foodLocationsDiscoveredText.text = $"Food Spawns Active: {spots}";
+            foodEatenByPestsText.text        = $"Food Eaten by Pests: {pests}";
+        }
+        else
+        {
+            Debug.LogWarning("SpawnManager.Instance is null!");
+        }
+
+        // use your own tracked counters here:
         blocksMovedText.text = $"Blocks Moved: {blocksMoved}";
-        wallsBuiltText.text = $"Walls Built: {wallsBuilt}";
+        wallsBuiltText.text  = $"Walls Built: {wallsBuilt}";
         wallsPlacedText.text = $"Walls Placed: {wallsPlaced}";
-        simulationDurationText.text = $"Simulation Days Passed: {simulationDaysPassed}";
+
+        int days = tm != null ? tm.Days : 0;
+        simulationDurationText.text = $"Days Passed: {days}";
     }
 
     private void UpdateFitnessScores()
     {
-        // Clear old fitness text objects
-        foreach (var obj in instantiatedFitnessTexts)
-        {
-            Destroy(obj);
-        }
+        // clear out old entries
+        foreach (var go in instantiatedFitnessTexts)
+            Destroy(go);
         instantiatedFitnessTexts.Clear();
 
-        if (SpawnManager.Instance == null)
-        {
-            Debug.LogWarning("SpawnManager.Instance not found.");
-            return;
-        }
-
-        List<GameObject> aliveAgents = SpawnManager.Instance.aliveAgents;
+        if (SpawnManager.Instance == null) return;
 
         int agentNumber = 1;
-        foreach (GameObject agentObj in aliveAgents)
+        foreach (var agentObj in SpawnManager.Instance.aliveAgents)
         {
-            if (agentObj != null)
-            {
-                BehaviorManager behaviorManager = agentObj.GetComponent<BehaviorManager>();
-                if (behaviorManager != null)
-                {
-                    GameObject fitnessTextObj = Instantiate(fitnessScorePrefab, fitnessScoreContainer);
-                    TMP_Text fitnessText = fitnessTextObj.transform.GetChild(0).GetComponent<TMP_Text>();
-                    fitnessText.text = $"Agent {agentNumber}: {behaviorManager.FitnessScore:F2}";
-                    instantiatedFitnessTexts.Add(fitnessTextObj);
-                    agentNumber++;
-                }
-            }
+            if (agentObj == null) continue;
+            var bm = agentObj.GetComponent<BehaviorManager>();
+            if (bm == null) continue;
+
+            var entry = Instantiate(fitnessScorePrefab, fitnessScoreContainer);
+            var txt = entry.GetComponentInChildren<TMP_Text>();
+            txt.text = $"Agent {agentNumber++}: {bm.FitnessScore:F2}";
+            instantiatedFitnessTexts.Add(entry);
         }
     }
 
-    // Methods to increment counters
-    public void IncrementFoodCollected() => foodCollected++;
-    public void IncrementFoodEatenByPests() => foodEatenByPests++;
-    public void IncrementBlocksMoved() => blocksMoved++;
-    public void IncrementWallsBuilt() => wallsBuilt++;
-    public void IncrementWallsPlaced() => wallsPlaced++;
-    public void IncrementDeadAgents() => deadAgents++;
+    // if you want to update these mid-sim, call:
+    public void IncrementFoodCollected()        => foodCollected++;
+    public void IncrementFoodEatenByPests()     => foodEatenByPests++;
+    public void IncrementBlocksMoved()           => blocksMoved++;
+    public void IncrementWallsBuilt()            => wallsBuilt++;
+    public void IncrementWallsPlaced()           => wallsPlaced++;
+    public void IncrementDeadAgents()            => deadAgents++;
     public void IncrementFoodLocationsDiscovered() => foodLocationsDiscovered++;
-    
-    public void SetTotalAgents(int count) => totalAgents = count;
-    public void SetSimulationDays(int days) => simulationDaysPassed = days;
-
-    //EndSimMetricsUI.Instance.SetTotalAgents(maxAgents);
-    //SetSimulationDays(TimeManager.Instance.Days);
-    //EndSimMetricsUI.Instance.IncrementFoodCollected();
-    //EndSimMetricsUI.Instance.IncrementFoodEatenByPests();
-    //EndSimMetricsUI.Instance.IncrementBlocksMoved();
-    //EndSimMetricsUI.Instance.IncrementWallsBuilt();
-    //EndSimMetricsUI.Instance.IncrementWallsPlaced();
-    //EndSimMetricsUI.Instance.IncrementDeadAgents();
+    public void SetTotalAgents(int c)            => totalAgents = c;
+    public void SetSimulationDays(int d)         => simulationDaysPassed = d;
 }
-

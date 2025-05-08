@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    private bool hasInitialized = false;
+
     [Header("Spawnable Objects")]
     public GameObject foodPrefab;
     public GameObject enemyPrefab;
@@ -31,9 +33,9 @@ public class SpawnManager : MonoBehaviour
     public int dailyActiveEnemySpawnCount = 2;
 
     // Spawned object lists.
-    private List<GameObject> spawnedFood = new List<GameObject>();
-    private List<GameObject> spawnedEnemies = new List<GameObject>();
-    private List<GameObject> spawnedAgents = new List<GameObject>();
+    public List<GameObject> spawnedFood = new List<GameObject>();
+    public List<GameObject> spawnedEnemies = new List<GameObject>();
+    public List<GameObject> spawnedAgents = new List<GameObject>();
     public List<GameObject> aliveAgents = new List<GameObject>();
     private List<GameObject> spawnedPests = new List<GameObject>();
 
@@ -42,9 +44,9 @@ public class SpawnManager : MonoBehaviour
     private List<Transform> enemySpawnPoints = new List<Transform>();
 
     // Active spawn points for food and enemy.
-    private List<Transform> activeFoodSpawnPoints = new List<Transform>();
-    private List<Transform> activeEnemySpawnPoints = new List<Transform>();
-    private List<Transform> agentSpawnPoints = new List<Transform>();
+    public List<Transform> activeFoodSpawnPoints = new List<Transform>();
+    public List<Transform> activeEnemySpawnPoints = new List<Transform>();
+    public List<Transform> agentSpawnPoints = new List<Transform>();
 
     private MapMarkerManager markerManager;
     public static SpawnManager Instance;
@@ -91,10 +93,52 @@ public class SpawnManager : MonoBehaviour
             Debug.LogWarning("No habitat found to reposition.");
         }
 
-        // Spawn agents at the central hub only once at simulation awake.
+        // // Spawn agents at the central hub only once at simulation awake.
+        // SpawnAgentsAtHub();
+
+        // // Continue with food and enemy spawning based on current time.
+        // if (TimeManager.Instance != null && TimeManager.Instance.IsDayTime)
+        // {
+        //     RandomizeFoodSpawnPoints();
+        //     SpawnFoodAtActivePoints();
+
+        //     RandomizeEnemySpawnPoints();
+        //     SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
+        // }
+
+        // Listen for any marker removals:
+        MarkerEventManager.OnMarkerRemoved += HandleAnyMarkerRemoved;
+    }
+
+    public void InitializeSimulation()
+    {
+        // 0) destroy any old objects
+        foreach(var go in spawnedAgents) Destroy(go);
+        spawnedAgents.Clear();
+        aliveAgents.Clear();
+
+        foreach(var go in spawnedFood)   Destroy(go);
+        spawnedFood.Clear();
+        foodSpawnMapping.Clear();
+        activeFoodSpawnPoints.Clear();
+
+        foreach(var go in spawnedEnemies) Destroy(go);
+        spawnedEnemies.Clear();
+
+        foreach(var go in spawnedPests) Destroy(go);
+        spawnedPests.Clear();
+        
+        hasInitialized = true;
+
+        // reposition habitat (unchanged)
+        GameObject habitatObj = GameObject.FindWithTag("habitat");
+        if (habitatObj != null)
+            habitatObj.GetComponent<Habitat>().RepositionHabitat();
+
+        // 1) spawn your agents
         SpawnAgentsAtHub();
 
-        // Continue with food and enemy spawning based on current time.
+        // 2) spawn food + enemies, depending on day/night
         if (TimeManager.Instance != null && TimeManager.Instance.IsDayTime)
         {
             RandomizeFoodSpawnPoints();
@@ -103,8 +147,13 @@ public class SpawnManager : MonoBehaviour
             RandomizeEnemySpawnPoints();
             SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
         }
-        // Listen for any marker removals:
-        MarkerEventManager.OnMarkerRemoved += HandleAnyMarkerRemoved;
+        else
+        {
+            // if you want some “night-at-start” behavior
+            RandomizeEnemySpawnPoints();
+            SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
+            SpawnPests();
+        }
     }
 
     private void OnDestroy()
@@ -145,6 +194,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Update()
     {
+        if (!hasInitialized) return;
         if (TimeManager.Instance != null)
         {
             if (TimeManager.Instance.IsDayTime != lastIsDaytime)
@@ -206,7 +256,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Randomly select active food spawn points.
-    private void RandomizeFoodSpawnPoints()
+    public void RandomizeFoodSpawnPoints()
     {
         activeFoodSpawnPoints.Clear();
         int countToSelect = Mathf.Min(dailyActiveFoodSpawnCount, foodSpawnPoints.Count);
@@ -245,7 +295,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Randomizes active enemy spawn points (daytime only).
-    private void RandomizeEnemySpawnPoints()
+    public void RandomizeEnemySpawnPoints()
     {
         activeEnemySpawnPoints.Clear();
         int countToSelect = Mathf.Min(dailyActiveEnemySpawnCount, enemySpawnPoints.Count);
@@ -303,7 +353,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Spawns food objects from active food spawn points.
-    private void SpawnFoodAtActivePoints()
+    public void SpawnFoodAtActivePoints()
     {
         DespawnObjects(spawnedFood);
         SpawnObjects(activeFoodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
@@ -325,7 +375,7 @@ public class SpawnManager : MonoBehaviour
     }
 
     // Generic spawn method.
-    private void SpawnObjects(List<Transform> spawnPoints, GameObject prefab, int maxCount, List<GameObject> spawnedList, float spawnRadius)
+    public void SpawnObjects(List<Transform> spawnPoints, GameObject prefab, int maxCount, List<GameObject> spawnedList, float spawnRadius)
     {
         if (spawnPoints.Count == 0)
         {
@@ -414,7 +464,7 @@ public class SpawnManager : MonoBehaviour
     }
 
         // Spawns agents at the central hub (Habitat).
-    private void SpawnAgentsAtHub()
+    public void SpawnAgentsAtHub()
     {
         GameObject habitatObj = GameObject.FindWithTag("habitat");
         if (habitatObj != null)
@@ -525,4 +575,7 @@ public class SpawnManager : MonoBehaviour
     {
         // Not needed here since agents are spawned from the central hub.
     }
+
+    // expose your private spawnedPests list count:
+    public int SpawnedPestsCount => spawnedPests.Count;
 }

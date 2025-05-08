@@ -1,43 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EndSim : MonoBehaviour
 {
+    [Header("Assign these in the Inspector")]
     public Button finishButton;
-    public GameObject endMetrics;
-    public GameObject runtimeUI;
+    public GameObject runtimeUI;   // your in-game HUD panel
+    public GameObject endMetrics;  // your End-of-Sim metrics panel
 
-    void Start() {
-         GameObject endMetrics = this.gameObject.transform.GetChild(0).gameObject;
-         GameObject runtimeUI = this.gameObject.transform.GetChild(1).gameObject;
-
-        if (finishButton != null)
-            finishButton.onClick.AddListener(TaskOnClick);
+    private void Start()
+    {
+        // sanity check
+        if (finishButton == null || runtimeUI == null || endMetrics == null)
+            Debug.LogError("EndSim: please assign finishButton, runtimeUI and endMetrics in the Inspector!");
         else
-            Debug.LogError("Finish Button is not assigned!");
+            finishButton.onClick.AddListener(OnFinishClicked);
 
-        if (endMetrics == null)
-            Debug.LogError("End Metrics GameObject is not assigned!");
-
-        if (runtimeUI == null)
-            Debug.LogError("Runtime UI GameObject is not assigned!");
-
-        Debug.Log("End Metrics Active: " + endMetrics.activeSelf);
-        Debug.Log("Runtime UI Active: " + runtimeUI.activeSelf);
+        // make sure panels start in the right state:
+        runtimeUI.SetActive(true);
+        endMetrics.SetActive(false);
     }
 
-    void TaskOnClick() {
-        Debug.Log("TaskOnClick Executed");
-        Debug.Log(runtimeUI != null);
-        Debug.Log(runtimeUI.activeSelf);
-        if (runtimeUI != null) {
-            runtimeUI.SetActive(false);
-            Debug.Log("Set Runtime to False");
-            if (endMetrics != null)
-                endMetrics.SetActive(true);
-                Debug.Log("Set endMetrics to True");
-        }
+    private void OnFinishClicked()
+    {
+        // hide the in-game UI
+        runtimeUI.SetActive(false);
+
+        // tell your metrics-UI to populate & show
+        EndSimMetricsUI.Instance.OpenUI();
     }
 }
