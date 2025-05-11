@@ -283,7 +283,7 @@ public class Habitat : MonoBehaviour
 
     public void BuildNextWall()
     {
-        if (nextWallIndex < wallsList.Count || storedBlocks<3)
+        if (nextWallIndex < wallsList.Count || storedBlocks>=3)
         {
             var wall = wallsList[nextWallIndex];
             wall.SetActive(true);

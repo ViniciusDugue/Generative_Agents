@@ -68,9 +68,14 @@ public class SpawnManager : MonoBehaviour
     // Track the previous day/night state.
     private bool lastIsDaytime;
 
-    private void Awake()
+    void Start()
     {
         SpawnBlocks();
+    }
+    
+    private void Awake()
+    {
+        
         Instance = this;
         Debug.Log("spawn manager awake");
 

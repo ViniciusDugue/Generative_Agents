@@ -44,6 +44,8 @@ public class MoveBlockBehavior : AgentBehavior
     {
         startBehavior = true;
         interrupt = false;
+
+        SetBlockAgentData(null);
     }
 
     void OnDisable()
@@ -59,7 +61,7 @@ public class MoveBlockBehavior : AgentBehavior
         holdingBlock?.SetActive(false);
 
         // Spawn a new block in front of the agent
-        if (blockPrefab != null)
+        if (targetBlock != null)
         {
             Vector3 spawnPos = transform.position + transform.forward * pickupRange;
             Instantiate(blockPrefab, spawnPos, Quaternion.identity);
@@ -71,7 +73,44 @@ public class MoveBlockBehavior : AgentBehavior
     /// </summary>
     public void SetBlockAgentData(GameObject targetBlockObject)
     {
-        targetBlock = targetBlockObject;
+        if (targetBlockObject != null)
+        {
+            targetBlock = targetBlockObject;
+            return;
+        }
+
+        // No block explicitly passed — search for closest from BehaviorManager
+        BehaviorManager manager = GetComponent<BehaviorManager>();
+        if (manager == null || manager.blockMappingsList.Count == 0)
+        {
+            Debug.LogWarning($"[MoveBlockBehavior] No BehaviorManager or discovered blocks on agent {gameObject.name}");
+            return;
+        }
+
+        GameObject closestBlock = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (var entry in manager.blockMappingsList)
+        {
+            if (entry.blockObject == null) continue;
+
+            float distance = Vector3.Distance(transform.position, entry.blockObject.transform.position);
+            if (distance < closestDistance)
+            {
+                closestBlock = entry.blockObject;
+                closestDistance = distance;
+            }
+        }
+
+        if (closestBlock != null)
+        {
+            targetBlock = closestBlock;
+            Debug.Log($"[MoveBlockBehavior] Closest discovered block '{closestBlock.name}' assigned to {gameObject.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"[MoveBlockBehavior] No valid block found for {gameObject.name}");
+        }
     }
 
     void Update()

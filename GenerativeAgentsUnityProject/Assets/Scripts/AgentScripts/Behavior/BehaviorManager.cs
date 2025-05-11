@@ -345,6 +345,14 @@ public class BehaviorManager : MonoBehaviour
                 // hand off to your MoveBlockBehavior
                 if (behaviors.TryGetValue("MoveBlockBehavior", out var raw))
                 {
+                    if(blockObj == null)
+                    {
+                        Debug.Log("block object is null");
+                    }
+                    else
+                    {
+                        Debug.Log("block object is not null");
+                    }
                     var mb = raw as MoveBlockBehavior;
                     mb!.SetBlockAgentData(blockObj);
                 }
@@ -625,6 +633,7 @@ public class BehaviorManager : MonoBehaviour
                 int damage = Mathf.RoundToInt(missingFood * damagePercentagePerPortion * agentHealth.maxHealth);
                 Debug.Log($"Agent {agentID} did not consume enough food. Missing {missingFood} portions. Applying {damage} damage.");
                 agentHealth.TakeDamage(damage);
+                agentHeal.TakeDamage(damage);
             }
             else
             {
