@@ -318,7 +318,7 @@ public class BehaviorManager : MonoBehaviour
                 if (behaviors.TryGetValue("MoveBlockBehavior", out var raw))
                 {
                     var mb = raw as MoveBlockBehavior;
-                    // mb!.SetBlockAgentData(blockObj);
+                    mb!.SetBlockAgentData(blockObj);
                 }
                 else
                 {
