@@ -9,6 +9,7 @@ public class SpawnManager : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject agentPrefab;
     public GameObject pestPrefab;
+    public GameObject blockPrefab;
     
     [Header("Spawn Settings")]
     public int maxFood = 10;
@@ -16,6 +17,8 @@ public class SpawnManager : MonoBehaviour
     public int maxAgents = 5;
     public float spawnHeightOffset = 0.5f;
     public int maxPests = 6;
+    public int maxBlocksPerPoint = 4;
+    public float blockSpawnHeight = 10f;
 
     [Header("Spawn Radii (Units)")]
     public float foodSpawnRadius = 5f;
@@ -46,6 +49,9 @@ public class SpawnManager : MonoBehaviour
     private List<Transform> activeEnemySpawnPoints = new List<Transform>();
     private List<Transform> agentSpawnPoints = new List<Transform>();
 
+    public List<Transform> blockSpawnPoints = new List<Transform>();
+    public List<GameObject> spawnedBlocks = new List<GameObject>();
+
     private MapMarkerManager markerManager;
     public static SpawnManager Instance;
 
@@ -64,6 +70,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
+        SpawnBlocks();
         Instance = this;
         Debug.Log("spawn manager awake");
 
@@ -307,6 +314,24 @@ public class SpawnManager : MonoBehaviour
     {
         DespawnObjects(spawnedFood);
         SpawnObjects(activeFoodSpawnPoints, foodPrefab, maxFood, spawnedFood, foodSpawnRadius);
+    }
+
+    private void SpawnBlocks()
+    {
+        DespawnObjects(spawnedBlocks);
+
+        int blockIndex = 1; // Counter for naming
+        int totalToSpawn = maxBlocksPerPoint * blockSpawnPoints.Count;
+
+        SpawnObjects(blockSpawnPoints, blockPrefab, totalToSpawn, spawnedBlocks, 3f);
+
+        // Rename each spawned block after spawning
+        foreach (GameObject block in spawnedBlocks)
+        {
+            block.name = $"Block({blockIndex++})";
+        }
+
+        Debug.Log($"✅ Spawned and named {spawnedBlocks.Count} blocks.");
     }
 
     private void SpawnPests()

@@ -1438,7 +1438,7 @@ GameObject:
   - component: {fileID: 5729518069442870478}
   - component: {fileID: 7275002512134994195}
   - component: {fileID: 1713156178617753578}
-  - component: {fileID: 5926976418048991636}
+  - component: {fileID: 2500919377470573148}
   - component: {fileID: 8322022180366706281}
   - component: {fileID: 4361704349902786676}
   - component: {fileID: 8813810141994640850}
@@ -1677,16 +1677,16 @@ MonoBehaviour:
   chaseDuration: 3
   maxChaseDistance: 20
   collisionDamage: 20
---- !u!114 &5926976418048991636
+--- !u!114 &2500919377470573148
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8148831817186536054}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04f11643a90aaf842b3767b619b557ae, type: 3}
+  m_Script: {fileID: 11500000, guid: edcd0ef6e8e8bf641a7f9e87107e4a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   exhaustionRate: 0.1
@@ -1694,7 +1694,7 @@ MonoBehaviour:
   destinationPrefab: {fileID: 6115637942887520002, guid: 9bcd5cf5acf56994d9e286e0bdaa1857,
     type: 3}
   navAgent: {fileID: 3081395510317380987}
-  destinationStopDistance: 2
+  destinationStopDistance: 1
   startBehavior: 0
   interrupt: 0
   isHoldingWall: 0

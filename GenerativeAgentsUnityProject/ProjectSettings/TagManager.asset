@@ -45,6 +45,7 @@ TagManager:
   - targetBlock
   - ConstructionSite
   - Built_Wall
+  - blockSpawn
   layers:
   - Default
   - TransparentFX
@@ -59,7 +60,7 @@ TagManager:
   - EnemySpawn
   - AgentSpawn
   - Block
-  - 
+  - BlockSpawn
   - 
   - 
   - 
