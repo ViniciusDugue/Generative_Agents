@@ -36,6 +36,11 @@ public class BehaviorManager : MonoBehaviour
     private Dictionary<string, AgentBehavior> behaviors = new Dictionary<string, AgentBehavior>();
     private Coroutine exhaustionCoroutine;
     private bool mapDataExist = false;
+    public bool MapDataExist
+{
+    get => mapDataExist;
+    set => mapDataExist = value;
+}
     private bool _updateLLM = false;
     public delegate void updateLLMBoolChangedHandler(int agentID, bool mapData);
     public event updateLLMBoolChangedHandler OnUpdateLLM;
@@ -94,15 +99,15 @@ public class BehaviorManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        AllManagers.Add(this);
-    }
+    // private void OnEnable()
+    // {
+    //     AllManagers.Add(this);
+    // }
 
-    private void OnDisable()
-    {
-        AllManagers.Remove(this);
-    }
+    // private void OnDisable()
+    // {
+    //     AllManagers.Remove(this);
+    // }
     
     void Start()
     {
@@ -134,6 +139,29 @@ public class BehaviorManager : MonoBehaviour
         agentHealth = GetComponent<AgentHealth>();
         gatherBehavior = GetComponent<GatherBehavior>();
         agentHabitat = GameObject.FindGameObjectWithTag("habitat").GetComponent<Habitat>();
+    }
+
+    private void OnEnable()
+    {
+        MarkerEventManager.OnMarkerRemoved += HandleMarkerRemoved;
+    }
+
+    private void OnDisable()
+    {
+        MarkerEventManager.OnMarkerRemoved -= HandleMarkerRemoved;
+    }
+
+    /// <summary>
+    /// As soon as a FoodSpawn-point fires MarkerRemoved, drop it from both sets.
+    /// </summary>
+    private void HandleMarkerRemoved(GameObject obj)
+    {
+        Transform t = obj.transform;
+        if (activeFoodLocations.Remove(t))
+            Debug.Log($"[Agent {agentID}] Removed active food location {t.name}");
+
+        if (foodLocations.Remove(t))
+            Debug.Log($"[Agent {agentID}] Removed known food location {t.name}");
     }
 
     private void Update()
@@ -433,7 +461,8 @@ public class BehaviorManager : MonoBehaviour
     {
         RayPerceptionSensorComponent3D[] rayPerceptionSensorComponents = GetComponents<RayPerceptionSensorComponent3D>();
 
-        float maxDetectionDistance = 25.5f; // Set your max detection distance here
+        float maxDetectionDistance = 35.5f; // Set your max detection distance here
+
         enemyCurrentlyDetected = false;
 
 
@@ -471,7 +500,7 @@ public class BehaviorManager : MonoBehaviour
 
                     if(goHit.tag == "food")
                     {
-                        if(gatherBehavior != null) {
+                        if(gatherBehavior != null && gatherBehavior.enabled) {
                             gatherBehavior.isGathering = true;
                             gatherBehavior.SetFoodTarget(goHit);
                         }
@@ -610,6 +639,9 @@ public class BehaviorManager : MonoBehaviour
         // Reset the daily food tally for the next day.
         depositedFood = 0;
     }
-
+    public void ClearDailyFoodLocations()
+    {
+        activeFoodLocations.Clear();
+    }
 
 }

@@ -7,11 +7,14 @@ public class MoveBehavior : AgentBehavior
 {
     public NavMeshAgent agent;
     public Vector3 target;
+    private BehaviorManager bm;
+    private bool promptLLM = false;
 
     void Awake()
     {
         target = this.gameObject.transform.position;
         agent = GetComponent<NavMeshAgent>();
+        bm = GetComponent<BehaviorManager>();
     }
 
     public void setTarget(Vector3 newPosition) {
@@ -40,9 +43,24 @@ public class MoveBehavior : AgentBehavior
     void Update()
     {
         agent.isStopped = false;
+
         if (agent != null && target != null)
         {
             agent.SetDestination(target);
         }
+
+        if(agent.remainingDistance > agent.stoppingDistance)
+            promptLLM = false; 
+
+        // once we’ve arrived (within stoppingDistance), fire exactly one update:
+        if (!agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance &&
+            !promptLLM)
+        {
+            bm.UpdateLLM = true;
+            bm.MapDataExist = true;
+            promptLLM = true;
+        }
+        
     }
 }

@@ -103,6 +103,44 @@ public class SpawnManager : MonoBehaviour
             RandomizeEnemySpawnPoints();
             SpawnObjects(activeEnemySpawnPoints, enemyPrefab, maxEnemies, spawnedEnemies, enemySpawnRadius);
         }
+        // Listen for any marker removals:
+        MarkerEventManager.OnMarkerRemoved += HandleAnyMarkerRemoved;
+    }
+
+    private void OnDestroy()
+    {
+        MarkerEventManager.OnMarkerRemoved -= HandleAnyMarkerRemoved;
+    }
+
+    /// <summary>
+    /// Called whenever *any* object is removed via MarkerEventManager.
+    /// We care only about Food objects here, to keep foodSpawnMapping in sync.
+    /// </summary>
+    private void HandleAnyMarkerRemoved(GameObject obj)
+    {
+        // 1) Was it one of our spawned food items?
+        foreach (var kvp in foodSpawnMapping)
+        {
+            var spawnPoint = kvp.Key;
+            var list       = kvp.Value;
+            if (list.Remove(obj))
+            {
+                // 2) If that was the last one, fire removal of the spawn‐point itself
+                if (list.Count == 0)
+                {
+                    // Update spawn‐point status
+                    var status = spawnPoint.GetComponent<FoodSpawnPointStatus>();
+                    if (status != null) status.HasFood = false;
+
+                    // Remove from active list so no future spawning happens
+                    activeFoodSpawnPoints.Remove(spawnPoint);
+
+                    // Inform map & agents that the spawn‐point is “gone”
+                    MarkerEventManager.MarkerRemoved(spawnPoint.gameObject);
+                }
+                break;
+            }
+        }
     }
 
     private void Update()

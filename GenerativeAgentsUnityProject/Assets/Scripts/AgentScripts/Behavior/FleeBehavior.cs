@@ -37,7 +37,6 @@ public class FleeBehavior : AgentBehavior
         }
     }
     
-    
     void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();

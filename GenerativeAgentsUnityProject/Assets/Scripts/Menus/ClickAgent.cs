@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class ClickAgent : MonoBehaviour
 {
+    private BehaviorManager behaviorManager;
+
+    void Start() {
+        behaviorManager = GetComponent<BehaviorManager>();
+    }
     void Update()
     {
         if (Input.GetMouseButtonDown(0)) // Left click
@@ -17,7 +22,6 @@ public class ClickAgent : MonoBehaviour
                 if (clickedObject.CompareTag("agent")) // Check if the tag is "Agent"
                 {
                     Debug.Log("Agent Clicked");
-                    BehaviorManager behaviorManager = clickedObject.GetComponent<BehaviorManager>();
                     if (behaviorManager != null)
                     {
                         string reasoning = behaviorManager.reasoning;
@@ -30,6 +34,10 @@ public class ClickAgent : MonoBehaviour
                     }
                 }
             }
+        }
+        if(behaviorManager != null) {
+            string reasoning = behaviorManager.reasoning;
+            AgentReasoningUI.Instance.SetText(reasoning);
         }
     }
 }
