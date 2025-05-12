@@ -315,8 +315,8 @@ async def process_input(request: Request):
         restored_history = ModelMessagesTypeAdapter.validate_python(as_python_objects)
         manager.update_message_history(agent_id, restored_history)
 
-        print(result.data)
-        return result.data
+        print(result.output)
+        return result.output
     except UnexpectedModelBehavior as e:
         logging.error("Unexpected model behavior", exc_info=True)
         logging.error(f"Map Data: {base64.b64encode(map_data)}")
@@ -375,4 +375,4 @@ async def filter_message_history(messages) -> list:
 
 # Run the FastAPI app
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=12345, reload=True)
+    uvicorn.run(app, host="127.0.0.1", port=12345)
