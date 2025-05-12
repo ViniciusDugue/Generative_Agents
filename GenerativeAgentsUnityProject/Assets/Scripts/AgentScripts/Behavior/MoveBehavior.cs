@@ -10,16 +10,41 @@ public class MoveBehavior : AgentBehavior
     private BehaviorManager bm;
     private bool promptLLM = false;
 
-    override protected void Awake()
+    protected override void Awake()
     {
-        target = this.gameObject.transform.position;
-        agent = GetComponent<NavMeshAgent>();
-        bm = GetComponent<BehaviorManager>();
+        agent   = GetComponent<NavMeshAgent>();
+        bm      = GetComponent<BehaviorManager>();
+        target  = transform.position;
+
+        // make sure every agent gets a unique NavMesh avoidance priority
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        agent.avoidancePriority      = Random.Range(0, 100);
+        agent.autoBraking            = false;
     }
 
-    public void setTarget(Vector3 newPosition) {
-        target = newPosition;
-        Debug.Log($"MoveBehavior target set to: {target}");
+    public void setTarget(Vector3 newPosition)
+    {
+        // How far around the home should agents spread?
+        const float jitterRadius = 6f;
+
+        // Pick a random offset in XZ
+        Vector2 rnd = Random.insideUnitCircle * jitterRadius;
+        Vector3 jittered = new Vector3(
+            newPosition.x + rnd.x,
+            newPosition.y,
+            newPosition.z + rnd.y
+        );
+
+        // (Optionally) snap to the NavMesh so it’s always a valid point:
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(jittered, out hit, jitterRadius, NavMesh.AllAreas))
+            jittered = hit.position;
+
+        // Store & send to the agent
+        target = jittered;
+        agent.SetDestination(jittered);
+
+        Debug.Log($"[Agent {bm.agentID}] Move→ {jittered} (home + jitter)");
     }
 
     protected override void OnEnable()
@@ -44,10 +69,6 @@ public class MoveBehavior : AgentBehavior
     {
         agent.isStopped = false;
 
-        
-
-        
-
         if (agent != null && target != null)
         {
             agent.SetDestination(target);
@@ -61,9 +82,9 @@ public class MoveBehavior : AgentBehavior
             agent.remainingDistance <= agent.stoppingDistance &&
             !promptLLM)
         {
-            bm.UpdateLLM = true;
-            bm.MapDataExist = true;
-            promptLLM = true;
+            // bm.UpdateLLM = true;
+            // bm.MapDataExist = true;
+            // promptLLM = true;
         }
         
     }

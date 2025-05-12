@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using TMPro;
 using Unity.MLAgents;
-using UnityEditor.UIElements;
+// using UnityEditor.UIElements;
 using System.Net;
 using System;
 using NUnit.Framework.Constraints;
@@ -19,7 +19,7 @@ public class Client : MonoBehaviour
     private GameObject habitat;
     private Habitat habitatComponent;
     private Dictionary<int, GameObject> agentDict = new Dictionary<int, GameObject>();
-
+    public bool IsDayTime => TimeManager.Instance.IsDayTime;
     private HttpClient client;
 
     void Start()
@@ -158,7 +158,7 @@ public class Client : MonoBehaviour
             health = agentHealth.currentHealth,  
             enemyCurrentlyDetected = bm.enemyPreviousDetected,
             exhaustion = bm.exhaustion,
-            isDayTime = TimeManager.Instance.IsDayTime,
+            isDayTime = IsDayTime,
             isGuarded = habitatComponent.isGuarded,
             habitatLocation = new {x = habitatComponent.transform.position.x, z =habitatComponent.transform.position.z},
             activeFoodLocations = GetFoodLocationsAsList(bm.activeFoodLocations),

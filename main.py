@@ -45,11 +45,11 @@ Environment & Map:
 Health & Enemy System:
 - Health ranges from 0 to 100. If health reaches 0, you die.
 - If your health drops below 50. It is recommended you rest at the habitat to avoid fatal damage. Override this concern if you are at risk of starvation.  
-- Enemies deal damage by moving into your location an attacking.
+- Enemies deal damage by moving towards your location and attacking.
 - If Enemies are detected on the map, they should be avoided unless doing so would result in death from starvation.
 - Pests will spawn at night and will steal food from your habitat.
-- If a pest is detected at your habitat, you should use the GuardHabitat_Behavior to prevent food loss.
-- isGuarded is a boolean that indicates whether your habitat is currently guarded by another agent. Only one agent needs to guard the habitat at a time.
+- If a pest is detected at your habitat, you should use the GuardBehavior to prevent food loss.
+- isGuarded is a boolean that indicates whether your habitat is currently guarded by another agent. Guarding should only be done at night.
 
 Food & Resourcesd System:
 - Food items spawn only at designated 'Active' food locations; not every food location will have food.
@@ -72,7 +72,7 @@ Available Actions & Effects:
 - **RestBehavior:**  
   *Effect:* Rests to restore energy.  
   *Cost:* -2 exhaustion per second.  
-  *Purpose:* Prevents exhaustion from reaching dangerous levels.
+  *Purpose:* Prevents exhaustion from reaching dangerous levels. Resting should be done at night unless guarding.
 
 - **FleeBehavior:**  
   *Effect:* Flees from detected enemies by moving away.  
@@ -163,7 +163,7 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 <assistant>
 {
-    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food. It is still day so habitat does not need to be guarded.",
+    "reasoning": "The agent is at a food location and has reached its max food capacity, so it should deposit its current food. It is still day so no pest are present and habitat does not need to be guarded.",
     "eatCurrentFoodSupply": true,
     "next_action": "MoveBehavior",
     "location": { "x": 65.6, "z": 111.9 }
@@ -195,7 +195,7 @@ Respond with the chosen ACTION (and location if using MoveBehavior) along with a
 
 <assistant>
 {
-    "reasoning": "The agent is low on hunger and has no known food locations. As such, it should go out searching using GatherBehavior. It is still day so habitat does not need to be guarded.",
+    "reasoning": "The agent is low on hunger and has no known food locations. As such, it should go out searching using GatherBehavior. It is still day so no pest are present and habitat does not need to be guarded.",
     "eatCurrentFoodSupply": false,
     "next_action": "GatherBehavior",
 }

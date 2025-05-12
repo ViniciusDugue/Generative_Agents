@@ -140,8 +140,8 @@ public class TimeManager : MonoBehaviour
         if (currentIsDay != lastIsDayTime)
         {
             lastIsDayTime = currentIsDay;
-            IsDayTime = currentIsDay;
-            Debug.Log("Daytime status changed: " + IsDayTime + ". Current Day: " + Days);
+            isDayTime = currentIsDay;
+            Debug.Log("Daytime status changed: " + isDayTime + ". Current Day: " + Days);
         }
     }
 

@@ -12,6 +12,11 @@ public class AgentBehaviorUI : MonoBehaviour
 
     public BehaviorManager behaviorManager;
 
+    void Start()
+    {
+        UpdateBehaviorUI();
+    }
+
     public void UpdateBehaviorUI()
     {
         

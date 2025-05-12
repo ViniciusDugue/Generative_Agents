@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+// using UnityEditor;
 
 public class CombineWallMesh : MonoBehaviour
 {
@@ -29,9 +29,9 @@ public class CombineWallMesh : MonoBehaviour
         filter.mesh = combinedMesh;
         combinedObject.AddComponent<MeshRenderer>().sharedMaterial = meshFilters[0].GetComponent<MeshRenderer>().sharedMaterial;
 
-        // SAVE the mesh so it persists
-        AssetDatabase.CreateAsset(combinedMesh, "Assets/CombinedWallsMesh.asset");
-        AssetDatabase.SaveAssets();
+        // // SAVE the mesh so it persists
+        // AssetDatabase.CreateAsset(combinedMesh, "Assets/CombinedWallsMesh.asset");
+        // AssetDatabase.SaveAssets();
 
         Debug.Log("Walls Combined and Saved!");
     }

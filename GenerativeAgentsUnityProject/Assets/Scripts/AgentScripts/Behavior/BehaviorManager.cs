@@ -70,6 +70,8 @@ public class BehaviorManager : MonoBehaviour
     // NEW: Time tracking for enemy detection.
     private float enemyDetectionBuffer = 5f;
 
+    // only count the very first discovery of each spawn, across all agents
+    private static readonly HashSet<Transform> _globallyDiscoveredFoodSpawns = new();
 
     public bool UpdateLLM
     {
@@ -240,9 +242,16 @@ public class BehaviorManager : MonoBehaviour
         {
             Debug.Log($"Switching AgentBehavior to {behaviorName}");
 
+        try
+        {
             // Disable current AgentBehavior
             currentAgentBehavior.enabled = false;
-
+        }
+            catch (System.Exception e)
+        {
+            Debug.LogWarning($"Error disabling {currentAgentBehavior.GetType().Name}: {e.Message}");
+        }
+        
             // Switch and enable new AgentBehavior  
             currentAgentBehavior = newBehavior;
             currentAgentBehavior.enabled = true;
@@ -383,7 +392,7 @@ public class BehaviorManager : MonoBehaviour
     {
         RayPerceptionSensorComponent3D[] rayPerceptionSensorComponents = GetComponents<RayPerceptionSensorComponent3D>();
 
-        float maxDetectionDistance = 35.5f; // Set your max detection distance here
+        float maxDetectionDistance = 22.5f; // Set your max detection distance here
         enemyCurrentlyDetected = false;
 
 
@@ -404,18 +413,16 @@ public class BehaviorManager : MonoBehaviour
                     // Check if the hit object is a food spawn point
                     if (goHit.tag == "foodSpawn")
                     {
-                        if (foodLocations.Add(goHit.transform)) // Add returns false if the item is already present
+                        var status = goHit.GetComponent<FoodSpawnPointStatus>();
+                        if (status != null && status.HasFood)
                         {
-                            FoodSpawnPointStatus status = goHit.transform.GetComponent<FoodSpawnPointStatus>();
-                            if (status != null && status.HasFood) {
-                                activeFoodLocations.Add(goHit.transform);
+                            activeFoodLocations.Add(goHit.transform);
+
+                            if (_globallyDiscoveredFoodSpawns.Add(goHit.transform))
+                            {
                                 EndSimMetricsUI.Instance.IncrementFoodLocationsDiscovered();
                                 Debug.Log("Active Food location found!");
                             }
-                            else{
-                                //Debug.Log("Food location found!");
-                            }
-                            
                         }
                     }
 
@@ -511,12 +518,14 @@ public class BehaviorManager : MonoBehaviour
             int missingFood = RequiredFood - CurrentHunger;
             // Parameter: Percentage of max health damage per missing food portion.
             float damagePercentagePerPortion = 0.10f;  // 10% of max health per missing food
+            AgentHeal agentHeal = GetComponent<AgentHeal>(); // TODO: MODIFY AGENTHEAL TO CALL AGENTHEALTH INSTEAD
             AgentHealth agentHealth = GetComponent<AgentHealth>();
             if (agentHealth != null)
             {
                 // Calculate total damage.
                 int damage = Mathf.RoundToInt(missingFood * damagePercentagePerPortion * agentHealth.maxHealth);
                 Debug.Log($"Agent {agentID} did not consume enough food. Missing {missingFood} portions. Applying {damage} damage.");
+                agentHeal.TakeDamage(damage);
                 agentHealth.TakeDamage(damage);
             }
             else

@@ -1,10 +1,14 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class GatherBehavior : AgentBehavior
 {
+    // --- Prevent two agents from chasing the same food ---
+    private static HashSet<GameObject> _reservedFood = new HashSet<GameObject>();
+
     [Header("Wander Settings")]
     public float wanderRadius = 15f;               // Radius for random wandering
     public LayerMask groundLayerMask;              // Assign “Default” or a dedicated Ground layer
@@ -49,6 +53,11 @@ public class GatherBehavior : AgentBehavior
         // 3) Crank up acceleration so it snaps to speed
         // agent.acceleration = 20f;
 
+        // ** Avoidance tweaks **
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        agent.avoidancePriority = Random.Range(0, 100);
+        agent.autoBraking = false;
+
         target = Vector3.positiveInfinity;
     }
     
@@ -76,6 +85,9 @@ public class GatherBehavior : AgentBehavior
         if (resetTargetCoroutine != null)
             StopCoroutine(resetTargetCoroutine);
         
+        if (currentFood != null)
+            _reservedFood.Remove(currentFood);
+
         // If we were gathering food, release it
         currentFood = null;
     }
@@ -188,33 +200,35 @@ public class GatherBehavior : AgentBehavior
     /// <param name="foodLocation">Position of the food target</param>
     public void SetFoodTarget(GameObject food)
     {
-        isGathering = true;
+        // 1) if already claimed, bail
+        if (_reservedFood.Contains(food)) return;
 
-        // Stop the reset coroutine if it's running
-        if (resetTargetCoroutine != null) {
+        // 2) release old claim
+        if (currentFood != null)
+            _reservedFood.Remove(currentFood);
+
+        // 3) claim this one
+        _reservedFood.Add(food);
+
+        // 4) stop wander
+        isGathering = true;
+        if (resetTargetCoroutine != null)
+        {
             StopCoroutine(resetTargetCoroutine);
             resetTargetCoroutine = null;
         }
 
-        // If we already have a food target that still exists, bail out
-        if (food != currentFood && currentFood != null) {
-            _lastFoodTargetTime = Time.time;
-            if(target == currentFood.transform.position)
-                return;
-        }
-
-        if (!manager.canCarryMoreFood()) // TODO: Fix this logic
+        // 5) check carry‐capacity
+        if (!manager.canCarryMoreFood())
         {
-            // agent.isStopped = true;
-            Debug.Log("Agent is full, cannot carry any more food");
+            Debug.Log("Agent is full, cannot carry more food");
             return;
         }
-            
 
-        // Assign and chase
+        // 6) chase the new food
         currentFood = food;
-        target = food.transform.position;
-        Debug.Log($"Agent ({manager.agentID}) has set food target set at: " + target);
+        target      = food.transform.position;
+        Debug.Log($"Agent ({manager.agentID}) chasing food @ {target}");
         agent.SetDestination(target);
     }
 
@@ -231,6 +245,7 @@ public class GatherBehavior : AgentBehavior
 
         if (collision.gameObject.CompareTag("food") && manager.canCarryMoreFood())
         {
+            GameObject go = collision.gameObject;
             Debug.Log("food collision");
             if (collision.gameObject.GetComponent<FoodScript>() == null)
             {
@@ -240,11 +255,17 @@ public class GatherBehavior : AgentBehavior
             EndSimMetricsUI.Instance.IncrementFoodCollected();
             
             Satiate();
-            collision.gameObject.GetComponent<FoodScript>().OnEaten();
-            this.gameObject.GetComponent<BehaviorManager>().updateFoodCount();
+            go.GetComponent<FoodScript>().OnEaten();
+            manager.updateFoodCount();
+            // collision.gameObject.GetComponent<FoodScript>().OnEaten();
+            // this.gameObject.GetComponent<BehaviorManager>().updateFoodCount();
+
+            // ← Release your claim
+            _reservedFood.Remove(go);
 
             // Remove this food so you don’t chase it again
             currentFood = null;
+            isGathering  = false;
 
             // If you can still carry more *and* there are other active food spawns, BehaviorManager
             // will raycast them and call SetFoodTarget again automatically.
@@ -258,6 +279,11 @@ public class GatherBehavior : AgentBehavior
     /// </summary>
     public void ClearFoodTarget()
     {
+
+        // ← If you had reserved something, let it go
+        if (currentFood != null)
+            _reservedFood.Remove(currentFood);
+
         // Stop chasing
         isGathering   = false;
         currentFood   = null;
