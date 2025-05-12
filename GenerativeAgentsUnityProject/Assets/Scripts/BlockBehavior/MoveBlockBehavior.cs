@@ -18,6 +18,7 @@ public class MoveBlockBehavior : AgentBehavior
     [Header("Block")]    
     public GameObject blockPrefab;
     public GameObject targetBlock;
+    public bool isHoldingBlock;
 
     [Header("Agent Settings")]
     public NavMeshAgent navAgent;
@@ -56,16 +57,22 @@ public class MoveBlockBehavior : AgentBehavior
         interrupt = false;
         if (navAgent.isOnNavMesh)
             navAgent.isStopped = true;
-
+        if(isHoldingBlock)
+        {
+            Habitat.Instance.storedBlocks++;
+            EndSimMetricsUI.Instance.IncrementBlocksMoved();
+        }
+        
         // Hide holding visual
         holdingBlock?.SetActive(false);
+        isHoldingBlock = false;
 
-        // Spawn a new block in front of the agent
-        if (targetBlock != null)
-        {
-            Vector3 spawnPos = transform.position + transform.forward * pickupRange;
-            Instantiate(blockPrefab, spawnPos, Quaternion.identity);
-        }
+        // // Spawn a new block in front of the agent
+        // if (targetBlock != null)
+        // {
+        //     Vector3 spawnPos = transform.position + transform.forward * pickupRange;
+        //     Instantiate(blockPrefab, spawnPos, Quaternion.identity);
+        // }
     }
 
     /// <summary>
@@ -152,6 +159,7 @@ public class MoveBlockBehavior : AgentBehavior
                     Destroy(targetBlock);
                     targetBlock = null;
                     holdingBlock?.SetActive(true);
+                    isHoldingBlock= true;
                 }
                 currentState = AgentState.WaitAfterPickup;
                 StartCoroutine(WaitAfterPickupCoroutine());

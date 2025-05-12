@@ -5,11 +5,8 @@ using UnityEngine;
 
 public class ClickAgent : MonoBehaviour
 {
-    private BehaviorManager behaviorManager;
+    public BehaviorManager behaviorManager;
 
-    void Start() {
-        behaviorManager = GetComponent<BehaviorManager>();
-    }
     void Update()
     {
         if (Input.GetMouseButtonDown(0)) // Left click
@@ -21,6 +18,7 @@ public class ClickAgent : MonoBehaviour
 
                 if (clickedObject.CompareTag("agent")) // Check if the tag is "Agent"
                 {
+                    behaviorManager = clickedObject.GetComponent<BehaviorManager>();
                     Debug.Log("Agent Clicked");
                     if (behaviorManager != null)
                     {

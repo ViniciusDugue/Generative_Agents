@@ -34,6 +34,7 @@ public class Habitat : MonoBehaviour
 
     public static Habitat Instance;
     public bool isGuarded;
+    public bool isWallBeingBuilt=false;
 
     void Awake()
     {
@@ -290,7 +291,7 @@ public class Habitat : MonoBehaviour
             Debug.Log($"[Habitat] Built wall #{nextWallIndex + 1}: {wall.name}");
             nextWallIndex++;
             wallsBuilt++;
-            storedBlocks-=3;
+            // storedBlocks-=3;
             EndSimMetricsUI.Instance.IncrementWallsBuilt();
         }
         else

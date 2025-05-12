@@ -1649,6 +1649,7 @@ MonoBehaviour:
   blockPrefab: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
     type: 3}
   targetBlock: {fileID: 0}
+  isHoldingBlock: 0
   navAgent: {fileID: 3081395510317380987}
   pickupRange: 2
   destinationStopDistance: 1
@@ -2009,7 +2010,7 @@ GameObject:
   - component: {fileID: 6411887144982516542}
   m_Layer: 0
   m_Name: Holding_Block
-  m_TagString: block
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

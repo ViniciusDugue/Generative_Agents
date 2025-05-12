@@ -1368,6 +1368,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 178d89c001c865c42bd08d4f5b1e9cfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  behaviorManager: {fileID: 0}
 --- !u!4 &153343329
 Transform:
   m_ObjectHideFlags: 0
@@ -11097,6 +11098,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 834473396254181571, guid: c0ceb7df25eb974458898fe265f3e347,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1112872655335634168, guid: c0ceb7df25eb974458898fe265f3e347,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -17903,13 +17909,13 @@ MonoBehaviour:
   maxEnemies: 0
   maxAgents: 5
   spawnHeightOffset: 0.5
-  maxPests: 5
+  maxPests: 10
   maxBlocksPerPoint: 4
   blockSpawnHeight: 10
   foodSpawnRadius: 5
   enemySpawnRadius: 10
   agentSpawnRadius: 7
-  dailyActiveFoodSpawnCount: 2
+  dailyActiveFoodSpawnCount: 3
   dailyActiveEnemySpawnCount: 2
   aliveAgents: []
   blockSpawnPoints:
@@ -19148,74 +19154,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2045209172}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &2058077885
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2084613589900514413, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_Name
-      value: Block
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 15.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 8.34
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 84.6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428057322221003234, guid: da5a6061a37181549a29c19e1a72ac28,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: da5a6061a37181549a29c19e1a72ac28, type: 3}
 --- !u!1 &2064889133
 GameObject:
   m_ObjectHideFlags: 0
@@ -21027,7 +20965,6 @@ SceneRoots:
   - {fileID: 316168839}
   - {fileID: 87198316}
   - {fileID: 3772322730700701152}
-  - {fileID: 2058077885}
   - {fileID: 2073148499}
   - {fileID: 897397910}
   - {fileID: 629491498}

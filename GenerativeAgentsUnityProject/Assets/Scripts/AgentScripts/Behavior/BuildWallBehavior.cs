@@ -11,11 +11,11 @@ public class BuildWallBehavior : AgentBehavior
     [Header("Movement Settings")]
     public NavMeshAgent navAgent;
     public float destinationStopDistance = 1f;
-
     [Header("Control Booleans")]
     public bool startBehavior = false;
     public bool interrupt = false;
     public bool isHoldingWall = false;
+    public bool isBlocksConsumed= false;
 
     public enum AgentState
     {
@@ -38,6 +38,7 @@ public class BuildWallBehavior : AgentBehavior
         interrupt = false;
         isHoldingWall = false;
         currentState = AgentState.Idle;
+
     }
 
     void OnDisable()
@@ -49,6 +50,7 @@ public class BuildWallBehavior : AgentBehavior
         navAgent.isStopped = true;
         if (destinationMarker)
             Destroy(destinationMarker);
+        isBlocksConsumed = false;
     }
 
     void Update()
@@ -76,6 +78,11 @@ public class BuildWallBehavior : AgentBehavior
 
             case AgentState.MoveToBuildPosition:
                 smallWall.SetActive(true);
+                if(!isBlocksConsumed)
+                {
+                    Habitat.Instance.storedBlocks-=3;
+                    isBlocksConsumed = true;
+                }
                 if (destinationMarker)
                 {
                     navAgent.isStopped = false;
@@ -89,9 +96,11 @@ public class BuildWallBehavior : AgentBehavior
                 break;
 
             case AgentState.CreateWall:
+
                 Habitat.Instance.BuildNextWall();
                 Destroy(destinationMarker);
                 smallWall.SetActive(false);
+                Habitat.Instance.isWallBeingBuilt = false;
                 currentState = AgentState.Idle;
                 startBehavior = false;
                 break;
@@ -104,7 +113,16 @@ public class BuildWallBehavior : AgentBehavior
         waitingAtHabitat = false;
         
         SetBuildData();
-        currentState = AgentState.MoveToBuildPosition;
+        if(!Habitat.Instance.isWallBeingBuilt&& Habitat.Instance.storedBlocks>=3)
+        {
+            Habitat.Instance.isWallBeingBuilt = true;
+            currentState = AgentState.MoveToBuildPosition;
+        }
+        else
+        {
+            currentState = AgentState.WaitAtHabitat;
+        }
+        
     }
 
     IEnumerator WaitAtBuildPositionCoroutine()
