@@ -1,101 +1,56 @@
-<h1 align="center">Generative Agents</h1>
+# Generative_Agents
+A project for simulating agents using llms and unity.
 
-<p align="center">
-  <em>Multi-agent survival simulation in Unity where every agent runs its own LLM.</em>
-</p>
+## Downloading & Running the Simulation (Major Release)
 
-<p align="center">
-  <img alt="Award" src="https://img.shields.io/badge/%E2%98%85_Best_Use_of_AI-CSULB_Senior_Expo-e0af68?style=flat-square&labelColor=11141b">
-  <img alt="Engine" src="https://img.shields.io/badge/Unity-C%23-7aa2f7?style=flat-square&labelColor=11141b">
-  <img alt="ML" src="https://img.shields.io/badge/ML--Agents-ONNX-f7768e?style=flat-square&labelColor=11141b">
-</p>
+If you want to run the pre-built simulation without setting up the training environment, follow these steps:
 
-<p align="center">
-  <a href="https://viniciusdugue.dev/projects/generative-agents/index.html">
-    <img src="https://viniciusdugue.dev/projects/generative-agents/poster.jpg" alt="Generative Agents poster" width="720">
-  </a>
-</p>
+1.  **Go to the Releases Page:**
+    * Click this link to access the simulation download: [Generative Agents - Major Release](https://github.com/ViniciusDugue/Generative_Agents/releases/tag/Major_Release)
 
-<p align="center">
-  <a href="https://viniciusdugue.dev/projects/generative-agents/index.html"><b>→ Project page on viniciusdugue.dev</b></a>
-</p>
+2.  **Download the Simulation:**
+    * On the release page, look for the file named `Version.1.0.zip` under the "Assets" section.
+    * Click on `Version.1.0.zip` to download it to your computer.
 
----
+3.  **Unzip the File:**
+    * Once the download is complete, locate the `Version.1.0.zip` file (usually in your Downloads folder).
+    * Right-click on the file and select an option like "Extract All...", "Unzip...", or use your preferred unzipping software to extract the contents into a new folder.
 
-## About
+4.  **Run the Simulation:**
+    * Open the new folder that was created after unzipping.
+    * To start the application correctly, you **must double-click and run the `Launch_Sim.bat` file.**
 
-**Generative Agents** (a.k.a. Dynamic Digital Agents) is a multi-agent survival simulation built in Unity. Every agent observes the environment through image snapshots and contextual data, then queries its own large language model to make informed long-term decisions about how to survive.
+5.  **Enjoy the Simulation!**
 
-Agents balance hunger, threats, and exploration in a stylized open world — but instead of hand-tuned heuristics, their behavior emerges from prompting an LLM with what they "see." On top of that, ML-Agents handles a reinforcement-learning pass so agents can learn faster by combining language-model priors with reward signals.
-
-Built as a CSULB senior capstone with **Carla Zuccarini** and **Nathaniel Fedida**. The project was awarded **Best Use of AI** at the CSULB Senior Project Expo.
-
-## How it works
-
-- **Vision-grounded prompting.** Each agent renders a snapshot of its surroundings each tick, packs it into a structured prompt (alongside hunger, position, recent actions), and asks its LLM what to do next.
-- **Behavior priors from the LLM.** Outputs are parsed into discrete actions (move, eat, build, attack, flee). The LLM's commonsense gives the agent a head start on long-horizon plans no scripted policy would invent.
-- **RL fine-tuning via ML-Agents.** A reinforcement loop trains an ONNX policy in parallel with the LLM, so the system can fall back to a fast inference model when latency matters.
-- **Configurable environments.** Number of agents, food density, hostile creatures, day/night cycle — all driven from `configuration.yaml` and TensorBoard-monitored during training.
-
-## Stack
-
-`Unity` · `C#` · `ML-Agents` · `Python` · `ONNX`
+    *Note: Your operating system (like Windows) might show a security warning when running `.bat` files or executables downloaded from the internet. You may need to grant permission or click "More info" -> "Run anyway" to proceed.*
 
 ---
 
-## Run the simulation
+# Training Steps
+1. activate your virtual environment
+2. run this line in the command prompt to setup the mlagents training: `mlagents-learn --force --run id=test1`
+3. Go to the agents inspector in unity and in the behavior parameters script set the Behavior Type to default
+4. In behavior parameters in the inspector, set the Model to None
+5. To start training, press play in the unity editor
 
-Pre-built Windows release — no setup required.
+# Changing Config file for Training
+1. Go to results/id=test1/ folder and find the configuration.yaml file
+2. Open configuration.yaml file and edit it
+3. Link for file parameters: https://unity-technologies.github.io/ml-agents/Training-Configuration-File/
 
-1. **Download** [`Version.1.0.zip`](https://github.com/ViniciusDugue/Generative_Agents/releases/tag/Major_Release) from the Releases page.
-2. **Unzip** it anywhere.
-3. **Run `Launch_Sim.bat`** — Windows may show a security prompt; click *More info → Run anyway*.
+# Tracking Progress
+1. Track the epoch progress in the command prompt in realtime
+2. Run this in the command prompt to track loss and progress in more detail with tensorboard: `tensorboard --logdir results/id=Test1`
 
-## Training your own model
+# Inference
+1. Once the model is trained, the models weights will be in the results/id=test1/ folder and it will be an .onnx file
+2. Drag that file into the unity project scope
+3. Go to the agents inspector in unity and in the behavior parameters script set the Model to your .onnx file
+4. Go to the agents inspector in unity and in the behavior parameters script set the Behavior Type to inference
+5. To start inference, press play
 
-```bash
-# 1. Activate your virtual environment, then start ML-Agents:
-mlagents-learn --force --run-id=test1
-```
+# Increasing Environment Count
+1. Change config file parameter num_envs
 
-Then in the Unity editor:
-
-1. Select an agent → **Behavior Parameters** script.
-2. Set **Behavior Type** to `Default` and **Model** to `None`.
-3. Press Play to start training.
-
-**Editing the config:** open `results/id=test1/configuration.yaml`. Reference: [ML-Agents training-configuration docs](https://unity-technologies.github.io/ml-agents/Training-Configuration-File/).
-
-**Monitoring progress:**
-```bash
-tensorboard --logdir results/id=test1
-```
-
-## Inference
-
-Once a model is trained, the weights live in `results/id=test1/` as a `.onnx` file.
-
-1. Drag the `.onnx` file into the Unity project.
-2. On an agent's **Behavior Parameters**, set **Model** to that `.onnx` and **Behavior Type** to `Inference Only`.
-3. Press Play.
-
----
-
-## Team
-
-- [Vinicius Dugue](https://github.com/ViniciusDugue)
-- Carla Zuccarini
-- Nathaniel Fedida
-
-## Recognition
-
-★ **Best Use of AI** — CSULB Senior Project Expo
-
----
-
-<p align="center">
-  <sub>
-    More work at <a href="https://viniciusdugue.dev">viniciusdugue.dev</a>
-    · <a href="https://www.linkedin.com/in/viniciusdugue/">LinkedIn</a>
-  </sub>
-</p>
+# Training Multi-agents
+1. same as Training Steps but run this instead: `mlagents-learn --force --run id=test2`

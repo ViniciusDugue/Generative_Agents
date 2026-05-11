@@ -1,0 +1,49 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1738691739",
+        "python_version": "3.10.0 (tags/v3.10.0:b494f59, Oct  4 2021, 19:00:18) [MSC v.1929 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\ViniciusDugue\\Desktop\\Generative_Agents\\venv\\Scripts\\mlagents-learn configuration.yaml --run-id=test1 --resume",
+        "mlagents_version": "0.30.0",
+        "mlagents_envs_version": "0.30.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.13.1+cu117",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1738691746"
+    },
+    "total": 7.124292000022251,
+    "count": 1,
+    "self": 0.004870499949902296,
+    "children": {
+        "run_training.setup": {
+            "total": 0.0545088000362739,
+            "count": 1,
+            "self": 0.0545088000362739
+        },
+        "TrainerController.start_learning": {
+            "total": 7.064912700036075,
+            "count": 1,
+            "self": 7.630005711689591e-05,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 6.561504499986768,
+                    "count": 1,
+                    "self": 6.561504499986768
+                },
+                "TrainerController._save_models": {
+                    "total": 0.5033318999921903,
+                    "count": 1,
+                    "self": 0.011719200003426522,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.4916126999887638,
+                            "count": 1,
+                            "self": 0.4916126999887638
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
